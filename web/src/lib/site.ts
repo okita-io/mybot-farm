@@ -3,10 +3,11 @@ export const site = {
   productName: "My Bot Farm",
   url: "https://mybot.farm",
   tagline: "An Open Market to share your Agents",
+  contrast: "Not a warehouse of skills.",
   byline:
     "A farmers market for your agent workforce in GrokBot, Hermes, OpenClaw and more.",
   description:
-    "My Bot Farm is an open marketplace for whole agents and teams. Publish a pack, browse by what you need, and install a copy — clear, simple, and agent-friendly.",
+    "My Bot Farm is an open marketplace for whole agents and teams — not a warehouse of skills. Publish a pack, browse by what you need, and install a copy — clear, simple, and agent-friendly.",
   summary:
     "An open marketplace for whole agents and teams — not a warehouse of skills. Publish a pack, browse by life job, and install a copy.",
 } as const;
@@ -79,7 +80,7 @@ export const faqs = [
   {
     question: "What is mybot.farm?",
     answer:
-      "My Bot Farm is an open marketplace where people share and install whole agents and teams. It stays clear, simple, sharable, searchable, and agent-friendly.",
+      "My Bot Farm is an open marketplace where people share and install whole agents and teams — not a warehouse of skills. It stays clear, simple, sharable, searchable, and agent-friendly.",
   },
   {
     question: "How is that different from a skills hub?",
