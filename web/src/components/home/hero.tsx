@@ -42,6 +42,12 @@ export function HomeHero() {
                 How-To
               </Link>
               <Link
+                href="/teams"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
+              >
+                Teams
+              </Link>
+              <Link
                 href="/#stalls"
                 className="font-medium text-foreground underline-offset-4 hover:underline"
               >

@@ -44,8 +44,12 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
         <Link href="/how-to" className="font-medium text-foreground underline-offset-4 hover:underline">
           Copy install prompt
         </Link>{" "}
-        (Grok Bot runtime) and WebMCP (agent tools). Preview is anonymous.
-        Starting a plot (and persisting a library) comes later.
+        (Grok Bot runtime),{" "}
+        <Link href="/teams" className="font-medium text-foreground underline-offset-4 hover:underline">
+          Agent Teams
+        </Link>
+        , and WebMCP (agent tools). Preview is anonymous. Starting a plot (and
+        persisting a library) comes later.
       </p>
     </ContentPage>
   );

@@ -110,6 +110,10 @@ export default function AboutPage() {
               Patch, Probe, Grant Research, Pair Bench
             </li>
             <li>
+              <Link href="/teams">Agent Teams</Link> — plant a crew instead of
+              wiring agents one-by-one
+            </li>
+            <li>
               <Link href="/how-to">How-To</Link> — install a pack, or share
               your own Bot
             </li>

@@ -148,6 +148,10 @@ export default function HowToPage() {
               dump
             </li>
             <li>
+              <Link href="/teams">Agent Teams</Link> — pair, hub, and pipeline
+              packs
+            </li>
+            <li>
               <Link href="/plant">Plant</Link> — paste a share URL and preview
               the pack
             </li>
