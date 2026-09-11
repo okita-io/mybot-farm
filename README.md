@@ -13,3 +13,13 @@ Private repo under [okita-io](https://github.com/okita-io).
 ```bash
 git clone https://github.com/okita-io/mybot-farm.git
 ```
+
+## Docs
+
+Marketplace positioning and product notes:
+
+- [Farmers market positioning](docs/positioning-farmers-market.md)
+- [Teams (multi-agent packs)](docs/teams.md)
+- [Categories](docs/categories.md)
+- [Docs index](docs/README.md)
+

@@ -1,0 +1,38 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Container } from "@/components/container";
+import { teams } from "@/lib/site";
+
+export function HomeTeams() {
+  return (
+    <section aria-labelledby="teams-heading" className="pb-16 sm:pb-20">
+      <Container>
+        <h2
+          id="teams-heading"
+          className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+        >
+          Teams are first-class
+        </h2>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          Many workflows are pairs or crews. Installing a team creates a copy of
+          each member — no live link to the author’s farm.
+        </p>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          {teams.map((team) => (
+            <Card key={team.name} className="min-w-0 gap-3 py-5 ring-1 ring-foreground/10">
+              <CardHeader>
+                <CardTitle className="text-lg font-semibold tracking-tight">
+                  {team.name}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-base leading-relaxed text-pretty text-muted-foreground">
+                  {team.roles}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}

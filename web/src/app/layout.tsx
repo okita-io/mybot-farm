@@ -1,29 +1,34 @@
-import type { Metadata } from "next";
-import { Fraunces, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { JsonLd } from "@/components/json-ld";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { organizationLd, websiteLd } from "@/lib/schema";
 import { site } from "@/lib/site";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const geistSans = Geist({
   subsets: ["latin"],
-  axes: ["SOFT", "WONK", "opsz"],
+  variable: "--font-geist-sans",
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — Coming soon`,
+    default: `${site.productName} — ${site.tagline}`,
     template: `%s | ${site.name}`,
   },
   description: site.description,
-  applicationName: site.name,
+  applicationName: site.productName,
+  alternates: { canonical: "/" },
   openGraph: {
-    title: `${site.name} — Coming soon`,
+    title: `${site.productName} — ${site.tagline}`,
     description: site.description,
     url: "/",
     siteName: site.name,
@@ -31,33 +36,41 @@ export const metadata: Metadata = {
     locale: "en_US",
   },
   twitter: {
-    card: "summary",
-    title: `${site.name} — Coming soon`,
+    card: "summary_large_image",
+    title: `${site.productName} — ${site.tagline}`,
     description: site.description,
   },
   robots: { index: true, follow: true },
 };
 
-const websiteLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: site.name,
-  url: site.url,
-  description: site.description,
+export const viewport: Viewport = {
+  themeColor: "#f4f5f8",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${geistMono.variable} h-full antialiased`}
+      className={cn(
+        geistSans.variable,
+        geistMono.variable,
+        "h-full antialiased",
+      )}
     >
-      <body className="min-h-full flex flex-col">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
-        />
-        {children}
+      <body className="flex min-h-full flex-col bg-background text-foreground">
+        <JsonLd data={websiteLd} />
+        <JsonLd data={organizationLd} />
+        <a
+          href="#content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
+        >
+          Skip to content
+        </a>
+        <SiteHeader />
+        <main id="content" className="flex flex-1 flex-col">
+          {children}
+        </main>
+        <SiteFooter />
       </body>
     </html>
   );
