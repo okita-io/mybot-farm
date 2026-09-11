@@ -5,20 +5,31 @@ import { Check, ClipboardCopy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 async function copyText(text: string) {
-  if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(text);
-    return;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+  } catch {
+    // Fall through to the textarea path when the Clipboard API is blocked.
   }
 
   const field = document.createElement("textarea");
   field.value = text;
   field.setAttribute("readonly", "");
   field.style.position = "fixed";
-  field.style.left = "-9999px";
+  field.style.top = "0";
+  field.style.left = "0";
+  field.style.opacity = "0";
   document.body.appendChild(field);
+  field.focus();
   field.select();
-  document.execCommand("copy");
+  const copied = document.execCommand("copy");
   document.body.removeChild(field);
+
+  if (!copied) {
+    throw new Error("copy_failed");
+  }
 }
 
 export function CopyInstallPrompt({
@@ -30,13 +41,21 @@ export function CopyInstallPrompt({
   label?: string;
   variant?: "default" | "outline" | "ghost";
 }) {
-  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
 
   async function onCopy() {
-    await copyText(prompt);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
+    try {
+      await copyText(prompt);
+      setStatus("copied");
+    } catch {
+      setStatus("failed");
+    }
+
+    window.setTimeout(() => setStatus("idle"), 2000);
   }
+
+  const idle = status === "idle";
+  const copied = status === "copied";
 
   return (
     <Button
@@ -44,14 +63,17 @@ export function CopyInstallPrompt({
       variant={variant}
       size="lg"
       className="h-9 rounded-full px-4"
-      onClick={onCopy}
+      aria-live="polite"
+      onClick={() => {
+        void onCopy();
+      }}
     >
       {copied ? (
         <Check data-icon="inline-start" />
       ) : (
         <ClipboardCopy data-icon="inline-start" />
       )}
-      {copied ? "Copied" : label}
+      {idle ? label : copied ? "Copied" : "Select text below"}
     </Button>
   );
 }
