@@ -9,6 +9,7 @@ Format: `mybot.farm/agent-pack` / `mybot.farm/team-pack` v0.1 (see `docs/` + Glo
 | Sprout Journal | agent | lifestyle | [agents/sprout-journal.json](./agents/sprout-journal.json) |
 | Patch | agent | coding | [agents/patch.json](./agents/patch.json) |
 | Probe | agent | coding | [agents/probe.json](./agents/probe.json) |
+| Grant Research | agent | education | [agents/grant-research.json](./agents/grant-research.json) |
 | Pair Bench | team | coding | [teams/pair-bench.json](./teams/pair-bench.json) |
 
 These are **marketplace seeds** (scrubbed, installable copies). They are not automatically your live Grok Bot sidebar agents until you import / create them.

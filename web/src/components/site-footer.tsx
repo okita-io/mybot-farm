@@ -1,12 +1,26 @@
+import Link from "next/link";
 import { Container } from "@/components/container";
-import { site } from "@/lib/site";
+import { footerLinks, site } from "@/lib/site";
 
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-border/80 py-8">
-      <Container className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <Container className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">{site.productName}</p>
-        <p className="font-mono text-xs text-muted-foreground">{site.url.replace("https://", "")}</p>
+        <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          {footerLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <span className="font-mono text-xs text-muted-foreground">
+            {site.url.replace("https://", "")}
+          </span>
+        </nav>
       </Container>
     </footer>
   );

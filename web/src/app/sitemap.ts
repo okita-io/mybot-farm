@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { stallPageUrl, stalls } from "@/lib/packs";
-import { site } from "@/lib/site";
+import { contentRoutes, site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -10,6 +10,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
+    ...contentRoutes.map((page) => ({
+      url: `${site.url}${page.path}`,
+      lastModified: new Date(),
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+    })),
     ...stalls.map((stall) => ({
       url: stallPageUrl(stall),
       lastModified: new Date(),

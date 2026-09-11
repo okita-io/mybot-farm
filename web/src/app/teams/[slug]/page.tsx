@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { StallView } from "@/components/stall-view";
-import { getStall, stallsOfKind, stallPagePath } from "@/lib/packs";
+import { getStall, stallsOfKind, stallPagePath, stallSeo } from "@/lib/packs";
 
 export function generateStaticParams() {
   return stallsOfKind("team").map((stall) => ({ slug: stall.slug }));
@@ -18,14 +18,15 @@ export async function generateMetadata({
   }
 
   const path = stallPagePath(stall);
+  const seo = stallSeo(stall);
 
   return {
-    title: stall.name,
-    description: stall.description,
+    title: seo.title,
+    description: seo.description,
     alternates: { canonical: path },
     openGraph: {
-      title: `${stall.name} — ${stall.title}`,
-      description: stall.description,
+      title: seo.ogTitle,
+      description: seo.description,
       url: path,
     },
   };

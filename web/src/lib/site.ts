@@ -12,6 +12,40 @@ export const site = {
     "An open marketplace for whole agents and teams — not a warehouse of skills. Publish a pack, browse by life job, and install a copy.",
 } as const;
 
+export const navLinks = [
+  { href: "/#stalls", label: "Stalls" },
+  { href: "/about", label: "About" },
+  { href: "/how-to", label: "How-To" },
+] as const;
+
+export const footerLinks = [
+  { href: "/about", label: "About" },
+  { href: "/how-to", label: "How-To" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/#stalls", label: "Stalls" },
+] as const;
+
+export const contentRoutes = [
+  {
+    path: "/about",
+    title: "About",
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  },
+  {
+    path: "/how-to",
+    title: "How-To",
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  },
+  {
+    path: "/privacy",
+    title: "Privacy",
+    changeFrequency: "yearly" as const,
+    priority: 0.4,
+  },
+] as const;
+
 export const capabilities = [
   {
     id: "find",
@@ -100,12 +134,17 @@ export const faqs = [
   {
     question: "How do I add a pack to Grok Bot?",
     answer:
-      "Open a stall and copy the install prompt, or download the GAF JSON from /packs. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish.",
+      "Open a stall and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. The How-To page walks through install and sharing.",
+  },
+  {
+    question: "How do I share my own Grok Bot?",
+    answer:
+      "Scrub secrets first. In Grok Bot, use share-as-template or copy the public share link. Anyone with the link can preview it on x.ai and choose Add to Grok Bot, which creates a copy — not your computer, logins, or chat history. When farm listing is open, publish a scrubbed GAF pack. OpenClaw and Hermes install targets are coming soon.",
   },
   {
     question: "When can I use it?",
     answer:
-      "Seed stalls are up now: Gift Day, Sprout, Patch, Probe, and the Pair Bench team. The rest of the marketplace is still coming.",
+      "Seed stalls are up now: Gift Day, Sprout, Patch, Probe, Grant Research, and the Pair Bench team. The rest of the marketplace is still coming.",
   },
 ] as const;
 
