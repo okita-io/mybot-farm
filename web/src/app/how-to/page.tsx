@@ -73,6 +73,15 @@ export default function HowToPage() {
             Shared Bots are created by other users, not by SpaceXAI. Adding one
             accepts the third-party bot terms.
           </p>
+          <p>
+            Have a stall, pack, or <code>/api</code> URL already? Paste it on{" "}
+            <Link href="/plant">Plant</Link>. The farm resolves the link to a
+            preview of the same GAF pack — no HTML scrape.{" "}
+            <strong>Plant into library</strong> is the next door (buyer
+            collection on the farm) and is preview-only until accounts exist.
+            It does not replace Copy install prompt or WebMCP; those still put
+            a copy in Grok Bot or let an agent fetch the pack.
+          </p>
         </ContentSection>
 
         <ContentSection id="share" title="Export or share your own Grok Bot">
@@ -136,6 +145,10 @@ export default function HowToPage() {
             <li>
               <Link href="/about">About</Link> — farmers market, not a skills
               dump
+            </li>
+            <li>
+              <Link href="/plant">Plant</Link> — paste a share URL and preview
+              the pack
             </li>
             <li>
               <Link href="/#stalls">Open stalls</Link>

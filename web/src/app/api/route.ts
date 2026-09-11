@@ -12,6 +12,10 @@ export function GET() {
       download_pack: "/api/packs/{slug}",
       list_pack_skills: "/api/packs/{slug}/skills",
       get_install_prompt: "/api/install-prompt/{slug}",
+      resolve_share: "/api/resolve-share",
+    },
+    plannedWrites: {
+      plant_into_library: "/api/library/plant",
     },
   });
 }
