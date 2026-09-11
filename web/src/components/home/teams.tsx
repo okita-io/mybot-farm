@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Container } from "@/components/container";
 import { teams } from "@/lib/site";
@@ -15,6 +16,21 @@ export function HomeTeams() {
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
           Many workflows are pairs or crews. Installing a team creates a copy of
           each member — no live link to the author’s farm.
+        </p>
+        <p className="mt-4 text-sm">
+          <Link
+            href="/teams"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Why plant a team
+          </Link>
+          <span className="text-muted-foreground"> · </span>
+          <Link
+            href="/teams/pair-bench"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Pair Bench
+          </Link>
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {teams.map((team) => (

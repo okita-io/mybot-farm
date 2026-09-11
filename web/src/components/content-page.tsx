@@ -5,27 +5,44 @@ export function ContentPage({
   kicker,
   title,
   lead,
+  hero,
   children,
 }: {
   kicker?: string;
   title: string;
   lead: string;
+  hero?: ReactNode;
   children: ReactNode;
 }) {
+  const heading = (
+    <>
+      {kicker ? (
+        <p className="font-mono text-[0.7rem] font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          {kicker}
+        </p>
+      ) : null}
+      <h1 className="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+        {title}
+      </h1>
+      <p className="mt-5 text-lg leading-relaxed text-pretty text-muted-foreground">
+        {lead}
+      </p>
+    </>
+  );
+
   return (
     <section className="py-16 sm:py-20">
       <Container className="max-w-3xl">
-        {kicker ? (
-          <p className="font-mono text-[0.7rem] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-            {kicker}
-          </p>
-        ) : null}
-        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-          {title}
-        </h1>
-        <p className="mt-5 text-lg leading-relaxed text-pretty text-muted-foreground">
-          {lead}
-        </p>
+        {hero ? (
+          <div className="grid items-center gap-8 md:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] md:gap-10">
+            <div className="mx-auto w-[min(100%,14rem)] md:mx-0 md:w-full">
+              {hero}
+            </div>
+            <div>{heading}</div>
+          </div>
+        ) : (
+          heading
+        )}
         <div className="mt-12 space-y-12">{children}</div>
       </Container>
     </section>
