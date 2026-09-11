@@ -1,4 +1,5 @@
 import giftDay from "../../public/packs/agents/gift-day.json";
+import grantResearch from "../../public/packs/agents/grant-research.json";
 import patch from "../../public/packs/agents/patch.json";
 import probe from "../../public/packs/agents/probe.json";
 import sproutJournal from "../../public/packs/agents/sprout-journal.json";
@@ -57,6 +58,7 @@ const packsBySlug: Record<string, FarmPack> = {
   "sprout-journal": sproutJournal,
   patch,
   probe,
+  "grant-research": grantResearch,
   "pair-bench": pairBench,
 };
 

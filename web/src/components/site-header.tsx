@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/container";
-import { site } from "@/lib/site";
+import { navLinks, site } from "@/lib/site";
 
 export function SiteMark() {
   return (
@@ -23,21 +23,30 @@ export function SiteMark() {
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur-xl">
-      <Container className="flex h-14 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5 no-underline">
+      <Container className="flex h-14 items-center justify-between gap-3">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5 no-underline">
           <SiteMark />
           <span className="text-sm font-medium tracking-tight text-foreground">
             {site.name}
           </span>
         </Link>
-        <nav className="flex items-center gap-3">
-          <Link
-            href="/#stalls"
-            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+        <nav
+          aria-label="Primary"
+          className="flex items-center gap-3 sm:gap-4"
+        >
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Badge
+            variant="secondary"
+            className="hidden h-6 px-2.5 text-[0.7rem] sm:inline-flex"
           >
-            Stalls
-          </Link>
-          <Badge variant="secondary" className="h-6 px-2.5 text-[0.7rem]">
             Coming soon
           </Badge>
         </nav>

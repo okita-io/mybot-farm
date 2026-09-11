@@ -23,3 +23,5 @@ Marketplace positioning and product notes:
 - [Categories](docs/categories.md)
 - [Docs index](docs/README.md)
 
+Live site pages: [About](https://mybot.farm/about), [How-To](https://mybot.farm/how-to), [Privacy](https://mybot.farm/privacy).
+
