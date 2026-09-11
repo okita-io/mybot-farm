@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --soil: oklch(0.17 0.018 85);
+  --furrow: oklch(0.24 0.022 85);
+  --straw: oklch(0.91 0.035 88);
+  --chaff: oklch(0.72 0.03 85);
+  --sap: oklch(0.74 0.12 125);
+  --dawn: oklch(0.28 0.04 70);
+}
+
+@theme inline {
+  --color-soil: var(--soil);
+  --color-furrow: var(--furrow);
+  --color-straw: var(--straw);
+  --color-chaff: var(--chaff);
+  --color-sap: var(--sap);
+  --font-sans: var(--font-fraunces);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  background: var(--soil);
+  color: var(--straw);
+}
+
+body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(1200px 480px at 50% -80px, var(--dawn), transparent 70%),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 3.4rem,
+      oklch(0.22 0.02 85 / 0.55) 3.4rem 3.45rem
+    ),
+    var(--soil);
+  color: var(--straw);
+  font-family: var(--font-sans), ui-serif, Georgia, serif;
+}
+
+::selection {
+  background: var(--sap);
+  color: var(--soil);
+}
