@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/container";
 
 const steps = [
@@ -53,7 +54,14 @@ export function HomeInstall() {
         </ol>
         <p className="mt-8 text-sm leading-relaxed text-muted-foreground">
           Shared Bots are created by other users, not by SpaceXAI. Adding one
-          accepts the third-party bot terms.
+          accepts the third-party bot terms. Full install and share steps:{" "}
+          <Link
+            href="/how-to"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            How-To
+          </Link>
+          .
         </p>
       </Container>
     </section>

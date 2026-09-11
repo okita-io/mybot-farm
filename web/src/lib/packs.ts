@@ -12,6 +12,8 @@ export type Stall = {
   category: string;
   tone: StallTone;
   downloadHref: string;
+  seoTitle?: string;
+  seoDescription?: string;
   members?: { name: string; href: string }[];
 };
 
@@ -86,6 +88,14 @@ export function searchStalls(query?: string, kind?: StallKind): Stall[] {
   });
 }
 
+export function stallSeo(stall: Stall) {
+  return {
+    title: stall.seoTitle ?? stall.name,
+    description: stall.seoDescription ?? stall.description,
+    ogTitle: stall.seoTitle ?? `${stall.name} — ${stall.title}`,
+  };
+}
+
 export function stallApiPaths(slug: string) {
   return {
     get_stall: `/api/stalls/${slug}`,
@@ -156,6 +166,20 @@ export const stalls: Stall[] = [
     category: "Coding",
     tone: "share",
     downloadHref: "/packs/agents/probe.json",
+  },
+  {
+    kind: "agent",
+    slug: "grant-research",
+    name: "Grant Research",
+    title: "Grant research & proposal specialist",
+    description:
+      "Finds RFAs, RFPs, and NOFOs, then drafts narratives, budgets, attachments, and support letters. Research and draft only — never invents eligibility.",
+    seoTitle: "Grant Research — grant research & proposal specialist",
+    seoDescription:
+      "Install Grant Research from mybot.farm: a free education agent that researches public solicitations (RFA / RFP / NOFO) and drafts grant narratives, budgets, attachments, letters of support, and pre-submit reviews. Research and draft only. No invented eligibility or award amounts.",
+    category: "Education",
+    tone: "find",
+    downloadHref: "/packs/agents/grant-research.json",
   },
   {
     kind: "team",

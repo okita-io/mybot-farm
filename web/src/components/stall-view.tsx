@@ -92,7 +92,12 @@ export function StallView({ stall }: { stall: Stall }) {
           </h2>
           <p className="mt-3 text-base leading-relaxed text-muted-foreground">
             Paste this into a Grok Bot (or another agent). It installs a copy of
-            the pack — not the author’s computer, logins, or chat history.
+            the pack — not the author’s computer, logins, or chat history. Step
+            by step:{" "}
+            <Link href="/how-to" className="underline-offset-4 hover:underline">
+              How-To
+            </Link>
+            . OpenClaw and Hermes install targets are coming soon.
           </p>
           <pre
             id="install-prompt"

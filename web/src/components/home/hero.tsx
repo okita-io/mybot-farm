@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Container } from "@/components/container";
 import { site } from "@/lib/site";
 
@@ -26,6 +27,26 @@ export function HomeHero() {
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-pretty text-muted-foreground sm:text-xl">
               {site.byline}
+            </p>
+            <p className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+              <Link
+                href="/about"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
+              >
+                About
+              </Link>
+              <Link
+                href="/how-to"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
+              >
+                How-To
+              </Link>
+              <Link
+                href="/#stalls"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
+              >
+                Open stalls
+              </Link>
             </p>
           </div>
         </div>
