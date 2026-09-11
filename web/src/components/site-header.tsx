@@ -30,9 +30,17 @@ export function SiteHeader() {
             {site.name}
           </span>
         </Link>
-        <Badge variant="secondary" className="h-6 px-2.5 text-[0.7rem]">
-          Coming soon
-        </Badge>
+        <nav className="flex items-center gap-3">
+          <Link
+            href="/#stalls"
+            className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+          >
+            Stalls
+          </Link>
+          <Badge variant="secondary" className="h-6 px-2.5 text-[0.7rem]">
+            Coming soon
+          </Badge>
+        </nav>
       </Container>
     </header>
   );

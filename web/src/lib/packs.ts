@@ -1,3 +1,5 @@
+import { site } from "@/lib/site";
+
 export type StallKind = "agent" | "team";
 export type StallTone = "find" | "share" | "agent";
 
@@ -12,6 +14,103 @@ export type Stall = {
   downloadHref: string;
   members?: { name: string; href: string }[];
 };
+
+export const stallToneClasses: Record<
+  StallTone,
+  { card: string; label: string }
+> = {
+  find: { card: "bg-find-muted/60 ring-find/20", label: "text-find-foreground" },
+  share: {
+    card: "bg-share-muted/60 ring-share/20",
+    label: "text-share-foreground",
+  },
+  agent: {
+    card: "bg-agent-muted/60 ring-agent/20",
+    label: "text-agent-foreground",
+  },
+};
+
+export function isStallKind(value: string | null | undefined): value is StallKind {
+  return value === "agent" || value === "team";
+}
+
+export function stallPagePath(stall: Pick<Stall, "kind" | "slug">): string {
+  return stall.kind === "team" ? `/teams/${stall.slug}` : `/agents/${stall.slug}`;
+}
+
+export function stallPageUrl(stall: Pick<Stall, "kind" | "slug">): string {
+  return `${site.url}${stallPagePath(stall)}`;
+}
+
+export function packFileUrl(stall: Pick<Stall, "downloadHref">): string {
+  return `${site.url}${stall.downloadHref}`;
+}
+
+export function packFilename(stall: Pick<Stall, "downloadHref" | "slug">): string {
+  return stall.downloadHref.split("/").at(-1) ?? `${stall.slug}.json`;
+}
+
+export function getStall(slug: string): Stall | undefined {
+  return stalls.find((stall) => stall.slug === slug);
+}
+
+export function stallsOfKind(kind: StallKind): Stall[] {
+  return stalls.filter((stall) => stall.kind === kind);
+}
+
+export function searchStalls(query?: string, kind?: StallKind): Stall[] {
+  const needle = query?.trim().toLowerCase();
+
+  return stalls.filter((stall) => {
+    if (kind && stall.kind !== kind) {
+      return false;
+    }
+
+    if (!needle) {
+      return true;
+    }
+
+    const haystack = [
+      stall.slug,
+      stall.name,
+      stall.title,
+      stall.description,
+      stall.category,
+      stall.kind,
+      ...(stall.members?.map((member) => member.name) ?? []),
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return haystack.includes(needle);
+  });
+}
+
+export function stallApiPaths(slug: string) {
+  return {
+    get_stall: `/api/stalls/${slug}`,
+    download_pack: `/api/packs/${slug}`,
+    list_pack_skills: `/api/packs/${slug}/skills`,
+    get_install_prompt: `/api/install-prompt/${slug}`,
+  };
+}
+
+export function stallRecord(stall: Stall) {
+  return {
+    kind: stall.kind,
+    slug: stall.slug,
+    name: stall.name,
+    title: stall.title,
+    description: stall.description,
+    category: stall.category,
+    pagePath: stallPagePath(stall),
+    pageUrl: stallPageUrl(stall),
+    downloadHref: stall.downloadHref,
+    packUrl: packFileUrl(stall),
+    members: stall.members,
+    api: stallApiPaths(stall.slug),
+  };
+}
 
 export const stalls: Stall[] = [
   {

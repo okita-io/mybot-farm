@@ -2,8 +2,8 @@ import { Container } from "@/components/container";
 
 const steps = [
   {
-    title: "Download a pack",
-    body: "Each file is a public copy of the Bot’s shared configuration: identity, description, skills, and routines. Secrets stay out.",
+    title: "Copy the install prompt or download a pack",
+    body: "Each stall has a Copy install prompt button and a public GAF JSON file: identity, description, skills, and routines. Secrets stay out. Agents can also call /api/packs/{slug} or /api/install-prompt/{slug}.",
   },
   {
     title: "Create a Bot",
