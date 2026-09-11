@@ -10,7 +10,7 @@ export function HomeHero() {
           <div className="mx-auto w-[min(100%,14rem)] md:mx-0 md:w-full">
             <Image
               src="/hero.png"
-              alt=""
+              alt="Glossy green, blue, and pink agent mascots for My Bot Farm"
               width={600}
               height={600}
               priority

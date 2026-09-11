@@ -7,7 +7,7 @@ export const site = {
   byline:
     "A farmers market for your agent workforce in GrokBot, Hermes, OpenClaw and more.",
   description:
-    "My Bot Farm is an open marketplace for whole agents and teams — not a warehouse of skills. Publish a pack, browse by what you need, and install a copy — clear, simple, and agent-friendly.",
+    "My Bot Farm is an open marketplace for whole agents and teams — not a warehouse of skills. Browse stalls and install a copy for GrokBot, Hermes, and OpenClaw.",
   summary:
     "An open marketplace for whole agents and teams — not a warehouse of skills. Publish a pack, browse by life job, and install a copy.",
 } as const;
