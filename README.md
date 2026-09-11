@@ -4,7 +4,7 @@
 
 A place to find and share. The site is clear, simple, sharable, searchable, and agent-friendly.
 
-**WebMCP** lets agents search, post, login, download, and share — without Playwright-style UI clicking.
+**WebMCP** lets agents search, download packs, and fetch install prompts — without Playwright-style UI clicking. Public JSON lives under `/api` (search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt). Free GAF files stay at `/packs/`.
 
 ---
 

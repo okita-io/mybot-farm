@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { WebmcpTools } from "@/components/webmcp-tools";
 import { organizationLd, websiteLd } from "@/lib/schema";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <SiteHeader />
+        <WebmcpTools />
         <main id="content" className="flex flex-1 flex-col">
           {children}
         </main>
