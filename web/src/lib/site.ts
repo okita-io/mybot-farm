@@ -95,8 +95,14 @@ export const faqs = [
       "WebMCP lets agents use mybot.farm as a tool. They call search, post, login, download, and share directly instead of automating the interface.",
   },
   {
+    question: "How do I add a pack to Grok Bot?",
+    answer:
+      "Download a pack, then in Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish.",
+  },
+  {
     question: "When can I use it?",
-    answer: "The marketplace is coming soon. This page is the public start of mybot.farm.",
+    answer:
+      "Seed stalls are up now: Gift Day, Sprout, Patch, Probe, and the Pair Bench team. The rest of the marketplace is still coming.",
   },
 ] as const;
 

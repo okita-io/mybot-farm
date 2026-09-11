@@ -1,0 +1,49 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": ["grok-bot"],
+  "slug": "pair-bench",
+  "category": "coding",
+  "tags": ["pair", "programmer", "debugger", "team"],
+  "profile": {
+    "name": "Pair Bench",
+    "title": "Programmer + debugger team",
+    "description": "A two-agent bench: Patch implements; Probe reproduces and verifies. Install both and let them hand off until the verify path passes.",
+    "avatar": { "kind": "geometric", "shape": "capsule", "color": "cyan" }
+  },
+  "members": [
+    {
+      "role": "programmer",
+      "summary": "Implements small diffs and features.",
+      "pack": "agents/patch.json"
+    },
+    {
+      "role": "debugger",
+      "summary": "Reproduces bugs and verifies fixes.",
+      "pack": "agents/probe.json"
+    }
+  ],
+  "topology": {
+    "kind": "pair",
+    "handoffs": [
+      "User bug report → Probe reproduces → Patch patches → Probe verifies → done",
+      "User feature ask → Patch implements → Probe smoke-checks happy path when asked"
+    ]
+  },
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Pair Bench: a task is not done until Probe (or the user) confirms the verify path. Neither member sends production deploys without the user."
+      }
+    ],
+    "gettingStarted": "Install Patch and Probe. Put them in one group or section named Pair Bench. Start bug work with Probe; start greenfield features with Patch."
+  },
+  "manifest": {
+    "author": "mybot.farm seeds",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/pair-bench",
+    "tags": ["coding", "team"],
+    "scrubbed": true
+  }
+}

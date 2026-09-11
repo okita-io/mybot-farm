@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { stalls } from "@/lib/packs";
 import { site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,5 +10,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
+    ...stalls.map((stall) => ({
+      url: `${site.url}${stall.downloadHref}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
   ];
 }
