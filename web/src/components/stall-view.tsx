@@ -43,6 +43,14 @@ export function StallView({ stall }: { stall: Stall }) {
           <Link href="/#stalls" className="underline-offset-4 hover:underline">
             Open stalls
           </Link>
+          {stall.kind === "team" ? (
+            <>
+              {" · "}
+              <Link href="/teams" className="underline-offset-4 hover:underline">
+                Agent Teams
+              </Link>
+            </>
+          ) : null}
         </p>
         <div className={cn("mt-6 rounded-3xl px-6 py-8 ring-1 sm:px-8", tone.card)}>
           <div className="flex flex-wrap items-center gap-2">

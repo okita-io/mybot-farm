@@ -84,3 +84,17 @@ export const privacyPageLd = {
   description:
     "mybot.farm uses standard web analytics. We do not sell personal data. Pack downloads and install prompts are product features.",
 };
+
+export const teamsPageLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: `Agent Teams | ${site.name}`,
+  url: `${site.url}/teams`,
+  description:
+    "Import a pre-coordinated team of agents instead of wiring them one-by-one. Solo agents are fine; many workflows are pairs or crews with roles and handoffs.",
+  isPartOf: {
+    "@type": "WebSite",
+    name: site.productName,
+    url: site.url,
+  },
+};

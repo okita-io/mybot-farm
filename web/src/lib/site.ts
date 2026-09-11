@@ -14,6 +14,7 @@ export const site = {
 
 export const navLinks = [
   { href: "/#stalls", label: "Stalls" },
+  { href: "/teams", label: "Teams" },
   { href: "/about", label: "About" },
   { href: "/how-to", label: "How-To" },
   { href: "/plant", label: "Plant" },
@@ -21,6 +22,7 @@ export const navLinks = [
 
 export const footerLinks = [
   { href: "/about", label: "About" },
+  { href: "/teams", label: "Teams" },
   { href: "/how-to", label: "How-To" },
   { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
@@ -31,6 +33,12 @@ export const contentRoutes = [
   {
     path: "/about",
     title: "About",
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  },
+  {
+    path: "/teams",
+    title: "Agent Teams",
     changeFrequency: "monthly" as const,
     priority: 0.7,
   },
