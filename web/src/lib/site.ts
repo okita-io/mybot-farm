@@ -2,7 +2,9 @@ export const site = {
   name: "mybot.farm",
   productName: "My Bot Farm",
   url: "https://mybot.farm",
-  tagline: "A place to find and share.",
+  tagline: "An Open Market to share your Agents",
+  byline:
+    "A farmers market for your agent workforce in GrokBot, Hermes, OpenClaw and more.",
   description:
     "My Bot Farm is an open marketplace for whole agents and teams. Publish a pack, browse by what you need, and install a copy — clear, simple, and agent-friendly.",
   summary:

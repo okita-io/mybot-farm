@@ -27,7 +27,7 @@ export default function Image() {
           <div
             style={{
               display: "flex",
-              fontSize: 72,
+              fontSize: 56,
               fontWeight: 600,
               letterSpacing: "-0.04em",
               lineHeight: 1.05,
@@ -36,7 +36,7 @@ export default function Image() {
             {site.tagline}
           </div>
           <div style={{ display: "flex", fontSize: 28, color: "#5a6478", maxWidth: 820 }}>
-            {site.description}
+            {site.byline}
           </div>
         </div>
       </div>

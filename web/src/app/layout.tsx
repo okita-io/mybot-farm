@@ -26,6 +26,9 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.productName,
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
   alternates: { canonical: "/" },
   openGraph: {
     title: `${site.productName} — ${site.tagline}`,
