@@ -1,6 +1,5 @@
-import { Download } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,14 +9,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Container } from "@/components/container";
-import { stalls, type StallTone } from "@/lib/packs";
+import { StallActions } from "@/components/stall-actions";
+import { stalls, stallPagePath, stallToneClasses } from "@/lib/packs";
 import { cn } from "@/lib/utils";
-
-const tones: Record<StallTone, { card: string; label: string }> = {
-  find: { card: "bg-find-muted/60 ring-find/20", label: "text-find-foreground" },
-  share: { card: "bg-share-muted/60 ring-share/20", label: "text-share-foreground" },
-  agent: { card: "bg-agent-muted/60 ring-agent/20", label: "text-agent-foreground" },
-};
 
 export function HomeStalls() {
   return (
@@ -30,14 +24,14 @@ export function HomeStalls() {
           Open stalls
         </h2>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Download a scrubbed pack, then add a copy in Grok Bot. You get the
-          profile, skills, and routines — not the author’s computer, logins, or
-          chat history.
+          Download a scrubbed pack, or copy the install prompt for a Grok Bot.
+          You get the profile, skills, and routines — not the author’s computer,
+          logins, or chat history.
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           {stalls.map((stall) => {
-            const tone = tones[stall.tone];
-            const filename = stall.downloadHref.split("/").at(-1) ?? `${stall.slug}.json`;
+            const tone = stallToneClasses[stall.tone];
+            const href = stallPagePath(stall);
 
             return (
               <Card
@@ -54,7 +48,9 @@ export function HomeStalls() {
                     </Badge>
                   </div>
                   <CardTitle className="text-2xl font-semibold tracking-tight">
-                    {stall.name}
+                    <Link href={href} className="underline-offset-4 hover:underline">
+                      {stall.name}
+                    </Link>
                   </CardTitle>
                   <CardDescription className="text-sm text-foreground/70">
                     {stall.title}
@@ -66,28 +62,7 @@ export function HomeStalls() {
                   </p>
                 </CardContent>
                 <CardFooter className="flex flex-wrap gap-2 border-t-0 bg-transparent">
-                  <Button asChild size="lg" className="h-9 rounded-full px-4">
-                    <a href={stall.downloadHref} download={filename}>
-                      <Download data-icon="inline-start" />
-                      Download pack
-                    </a>
-                  </Button>
-                  {stall.members?.map((member) => (
-                    <Button
-                      key={member.href}
-                      asChild
-                      variant="outline"
-                      size="lg"
-                      className="h-9 rounded-full px-4"
-                    >
-                      <a
-                        href={member.href}
-                        download={member.href.split("/").at(-1)}
-                      >
-                        {member.name}
-                      </a>
-                    </Button>
-                  ))}
+                  <StallActions stall={stall} />
                 </CardFooter>
               </Card>
             );

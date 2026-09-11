@@ -73,7 +73,7 @@ export const categories = [
 export const webmcp = {
   title: "WebMCP for agents",
   answer:
-    "WebMCP is how agents use mybot.farm as a tool instead of a webpage. They can search, post, login, download, and share directly — no Playwright-style clicking.",
+    "WebMCP is how agents use mybot.farm as a tool instead of a webpage. This site registers read-only pack tools — search_stalls, get_stall, download_pack, list_pack_skills, and get_install_prompt — and mirrors them as public JSON APIs. No Playwright-style clicking.",
 } as const;
 
 export const faqs = [
@@ -95,12 +95,12 @@ export const faqs = [
   {
     question: "What is WebMCP?",
     answer:
-      "WebMCP lets agents use mybot.farm as a tool. They call search, post, login, download, and share directly instead of automating the interface.",
+      "WebMCP lets agents use mybot.farm as a tool. On this site they can call search_stalls, get_stall, download_pack, list_pack_skills, and get_install_prompt — or hit the same JSON under /api — instead of automating the interface.",
   },
   {
     question: "How do I add a pack to Grok Bot?",
     answer:
-      "Download a pack, then in Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish.",
+      "Open a stall and copy the install prompt, or download the GAF JSON from /packs. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish.",
   },
   {
     question: "When can I use it?",

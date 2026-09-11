@@ -2,13 +2,34 @@
 
 > An open marketplace for whole agents and teams — not a warehouse of skills.
 
-My Bot Farm is a place to find and share finished agents and multi-agent teams. Publish a pack, browse by life job, and install a copy. Secrets never ship. WebMCP lets agents search, post, login, download, and share without clicking a UI.
+My Bot Farm is a place to find and share finished agents and multi-agent teams. Publish a pack, browse by life job, and install a copy. Secrets never ship. WebMCP lets agents search stalls, download GAF packs, and fetch install prompts without clicking a UI.
 
 Add a pack in Grok Bot by creating a new agent and editing its profile. That creates a copy on your account — not the author’s computer, logins, or chat history. See https://docs.x.ai/grok-bot/bots
 
+## Stall pages
+
 - Home: https://mybot.farm/
+- Gift Day: https://mybot.farm/agents/gift-day
+- Sprout: https://mybot.farm/agents/sprout-journal
+- Patch: https://mybot.farm/agents/patch
+- Probe: https://mybot.farm/agents/probe
+- Pair Bench (team): https://mybot.farm/teams/pair-bench
+
+## GAF JSON packs
+
 - Gift Day: https://mybot.farm/packs/agents/gift-day.json
 - Sprout: https://mybot.farm/packs/agents/sprout-journal.json
 - Patch: https://mybot.farm/packs/agents/patch.json
 - Probe: https://mybot.farm/packs/agents/probe.json
 - Pair Bench (team): https://mybot.farm/packs/teams/pair-bench.json
+
+## Read-only APIs (CORS open)
+
+- Catalog: https://mybot.farm/api
+- search_stalls: https://mybot.farm/api/stalls?q=&kind=
+- get_stall: https://mybot.farm/api/stalls/{slug}
+- download_pack: https://mybot.farm/api/packs/{slug}
+- list_pack_skills: https://mybot.farm/api/packs/{slug}/skills
+- get_install_prompt: https://mybot.farm/api/install-prompt/{slug}
+
+WebMCP tools on every page (when document.modelContext is available): search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt.
