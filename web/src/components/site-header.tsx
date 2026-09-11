@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/container";
 import { navLinks, site } from "@/lib/site";
 
@@ -43,12 +42,6 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
-          <Badge
-            variant="secondary"
-            className="hidden h-6 px-2.5 text-[0.7rem] sm:inline-flex"
-          >
-            Coming soon
-          </Badge>
         </nav>
       </Container>
     </header>
