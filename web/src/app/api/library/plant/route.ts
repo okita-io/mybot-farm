@@ -6,8 +6,8 @@ import {
 } from "@/lib/resolve-share";
 
 /**
- * Auth + persistence are placeholders (Clerk/session later).
- * Unauthenticated clients should use GET|POST /api/resolve-share for preview-only.
+ * Persist is plot/library ownership (Clerk later, behind Start a plot).
+ * Landing and resolve/preview stay anonymous — no login wall.
  */
 export async function POST(request: Request) {
   const input = await inputFromRequest(request);
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       ok: false,
       error: "auth_required",
       message:
-        "Plant into library needs a signed-in buyer. Auth is a placeholder (Clerk/session later). Use GET or POST /api/resolve-share for preview-only.",
+        "Persisting a library item needs a plot (Start a plot / Clerk later). Browse, Copy install prompt, and resolve/preview stay anonymous. Use GET or POST /api/resolve-share for preview-only.",
       ...(preview ? { preview } : {}),
     },
     {

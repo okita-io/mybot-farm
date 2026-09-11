@@ -147,7 +147,7 @@ export const faqs = [
   {
     question: "Can I plant a share URL into my library?",
     answer:
-      "Paste a mybot.farm stall, pack, or API URL on /plant to preview the pack. Plant into library is sketched and needs a signed-in buyer later. Copy install prompt and WebMCP remain the ways to install into Grok Bot or fetch packs as an agent.",
+      "Paste a mybot.farm stall, pack, or API URL on /plant to preview the pack. No login required for browse or preview. Saving into a library waits until you Start a plot (Clerk later). Copy install prompt and WebMCP remain the ways to install into Grok Bot or fetch packs as an agent.",
   },
   {
     question: "How do I share my own Grok Bot?",

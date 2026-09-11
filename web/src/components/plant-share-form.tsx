@@ -154,7 +154,7 @@ export function PlantShareForm({
         "message" in data &&
         typeof data.message === "string"
           ? data.message
-          : "Plant into library needs a signed-in buyer. Preview-only for now.";
+          : "Saving into a library needs a plot. Preview stays anonymous.";
 
       setState({ status: "planted-blocked", result: preview, message });
     } catch {
@@ -285,8 +285,8 @@ export function PlantShareForm({
             </p>
           ) : (
             <p className="mt-4 text-sm leading-relaxed text-foreground/65">
-              Plant is preview-only until buyer accounts exist. Copy install prompt still
-              creates a Grok Bot copy.
+              No login on this page. Copy install prompt still creates a Grok Bot
+              copy. Saving into a library waits for Start a plot.
             </p>
           )}
         </article>

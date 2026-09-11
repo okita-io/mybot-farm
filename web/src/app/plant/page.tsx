@@ -9,7 +9,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Plant from a share URL",
   description:
-    "Paste a mybot.farm stall, pack, or API URL to preview the agent. Plant into your library is sketched — preview-only until accounts exist.",
+    "Paste a mybot.farm stall, pack, or API URL to preview the agent. No login required. Persisting a library item waits until you Start a plot.",
   alternates: { canonical: "/plant" },
   openGraph: {
     title: `Plant from a share URL | ${site.name}`,
@@ -36,7 +36,7 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
     <ContentPage
       kicker="Plant"
       title="Paste a share link, preview the pack"
-      lead="Bring a mybot.farm stall or pack URL here. The farm resolves it to the same GAF data the read APIs already serve — no HTML scrape, no invented skills. Plant into a buyer library waits on accounts."
+      lead="Bring a mybot.farm stall or pack URL here. The farm resolves it to the same GAF data the read APIs already serve — no HTML scrape, no invented skills, no login. Saving into a library waits until you Start a plot."
     >
       <PlantShareForm initialUrl={initialUrl} initialResult={initialResult} />
       <p className="text-sm leading-relaxed text-muted-foreground">
@@ -44,8 +44,8 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
         <Link href="/how-to" className="font-medium text-foreground underline-offset-4 hover:underline">
           Copy install prompt
         </Link>{" "}
-        (Grok Bot runtime) and WebMCP (agent tools). Plant writes to a library
-        later — preview is the whole MVP.
+        (Grok Bot runtime) and WebMCP (agent tools). Preview is anonymous.
+        Starting a plot (and persisting a library) comes later.
       </p>
     </ContentPage>
   );

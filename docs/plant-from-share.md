@@ -30,9 +30,9 @@ POST /api/resolve-share  (or GET ?url=)
 
 1. **Paste URL.** A buyer (or an agent helping them) pastes a mybot.farm stall, pack, or API link. Bare slugs (`gift-day`) are a convenience, not a public share shape.
 2. **Resolve.** The farm **parses** the URL and loads the matching stall + GAF from the same loaders as `/api/stalls/{slug}` and `/api/packs/{slug}`. It does **not** scrape HTML and does **not** invent fields.
-3. **Preview card.** Show who it is, what kind, what’s in the crate (counts, scrubbed flag), and the existing install prompt. Unauthenticated users stop here — preview-only.
-4. **Plant into library (auth later).** A signed-in buyer adds a `UserLibraryItem`. That is a **copy reference** (slug + source URL + snapshot ref), not a live tether to the seller.
-5. **List on my stall (later, optional).** The buyer may publish a stall from a planted item. That is a separate publish step — planting does not auto-list or auto-outbound.
+3. **Preview card.** Show who it is, what kind, what’s in the crate (counts, scrubbed flag), and the existing install prompt. **No account required.** Anonymous visitors browse, copy the install prompt, and resolve/preview share URLs the same as signed-in ones.
+4. **Plant into library (needs a plot).** Persisting a `UserLibraryItem` is **plot/library ownership**, not a landing wall. Sign-in (Clerk) is gated behind **Start a plot** / claim stall / list agents / keep a personal library. That is a **copy reference** (slug + source URL + snapshot ref), not a live tether to the seller.
+5. **List on my stall (later, optional).** Also behind a plot. Separate publish step — planting does not auto-list or auto-outbound.
 
 ---
 
@@ -103,11 +103,27 @@ Reuse `getStall` / `requireStallAndPack` / `installPromptPayload` in `web/src/li
 
 ---
 
+## Auth / plot (constraint)
+
+**No forced login on landing.** The home page, stall pages, Copy install prompt, How-To, and `/plant` resolve/preview are public. Do **not** add a login modal on home.
+
+| Action | Auth |
+|--------|------|
+| Browse stalls | Anonymous |
+| Copy install prompt / download GAF | Anonymous |
+| Paste share URL → resolve → preview | Anonymous (`GET\|POST /api/resolve-share`) |
+| **Start a plot** / claim a stall / list agents | Clerk (later) |
+| Persist personal library (`POST /api/library/plant`) | Clerk — framed as plot/library ownership |
+
+Clerk is the intended vendor **only when someone starts a plot**. This sketch does **not** wire Clerk, sessions, or a sign-in UI. The plant stub returns `401` and tells the client to keep using preview.
+
+---
+
 ## API shape
 
 ### `GET|POST /api/resolve-share` — preview (no auth)
 
-Public, CORS open. **Preview-only.** GET is the easy share; POST is the form.
+Public, CORS open. **Preview-only. Always anonymous.** GET is the easy share; POST is the form.
 
 ```http
 GET /api/resolve-share?url=https%3A%2F%2Fmybot.farm%2Fagents%2Fgift-day
@@ -183,9 +199,11 @@ Content-Type: application/json
 
 HTTP: `400` for input problems, `404` for `stall_not_found`. Body always includes `warnings[]`.
 
-### `POST /api/library/plant` — add to buyer library (auth TBD)
+### `POST /api/library/plant` — persist into a plot library
 
-**Not persisted in this sketch.** Auth is a **placeholder** (Clerk or a first-party session — undecided). Unauthenticated clients keep using resolve (preview-only).
+**Not persisted in this sketch.** This write is **plot/library ownership**, not a landing gate. When Clerk exists, require a signed-in plot owner. Until then the stub is `401` and `/plant` stays preview-only — no login modal.
+
+Unauthenticated clients **keep using resolve** for preview. They can still Copy install prompt.
 
 ```http
 POST /api/library/plant
@@ -213,7 +231,7 @@ Alternate body: `{ "slug": "gift-day", "sourceUrl": "https://mybot.farm/agents/g
 }
 ```
 
-**MVP stub:** `401` + `error: "auth_required"`. If a URL/slug was sent, include a `preview` object from resolve so the UI can keep showing the card. No write, no outbound.
+**MVP stub:** `401` + `error: "auth_required"`. Message should say persist needs a plot (Clerk later), not “log in to use the farm.” If a URL/slug was sent, include a `preview` object from resolve so the UI can keep showing the card. No write, no outbound, no sign-in redirect.
 
 `List on my stall` is **not** an API yet.
 
@@ -223,7 +241,7 @@ Alternate body: `{ "slug": "gift-day", "sourceUrl": "https://mybot.farm/agents/g
 
 ```text
 UserLibraryItem
-  userId            signed-in buyer (Clerk id or session subject — TBD)
+  userId            plot owner (Clerk user id, once Start a plot exists)
   slug              stall slug (catalog key)
   kind              agent | team
   sourceUrl         the URL they pasted (or the canonical stall URL)
@@ -252,8 +270,9 @@ No table is created in this PR.
 | **Size limits** | URL ≤ 2048 chars; slug ≤ 64; `[a-z0-9-]`. v2 fetch should cap body (suggest 512 KiB) before JSON parse. |
 | **No auto-outbound** | Resolve and plant must not email, ping Grok Bot, charge Stripe, or publish a stall. |
 | **No HTML scrape** | Path + local JSON only. |
-| **Plant auth** | Writes wait for a real session. Preview stays public. |
-| **CORS** | Resolve is public read (GET/POST). Plant will not stay anonymous once auth exists. |
+| **No landing login wall** | Home, stalls, install prompt, and resolve/preview stay public. No modal. |
+| **Plant persist** | `POST /api/library/plant` waits for a **plot** (Clerk). Preview stays public. |
+| **CORS** | Resolve is public read (GET/POST). Plant persist is authenticated once plots exist. |
 
 v2 raw-GAF fetch, if we add it: HTTPS only, block private/link-local IPs, redirect cap, content-type JSON, schema `format` prefix `mybot.farm/`, still no script execution.
 
@@ -279,10 +298,10 @@ They compose:
 
 ## Open questions
 
-Research tone — do not treat these as decided. Do not invent Clerk or Stripe wiring.
+Research tone for what is still open. Auth **gating** is decided (above): no landing login; Clerk only on Start a plot / persist library. Do not invent Clerk or Stripe wiring in this PR.
 
-- [ ] **Buyer library vs seller stall.** Is the library a private collection (shopping basket / “my copies”), or the draft queue for “my stall”? Can one user be both buyer and seller without mixing those lists?
-- [ ] **Auth.** Clerk vs first-party session vs “sign in with Grok Bot.” Plant stays 401 until this exists. No vendor is wired.
+- [ ] **Buyer library vs seller stall.** Is the library a private collection (shopping basket / “my copies”), or the draft queue for “my stall”? Same plot, two lists — or one?
+- [ ] **Start a plot UX.** Where does the first Clerk prompt live (dedicated `/plot`, a button on `/plant`, claim-stall)? Must not interrupt browse/preview.
 - [ ] **Stripe later.** Paid stalls, tips, featured placement — does `plant` check an entitlement, or is money only on **List on my stall** / download? Free seed packs should keep working without a wallet.
 - [ ] **Grok Bot share links.** Do we ever resolve `x.ai/bot/…`, or do those stay on the official Add-to-Grok-Bot path ([How-To](/how-to#share))?
 - [ ] **Raw GAF (v2).** Allowlist of hosts vs any HTTPS? Who is liable if the JSON is hostile or unscrubbed?
@@ -303,7 +322,7 @@ Research tone — do not treat these as decided. Do not invent Clerk or Stripe w
 | `/plant` | URL field + preview card; Plant button shows the stub |
 | How-To | Short pointer at the flow |
 
-No buyer table, no Clerk, no Stripe, no listing API.
+No buyer table, no Clerk SDK, no login modal, no Stripe, no listing API.
 
 ---
 

@@ -77,10 +77,11 @@ export default function HowToPage() {
             Have a stall, pack, or <code>/api</code> URL already? Paste it on{" "}
             <Link href="/plant">Plant</Link>. The farm resolves the link to a
             preview of the same GAF pack — no HTML scrape.{" "}
-            <strong>Plant into library</strong> is the next door (buyer
-            collection on the farm) and is preview-only until accounts exist.
-            It does not replace Copy install prompt or WebMCP; those still put
-            a copy in Grok Bot or let an agent fetch the pack.
+            <strong>Plant into library</strong> is the next door (a plot’s
+            collection on the farm). Preview needs no login. Persisting that
+            collection waits until you Start a plot. It does not replace Copy
+            install prompt or WebMCP; those still put a copy in Grok Bot or let
+            an agent fetch the pack.
           </p>
         </ContentSection>
 
