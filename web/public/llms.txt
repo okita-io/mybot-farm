@@ -13,6 +13,7 @@ OpenClaw and Hermes support are coming soon (translators / install targets). The
 - Home: https://mybot.farm/
 - About: https://mybot.farm/about
 - How-To (install and share): https://mybot.farm/how-to
+- Plant (paste a share URL, preview a pack): https://mybot.farm/plant
 - Privacy: https://mybot.farm/privacy
 
 ## Stall pages
@@ -41,5 +42,7 @@ OpenClaw and Hermes support are coming soon (translators / install targets). The
 - download_pack: https://mybot.farm/api/packs/{slug}
 - list_pack_skills: https://mybot.farm/api/packs/{slug}/skills
 - get_install_prompt: https://mybot.farm/api/install-prompt/{slug}
+- resolve_share: https://mybot.farm/api/resolve-share?url=
+- plant_into_library (auth stub): https://mybot.farm/api/library/plant
 
 WebMCP tools on every page (when document.modelContext is available): search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt.
