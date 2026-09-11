@@ -21,7 +21,8 @@ Marketplace positioning and product notes:
 - [Farmers market positioning](docs/positioning-farmers-market.md)
 - [Teams (multi-agent packs)](docs/teams.md)
 - [Categories](docs/categories.md)
+- [Plant from a share URL](docs/plant-from-share.md)
 - [Docs index](docs/README.md)
 
-Live site pages: [About](https://mybot.farm/about), [How-To](https://mybot.farm/how-to), [Privacy](https://mybot.farm/privacy).
+Live site pages: [About](https://mybot.farm/about), [How-To](https://mybot.farm/how-to), [Plant](https://mybot.farm/plant), [Privacy](https://mybot.farm/privacy).
 

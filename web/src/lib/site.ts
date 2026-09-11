@@ -16,11 +16,13 @@ export const navLinks = [
   { href: "/#stalls", label: "Stalls" },
   { href: "/about", label: "About" },
   { href: "/how-to", label: "How-To" },
+  { href: "/plant", label: "Plant" },
 ] as const;
 
 export const footerLinks = [
   { href: "/about", label: "About" },
   { href: "/how-to", label: "How-To" },
+  { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
   { href: "/#stalls", label: "Stalls" },
 ] as const;
@@ -37,6 +39,12 @@ export const contentRoutes = [
     title: "How-To",
     changeFrequency: "monthly" as const,
     priority: 0.8,
+  },
+  {
+    path: "/plant",
+    title: "Plant",
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
   },
   {
     path: "/privacy",
@@ -135,6 +143,11 @@ export const faqs = [
     question: "How do I add a pack to Grok Bot?",
     answer:
       "Open a stall and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. The How-To page walks through install and sharing.",
+  },
+  {
+    question: "Can I plant a share URL into my library?",
+    answer:
+      "Paste a mybot.farm stall, pack, or API URL on /plant to preview the pack. No login required for browse or preview. Saving into a library waits until you Start a plot (Clerk later). Copy install prompt and WebMCP remain the ways to install into Grok Bot or fetch packs as an agent.",
   },
   {
     question: "How do I share my own Grok Bot?",

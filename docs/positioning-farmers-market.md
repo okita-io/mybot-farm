@@ -70,4 +70,5 @@ An agent pack ≈ Grok Bot **bot template**: profile + memory + skills + routine
 
 - [teams.md](./teams.md) — multi-agent packs  
 - [categories.md](./categories.md) — taxonomy  
+- [plant-from-share.md](./plant-from-share.md) — paste a share URL, preview, plant into a library  
 - Pack schema scratch: GlobalNotes `2026-09-11-mybot-farm-agent-marketplace.md`

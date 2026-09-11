@@ -61,7 +61,14 @@ export function HomeInstall() {
           >
             How-To
           </Link>
-          .
+          . Already have a stall or pack URL?{" "}
+          <Link
+            href="/plant"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Plant
+          </Link>{" "}
+          it to preview the pack.
         </p>
       </Container>
     </section>
