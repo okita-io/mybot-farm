@@ -201,11 +201,11 @@ function resolveFromSlug(
   const warnings: string[] = [];
 
   if (pathKind === "agent" && stall.kind !== "agent") {
-    warnings.push(`Path says /agents/ but "${slug}" is a ${stall.kind}.`);
+    warnings.push(`Path says /agents/ but "${slug}" is a ${stall.kind} stall.`);
   }
 
   if (pathKind === "team" && stall.kind !== "team") {
-    warnings.push(`Path says /teams/ but "${slug}" is a ${stall.kind}.`);
+    warnings.push(`Path says /teams/ but "${slug}" is a ${stall.kind} stall.`);
   }
 
   if (pathKind === "install-prompt") {

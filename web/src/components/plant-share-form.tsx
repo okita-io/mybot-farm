@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CopyInstallPrompt } from "@/components/copy-install-prompt";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   type ResolveShareFailure,
+  type ResolveShareResult,
   type ResolveShareSuccess,
 } from "@/lib/resolve-share";
 import { stallToneClasses } from "@/lib/packs";
@@ -68,9 +69,27 @@ function isFailure(value: unknown): value is ResolveShareFailure {
   );
 }
 
-export function PlantShareForm({ initialUrl = "" }: { initialUrl?: string }) {
+function stateFromResult(result: ResolveShareResult | undefined): PlantState {
+  if (!result) {
+    return { status: "idle" };
+  }
+
+  if (result.ok) {
+    return { status: "preview", result };
+  }
+
+  return { status: "error", result };
+}
+
+export function PlantShareForm({
+  initialUrl = "",
+  initialResult,
+}: {
+  initialUrl?: string;
+  initialResult?: ResolveShareResult;
+}) {
   const [url, setUrl] = useState(initialUrl);
-  const [state, setState] = useState<PlantState>({ status: "idle" });
+  const [state, setState] = useState<PlantState>(() => stateFromResult(initialResult));
 
   async function resolve(nextUrl = url) {
     const trimmed = nextUrl.trim();
@@ -78,7 +97,7 @@ export function PlantShareForm({ initialUrl = "" }: { initialUrl?: string }) {
     if (!trimmed) {
       setState({
         status: "error",
-        result: { error: "url_required", warnings: [] },
+        result: { ok: false, error: "url_required", warnings: [] },
       });
       return;
     }
@@ -146,14 +165,6 @@ export function PlantShareForm({ initialUrl = "" }: { initialUrl?: string }) {
       });
     }
   }
-
-  useEffect(() => {
-    if (initialUrl.trim()) {
-      void resolve(initialUrl);
-    }
-    // Preview once for a deep-linked ?url= / ?slug= — not on every keystroke.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialUrl]);
 
   const preview =
     state.status === "preview" || state.status === "planted-blocked"

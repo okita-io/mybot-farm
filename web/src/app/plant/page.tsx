@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
 import { PlantShareForm } from "@/components/plant-share-form";
+import { resolveShare } from "@/lib/resolve-share";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -21,7 +23,14 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
   const params = await searchParams;
   const urlParam = typeof params.url === "string" ? params.url : "";
   const slugParam = typeof params.slug === "string" ? params.slug : "";
-  const initialUrl = urlParam || (slugParam ? slugParam : "");
+  const initialUrl = urlParam || slugParam;
+  const requestHost = (await headers()).get("host") ?? undefined;
+  const initialResult = initialUrl
+    ? resolveShare(
+        urlParam ? { url: urlParam } : { slug: slugParam },
+        { requestHost },
+      )
+    : undefined;
 
   return (
     <ContentPage
@@ -29,7 +38,7 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
       title="Paste a share link, preview the pack"
       lead="Bring a mybot.farm stall or pack URL here. The farm resolves it to the same GAF data the read APIs already serve — no HTML scrape, no invented skills. Plant into a buyer library waits on accounts."
     >
-      <PlantShareForm initialUrl={initialUrl} />
+      <PlantShareForm initialUrl={initialUrl} initialResult={initialResult} />
       <p className="text-sm leading-relaxed text-muted-foreground">
         This sits beside{" "}
         <Link href="/how-to" className="font-medium text-foreground underline-offset-4 hover:underline">
