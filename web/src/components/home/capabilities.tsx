@@ -13,17 +13,17 @@ const icons: Record<CapabilityTone, LucideIcon> = {
 const tones: Record<CapabilityTone, { card: string; icon: string; label: string }> = {
   find: {
     card: "bg-find-muted ring-find/20",
-    icon: "bg-find text-primary-foreground",
+    icon: "bg-find text-white",
     label: "text-find-foreground",
   },
   share: {
     card: "bg-share-muted ring-share/20",
-    icon: "bg-share text-primary-foreground",
+    icon: "bg-share text-white",
     label: "text-share-foreground",
   },
   agent: {
     card: "bg-agent-muted ring-agent/20",
-    icon: "bg-agent text-primary-foreground",
+    icon: "bg-agent text-white",
     label: "text-agent-foreground",
   },
 };

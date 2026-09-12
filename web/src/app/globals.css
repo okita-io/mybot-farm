@@ -47,6 +47,51 @@
   --agent: oklch(0.5 0.09 290);
   --agent-foreground: oklch(0.38 0.1 290);
   --agent-muted: oklch(0.95 0.03 290);
+  color-scheme: light;
+}
+
+.dark {
+  --background: oklch(0.18 0.018 260);
+  --foreground: oklch(0.96 0.008 260);
+  --card: oklch(0.22 0.016 260);
+  --card-foreground: oklch(0.96 0.008 260);
+  --popover: oklch(0.22 0.016 260);
+  --popover-foreground: oklch(0.96 0.008 260);
+  --primary: oklch(0.92 0.012 255);
+  --primary-foreground: oklch(0.22 0.02 260);
+  --secondary: oklch(0.28 0.016 260);
+  --secondary-foreground: oklch(0.92 0.01 260);
+  --muted: oklch(0.26 0.014 260);
+  --muted-foreground: oklch(0.72 0.02 260);
+  --accent: oklch(0.28 0.02 250);
+  --accent-foreground: oklch(0.92 0.02 255);
+  --destructive: oklch(0.7 0.16 25);
+  --border: oklch(0.32 0.016 260);
+  --input: oklch(0.32 0.016 260);
+  --ring: oklch(0.62 0.08 255);
+  --chart-1: oklch(0.68 0.1 250);
+  --chart-2: oklch(0.7 0.09 185);
+  --chart-3: oklch(0.7 0.09 290);
+  --chart-4: oklch(0.72 0.08 80);
+  --chart-5: oklch(0.62 0.04 260);
+  --sidebar: oklch(0.2 0.016 260);
+  --sidebar-foreground: oklch(0.96 0.008 260);
+  --sidebar-primary: oklch(0.92 0.012 255);
+  --sidebar-primary-foreground: oklch(0.22 0.02 260);
+  --sidebar-accent: oklch(0.28 0.016 260);
+  --sidebar-accent-foreground: oklch(0.92 0.01 260);
+  --sidebar-border: oklch(0.32 0.016 260);
+  --sidebar-ring: oklch(0.62 0.08 255);
+  --find: oklch(0.58 0.1 250);
+  --find-foreground: oklch(0.82 0.06 250);
+  --find-muted: oklch(0.24 0.04 250);
+  --share: oklch(0.58 0.09 185);
+  --share-foreground: oklch(0.82 0.05 185);
+  --share-muted: oklch(0.24 0.035 185);
+  --agent: oklch(0.58 0.09 290);
+  --agent-foreground: oklch(0.84 0.06 290);
+  --agent-muted: oklch(0.24 0.04 290);
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -118,5 +163,10 @@
   ::selection {
     background: oklch(0.5 0.1 250 / 0.22);
     color: oklch(0.22 0.02 260);
+  }
+
+  .dark ::selection {
+    background: oklch(0.65 0.1 250 / 0.35);
+    color: oklch(0.96 0.008 260);
   }
 }
