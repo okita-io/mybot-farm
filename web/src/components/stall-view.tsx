@@ -147,8 +147,10 @@ export async function StallView({
               : "Buy this stall to unlock the pack download and install prompt. Seed stalls on the farm stay free."}{" "}
             <Link href="/how-to" className="underline-offset-4 hover:underline">
               How-To
-            </Link>
-            . OpenClaw and Hermes install targets are coming soon.
+            </Link>{" "}
+            covers Grok Bot (this GAF prompt) and Hermes (a scrubbed{" "}
+            <code className="font-mono text-[0.9em] text-foreground">.tar.gz</code>
+            ). OpenClaw install targets are still coming.
           </p>
           {canDownload ? (
             <pre

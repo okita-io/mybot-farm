@@ -42,9 +42,9 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
       <p className="text-sm leading-relaxed text-muted-foreground">
         This sits beside{" "}
         <Link href="/how-to" className="font-medium text-foreground underline-offset-4 hover:underline">
-          Copy install prompt
+          How-To
         </Link>{" "}
-        (Grok Bot runtime),{" "}
+        (Grok Bot GAF prompt, Hermes scrubbed archive),{" "}
         <Link href="/teams" className="font-medium text-foreground underline-offset-4 hover:underline">
           Agent Teams
         </Link>

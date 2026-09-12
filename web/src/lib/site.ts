@@ -158,7 +158,17 @@ export const faqs = [
   {
     question: "How do I add a pack to Grok Bot?",
     answer:
-      "Open a stall and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. The How-To page walks through install and sharing.",
+      "Open a stall and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. Seed stalls today are GAF files. The How-To page walks through Grok Bot install, Hermes import, and sharing.",
+  },
+  {
+    question: "How do I import a pack into Hermes?",
+    answer:
+      "Hermes installs from a scrubbed profile .tar.gz with hermes profile import, not from GAF JSON. Seed stalls on the farm today are GAF files for Grok Bot. After import, add your own API keys — auth.json and .env never ship. The How-To page has the commands.",
+  },
+  {
+    question: "How do I share my Hermes agent?",
+    answer:
+      "Export with hermes profile export, then run scripts/scrub.py (also at https://mybot.farm/scripts/scrub.py) to drop chat history and secrets. Share only the clean archive. Never send the raw export. You can list a scrubbed GAF pack on /sell.",
   },
   {
     question: "Can I plant a share URL into my library?",
@@ -168,7 +178,7 @@ export const faqs = [
   {
     question: "How do I share my own Grok Bot?",
     answer:
-      "Scrub secrets first. Then list it on /sell: connect Stripe, paste a GAF pack, set a price. The farm hosts the stall and keeps 10% of each sale. You can still use Grok Bot’s public share link if you only want a free copy, not a paid stall.",
+      "Scrub secrets first. Then list it on /sell: connect Stripe, paste a GAF pack, set a price. The farm hosts the stall and keeps 10% of each sale. You can still use Grok Bot’s public share link if you only want a free copy, not a paid stall. Hermes authors export, scrub with scrub.py, then share the clean .tar.gz or a GAF listing.",
   },
   {
     question: "What does the farm keep?",

@@ -63,7 +63,7 @@ export function ContentSection({
       <h2 className="text-2xl font-semibold tracking-tight text-foreground">
         {title}
       </h2>
-      <div className="mt-3 space-y-4 text-base leading-relaxed text-pretty text-muted-foreground [&_a]:font-medium [&_a]:text-foreground [&_a]:underline-offset-4 [&_a]:hover:underline [&_ol]:list-decimal [&_ol]:space-y-3 [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5 [&_strong]:font-medium [&_strong]:text-foreground [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-foreground">
+      <div className="mt-3 space-y-4 text-base leading-relaxed text-pretty text-muted-foreground [&_a]:font-medium [&_a]:text-foreground [&_a]:underline-offset-4 [&_a]:hover:underline [&_h3]:mt-8 [&_h3]:text-lg [&_h3]:font-medium [&_h3]:tracking-tight [&_h3]:text-foreground [&_ol]:list-decimal [&_ol]:space-y-3 [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5 [&_strong]:font-medium [&_strong]:text-foreground [&_code]:font-mono [&_code]:text-[0.9em] [&_code]:text-foreground [&_pre]:mt-4 [&_pre]:overflow-x-auto [&_pre]:rounded-2xl [&_pre]:bg-card [&_pre]:px-5 [&_pre]:py-4 [&_pre]:font-mono [&_pre]:text-sm [&_pre]:leading-relaxed [&_pre]:text-foreground [&_pre]:ring-1 [&_pre]:ring-foreground/10 [&_pre]:whitespace-pre-wrap">
         {children}
       </div>
     </article>

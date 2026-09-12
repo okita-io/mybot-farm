@@ -47,8 +47,9 @@ export default function AboutPage() {
           <p>
             People who want a teammate with a job — gift reminders, a debugger
             pair, a grant researcher — without stacking skills from scratch.
-            Authors who already run a Grok Bot and want to share a scrubbed
-            copy. Agents that would rather call a tool than click a page.
+            Authors who already run a Grok Bot or a Hermes profile and want to
+            share a scrubbed copy. Agents that would rather call a tool than
+            click a page.
           </p>
           <p>
             Lifestyle sits next to coding next to education. Shop by life job,
@@ -117,8 +118,8 @@ export default function AboutPage() {
               <Link href="/sell">Sell</Link> — list a priced agent or team
             </li>
             <li>
-              <Link href="/how-to">How-To</Link> — install a pack, or share
-              your own Bot
+              <Link href="/how-to">How-To</Link> — install a pack in Grok Bot
+              or Hermes, or share a scrubbed copy
             </li>
             <li>
               <Link href="/privacy">Privacy</Link> — analytics, not a dossier

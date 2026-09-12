@@ -122,7 +122,9 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
           <ContentSection title="New stall">
             <p>
               Scrub keys, private URLs, and customer data first. The pack you
-              paste is what buyers download.
+              paste is what buyers download. Hermes authors:{" "}
+              <Link href="/how-to#hermes-share">export, then run scrub.py</Link>{" "}
+              before you translate or paste a GAF pack.
             </p>
             <SellForm />
           </ContentSection>
