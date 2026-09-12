@@ -15,6 +15,7 @@ export const site = {
 export const navLinks = [
   { href: "/#stalls", label: "Stalls" },
   { href: "/teams", label: "Teams" },
+  { href: "/sell", label: "Sell" },
   { href: "/about", label: "About" },
   { href: "/how-to", label: "How-To" },
   { href: "/plant", label: "Plant" },
@@ -23,6 +24,7 @@ export const navLinks = [
 export const footerLinks = [
   { href: "/about", label: "About" },
   { href: "/teams", label: "Teams" },
+  { href: "/sell", label: "Sell" },
   { href: "/how-to", label: "How-To" },
   { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
@@ -55,6 +57,12 @@ export const contentRoutes = [
     priority: 0.7,
   },
   {
+    path: "/sell",
+    title: "Sell",
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  },
+  {
     path: "/privacy",
     title: "Privacy",
     changeFrequency: "yearly" as const,
@@ -75,7 +83,7 @@ export const capabilities = [
     title: "Share",
     tone: "share",
     description:
-      "Publish a finished agent or a whole team. Open stalls — not a gated catalog-of-one.",
+      "Publish a finished agent or a whole team. Set a price if you want — the farm hosts the stall.",
   },
   {
     id: "teams",
@@ -155,17 +163,22 @@ export const faqs = [
   {
     question: "Can I plant a share URL into my library?",
     answer:
-      "Paste a mybot.farm stall, pack, or API URL on /plant to preview the pack. No login required for browse or preview. Saving into a library waits until you Start a plot (Clerk later). Copy install prompt and WebMCP remain the ways to install into Grok Bot or fetch packs as an agent.",
+      "Paste a mybot.farm stall, pack, or API URL on /plant to preview the pack. No login required for browse or preview. Saving into a library waits until you Start a plot. Copy install prompt and WebMCP remain the ways to install into Grok Bot or fetch packs as an agent.",
   },
   {
     question: "How do I share my own Grok Bot?",
     answer:
-      "Scrub secrets first. In Grok Bot, use share-as-template or copy the public share link. Anyone with the link can preview it on x.ai and choose Add to Grok Bot, which creates a copy — not your computer, logins, or chat history. When farm listing is open, publish a scrubbed GAF pack. OpenClaw and Hermes install targets are coming soon.",
+      "Scrub secrets first. Then list it on /sell: connect Stripe, paste a GAF pack, set a price. The farm hosts the stall and keeps 10% of each sale. You can still use Grok Bot’s public share link if you only want a free copy, not a paid stall.",
+  },
+  {
+    question: "What does the farm keep?",
+    answer:
+      "10% of the listing price as a hosting fee. Buyers check out on mybot.farm. The rest goes to the seller through Stripe Connect. Seed stalls from the farm stay free.",
   },
   {
     question: "When can I use it?",
     answer:
-      "Seed stalls are up now: Gift Day, Sprout, Patch, Probe, Grant Research, and the Pair Bench team. The rest of the marketplace is still coming.",
+      "Seed stalls are up now: Gift Day, Sprout, Patch, Probe, Grant Research, and the Pair Bench team. Authors can list their own agents and teams on /sell.",
   },
 ] as const;
 

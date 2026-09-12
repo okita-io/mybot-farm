@@ -15,6 +15,10 @@ export type Stall = {
   seoTitle?: string;
   seoDescription?: string;
   members?: { name: string; href: string }[];
+  priceCents?: number;
+  currency?: string;
+  listingId?: string;
+  sellerUserId?: string;
 };
 
 export const stallToneClasses: Record<
@@ -118,6 +122,8 @@ export function stallRecord(stall: Stall) {
     downloadHref: stall.downloadHref,
     packUrl: packFileUrl(stall),
     members: stall.members,
+    priceCents: stall.priceCents ?? 0,
+    currency: stall.currency ?? "usd",
     api: stallApiPaths(stall.slug),
   };
 }

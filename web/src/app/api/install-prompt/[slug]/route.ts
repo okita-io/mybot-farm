@@ -1,13 +1,13 @@
 import { jsonResponse, notFoundResponse, optionsResponse } from "@/lib/http";
 import { installPromptPayload } from "@/lib/install-prompt";
-import { getStall } from "@/lib/packs";
+import { findStall } from "@/lib/catalog";
 
 export async function GET(
   request: Request,
   context: RouteContext<"/api/install-prompt/[slug]">,
 ) {
   const { slug } = await context.params;
-  const stall = getStall(slug);
+  const stall = await findStall(slug);
 
   if (!stall) {
     return notFoundResponse(slug);

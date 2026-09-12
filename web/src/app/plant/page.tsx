@@ -26,7 +26,7 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
   const initialUrl = urlParam || slugParam;
   const requestHost = (await headers()).get("host") ?? undefined;
   const initialResult = initialUrl
-    ? resolveShare(
+    ? await resolveShare(
         urlParam ? { url: urlParam } : { slug: slugParam },
         { requestHost },
       )

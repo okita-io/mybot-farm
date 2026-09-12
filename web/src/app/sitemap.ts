@@ -1,8 +1,11 @@
 import type { MetadataRoute } from "next";
-import { stallPageUrl, stalls } from "@/lib/packs";
+import { listCatalogStalls } from "@/lib/catalog";
+import { stallPageUrl } from "@/lib/packs";
 import { contentRoutes, site } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const stalls = await listCatalogStalls();
+
   return [
     {
       url: site.url,
@@ -22,11 +25,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
-    ...stalls.map((stall) => ({
-      url: `${site.url}${stall.downloadHref}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    })),
+    ...stalls
+      .filter((stall) => (stall.priceCents ?? 0) <= 0)
+      .map((stall) => ({
+        url: `${site.url}${stall.downloadHref}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      })),
   ];
 }

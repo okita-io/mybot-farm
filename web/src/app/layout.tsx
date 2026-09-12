@@ -1,3 +1,5 @@
+import { ClerkProvider } from "@clerk/nextjs";
+import { shadcn } from "@clerk/ui/themes";
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -5,6 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
+import { UserSync } from "@/components/user-sync";
 import { WebmcpTools } from "@/components/webmcp-tools";
 import { organizationLd, websiteLd } from "@/lib/schema";
 import { site } from "@/lib/site";
@@ -69,23 +72,26 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       )}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <ThemeProvider>
-          <JsonLd data={websiteLd} />
-          <JsonLd data={organizationLd} />
-          <a
-            href="#content"
-            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
-          >
-            Skip to content
-          </a>
-          <SiteHeader />
-          <WebmcpTools />
-          <main id="content" className="flex flex-1 flex-col">
-            {children}
-          </main>
-          <SiteFooter />
-          <Analytics />
-        </ThemeProvider>
+        <ClerkProvider appearance={{ theme: shadcn }}>
+          <ThemeProvider>
+            <JsonLd data={websiteLd} />
+            <JsonLd data={organizationLd} />
+            <a
+              href="#content"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
+            >
+              Skip to content
+            </a>
+            <SiteHeader />
+            <UserSync />
+            <WebmcpTools />
+            <main id="content" className="flex flex-1 flex-col">
+              {children}
+            </main>
+            <SiteFooter />
+            <Analytics />
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

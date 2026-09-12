@@ -1,8 +1,9 @@
 import { jsonResponse, optionsResponse } from "@/lib/http";
-import { isStallKind, searchStalls, stallRecord } from "@/lib/packs";
+import { searchCatalogStalls } from "@/lib/catalog";
+import { isStallKind, stallRecord } from "@/lib/packs";
 import { packTools } from "@/lib/webmcp-catalog";
 
-export function GET(request: Request) {
+export async function GET(request: Request) {
   const url = new URL(request.url);
   const query =
     url.searchParams.get("q") ?? url.searchParams.get("query") ?? undefined;
@@ -16,7 +17,7 @@ export function GET(request: Request) {
     );
   }
 
-  const matches = searchStalls(query, kind).map(stallRecord);
+  const matches = (await searchCatalogStalls(query, kind)).map(stallRecord);
 
   return jsonResponse({
     tool: "search_stalls",

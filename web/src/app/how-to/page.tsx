@@ -113,11 +113,12 @@ export default function HowToPage() {
             </li>
           </ol>
           <p>
-            Listing on the farm: when the publish flow is open, post a{" "}
-            <strong>scrubbed GAF pack</strong> as a stall (same shape as the
-            seed files under <code>/packs</code>). Until that listing path
-            ships, download or serve the GAF JSON yourself — or keep using the
-            Grok Bot share link. Do not ship secrets in either channel.
+            Listing on the farm: go to{" "}
+            <Link href="/sell">Sell</Link>, connect Stripe payouts, and post a{" "}
+            <strong>scrubbed GAF pack</strong> with a price. Buyers check out on
+            the farm. You receive 90%; the farm keeps 10% for hosting. Until you
+            list, you can still use Grok Bot’s public share link. Do not ship
+            secrets in either channel.
           </p>
           <p>
             Official Grok Bot notes:{" "}
@@ -154,6 +155,9 @@ export default function HowToPage() {
             <li>
               <Link href="/plant">Plant</Link> — paste a share URL and preview
               the pack
+            </li>
+            <li>
+              <Link href="/sell">Sell</Link> — list a priced agent or team
             </li>
             <li>
               <Link href="/#stalls">Open stalls</Link>

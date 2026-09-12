@@ -70,6 +70,18 @@ export default function PrivacyPage() {
           </ul>
         </ContentSection>
 
+        <ContentSection title="Accounts, listings, and payments">
+          <p>
+            Sign-in is optional for browsing and free seed packs. If you create
+            an account (Clerk), we store a matching user row so the farm can
+            remember you. If you sell a stall, we store the pack you posted,
+            the price, and your Stripe Connect account id. If you buy a stall,
+            Stripe handles the card; we store enough to unlock that pack for
+            you. The farm keeps 10% of the listing price as a hosting fee.
+            Stripe’s own privacy policy covers the checkout and payouts flow.
+          </p>
+        </ContentSection>
+
         <ContentSection title="Packs, APIs, and prompts">
           <p>
             Public JSON under <code>/packs</code> and <code>/api</code> is
@@ -90,6 +102,9 @@ export default function PrivacyPage() {
             </li>
             <li>
               <Link href="/how-to">How to install or share</Link>
+            </li>
+            <li>
+              <Link href="/sell">Sell a stall</Link>
             </li>
             <li>
               <Link href="/#stalls">Open stalls</Link>

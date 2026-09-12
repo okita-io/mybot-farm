@@ -48,6 +48,12 @@ export function HomeHero() {
                 Teams
               </Link>
               <Link
+                href="/sell"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
+              >
+                Sell
+              </Link>
+              <Link
                 href="/#stalls"
                 className="font-medium text-foreground underline-offset-4 hover:underline"
               >

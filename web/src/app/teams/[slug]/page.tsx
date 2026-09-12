@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { StallView } from "@/components/stall-view";
-import { getStall, stallsOfKind, stallPagePath, stallSeo } from "@/lib/packs";
+import { findStall } from "@/lib/catalog";
+import { stallsOfKind, stallPagePath, stallSeo } from "@/lib/packs";
+import { stallPageState } from "@/lib/stall-page";
 
 export function generateStaticParams() {
   return stallsOfKind("team").map((stall) => ({ slug: stall.slug }));
@@ -11,7 +12,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/teams/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const stall = getStall(slug);
+  const stall = await findStall(slug);
 
   if (!stall || stall.kind !== "team") {
     return { title: "Stall not found" };
@@ -34,13 +35,22 @@ export async function generateMetadata({
 
 export default async function TeamStallPage({
   params,
+  searchParams,
 }: PageProps<"/teams/[slug]">) {
   const { slug } = await params;
-  const stall = getStall(slug);
+  const query = await searchParams;
+  const state = await stallPageState(slug, "team", {
+    checkout: typeof query.checkout === "string" ? query.checkout : undefined,
+    session_id:
+      typeof query.session_id === "string" ? query.session_id : undefined,
+  });
 
-  if (!stall || stall.kind !== "team") {
-    notFound();
-  }
-
-  return <StallView stall={stall} />;
+  return (
+    <StallView
+      stall={state.stall}
+      canDownload={state.canDownload}
+      signedIn={state.signedIn}
+      checkout={state.checkout}
+    />
+  );
 }

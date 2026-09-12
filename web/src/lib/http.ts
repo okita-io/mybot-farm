@@ -25,6 +25,17 @@ export function jsonResponse(data: unknown, init?: ResponseInit) {
   });
 }
 
+export function paymentRequiredResponse(slug: string, priceCents: number) {
+  return jsonResponse(
+    {
+      error: "purchase_required",
+      slug,
+      priceCents,
+    },
+    { status: 402, headers: { "Cache-Control": "no-store" } },
+  );
+}
+
 export function notFoundResponse(slug?: string) {
   return jsonResponse(
     {
