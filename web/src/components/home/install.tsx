@@ -61,6 +61,13 @@ export function HomeInstall() {
           >
             How-To
           </Link>
+          . Hermes uses a scrubbed profile archive, not this GAF prompt — see{" "}
+          <Link
+            href="/how-to#hermes-import"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            import a Hermes profile
+          </Link>
           . Already have a stall or pack URL?{" "}
           <Link
             href="/plant"

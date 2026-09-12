@@ -48,10 +48,10 @@ export const aboutPageLd = {
 export const howToInstallLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  name: "Install an agent from mybot.farm",
+  name: "Install an agent from mybot.farm in Grok Bot",
   description:
-    "Copy a stall’s install prompt into Grok Bot, or download the GAF JSON from /packs or /api/packs/{slug}. WebMCP tools can fetch the same pack.",
-  url: `${site.url}/how-to`,
+    "Copy a stall’s install prompt into Grok Bot, or download the GAF JSON from /packs or /api/packs/{slug}. Seed stalls today are GAF files. WebMCP tools can fetch the same pack.",
+  url: `${site.url}/how-to#install`,
   step: [
     {
       "@type": "HowToStep",
@@ -72,6 +72,68 @@ export const howToInstallLd = {
       "@type": "HowToStep",
       name: "Confirm you have a copy",
       text: "Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history.",
+    },
+  ],
+};
+
+export const howToHermesImportLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Import a Hermes profile from a scrubbed archive",
+  description:
+    "Hermes installs from a scrubbed profile .tar.gz, not from GAF JSON. Seed stalls on mybot.farm today are GAF files for Grok Bot. Import a clean archive with hermes profile import, then add your own API keys.",
+  url: `${site.url}/how-to#hermes-import`,
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Install Hermes Agent",
+      text: "Install Hermes Agent so hermes profile import is available on your machine.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Get a scrubbed profile archive",
+      text: "Use a .tar.gz that has already been through scrub.py. Do not import a raw hermes profile export. Seed stall downloads are GAF JSON and will not import.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Import as a new profile",
+      text: "Run hermes profile import path/to/pack.tar.gz --name my-agent. Import refuses to overwrite an existing profile and cannot import as default.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Add your own credentials",
+      text: "auth.json and .env never ship in a farm pack. Configure your own keys after import.",
+    },
+  ],
+};
+
+export const howToHermesShareLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Export and scrub a Hermes agent before sharing",
+  description:
+    "Export a Hermes profile, then run mybot.farm’s scrub.py to drop chat history and secrets. Share only the clean archive, never the raw export.",
+  url: `${site.url}/how-to#hermes-share`,
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Export the profile",
+      text: "Run hermes profile export <name>. The archive can include sessions, state.db, memories, and secrets written into files. Hermes strips auth.json and .env by filename only.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Scrub the export",
+      text: "Run python3 scrub.py on the tar.gz. The script lives in the mybot.farm repo under scripts/ and is mirrored at https://mybot.farm/scripts/scrub.py.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Read the report",
+      text: "Exit 0 means the re-scan passed. Exit 1 means a high-confidence secret remains — do not share. Review needs_review items before listing or sending the pack.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Share only the clean pack",
+      text: "Hand someone the scrubbed .tar.gz for hermes profile import, or list a scrubbed GAF pack on /sell. Never ship the original export.",
     },
   ],
 };
