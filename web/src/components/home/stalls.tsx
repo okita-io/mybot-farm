@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/card";
 import { Container } from "@/components/container";
 import { StallActions } from "@/components/stall-actions";
+import { StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
+import { stallCardStats } from "@/lib/pack-files";
 import { stalls, stallPagePath, stallToneClasses } from "@/lib/packs";
 import { cn } from "@/lib/utils";
 
@@ -32,6 +34,7 @@ export function HomeStalls() {
           {stalls.map((stall) => {
             const tone = stallToneClasses[stall.tone];
             const href = stallPagePath(stall);
+            const stats = stallCardStats(stall.slug);
 
             return (
               <Card
@@ -39,14 +42,12 @@ export function HomeStalls() {
                 className={cn("min-w-0 gap-4 py-6 ring-1", tone.card)}
               >
                 <CardHeader className="gap-3">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary" className={cn("h-6 px-2.5", tone.label)}>
-                      {stall.category}
-                    </Badge>
-                    <Badge variant="outline" className="h-6 px-2.5">
-                      {stall.kind === "team" ? "Team" : "Agent"}
-                    </Badge>
-                  </div>
+                  <StallHeaderMeta
+                    kind={stall.kind}
+                    category={stall.category}
+                    categoryClassName={tone.label}
+                    runtimes={stats?.runtimes ?? []}
+                  />
                   <CardTitle className="text-2xl font-semibold tracking-tight">
                     <Link href={href} className="underline-offset-4 hover:underline">
                       {stall.name}
@@ -56,10 +57,17 @@ export function HomeStalls() {
                     {stall.title}
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-3">
                   <p className="text-base leading-relaxed text-pretty text-foreground/80">
                     {stall.description}
                   </p>
+                  {stats ? (
+                    <StallPackStats
+                      skillCount={stats.skillCount}
+                      memoryLineCount={stats.memoryLineCount}
+                      soulLine={stats.soulLine}
+                    />
+                  ) : null}
                 </CardContent>
                 <CardFooter className="flex flex-wrap gap-2 border-t-0 bg-transparent">
                   <StallActions stall={stall} />

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { CopyInstallPrompt } from "@/components/copy-install-prompt";
+import { StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -226,19 +227,19 @@ export function PlantShareForm({
 
       {preview && tone ? (
         <article className={cn("rounded-3xl px-6 py-8 ring-1 sm:px-8", tone.card)}>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="secondary" className={cn("h-6 px-2.5", tone.label)}>
-              {preview.stall.category}
-            </Badge>
-            <Badge variant="outline" className="h-6 px-2.5">
-              {preview.kind === "team" ? "Team" : "Agent"}
-            </Badge>
-            {preview.packSummary.scrubbed ? (
-              <Badge variant="outline" className="h-6 px-2.5">
-                Scrubbed
-              </Badge>
-            ) : null}
-          </div>
+          <StallHeaderMeta
+            kind={preview.kind}
+            category={preview.stall.category}
+            categoryClassName={tone.label}
+            runtimes={preview.packSummary.runtime}
+            extra={
+              preview.packSummary.scrubbed ? (
+                <Badge variant="outline" className="h-6 px-2.5">
+                  Scrubbed
+                </Badge>
+              ) : null
+            }
+          />
           <h2 className="mt-4 text-3xl font-semibold tracking-tight text-foreground">
             {preview.stall.name}
           </h2>
@@ -246,10 +247,13 @@ export function PlantShareForm({
           <p className="mt-3 text-base leading-relaxed text-pretty text-foreground/80">
             {preview.stall.description}
           </p>
-          <p className="mt-4 text-sm text-foreground/70">
-            {preview.packSummary.skillCount} skills · {preview.packSummary.memoryCount} memory ·{" "}
-            {preview.packSummary.memberCount} members
-          </p>
+          <div className="mt-4">
+            <StallPackStats
+              skillCount={preview.packSummary.skillCount}
+              memoryLineCount={preview.packSummary.memoryLineCount}
+              soulLine={preview.packSummary.soulLine}
+            />
+          </div>
           {preview.stall.members?.length ? (
             <p className="mt-2 text-sm text-foreground/70">
               Members: {preview.stall.members.map((member) => member.name).join(", ")}

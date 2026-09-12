@@ -1,5 +1,5 @@
 import { installPromptPayload } from "@/lib/install-prompt";
-import { getPack, requireStallAndPack } from "@/lib/pack-files";
+import { getPack, packSummaryFields, requireStallAndPack } from "@/lib/pack-files";
 import {
   getStall,
   stallPageUrl,
@@ -36,8 +36,11 @@ export type PackSummary = {
     title?: string;
     description?: string;
   };
+  runtime: string[];
   skillCount: number;
   memoryCount: number;
+  memoryLineCount: number;
+  soulLine: string | null;
   memberCount: number;
   scrubbed: boolean;
 };
@@ -212,6 +215,8 @@ function resolveFromSlug(
     warnings.push("That URL is an install-prompt API. Preview uses the stall pack, not the prompt text as the pack.");
   }
 
+  const summary = packSummaryFields(pack);
+
   return {
     ok: true,
     kind: stall.kind,
@@ -223,19 +228,16 @@ function resolveFromSlug(
       tone: stall.tone,
     },
     packSummary: {
-      format: pack.format,
-      version: pack.version,
-      profile: pack.profile
-        ? {
-            name: pack.profile.name,
-            title: pack.profile.title,
-            description: pack.profile.description,
-          }
-        : undefined,
-      skillCount: pack.skills?.length ?? 0,
-      memoryCount: pack.memory?.length ?? 0,
-      memberCount: pack.members?.length ?? 0,
-      scrubbed: pack.manifest?.scrubbed ?? true,
+      format: summary.format,
+      version: summary.version,
+      profile: summary.profile,
+      runtime: summary.runtime,
+      skillCount: summary.skillCount,
+      memoryCount: summary.memoryCount,
+      memoryLineCount: summary.memoryLineCount,
+      soulLine: summary.soulLine,
+      memberCount: summary.memberCount,
+      scrubbed: summary.scrubbed,
     },
     installPrompt: installPromptPayload(stall),
     warnings,

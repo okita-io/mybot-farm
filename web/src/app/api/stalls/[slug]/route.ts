@@ -1,5 +1,5 @@
 import { jsonResponse, notFoundResponse, optionsResponse } from "@/lib/http";
-import { getPack, requireStallAndPack } from "@/lib/pack-files";
+import { getPack, packSummaryFields, requireStallAndPack } from "@/lib/pack-files";
 import { stallRecord } from "@/lib/packs";
 
 export async function GET(
@@ -14,20 +14,23 @@ export async function GET(
   }
 
   const { stall, pack } = loaded;
-  const memberCount = pack.members?.length ?? 0;
+  const summary = packSummaryFields(pack);
 
   return jsonResponse({
     tool: "get_stall",
     ...stallRecord(stall),
     pack: {
-      format: pack.format,
-      version: pack.version,
+      format: summary.format,
+      version: summary.version,
       profile: pack.profile,
-      skillCount: pack.skills?.length ?? 0,
-      memoryCount: pack.memory?.length ?? 0,
-      memberCount,
-      scrubbed: pack.manifest?.scrubbed ?? true,
-      homepage: pack.manifest?.homepage,
+      runtime: summary.runtime,
+      skillCount: summary.skillCount,
+      memoryCount: summary.memoryCount,
+      memoryLineCount: summary.memoryLineCount,
+      soulLine: summary.soulLine,
+      memberCount: summary.memberCount,
+      scrubbed: summary.scrubbed,
+      homepage: summary.homepage,
       members: (pack.members ?? []).map((member) => {
         const memberSlug = member.pack
           ?.split("/")
