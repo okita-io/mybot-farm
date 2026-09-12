@@ -1,12 +1,7 @@
 import { installPromptPayload } from "@/lib/install-prompt";
-import { getPack, packSummaryFields, requireStallAndPack } from "@/lib/pack-files";
-import {
-  getStall,
-  stallPageUrl,
-  stallRecord,
-  type StallKind,
-  type StallTone,
-} from "@/lib/packs";
+import { packSummaryFields } from "@/lib/pack-files";
+import { findStall, getCatalogPack, requireCatalogStallAndPack } from "@/lib/catalog";
+import { stallPageUrl, stallRecord, type StallKind, type StallTone } from "@/lib/packs";
 import { site } from "@/lib/site";
 
 export const MAX_SHARE_URL_LENGTH = 2048;
@@ -183,14 +178,14 @@ function coerceToUrl(raw: string): URL | { slug: string } | { error: ResolveShar
   return { error: "invalid_url" };
 }
 
-function resolveFromSlug(
+async function resolveFromSlug(
   slug: string,
   sourceUrl: string,
   pathKind: PathKind | "slug",
-): ResolveShareResult {
-  const loaded = requireStallAndPack(slug);
-  const stall = loaded?.stall ?? getStall(slug);
-  const pack = loaded?.pack ?? getPack(slug);
+): Promise<ResolveShareResult> {
+  const loaded = await requireCatalogStallAndPack(slug);
+  const stall = loaded?.stall ?? (await findStall(slug));
+  const pack = loaded?.pack ?? (await getCatalogPack(slug));
 
   if (!stall || !pack) {
     return {
@@ -244,11 +239,11 @@ function resolveFromSlug(
   };
 }
 
-function resolveParsedUrl(
+async function resolveParsedUrl(
   parsed: URL,
   options: ResolveShareOptions,
   alreadyUnwrapped: boolean,
-): ResolveShareResult {
+): Promise<ResolveShareResult> {
   if (!isAllowedHost(parsed.host, options.requestHost)) {
     return {
       ok: false,
@@ -299,11 +294,11 @@ function resolveParsedUrl(
   return resolveFromSlug(match.slug, parsed.toString(), match.pathKind);
 }
 
-export function resolveShare(
+export async function resolveShare(
   input: ResolveShareInput,
   options: ResolveShareOptions = {},
   alreadyUnwrapped = false,
-): ResolveShareResult {
+): Promise<ResolveShareResult> {
   const rawUrl = input.url?.trim();
   const rawSlug = input.slug?.trim();
 

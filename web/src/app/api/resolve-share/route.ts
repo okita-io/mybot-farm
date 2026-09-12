@@ -7,8 +7,8 @@ import {
   resolveShareStatus,
 } from "@/lib/resolve-share";
 
-export function GET(request: Request) {
-  const result = resolveShare(inputFromSearchParams(new URL(request.url)), {
+export async function GET(request: Request) {
+  const result = await resolveShare(inputFromSearchParams(new URL(request.url)), {
     requestHost: requestHostFrom(request),
   });
 
@@ -16,7 +16,7 @@ export function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const result = resolveShare(await inputFromRequest(request), {
+  const result = await resolveShare(await inputFromRequest(request), {
     requestHost: requestHostFrom(request),
   });
 

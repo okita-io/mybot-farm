@@ -1,12 +1,24 @@
-import { jsonResponse, notFoundResponse, optionsResponse } from "@/lib/http";
-import { packSkillList } from "@/lib/pack-files";
+import { auth } from "@clerk/nextjs/server";
+import { jsonResponse, notFoundResponse, optionsResponse, paymentRequiredResponse } from "@/lib/http";
+import { catalogPackSkillList, resolvePackAccess } from "@/lib/catalog";
 
 export async function GET(
   _request: Request,
   context: RouteContext<"/api/packs/[slug]/skills">,
 ) {
   const { slug } = await context.params;
-  const skills = packSkillList(slug);
+  const { userId } = await auth();
+  const access = await resolvePackAccess(slug, userId);
+
+  if (!access.ok && access.reason === "not_found") {
+    return notFoundResponse(slug);
+  }
+
+  if (!access.ok) {
+    return paymentRequiredResponse(slug, access.stall.priceCents ?? 0);
+  }
+
+  const skills = await catalogPackSkillList(slug);
 
   if (!skills) {
     return notFoundResponse(slug);

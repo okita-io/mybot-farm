@@ -5,10 +5,9 @@ import { ContentPage, ContentSection } from "@/components/content-page";
 import { JsonLd } from "@/components/json-ld";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { teamsPageLd } from "@/lib/schema";
-import { stallPagePath, stallsOfKind } from "@/lib/packs";
+import { listCatalogStalls } from "@/lib/catalog";
+import { stallPagePath } from "@/lib/packs";
 import { site } from "@/lib/site";
-
-const teamStalls = stallsOfKind("team");
 
 const teamsImageAlt =
   "Three glossy figures — a green oval, a pink triangle, and a blue cube — standing together in a cubicle office.";
@@ -60,7 +59,8 @@ const topologies = [
   },
 ] as const;
 
-export default function TeamsPage() {
+export default async function TeamsPage() {
+  const teamStalls = (await listCatalogStalls()).filter((stall) => stall.kind === "team");
   return (
     <>
       <JsonLd data={teamsPageLd} />
@@ -160,6 +160,9 @@ export default function TeamsPage() {
                 {` — ${stall.title}`}
               </li>
             ))}
+            <li>
+              <Link href="/sell">Sell</Link> — list a team pack of your own
+            </li>
             <li>
               <Link href="/how-to">How-To</Link> — install a pack, including
               each team member

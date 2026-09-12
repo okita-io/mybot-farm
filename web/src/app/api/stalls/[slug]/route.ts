@@ -1,5 +1,5 @@
 import { jsonResponse, notFoundResponse, optionsResponse } from "@/lib/http";
-import { getPack, packSummaryFields, requireStallAndPack } from "@/lib/pack-files";
+import { catalogPackSummary, findStall, getCatalogPack } from "@/lib/catalog";
 import { stallRecord } from "@/lib/packs";
 
 export async function GET(
@@ -7,14 +7,13 @@ export async function GET(
   context: RouteContext<"/api/stalls/[slug]">,
 ) {
   const { slug } = await context.params;
-  const loaded = requireStallAndPack(slug);
+  const stall = await findStall(slug);
+  const pack = await getCatalogPack(slug);
+  const summary = await catalogPackSummary(slug);
 
-  if (!loaded) {
+  if (!stall || !pack || !summary) {
     return notFoundResponse(slug);
   }
-
-  const { stall, pack } = loaded;
-  const summary = packSummaryFields(pack);
 
   return jsonResponse({
     tool: "get_stall",
@@ -36,14 +35,13 @@ export async function GET(
           ?.split("/")
           .pop()
           ?.replace(/\.json$/, "");
-        const memberPack = memberSlug ? getPack(memberSlug) : undefined;
 
         return {
           role: member.role,
           summary: member.summary,
           pack: member.pack,
           slug: memberSlug,
-          name: memberPack?.profile?.name,
+          name: member.role,
         };
       }),
     },

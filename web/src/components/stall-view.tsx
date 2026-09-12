@@ -4,7 +4,8 @@ import { StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
 import { Container } from "@/components/container";
 import { JsonLd } from "@/components/json-ld";
 import { installPrompt, shortInstallPrompt } from "@/lib/install-prompt";
-import { stallCardStats } from "@/lib/pack-files";
+import { catalogStallCardStats } from "@/lib/catalog";
+import { formatUsd } from "@/lib/money";
 import {
   packFileUrl,
   stallApiPaths,
@@ -15,6 +16,8 @@ import {
 import { cn } from "@/lib/utils";
 
 export function stallJsonLd(stall: Stall) {
+  const cents = stall.priceCents ?? 0;
+
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -24,18 +27,29 @@ export function stallJsonLd(stall: Stall) {
     applicationCategory: stall.category,
     offers: {
       "@type": "Offer",
-      price: "0",
-      priceCurrency: "USD",
+      price: (cents / 100).toFixed(2),
+      priceCurrency: (stall.currency ?? "usd").toUpperCase(),
     },
   };
 }
 
-export function StallView({ stall }: { stall: Stall }) {
+export async function StallView({
+  stall,
+  canDownload,
+  signedIn,
+  checkout,
+}: {
+  stall: Stall;
+  canDownload: boolean;
+  signedIn: boolean;
+  checkout?: "success" | "cancel" | null;
+}) {
   const tone = stallToneClasses[stall.tone];
   const prompt = installPrompt(stall);
   const shortPrompt = shortInstallPrompt(stall);
   const api = stallApiPaths(stall.slug);
-  const stats = stallCardStats(stall.slug);
+  const stats = await catalogStallCardStats(stall.slug);
+  const paid = (stall.priceCents ?? 0) > 0;
 
   return (
     <section className="py-16 sm:py-20">
@@ -68,6 +82,21 @@ export function StallView({ stall }: { stall: Stall }) {
           <p className="mt-4 text-base leading-relaxed text-pretty text-foreground/80 sm:text-lg">
             {stall.description}
           </p>
+          {paid ? (
+            <p className="mt-4 text-sm font-medium text-foreground">
+              {canDownload ? "Unlocked" : `${formatUsd(stall.priceCents ?? 0)} · farm keeps 10%`}
+            </p>
+          ) : null}
+          {checkout === "success" && !canDownload ? (
+            <p className="mt-3 text-sm text-foreground/75" role="status">
+              Payment received. Unlock the pack in a moment — refresh if the download is still locked.
+            </p>
+          ) : null}
+          {checkout === "cancel" ? (
+            <p className="mt-3 text-sm text-muted-foreground" role="status">
+              Checkout canceled. The stall is still here if you want it later.
+            </p>
+          ) : null}
           {stats ? (
             <div className="mt-4">
               <StallPackStats
@@ -99,7 +128,12 @@ export function StallView({ stall }: { stall: Stall }) {
             </p>
           ) : null}
           <div className="mt-8">
-            <StallActions stall={stall} showShortCopy />
+            <StallActions
+              stall={stall}
+              showShortCopy
+              canDownload={canDownload}
+              signedIn={signedIn}
+            />
           </div>
         </div>
 
@@ -108,28 +142,36 @@ export function StallView({ stall }: { stall: Stall }) {
             Copy-paste install
           </h2>
           <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-            Paste this into a Grok Bot (or another agent). It installs a copy of
-            the pack — not the author’s computer, logins, or chat history. Step
-            by step:{" "}
+            {canDownload
+              ? "Paste this into a Grok Bot (or another agent). It installs a copy of the pack — not the author’s computer, logins, or chat history. Step by step:"
+              : "Buy this stall to unlock the pack download and install prompt. Seed stalls on the farm stay free."}{" "}
             <Link href="/how-to" className="underline-offset-4 hover:underline">
               How-To
             </Link>
             . OpenClaw and Hermes install targets are coming soon.
           </p>
-          <pre
-            id="install-prompt"
-            className="mt-6 overflow-x-auto rounded-2xl bg-card px-5 py-5 font-mono text-sm leading-relaxed text-foreground ring-1 ring-foreground/10 whitespace-pre-wrap"
-          >
-            {prompt}
-          </pre>
-          <details className="mt-4">
-            <summary className="cursor-pointer text-sm font-medium text-foreground">
-              Short prompt
-            </summary>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              {shortPrompt}
+          {canDownload ? (
+            <pre
+              id="install-prompt"
+              className="mt-6 overflow-x-auto rounded-2xl bg-card px-5 py-5 font-mono text-sm leading-relaxed text-foreground ring-1 ring-foreground/10 whitespace-pre-wrap"
+            >
+              {prompt}
+            </pre>
+          ) : (
+            <p className="mt-6 rounded-2xl bg-card px-5 py-5 text-sm leading-relaxed text-muted-foreground ring-1 ring-foreground/10">
+              Install prompt unlocks after purchase.
             </p>
-          </details>
+          )}
+          {canDownload ? (
+            <details className="mt-4">
+              <summary className="cursor-pointer text-sm font-medium text-foreground">
+                Short prompt
+              </summary>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                {shortPrompt}
+              </p>
+            </details>
+          ) : null}
         </article>
 
         <article className="mt-12">

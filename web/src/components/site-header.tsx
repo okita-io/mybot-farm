@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { HeaderAuth } from "@/components/header-auth";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { navLinks, site } from "@/lib/site";
 
@@ -48,7 +49,8 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="shrink-0">
+        <div className="flex shrink-0 items-center gap-1.5">
+          <HeaderAuth />
           <ThemeToggle />
         </div>
       </Container>

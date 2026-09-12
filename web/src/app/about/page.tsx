@@ -64,9 +64,9 @@ export default function AboutPage() {
             shouldn’t be listed.
           </p>
           <p>
-            Seed stalls are up now. More authors will list as the publish flow
-            opens. Until then, you can still download GAF JSON and use Grok
-            Bot’s public share link.
+            Seed stalls are free. Authors list their own packs on{" "}
+            <Link href="/sell">Sell</Link> — connect Stripe, set a price, and
+            the farm keeps 10% for hosting.
           </p>
         </ContentSection>
 
@@ -112,6 +112,9 @@ export default function AboutPage() {
             <li>
               <Link href="/teams">Agent Teams</Link> — plant a crew instead of
               wiring agents one-by-one
+            </li>
+            <li>
+              <Link href="/sell">Sell</Link> — list a priced agent or team
             </li>
             <li>
               <Link href="/how-to">How-To</Link> — install a pack, or share

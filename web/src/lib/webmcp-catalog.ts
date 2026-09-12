@@ -21,7 +21,7 @@ export const packTools = [
     name: "download_pack",
     title: "Download pack",
     description:
-      "Download the Generic Agent Format (GAF) JSON pack for a stall slug. Same content as the public /packs file. Read-only.",
+      "Download the Generic Agent Format (GAF) JSON pack for a stall slug. Free seed packs are public. Paid listings return 402 until the signed-in buyer has purchased. Read-only.",
     method: "GET",
     path: "/api/packs/{slug}",
     query: ["download"],
