@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { navLinks, site } from "@/lib/site";
 
 export function SiteMark() {
@@ -22,27 +23,34 @@ export function SiteMark() {
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur-xl">
-      <Container className="flex h-14 items-center justify-between gap-3">
-        <Link href="/" className="flex shrink-0 items-center gap-2.5 no-underline">
+      <Container className="flex h-14 items-center gap-2 sm:gap-3">
+        <Link
+          href="/"
+          aria-label={site.name}
+          className="flex shrink-0 items-center gap-2.5 no-underline"
+        >
           <SiteMark />
-          <span className="text-sm font-medium tracking-tight text-foreground">
+          <span className="hidden text-sm font-medium tracking-tight text-foreground sm:inline">
             {site.name}
           </span>
         </Link>
         <nav
           aria-label="Primary"
-          className="flex items-center gap-3 sm:gap-4"
+          className="flex min-w-0 flex-1 items-center justify-end gap-2.5 overflow-x-auto sm:gap-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+              className="shrink-0 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
             >
               {link.label}
             </Link>
           ))}
         </nav>
+        <div className="shrink-0">
+          <ThemeToggle />
+        </div>
       </Container>
     </header>
   );

@@ -12,7 +12,8 @@ export const runtimeTags: Record<RuntimeId, RuntimeTag> = {
   "grok-bot": {
     id: "grok-bot",
     label: "GrokBot",
-    className: "border-transparent bg-black text-white!",
+    className:
+      "border-transparent bg-black text-white! dark:bg-white dark:text-black!",
   },
   hermes: {
     id: "hermes",
