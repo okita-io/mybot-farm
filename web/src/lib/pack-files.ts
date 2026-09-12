@@ -2,6 +2,7 @@ import giftDay from "../../public/packs/agents/gift-day.json";
 import grantResearch from "../../public/packs/agents/grant-research.json";
 import patch from "../../public/packs/agents/patch.json";
 import probe from "../../public/packs/agents/probe.json";
+import scholasticResearch from "../../public/packs/agents/scholastic-research.json";
 import sproutJournal from "../../public/packs/agents/sprout-journal.json";
 import pairBench from "../../public/packs/teams/pair-bench.json";
 import { getStall, type Stall } from "@/lib/packs";
@@ -157,6 +158,7 @@ const packsBySlug: Record<string, FarmPack> = {
   patch,
   probe,
   "grant-research": grantResearch,
+  "scholastic-research": scholasticResearch,
   "pair-bench": pairBench,
 };
 

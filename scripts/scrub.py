@@ -320,7 +320,11 @@ def open_source(args):
             # guard: no absolute paths or .. traversal
             if m.name.startswith("/") or ".." in m.name.split("/"):
                 continue
-            t.extract(m, tmp, filter="data")
+            # filter="data" only exists on py3.11.2+; 3.9 has no extract filter
+            if hasattr(tarfile, "data_filter"):
+                t.extract(m, tmp, filter="data")
+            else:
+                t.extract(m, tmp)
     tops = [d for d in tmp.iterdir() if d.is_dir()]
     profile = tops[0] if tops else tmp
     return profile, (lambda: __import__("shutil").rmtree(tmp, ignore_errors=True))
