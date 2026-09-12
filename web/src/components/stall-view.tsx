@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { StallActions } from "@/components/stall-actions";
-import { Badge } from "@/components/ui/badge";
+import { StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
 import { Container } from "@/components/container";
 import { JsonLd } from "@/components/json-ld";
 import { installPrompt, shortInstallPrompt } from "@/lib/install-prompt";
+import { stallCardStats } from "@/lib/pack-files";
 import {
   packFileUrl,
   stallApiPaths,
@@ -34,6 +35,7 @@ export function StallView({ stall }: { stall: Stall }) {
   const prompt = installPrompt(stall);
   const shortPrompt = shortInstallPrompt(stall);
   const api = stallApiPaths(stall.slug);
+  const stats = stallCardStats(stall.slug);
 
   return (
     <section className="py-16 sm:py-20">
@@ -53,14 +55,12 @@ export function StallView({ stall }: { stall: Stall }) {
           ) : null}
         </p>
         <div className={cn("mt-6 rounded-3xl px-6 py-8 ring-1 sm:px-8", tone.card)}>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="secondary" className={cn("h-6 px-2.5", tone.label)}>
-              {stall.category}
-            </Badge>
-            <Badge variant="outline" className="h-6 px-2.5">
-              {stall.kind === "team" ? "Team" : "Agent"}
-            </Badge>
-          </div>
+          <StallHeaderMeta
+            kind={stall.kind}
+            category={stall.category}
+            categoryClassName={tone.label}
+            runtimes={stats?.runtimes ?? []}
+          />
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
             {stall.name}
           </h1>
@@ -68,6 +68,15 @@ export function StallView({ stall }: { stall: Stall }) {
           <p className="mt-4 text-base leading-relaxed text-pretty text-foreground/80 sm:text-lg">
             {stall.description}
           </p>
+          {stats ? (
+            <div className="mt-4">
+              <StallPackStats
+                skillCount={stats.skillCount}
+                memoryLineCount={stats.memoryLineCount}
+                soulLine={stats.soulLine}
+              />
+            </div>
+          ) : null}
           {stall.members?.length ? (
             <p className="mt-4 text-sm text-foreground/70">
               Members:{" "}

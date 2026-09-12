@@ -5,6 +5,7 @@ import probe from "../../public/packs/agents/probe.json";
 import sproutJournal from "../../public/packs/agents/sprout-journal.json";
 import pairBench from "../../public/packs/teams/pair-bench.json";
 import { getStall, type Stall } from "@/lib/packs";
+import { normalizeRuntimes, type RuntimeId } from "@/lib/runtimes";
 
 export type PackSkill = {
   name: string;
@@ -33,6 +34,7 @@ export type PackMemberRef = {
 export type FarmPack = {
   format?: string;
   version?: string;
+  runtime?: string[];
   slug?: string;
   category?: string;
   tags?: string[];
@@ -52,6 +54,102 @@ export type FarmPack = {
     license?: string;
   };
 };
+
+export type StallCardStats = {
+  runtimes: RuntimeId[];
+  skillCount: number;
+  memoryCount: number;
+  memoryLineCount: number;
+  soulLine: string | null;
+  memberCount: number;
+};
+
+const SOUL_MAX_CHARS = 140;
+
+function countContentLines(content: string | undefined): number {
+  if (!content?.trim()) {
+    return 0;
+  }
+
+  return content.split(/\r?\n/).filter((line) => line.trim().length > 0).length;
+}
+
+function countMemoryLines(entries: PackMemory[] | undefined): number {
+  return (entries ?? []).reduce(
+    (sum, entry) => sum + countContentLines(entry.content),
+    0,
+  );
+}
+
+export function soulOneLiner(text: string | undefined | null): string | null {
+  if (!text?.trim()) {
+    return null;
+  }
+
+  const collapsed = text.replace(/\s+/g, " ").trim();
+  const sentenceEnd = collapsed.search(/[.!?](?:\s|$)/);
+  const line = sentenceEnd === -1 ? collapsed : collapsed.slice(0, sentenceEnd + 1);
+
+  if (line.length <= SOUL_MAX_CHARS) {
+    return line;
+  }
+
+  return `${line.slice(0, SOUL_MAX_CHARS - 1).trimEnd()}…`;
+}
+
+export function packCardStats(pack: FarmPack): StallCardStats {
+  const memberPacks = (pack.members ?? [])
+    .map((member) => {
+      const slug = member.pack ? memberSlugFromPackPath(member.pack) : undefined;
+      return slug ? getPack(slug) : undefined;
+    })
+    .filter((memberPack): memberPack is FarmPack => Boolean(memberPack));
+
+  const ownSkills = pack.skills?.length ?? 0;
+  const memberSkills = memberPacks.reduce(
+    (sum, memberPack) => sum + (memberPack.skills?.length ?? 0),
+    0,
+  );
+  const memoryEntries = [...(pack.memory ?? []), ...(pack.shared?.memory ?? [])];
+
+  return {
+    runtimes: normalizeRuntimes(pack.runtime),
+    skillCount: ownSkills + memberSkills,
+    memoryCount: memoryEntries.length,
+    memoryLineCount: countMemoryLines(memoryEntries),
+    soulLine: soulOneLiner(pack.profile?.description),
+    memberCount: pack.members?.length ?? 0,
+  };
+}
+
+export function stallCardStats(slug: string): StallCardStats | null {
+  const pack = getPack(slug);
+  return pack ? packCardStats(pack) : null;
+}
+
+export function packSummaryFields(pack: FarmPack) {
+  const stats = packCardStats(pack);
+
+  return {
+    format: pack.format,
+    version: pack.version,
+    profile: pack.profile
+      ? {
+          name: pack.profile.name,
+          title: pack.profile.title,
+          description: pack.profile.description,
+        }
+      : undefined,
+    runtime: stats.runtimes,
+    skillCount: stats.skillCount,
+    memoryCount: stats.memoryCount,
+    memoryLineCount: stats.memoryLineCount,
+    soulLine: stats.soulLine,
+    memberCount: stats.memberCount,
+    scrubbed: pack.manifest?.scrubbed ?? true,
+    homepage: pack.manifest?.homepage,
+  };
+}
 
 const packsBySlug: Record<string, FarmPack> = {
   "gift-day": giftDay,
