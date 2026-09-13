@@ -1,6 +1,6 @@
 import { jsonResponse, notFoundResponse, optionsResponse } from "@/lib/http";
 import { catalogPackSummary, findStall, getCatalogPack } from "@/lib/catalog";
-import { stallRecord } from "@/lib/packs";
+import { packPathStem, stallRecord } from "@/lib/packs";
 
 export async function GET(
   _request: Request,
@@ -31,10 +31,7 @@ export async function GET(
       scrubbed: summary.scrubbed,
       homepage: summary.homepage,
       members: (pack.members ?? []).map((member) => {
-        const memberSlug = member.pack
-          ?.split("/")
-          .pop()
-          ?.replace(/\.json$/, "");
+        const memberSlug = member.pack ? packPathStem(member.pack) : undefined;
 
         return {
           role: member.role,

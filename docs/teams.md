@@ -12,6 +12,7 @@ Solo agents are useful. Many real workflows are **pairs or crews**:
 | Example team | Roles |
 |--------------|--------|
 | **Programmer + Debugger** | One writes / implements; one reproduces failures, bisects, files checks |
+| **Spec + Scaffold + QA** | One writes cards; one builds; one gates release in a running app and never patches |
 | **Researcher + Librarian** | One hunts; one files, indexes, and retrieves |
 | **Writer + Editor** | One drafts; one humanizes, fact-checks, cuts |
 | **Hunter + Enricher** | One finds leads; one verifies contacts and deepens accounts |

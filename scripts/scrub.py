@@ -41,6 +41,9 @@ REDACTED = "[REDACTED]"
 # ---------------------------------------------------------------- paths
 
 # Whole-relative-path globs that are ALWAYS dropped from the pack.
+# Portable share scope = SOUL.md + memories/ + skills/ + assets/ + config.yaml
+# (redacted) + cron/ (user routines only). Everything machine-local, session
+# state, or derived state is dropped:
 DROP_GLOBS = [
     "state.db", "state.db-*", ".state.db",
     ".curator_backups", ".curator_backups/*",
@@ -50,7 +53,30 @@ DROP_GLOBS = [
     "auth.json", "auth.lock", ".auth",
     ".env", ".env.*",
     "bin", "bin/*",
-    ".backup.lock", ".clean_shutdown", ".DS_Store",
+    # machine-local / derived state (added from real-profile observations)
+    "lsp", "lsp/*",                      # LSP index + installed toolchains (30MB+)
+    "wisdom", "wisdom/*",                # local wisdom.db
+    "sessions", "sessions/*",            # chat transcripts (export already strips, belt+braces)
+    "runtime", "runtime/*",
+    "sandboxes", "sandboxes/*",
+    "home", "home/*",
+    "image_cache", "image_cache/*",
+    "pairing", "pairing/*",
+    "plans", "plans/*",
+    "skins", "skins/*",
+    "workspace", "workspace/*",
+    "projects.db", "processes.json",
+    "models_dev_cache*", "provider_models_cache*", "ollama_cloud_models_cache*",
+    ".update_check",
+    # cron: keep user-authored routines, drop execution state
+    "cron/executions.db", "cron/output", "cron/output/*",
+    "cron/ticker_last_success", "cron/ticker_heartbeat",
+    # skill bookkeeping
+    "skills/.usage.json", "skills/.usage.json.lock",
+    "skills/.bundled_manifest", "skills/.curator_state", "skills/.curator_ledger.jsonl",
+    "skills/.hub", "skills/.hub/*",
+    "__pycache__", "*__pycache__*", "*.pyc",
+    ".backup.lock", ".clean_shutdown", ".DS_Store", "._*",
     ".skills_prompt_snapshot.json", "channel_directory.json",
     "*.lock",
 ]

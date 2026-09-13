@@ -139,6 +139,10 @@ export const teams = [
     name: "Planner + Doer",
     roles: "One breaks work down. One executes and reports.",
   },
+  {
+    name: "Spec + Scaffold + QA",
+    roles: "One writes cards. One builds. One gates release and never patches.",
+  },
 ] as const;
 
 export const categories = [
@@ -191,7 +195,7 @@ export const faqs = [
   {
     question: "How do I import a pack into Hermes?",
     answer:
-      "Hermes installs from a scrubbed profile .tar.gz with hermes profile import, not from GAF JSON. Seed stalls on the farm today are GAF files for Grok Bot. After import, add your own API keys — auth.json and .env never ship. The How-To page has the commands.",
+      "Hermes installs from a scrubbed profile .tar.gz with hermes profile import, not from GAF JSON. Some seed stalls ship that way — Scholastic Research (one profile) and Workbench (three team members). After import, add your own API keys — auth.json and .env never ship. The How-To page has the commands.",
   },
   {
     question: "How do I share my Hermes agent?",
@@ -216,7 +220,7 @@ export const faqs = [
   {
     question: "When can I use it?",
     answer:
-      "Seed stalls are up now: Gift Day, Sprout, Patch, Probe, Grant Research, and the Pair Bench team. Authors can list their own agents and teams on /sell.",
+      "Seed stalls are up now: Gift Day, Sprout, Patch, Probe, Grant Research, Scholastic Research, the Pair Bench team, and the Workbench web team. Authors can list their own agents and teams on /sell.",
   },
 ] as const;
 

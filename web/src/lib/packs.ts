@@ -73,6 +73,19 @@ export function packFilename(stall: Pick<Stall, "downloadHref" | "slug">): strin
   return `${stall.slug}.json`;
 }
 
+export function packPathStem(packPath: string): string {
+  const filename = packPath.split("/").pop()?.split("?")[0] ?? packPath;
+  return filename
+    .replace(/\.hermes\.tar\.gz$/i, "")
+    .replace(/\.tar\.gz$/i, "")
+    .replace(/\.json$/i, "");
+}
+
+export function memberHref(member: { href: string }): string {
+  const stall = getStall(packPathStem(member.href));
+  return stall ? stallPagePath(stall) : member.href;
+}
+
 export function getStall(slug: string): Stall | undefined {
   return stalls.find((stall) => stall.slug === slug);
 }
@@ -248,6 +261,35 @@ export const stalls: Stall[] = [
     members: [
       { name: "Patch", href: "/packs/agents/patch.json" },
       { name: "Probe", href: "/packs/agents/probe.json" },
+    ],
+  },
+  {
+    kind: "team",
+    slug: "workbench",
+    name: "Workbench",
+    title: "Spec + scaffold + QA web team",
+    description:
+      "Install Spec, Scaffold, and Smoke. Spec writes cards; Scaffold builds; Smoke gates release and never fixes.",
+    seoDescription:
+      "Install Workbench from mybot.farm: a free Hermes web-app team. Spec writes cards, Scaffold implements, Smoke verifies — a card ships only when the running app passes.",
+    category: "Coding",
+    tone: "agent",
+    downloadHref: "/packs/teams/workbench.json",
+    priceCents: 0,
+    listedAt: "2026-09-13T00:00:00.000Z",
+    members: [
+      {
+        name: "Spec",
+        href: "/packs/teams/workbench/workbench-spec.hermes.tar.gz",
+      },
+      {
+        name: "Scaffold",
+        href: "/packs/teams/workbench/workbench-scaffold.hermes.tar.gz",
+      },
+      {
+        name: "Smoke",
+        href: "/packs/teams/workbench/workbench-smoke.hermes.tar.gz",
+      },
     ],
   },
 ];

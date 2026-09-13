@@ -149,10 +149,11 @@ export default async function TeamsPage() {
 
         <ContentSection title="Open team stalls">
           <p>
-            Browse anonymously. The live team pack is{" "}
+            Browse anonymously. Live team packs:{" "}
             <Link href="/teams/pair-bench">Pair Bench</Link> — Patch implements,
-            Probe verifies. Bug reports start with Probe; features start with
-            Patch.
+            Probe verifies. And{" "}
+            <Link href="/teams/workbench">Workbench</Link> — Spec writes cards,
+            Scaffold builds, Smoke gates a running app and never fixes.
           </p>
           <ul>
             {teamStalls.map((stall) => (
