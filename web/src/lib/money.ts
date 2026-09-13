@@ -5,6 +5,10 @@ export function formatUsd(cents: number) {
   }).format(cents / 100);
 }
 
+export function formatPriceLabel(cents: number) {
+  return cents <= 0 ? "Free" : formatUsd(cents);
+}
+
 export function dollarsToCents(value: string | number) {
   const amount = typeof value === "number" ? value : Number(value);
   if (!Number.isFinite(amount)) {

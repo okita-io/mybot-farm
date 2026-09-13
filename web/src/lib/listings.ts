@@ -5,7 +5,7 @@ import { getStall, isStallKind, type StallKind } from "@/lib/packs";
 import type { FarmPack } from "@/lib/pack-files";
 
 const MAX_PACK_CHARS = 500_000;
-const MIN_PRICE_CENTS = 100;
+const MIN_PAID_PRICE_CENTS = 200;
 const MAX_PRICE_CENTS = 999_900;
 
 export type ListingRow = typeof listings.$inferSelect;
@@ -31,7 +31,11 @@ export function parsePriceCents(value: unknown) {
   }
 
   const cents = Math.round(value);
-  if (cents < MIN_PRICE_CENTS || cents > MAX_PRICE_CENTS) {
+  if (cents === 0) {
+    return 0;
+  }
+
+  if (cents < MIN_PAID_PRICE_CENTS || cents > MAX_PRICE_CENTS) {
     return null;
   }
 
@@ -78,6 +82,26 @@ export async function listSellerListings(sellerUserId: string) {
     .from(listings)
     .where(eq(listings.sellerUserId, sellerUserId))
     .orderBy(desc(listings.createdAt));
+}
+
+export async function listPublishedListingsBySeller(sellerUserId: string) {
+  if (!hasDatabase()) {
+    return [];
+  }
+
+  try {
+    const db = getDb();
+    return await db
+      .select()
+      .from(listings)
+      .where(
+        and(eq(listings.sellerUserId, sellerUserId), eq(listings.published, true)),
+      )
+      .orderBy(desc(listings.createdAt));
+  } catch (error) {
+    console.error("listPublishedListingsBySeller failed:", error);
+    return [];
+  }
 }
 
 export async function getListingBySlug(slug: string) {

@@ -5,7 +5,7 @@ import { Container } from "@/components/container";
 import { JsonLd } from "@/components/json-ld";
 import { installPrompt, shortInstallPrompt } from "@/lib/install-prompt";
 import { catalogStallCardStats } from "@/lib/catalog";
-import { formatUsd } from "@/lib/money";
+import { formatPriceLabel, formatUsd } from "@/lib/money";
 import {
   packFileUrl,
   stallApiPaths,
@@ -56,8 +56,8 @@ export async function StallView({
       <JsonLd data={stallJsonLd(stall)} />
       <Container className="max-w-3xl">
         <p className="text-sm text-muted-foreground">
-          <Link href="/#stalls" className="underline-offset-4 hover:underline">
-            Open stalls
+          <Link href="/catalog" className="underline-offset-4 hover:underline">
+            Catalog
           </Link>
           {stall.kind === "team" ? (
             <>
@@ -74,6 +74,8 @@ export async function StallView({
             category={stall.category}
             categoryClassName={tone.label}
             runtimes={stats?.runtimes ?? []}
+            author={stall.author}
+            priceCents={stall.priceCents ?? 0}
           />
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
             {stall.name}
@@ -84,9 +86,15 @@ export async function StallView({
           </p>
           {paid ? (
             <p className="mt-4 text-sm font-medium text-foreground">
-              {canDownload ? "Unlocked" : `${formatUsd(stall.priceCents ?? 0)} · farm keeps 10%`}
+              {canDownload
+                ? "Unlocked"
+                : `${formatUsd(stall.priceCents ?? 0)} · farm keeps 10%`}
             </p>
-          ) : null}
+          ) : (
+            <p className="mt-4 text-sm font-medium text-foreground">
+              {formatPriceLabel(0)} download
+            </p>
+          )}
           {checkout === "success" && !canDownload ? (
             <p className="mt-3 text-sm text-foreground/75" role="status">
               Payment received. Unlock the pack in a moment — refresh if the download is still locked.

@@ -13,7 +13,7 @@ export const site = {
 } as const;
 
 export const navLinks = [
-  { href: "/#stalls", label: "Stalls" },
+  { href: "/catalog", label: "Stalls" },
   { href: "/teams", label: "Teams" },
   { href: "/sell", label: "Sell" },
   { href: "/about", label: "About" },
@@ -21,6 +21,13 @@ export const navLinks = [
   { href: "/how-to", label: "How-To" },
   { href: "/plant", label: "Plant" },
 ] as const;
+
+export const siteOgImage = {
+  url: "/og.png",
+  width: 2164,
+  height: 950,
+  alt: "Glossy green, blue, and pink agent mascots for My Bot Farm",
+} as const;
 
 export const footerLinks = [
   { href: "/about", label: "About" },
@@ -30,10 +37,17 @@ export const footerLinks = [
   { href: "/how-to", label: "How-To" },
   { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
-  { href: "/#stalls", label: "Stalls" },
+  { href: "/terms", label: "Terms" },
+  { href: "/catalog", label: "Stalls" },
 ] as const;
 
 export const contentRoutes = [
+  {
+    path: "/catalog",
+    title: "Catalog",
+    changeFrequency: "weekly" as const,
+    priority: 0.9,
+  },
   {
     path: "/about",
     title: "About",
@@ -73,6 +87,12 @@ export const contentRoutes = [
   {
     path: "/privacy",
     title: "Privacy",
+    changeFrequency: "yearly" as const,
+    priority: 0.4,
+  },
+  {
+    path: "/terms",
+    title: "Terms",
     changeFrequency: "yearly" as const,
     priority: 0.4,
   },

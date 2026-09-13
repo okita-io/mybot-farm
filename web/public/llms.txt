@@ -16,7 +16,9 @@ OpenClaw and Hermes support are coming soon (translators / install targets). The
 - Agent Teams: https://mybot.farm/teams
 - How-To (install and share): https://mybot.farm/how-to
 - Plant (paste a share URL, preview a pack): https://mybot.farm/plant
-- Privacy: https://mybot.farm/privacy
+- Sell: https://mybot.farm/sell
+- Privacy (Clerk, Stripe, cookies): https://mybot.farm/privacy
+- Terms (creators own listings; 10% hosting fee; farm not liable for pack behavior): https://mybot.farm/terms
 
 ## Stall pages
 

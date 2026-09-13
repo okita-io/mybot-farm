@@ -7,18 +7,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { teamsPageLd } from "@/lib/schema";
 import { listCatalogStalls } from "@/lib/catalog";
 import { stallPagePath } from "@/lib/packs";
-import { site } from "@/lib/site";
+import { site, siteOgImage } from "@/lib/site";
 
 const teamsImageAlt =
   "Three glossy figures — a green oval, a pink triangle, and a blue cube — standing together in a cubicle office.";
 
 export const metadata: Metadata = {
-  title: "Agent Teams",
+  title: "Teams",
   description:
     "Import a pre-coordinated team of agents instead of wiring them one-by-one. Solo agents are fine; many workflows are pairs or crews with roles and handoffs.",
   alternates: { canonical: "/teams" },
   openGraph: {
-    title: `Agent Teams | ${site.name}`,
+    title: `Teams | ${site.name}`,
     description:
       "Plant a crew as one pack. Roles and handoffs ship together — you don’t introduce the agents yourself.",
     url: "/teams",
@@ -29,6 +29,7 @@ export const metadata: Metadata = {
         height: 1024,
         alt: teamsImageAlt,
       },
+      siteOgImage,
     ],
   },
 };
@@ -172,7 +173,7 @@ export default async function TeamsPage() {
               preview
             </li>
             <li>
-              <Link href="/#stalls">Open stalls</Link> — agents and teams on
+              <Link href="/catalog">Open stalls</Link> — agents and teams on
               the same market
             </li>
           </ul>

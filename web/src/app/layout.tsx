@@ -10,7 +10,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { UserSync } from "@/components/user-sync";
 import { WebmcpTools } from "@/components/webmcp-tools";
 import { organizationLd, websiteLd } from "@/lib/schema";
-import { site } from "@/lib/site";
+import { site, siteOgImage } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -43,11 +43,13 @@ export const metadata: Metadata = {
     siteName: site.name,
     type: "website",
     locale: "en_US",
+    images: [siteOgImage],
   },
   twitter: {
     card: "summary_large_image",
     title: `${site.productName} — ${site.tagline}`,
     description: site.description,
+    images: [siteOgImage],
   },
   robots: { index: true, follow: true },
 };

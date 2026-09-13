@@ -56,7 +56,7 @@ export const howToInstallLd = {
     {
       "@type": "HowToStep",
       name: "Open a stall",
-      text: "Browse open stalls and open the agent or team you want, such as /agents/grant-research.",
+      text: "Browse the catalog and open the agent or team you want, such as /agents/grant-research.",
     },
     {
       "@type": "HowToStep",
@@ -178,7 +178,16 @@ export const privacyPageLd = {
   name: `Privacy | ${site.name}`,
   url: `${site.url}/privacy`,
   description:
-    "mybot.farm uses standard web analytics. We do not sell personal data. Pack downloads and install prompts are product features.",
+    "mybot.farm does not sell or redistribute personal data. Clerk handles accounts, Stripe handles payments, and cookies are only what those tools need.",
+};
+
+export const termsPageLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: `Terms | ${site.name}`,
+  url: `${site.url}/terms`,
+  description:
+    "Creators own the agents and teams they list. mybot.farm hosts the stall and keeps 10% of each sale. The farm is not responsible for how a pack behaves after someone installs it.",
 };
 
 export const teamsPageLd = {

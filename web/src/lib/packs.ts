@@ -3,6 +3,11 @@ import { site } from "@/lib/site";
 export type StallKind = "agent" | "team";
 export type StallTone = "find" | "share" | "agent";
 
+export type StallAuthor = {
+  username: string;
+  href?: string;
+};
+
 export type Stall = {
   kind: StallKind;
   slug: string;
@@ -19,6 +24,8 @@ export type Stall = {
   currency?: string;
   listingId?: string;
   sellerUserId?: string;
+  author?: StallAuthor;
+  listedAt?: string;
 };
 
 export const stallToneClasses: Record<
@@ -83,8 +90,10 @@ export function searchStalls(query?: string, kind?: StallKind): Stall[] {
       stall.description,
       stall.category,
       stall.kind,
+      stall.author?.username,
       ...(stall.members?.map((member) => member.name) ?? []),
     ]
+      .filter(Boolean)
       .join(" ")
       .toLowerCase();
 
@@ -96,7 +105,7 @@ export function stallSeo(stall: Stall) {
   return {
     title: stall.seoTitle ?? stall.name,
     description: stall.seoDescription ?? stall.description,
-    ogTitle: stall.seoTitle ?? `${stall.name} — ${stall.title}`,
+    ogTitle: stall.seoTitle ?? stall.name,
   };
 }
 
@@ -124,6 +133,7 @@ export function stallRecord(stall: Stall) {
     members: stall.members,
     priceCents: stall.priceCents ?? 0,
     currency: stall.currency ?? "usd",
+    author: stall.author ?? null,
     api: stallApiPaths(stall.slug),
   };
 }
@@ -136,6 +146,8 @@ export const stalls: Stall[] = [
     title: "Family gift & birthday remembrancer",
     description:
       "Nudges you in time to buy or send something. Never charges or orders without your yes.",
+    seoDescription:
+      "Install Gift Day from mybot.farm: a lifestyle agent that nudges you in time to buy or send a gift. It never charges or orders without your yes.",
     category: "Lifestyle",
     tone: "find",
     downloadHref: "/packs/agents/gift-day.json",
@@ -147,6 +159,8 @@ export const stalls: Stall[] = [
     title: "Houseplant care journal",
     description:
       "A private plant roster and watering reminders. Your copy keeps the journal.",
+    seoDescription:
+      "Install Sprout from mybot.farm: a houseplant care journal with a private roster and watering reminders. Your copy keeps the journal.",
     category: "Lifestyle",
     tone: "find",
     downloadHref: "/packs/agents/sprout-journal.json",
@@ -158,6 +172,8 @@ export const stalls: Stall[] = [
     title: "Implementation programmer",
     description:
       "Writes small diffs and lands code. Pair with Probe on Pair Bench.",
+    seoDescription:
+      "Install Patch from mybot.farm: an implementation programmer that writes small diffs and lands code. Pair it with Probe on Pair Bench.",
     category: "Coding",
     tone: "share",
     downloadHref: "/packs/agents/patch.json",
@@ -169,6 +185,8 @@ export const stalls: Stall[] = [
     title: "Debugger & verifier",
     description:
       "Reproduces bugs and checks Patch’s work. A fix is not done until the verify path passes.",
+    seoDescription:
+      "Install Probe from mybot.farm: a debugger that reproduces bugs and checks Patch’s work. A fix is not done until the verify path passes.",
     category: "Coding",
     tone: "share",
     downloadHref: "/packs/agents/probe.json",
@@ -180,9 +198,9 @@ export const stalls: Stall[] = [
     title: "Grant research & proposal specialist",
     description:
       "Finds RFAs, RFPs, and NOFOs, then drafts narratives, budgets, attachments, and support letters. Research and draft only — never invents eligibility.",
-    seoTitle: "Grant Research — grant research & proposal specialist",
+    seoTitle: "Grant Research",
     seoDescription:
-      "Install Grant Research from mybot.farm: a free education agent that researches public solicitations (RFA / RFP / NOFO) and drafts grant narratives, budgets, attachments, letters of support, and pre-submit reviews. Research and draft only. No invented eligibility or award amounts.",
+      "Install Grant Research from mybot.farm. Finds public solicitations and drafts grant narratives. Research and draft only — no invented eligibility.",
     category: "Education",
     tone: "find",
     downloadHref: "/packs/agents/grant-research.json",
@@ -194,9 +212,9 @@ export const stalls: Stall[] = [
     title: "Scholastic research & source-synthesis agent",
     description:
       "Clarifies your research question, plans the search strategy, verifies peer-reviewed sources, and synthesizes them with clean citations. Trained and verified by an automated judge panel — 9.14/10 on unseen questions, zero fabricated citations.",
-    seoTitle: "Scholastic Research — research & source-synthesis agent",
+    seoTitle: "Scholastic Research",
     seoDescription:
-      "Install Scholastic Research from mybot.farm: a free Hermes-native research agent that scopes the question, finds and verifies peer-reviewed sources, and synthesizes them with proper citations. Download the scrubbed Hermes profile archive (or the GAF JSON via /api/packs/scholastic-research).",
+      "Install Scholastic Research from mybot.farm: a free Hermes-native agent that finds and verifies peer-reviewed sources, then synthesizes them with citations.",
     category: "Education",
     tone: "find",
     downloadHref: "/packs/agents/scholastic-research.hermes.tar.gz",
@@ -208,6 +226,8 @@ export const stalls: Stall[] = [
     title: "Programmer + debugger team",
     description:
       "Install Patch and Probe, then put them in one group. Bug reports start with Probe; features start with Patch.",
+    seoDescription:
+      "Install Pair Bench from mybot.farm: a programmer plus debugger team. Bug reports start with Probe; features start with Patch.",
     category: "Coding",
     tone: "agent",
     downloadHref: "/packs/teams/pair-bench.json",

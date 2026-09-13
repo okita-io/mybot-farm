@@ -1,10 +1,12 @@
 import type { MetadataRoute } from "next";
 import { listCatalogStalls } from "@/lib/catalog";
+import { authorHref, listAuthorUsernamesWithListings } from "@/lib/users";
 import { stallPageUrl } from "@/lib/packs";
 import { contentRoutes, site } from "@/lib/site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const stalls = await listCatalogStalls();
+  const authors = await listAuthorUsernamesWithListings();
 
   return [
     {
@@ -24,6 +26,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.8,
+    })),
+    ...authors.map((username) => ({
+      url: `${site.url}${authorHref(username)}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
     })),
     ...stalls
       .filter((stall) => (stall.priceCents ?? 0) <= 0)

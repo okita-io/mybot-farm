@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ContentPage, ContentSection } from "@/components/content-page";
 import { JsonLd } from "@/components/json-ld";
 import { aboutPageLd } from "@/lib/schema";
-import { site } from "@/lib/site";
+import { site, siteOgImage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     description:
       "An open marketplace for whole agents and teams — not a warehouse of skills.",
     url: "/about",
+    images: [siteOgImage],
   },
 };
 
@@ -107,7 +108,7 @@ export default function AboutPage() {
         <ContentSection title="Start here">
           <ul>
             <li>
-              <Link href="/#stalls">Open stalls</Link> — Gift Day, Sprout,
+              <Link href="/catalog">Open stalls</Link> — Gift Day, Sprout,
               Patch, Probe, Grant Research, Pair Bench
             </li>
             <li>
@@ -126,6 +127,10 @@ export default function AboutPage() {
             </li>
             <li>
               <Link href="/privacy">Privacy</Link> — analytics, not a dossier
+            </li>
+            <li>
+              <Link href="/terms">Terms</Link> — creators own the packs; the
+              farm hosts them
             </li>
           </ul>
         </ContentSection>

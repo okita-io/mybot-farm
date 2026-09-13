@@ -24,13 +24,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  if (!user.stripeConnectAccountId || !user.stripeConnectTransfersActive) {
-    return NextResponse.json(
-      { error: "connect_required", message: "Finish Stripe payouts before listing a stall." },
-      { status: 403 },
-    );
-  }
-
   const body: unknown = await request.json().catch(() => null);
   if (!body || typeof body !== "object") {
     return NextResponse.json({ error: "invalid_body" }, { status: 400 });
@@ -59,8 +52,24 @@ export async function POST(request: Request) {
 
   if (priceCents === null) {
     return NextResponse.json(
-      { error: "invalid_price", message: "Price must be between $1.00 and $9,999.00." },
+      {
+        error: "invalid_price",
+        message: "Choose Free, or a price between $2.00 and $9,999.00.",
+      },
       { status: 400 },
+    );
+  }
+
+  if (
+    priceCents > 0 &&
+    (!user.stripeConnectAccountId || !user.stripeConnectTransfersActive)
+  ) {
+    return NextResponse.json(
+      {
+        error: "connect_required",
+        message: "Finish Stripe payouts before listing a paid stall.",
+      },
+      { status: 403 },
     );
   }
 

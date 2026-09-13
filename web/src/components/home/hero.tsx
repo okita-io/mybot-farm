@@ -54,7 +54,7 @@ export function HomeHero() {
                 Sell
               </Link>
               <Link
-                href="/#stalls"
+                href="/catalog"
                 className="font-medium text-foreground underline-offset-4 hover:underline"
               >
                 Open stalls

@@ -1,7 +1,8 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
-import { getDb } from "@/lib/db";
-import { processedEvents, users } from "@/lib/db/schema";
+import { and, eq, inArray, isNotNull, isNull, ne, sql } from "drizzle-orm";
+import { getDb, hasDatabase } from "@/lib/db";
+import { listings, processedEvents, users } from "@/lib/db/schema";
+import type { StallAuthor } from "@/lib/packs";
 import { getStripe, hasStripeConfig } from "@/lib/stripe";
 
 export type ClerkUserInput = {
@@ -10,7 +11,50 @@ export type ClerkUserInput = {
   firstName: string | null;
   lastName: string | null;
   imageUrl: string | null;
+  username?: string | null;
 };
+
+export type AppUser = typeof users.$inferSelect;
+
+export type { StallAuthor };
+
+export const FARM_AUTHOR: StallAuthor = {
+  username: "mybot.farm",
+  href: "/about",
+};
+
+const MAX_BIO_LENGTH = 280;
+
+export function authorHref(username: string) {
+  return `/authors/${encodeURIComponent(username)}`;
+}
+
+export function slugifyUsername(value: string) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 32);
+}
+
+export function shortClerkId(clerkUserId: string) {
+  return clerkUserId.replace(/^user_/, "").slice(0, 8).toLowerCase();
+}
+
+export function preferredUsernameBase(input: ClerkUserInput) {
+  if (input.username) {
+    const fromClerk = slugifyUsername(input.username);
+    if (fromClerk) return fromClerk;
+  }
+
+  const fromName = slugifyUsername(
+    [input.firstName, input.lastName].filter(Boolean).join(" "),
+  );
+  if (fromName) return fromName;
+
+  return `grower-${shortClerkId(input.id)}`;
+}
 
 export async function markEventProcessed(
   id: string,
@@ -30,11 +74,16 @@ export async function syncClerkUser(input: ClerkUserInput) {
   const db = getDb();
   const now = new Date();
   const stripeCustomerId = await ensureStripeCustomer(input);
+  const existing = await getUserByClerkId(input.id);
+  const username =
+    existing?.username ?? (await allocateUsername(preferredUsernameBase(input)));
+
   const update = {
     email: input.email,
     firstName: input.firstName,
     lastName: input.lastName,
     imageUrl: input.imageUrl,
+    username,
     lastSeenAt: now,
     updatedAt: now,
     deletedAt: null,
@@ -68,19 +117,154 @@ export async function markClerkUserDeleted(clerkUserId: string) {
 }
 
 export async function getUserByClerkId(clerkUserId: string) {
-  const db = getDb();
-  const [row] = await db
-    .select()
-    .from(users)
-    .where(eq(users.clerkUserId, clerkUserId))
-    .limit(1);
+  if (!hasDatabase()) {
+    return null;
+  }
 
-  return row ?? null;
+  try {
+    const db = getDb();
+    const [row] = await db
+      .select()
+      .from(users)
+      .where(eq(users.clerkUserId, clerkUserId))
+      .limit(1);
+
+    return row ?? null;
+  } catch (error) {
+    console.error("getUserByClerkId failed:", error);
+    return null;
+  }
 }
 
 export async function getUserById(id: string) {
+  if (!hasDatabase()) {
+    return null;
+  }
+
+  try {
+    const db = getDb();
+    const [row] = await db.select().from(users).where(eq(users.id, id)).limit(1);
+    return row ?? null;
+  } catch (error) {
+    console.error("getUserById failed:", error);
+    return null;
+  }
+}
+
+export async function getUserByUsername(username: string) {
+  if (!hasDatabase()) {
+    return null;
+  }
+
+  const needle = username.trim().toLowerCase();
+  if (!needle) {
+    return null;
+  }
+
+  try {
+    const db = getDb();
+    const [row] = await db
+      .select()
+      .from(users)
+      .where(
+        and(
+          eq(sql`lower(${users.username})`, needle),
+          isNull(users.deletedAt),
+        ),
+      )
+      .limit(1);
+
+    return row ?? null;
+  } catch (error) {
+    console.error("getUserByUsername failed:", error);
+    return null;
+  }
+}
+
+export async function getUsersByIds(ids: string[]) {
+  const unique = [...new Set(ids.filter(Boolean))];
+  if (!unique.length || !hasDatabase()) {
+    return new Map<string, AppUser>();
+  }
+
+  try {
+    const db = getDb();
+    const rows = await db
+      .select()
+      .from(users)
+      .where(inArray(users.id, unique));
+
+    return new Map(rows.map((row) => [row.id, row]));
+  } catch (error) {
+    console.error("getUsersByIds failed:", error);
+    return new Map<string, AppUser>();
+  }
+}
+
+export function stallAuthorFromUser(user: Pick<AppUser, "username"> | null | undefined): StallAuthor | undefined {
+  if (!user?.username) {
+    return undefined;
+  }
+
+  return {
+    username: user.username,
+    href: authorHref(user.username),
+  };
+}
+
+export async function listAuthorUsernamesWithListings() {
+  if (!hasDatabase()) {
+    return [] as string[];
+  }
+
+  try {
+    const db = getDb();
+    const rows = await db
+      .selectDistinct({ username: users.username })
+      .from(users)
+      .innerJoin(listings, eq(listings.sellerUserId, users.id))
+      .where(
+        and(
+          eq(listings.published, true),
+          isNotNull(users.username),
+          isNull(users.deletedAt),
+        ),
+      );
+
+    return rows
+      .map((row) => row.username)
+      .filter((username): username is string => Boolean(username));
+  } catch (error) {
+    console.error("listAuthorUsernamesWithListings failed:", error);
+    return [];
+  }
+}
+
+export function parseBio(value: unknown) {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const bio = value.trim();
+  if (bio.length > MAX_BIO_LENGTH) {
+    return null;
+  }
+
+  return bio;
+}
+
+export async function updateUserBio(userId: string, bio: string) {
   const db = getDb();
-  const [row] = await db.select().from(users).where(eq(users.id, id)).limit(1);
+  const now = new Date();
+  const [row] = await db
+    .update(users)
+    .set({
+      bio: bio.length ? bio : null,
+      updatedAt: now,
+    })
+    .where(and(eq(users.id, userId), isNull(users.deletedAt)))
+    .returning();
+
   return row ?? null;
 }
 
@@ -107,6 +291,7 @@ export async function requireAppUser() {
     firstName: user.firstName,
     lastName: user.lastName,
     imageUrl: user.imageUrl,
+    username: user.username,
   });
 }
 
@@ -157,6 +342,34 @@ export async function linkStripeCustomer(
     .update(users)
     .set({ stripeCustomerId, updatedAt: now })
     .where(eq(users.clerkUserId, clerkUserId));
+}
+
+async function allocateUsername(base: string, excludeClerkUserId?: string) {
+  let candidate = base || `grower-${Math.random().toString(36).slice(2, 8)}`;
+  let n = 2;
+
+  while (await usernameTaken(candidate, excludeClerkUserId)) {
+    candidate = `${base.slice(0, 28)}-${n}`;
+    n += 1;
+  }
+
+  return candidate;
+}
+
+async function usernameTaken(username: string, excludeClerkUserId?: string) {
+  const db = getDb();
+  const conditions = [eq(sql`lower(${users.username})`, username.toLowerCase())];
+  if (excludeClerkUserId) {
+    conditions.push(ne(users.clerkUserId, excludeClerkUserId));
+  }
+
+  const [row] = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(and(...conditions))
+    .limit(1);
+
+  return Boolean(row);
 }
 
 async function ensureStripeCustomer(input: ClerkUserInput) {

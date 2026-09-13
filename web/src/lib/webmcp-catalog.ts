@@ -3,10 +3,10 @@ export const packTools = [
     name: "search_stalls",
     title: "Search stalls",
     description:
-      "Search mybot.farm stalls (agents and teams). Optional query matches name, slug, title, description, category, and member names. Returns page, pack, and API URLs. Read-only.",
+      "Search mybot.farm stalls (agents and teams). Optional query matches name, slug, title, description, category, author, and member names. Optional sort: newest, name, price. Returns page, pack, and API URLs. Read-only.",
     method: "GET",
     path: "/api/stalls",
-    query: ["q", "kind"],
+    query: ["q", "kind", "sort"],
   },
   {
     name: "get_stall",
