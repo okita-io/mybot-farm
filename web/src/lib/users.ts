@@ -111,9 +111,8 @@ export async function syncClerkUser(input: ClerkUserInput) {
   const [row] = await db
     .insert(users)
     .values({
-      clerkUserId: input.id,
-      stripeCustomerId: customerId,
       ...update,
+      stripeCustomerId: customerId,
     })
     .onConflictDoUpdate({
       target: users.clerkUserId,
