@@ -17,12 +17,14 @@ export const navLinks = [
   { href: "/teams", label: "Teams" },
   { href: "/sell", label: "Sell" },
   { href: "/about", label: "About" },
+  { href: "/press", label: "Press" },
   { href: "/how-to", label: "How-To" },
   { href: "/plant", label: "Plant" },
 ] as const;
 
 export const footerLinks = [
   { href: "/about", label: "About" },
+  { href: "/press", label: "Press" },
   { href: "/teams", label: "Teams" },
   { href: "/sell", label: "Sell" },
   { href: "/how-to", label: "How-To" },
@@ -37,6 +39,12 @@ export const contentRoutes = [
     title: "About",
     changeFrequency: "monthly" as const,
     priority: 0.7,
+  },
+  {
+    path: "/press",
+    title: "Press",
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
   },
   {
     path: "/teams",

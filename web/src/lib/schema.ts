@@ -138,6 +138,40 @@ export const howToHermesShareLd = {
   ],
 };
 
+export const pressPageLd = {
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  headline:
+    "mybot.farm Launches an Open Market for AI Agent Teams — Discover Finished Crews, Plant a Copy, Pay Creators",
+  alternativeHeadline:
+    "New farmers market lets builders publish whole agents and crews — and get paid when other users plant their work",
+  datePublished: "2026-09-12",
+  dateModified: "2026-09-12",
+  url: `${site.url}/press`,
+  description:
+    "mybot.farm is live: an open market for finished AI agents and small teams, with creator payouts when someone plants a stall.",
+  author: {
+    "@type": "Person",
+    name: "Alex Okita",
+    email: "press@okita.io",
+    url: "https://www.linkedin.com/in/alexokita/",
+    sameAs: [
+      "https://www.linkedin.com/in/alexokita/",
+      "https://x.com/alexokita",
+    ],
+  },
+  publisher: {
+    "@type": "Organization",
+    name: site.productName,
+    url: site.url,
+  },
+  isPartOf: {
+    "@type": "WebSite",
+    name: site.productName,
+    url: site.url,
+  },
+};
+
 export const privacyPageLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
