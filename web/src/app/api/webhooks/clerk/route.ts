@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
         firstName: event.data.first_name,
         lastName: event.data.last_name,
         imageUrl: event.data.image_url,
+        username: event.data.username,
       });
     }
 

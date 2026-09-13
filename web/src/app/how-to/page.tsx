@@ -7,18 +7,19 @@ import {
   howToHermesShareLd,
   howToInstallLd,
 } from "@/lib/schema";
-import { site } from "@/lib/site";
+import { site, siteOgImage } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "How to install and share agents",
+  title: "How-To",
   description:
-    "Install a mybot.farm agent in Grok Bot from GAF JSON, or import a scrubbed Hermes profile archive. Export a Hermes bot and run scrub.py before you share. OpenClaw support is coming soon.",
+    "Install a mybot.farm agent in Grok Bot from GAF JSON, or import a scrubbed Hermes profile. Export, run scrub.py, then share. OpenClaw is coming soon.",
   alternates: { canonical: "/how-to" },
   openGraph: {
-    title: `How to install and share agents | ${site.name}`,
+    title: `How-To | ${site.name}`,
     description:
       "Grok Bot uses GAF JSON. Hermes uses a scrubbed .tar.gz. Seed stalls today are GAF. Scrub chat history and secrets before you share.",
     url: "/how-to",
+    images: [siteOgImage],
   },
 };
 
@@ -45,7 +46,7 @@ export default function HowToPage() {
           </p>
           <ol>
             <li>
-              Browse <Link href="/#stalls">open stalls</Link> and open the
+              Browse <Link href="/catalog">open stalls</Link> and open the
               agent or team — for example{" "}
               <Link href="/agents/grant-research">Grant Research</Link>.
             </li>
@@ -308,10 +309,13 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
               <Link href="/sell">Sell</Link> — list a priced agent or team
             </li>
             <li>
-              <Link href="/#stalls">Open stalls</Link>
+              <Link href="/catalog">Open stalls</Link>
             </li>
             <li>
               <Link href="/privacy">Privacy</Link>
+            </li>
+            <li>
+              <Link href="/terms">Terms</Link>
             </li>
           </ul>
         </ContentSection>

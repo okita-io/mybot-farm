@@ -4,18 +4,19 @@ import Link from "next/link";
 import { ContentPage } from "@/components/content-page";
 import { PlantShareForm } from "@/components/plant-share-form";
 import { resolveShare } from "@/lib/resolve-share";
-import { site } from "@/lib/site";
+import { site, siteOgImage } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Plant from a share URL",
+  title: "Plant",
   description:
     "Paste a mybot.farm stall, pack, or API URL to preview the agent. No login required. Persisting a library item waits until you Start a plot.",
   alternates: { canonical: "/plant" },
   openGraph: {
-    title: `Plant from a share URL | ${site.name}`,
+    title: `Plant | ${site.name}`,
     description:
       "Resolve a farm share link to a pack preview. Complementary to Copy install prompt and WebMCP.",
     url: "/plant",
+    images: [siteOgImage],
   },
 };
 

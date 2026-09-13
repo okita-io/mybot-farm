@@ -3,19 +3,29 @@ import { getPack, packCardStats, packSkillList, packSummaryFields } from "@/lib/
 import {
   getListingBySlug,
   listPublishedListings,
+  listPublishedListingsBySeller,
   type ListingRow,
 } from "@/lib/listings";
 import {
   getStall,
-  searchStalls,
   stalls,
   type Stall,
   type StallKind,
 } from "@/lib/packs";
 import { hasPaidPurchase } from "@/lib/purchases";
-import { getUserByClerkId } from "@/lib/users";
+import {
+  FARM_AUTHOR,
+  getUserByClerkId,
+  getUsersByIds,
+  stallAuthorFromUser,
+} from "@/lib/users";
 
-export function listingToStall(listing: ListingRow): Stall {
+export type CatalogSort = "newest" | "name" | "price";
+
+export function listingToStall(
+  listing: ListingRow,
+  author?: Stall["author"],
+): Stall {
   const pack = listing.pack as FarmPack;
   const members = (pack.members ?? []).map((member) => ({
     name: member.role ?? member.pack ?? "Member",
@@ -36,6 +46,8 @@ export function listingToStall(listing: ListingRow): Stall {
     currency: listing.currency,
     listingId: listing.id,
     sellerUserId: listing.sellerUserId,
+    author,
+    listedAt: listing.createdAt.toISOString(),
   };
 }
 
@@ -44,7 +56,16 @@ export function withSeedPrice(stall: Stall): Stall {
     ...stall,
     priceCents: stall.priceCents ?? 0,
     currency: stall.currency ?? "usd",
+    author: stall.author ?? FARM_AUTHOR,
   };
+}
+
+async function hydrateListingStalls(listings: ListingRow[]): Promise<Stall[]> {
+  const sellers = await getUsersByIds(listings.map((listing) => listing.sellerUserId));
+
+  return listings.map((listing) =>
+    listingToStall(listing, stallAuthorFromUser(sellers.get(listing.sellerUserId))),
+  );
 }
 
 export async function findStall(slug: string): Promise<Stall | undefined> {
@@ -58,7 +79,8 @@ export async function findStall(slug: string): Promise<Stall | undefined> {
     return undefined;
   }
 
-  return listingToStall(listing);
+  const [stall] = await hydrateListingStalls([listing]);
+  return stall;
 }
 
 export async function getCatalogPack(slug: string): Promise<FarmPack | undefined> {
@@ -127,43 +149,76 @@ export async function catalogPackSkillList(slug: string) {
 
 export async function listCatalogStalls(): Promise<Stall[]> {
   const published = await listPublishedListings();
-  const extras = published
-    .filter((listing) => !getStall(listing.slug))
-    .map(listingToStall);
+  const extras = await hydrateListingStalls(
+    published.filter((listing) => !getStall(listing.slug)),
+  );
 
   return [...stalls.map(withSeedPrice), ...extras];
 }
 
-export async function searchCatalogStalls(query?: string, kind?: StallKind) {
-  const extra = (await listCatalogStalls()).filter((stall) => !getStall(stall.slug));
-  const seedMatches = searchStalls(query, kind).map(withSeedPrice);
-  const needle = query?.trim().toLowerCase();
+export async function listAuthorStalls(sellerUserId: string): Promise<Stall[]> {
+  const published = await listPublishedListingsBySeller(sellerUserId);
+  return hydrateListingStalls(published);
+}
 
-  const extraMatches = extra.filter((stall) => {
-    if (kind && stall.kind !== kind) {
-      return false;
-    }
+function stallMatchesQuery(stall: Stall, needle?: string, kind?: StallKind) {
+  if (kind && stall.kind !== kind) {
+    return false;
+  }
 
-    if (!needle) {
-      return true;
-    }
+  if (!needle) {
+    return true;
+  }
 
-    const haystack = [
-      stall.slug,
-      stall.name,
-      stall.title,
-      stall.description,
-      stall.category,
-      stall.kind,
-      ...(stall.members?.map((member) => member.name) ?? []),
-    ]
-      .join(" ")
-      .toLowerCase();
+  const haystack = [
+    stall.slug,
+    stall.name,
+    stall.title,
+    stall.description,
+    stall.category,
+    stall.kind,
+    stall.author?.username,
+    ...(stall.members?.map((member) => member.name) ?? []),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
 
-    return haystack.includes(needle);
+  return haystack.includes(needle);
+}
+
+export function sortCatalogStalls(stallsList: Stall[], sort: CatalogSort = "newest") {
+  const copy = [...stallsList];
+
+  if (sort === "name") {
+    return copy.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  if (sort === "price") {
+    return copy.sort((a, b) => {
+      const priceDiff = (a.priceCents ?? 0) - (b.priceCents ?? 0);
+      if (priceDiff !== 0) return priceDiff;
+      return a.name.localeCompare(b.name);
+    });
+  }
+
+  return copy.sort((a, b) => {
+    const aTime = a.listedAt ? Date.parse(a.listedAt) : 0;
+    const bTime = b.listedAt ? Date.parse(b.listedAt) : 0;
+    if (aTime !== bTime) return bTime - aTime;
+    return a.name.localeCompare(b.name);
   });
+}
 
-  return [...seedMatches, ...extraMatches];
+export async function searchCatalogStalls(
+  query?: string,
+  kind?: StallKind,
+  sort: CatalogSort = "newest",
+) {
+  const all = await listCatalogStalls();
+  const needle = query?.trim().toLowerCase();
+  const matches = all.filter((stall) => stallMatchesQuery(stall, needle, kind));
+  return sortCatalogStalls(matches, sort);
 }
 
 export async function catalogPackSummary(slug: string) {
@@ -198,7 +253,7 @@ export async function resolvePackAccess(
     return { ok: false, reason: "not_found" };
   }
 
-  const stall = listingToStall(listing);
+  const [stall] = await hydrateListingStalls([listing]);
   const pack = listing.pack as FarmPack;
 
   if (listing.priceCents <= 0 || isSeller) {
@@ -222,4 +277,8 @@ export async function canDownloadStall(
 
   const access = await resolvePackAccess(stall.slug, clerkUserId);
   return access.ok;
+}
+
+export function isCatalogSort(value: string | null | undefined): value is CatalogSort {
+  return value === "newest" || value === "name" || value === "price";
 }

@@ -3,6 +3,7 @@ import { StallView } from "@/components/stall-view";
 import { findStall } from "@/lib/catalog";
 import { stallsOfKind, stallPagePath, stallSeo } from "@/lib/packs";
 import { stallPageState } from "@/lib/stall-page";
+import { siteOgImage } from "@/lib/site";
 
 export function generateStaticParams() {
   return stallsOfKind("agent").map((stall) => ({ slug: stall.slug }));
@@ -15,7 +16,11 @@ export async function generateMetadata({
   const stall = await findStall(slug);
 
   if (!stall || stall.kind !== "agent") {
-    return { title: "Stall not found" };
+    return {
+      title: "Stall not found",
+      description:
+        "That agent stall is not on mybot.farm. Browse open stalls or go back home.",
+    };
   }
 
   const path = stallPagePath(stall);
@@ -29,6 +34,7 @@ export async function generateMetadata({
       title: seo.ogTitle,
       description: seo.description,
       url: path,
+      images: [siteOgImage],
     },
   };
 }

@@ -10,29 +10,35 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-export const users = pgTable("users", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  clerkUserId: text("clerk_user_id").notNull().unique(),
-  email: text("email"),
-  firstName: text("first_name"),
-  lastName: text("last_name"),
-  imageUrl: text("image_url"),
-  stripeCustomerId: text("stripe_customer_id").unique(),
-  stripeConnectAccountId: text("stripe_connect_account_id").unique(),
-  stripeConnectTransfersActive: boolean("stripe_connect_transfers_active")
-    .notNull()
-    .default(false),
-  lastSeenAt: timestamp("last_seen_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-  deletedAt: timestamp("deleted_at", { withTimezone: true }),
-});
+export const users = pgTable(
+  "users",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    clerkUserId: text("clerk_user_id").notNull().unique(),
+    email: text("email"),
+    firstName: text("first_name"),
+    lastName: text("last_name"),
+    imageUrl: text("image_url"),
+    username: text("username"),
+    bio: text("bio"),
+    stripeCustomerId: text("stripe_customer_id").unique(),
+    stripeConnectAccountId: text("stripe_connect_account_id").unique(),
+    stripeConnectTransfersActive: boolean("stripe_connect_transfers_active")
+      .notNull()
+      .default(false),
+    lastSeenAt: timestamp("last_seen_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+  },
+  (table) => [uniqueIndex("users_username_idx").on(table.username)],
+);
 
 export const listings = pgTable(
   "listings",

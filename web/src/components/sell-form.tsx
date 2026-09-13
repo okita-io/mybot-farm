@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { dollarsToCents, formatUsd } from "@/lib/money";
@@ -19,7 +20,13 @@ const SAMPLE_PACK = `{
   "memory": []
 }`;
 
-export function SellForm() {
+const PRICE_SUGGESTIONS = ["2.00", "5.00", "8.00", "10.00"] as const;
+
+export function SellForm({
+  canSellPaid = false,
+}: {
+  canSellPaid?: boolean;
+}) {
   const router = useRouter();
   const [kind, setKind] = useState<"agent" | "team">("agent");
   const [name, setName] = useState("");
@@ -28,12 +35,16 @@ export function SellForm() {
   const [category, setCategory] = useState<string>(
     categories[0]?.label ?? "Lifestyle",
   );
-  const [price, setPrice] = useState("9.00");
+  const [isFree, setIsFree] = useState(true);
+  const [price, setPrice] = useState("5.00");
   const [packText, setPackText] = useState(SAMPLE_PACK);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const priceCents = useMemo(() => dollarsToCents(price), [price]);
+  const priceCents = useMemo(() => {
+    if (isFree) return 0;
+    return dollarsToCents(price);
+  }, [isFree, price]);
   const fee =
     priceCents && priceCents > 1 ? Math.round(priceCents * 0.1) : 0;
 
@@ -50,9 +61,15 @@ export function SellForm() {
       return;
     }
 
-    if (priceCents === null) {
+    if (priceCents === null || (!isFree && (priceCents < 200 || priceCents > 999_900))) {
       setPending(false);
-      setError("Enter a price of at least $1.00.");
+      setError("Choose Free, or enter a price between $2.00 and $9,999.00.");
+      return;
+    }
+
+    if (!isFree && !canSellPaid) {
+      setPending(false);
+      setError("Connect Stripe payouts before listing a paid stall.");
       return;
     }
 
@@ -154,21 +171,71 @@ export function SellForm() {
           className="mt-2 w-full rounded-3xl border border-border bg-background px-4 py-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         />
       </label>
-      <label className="block text-sm font-medium text-foreground">
-        Price (USD)
-        <input
-          required
-          inputMode="decimal"
-          value={price}
-          onChange={(event) => setPrice(event.target.value)}
-          className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        />
-        <span className="mt-2 block text-sm font-normal text-muted-foreground">
-          {priceCents
-            ? `${formatUsd(priceCents)} listing. Farm hosting fee 10% (${formatUsd(fee)}). You receive ${formatUsd(Math.max(priceCents - fee, 0))} before Stripe processing.`
-            : "Minimum $1.00."}
-        </span>
-      </label>
+      <fieldset className="space-y-3">
+        <legend className="text-sm font-medium text-foreground">Price</legend>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            size="sm"
+            variant={isFree ? "default" : "outline"}
+            className="rounded-full"
+            onClick={() => setIsFree(true)}
+          >
+            Free
+          </Button>
+          <Button
+            type="button"
+            size="sm"
+            variant={!isFree ? "default" : "outline"}
+            className="rounded-full"
+            onClick={() => setIsFree(false)}
+          >
+            Paid
+          </Button>
+        </div>
+        {!isFree ? (
+          <div className="space-y-3">
+            <div className="flex flex-wrap gap-2">
+              {PRICE_SUGGESTIONS.map((suggestion) => (
+                <Button
+                  key={suggestion}
+                  type="button"
+                  size="sm"
+                  variant={price === suggestion ? "secondary" : "outline"}
+                  className="rounded-full"
+                  onClick={() => setPrice(suggestion)}
+                >
+                  ${suggestion.replace(/\.00$/, "")}
+                </Button>
+              ))}
+            </div>
+            <label className="block text-sm font-medium text-foreground">
+              Amount (USD)
+              <input
+                required={!isFree}
+                inputMode="decimal"
+                value={price}
+                onChange={(event) => setPrice(event.target.value)}
+                className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+              />
+            </label>
+            <p className="text-sm font-normal text-muted-foreground">
+              {priceCents && priceCents >= 200
+                ? `${formatUsd(priceCents)} listing. Farm hosting fee 10% (${formatUsd(fee)}). You receive ${formatUsd(Math.max(priceCents - fee, 0))} before Stripe processing.`
+                : "Suggested $2–$10. Paid listings need Stripe Connect."}
+            </p>
+            {!canSellPaid ? (
+              <p className="text-sm text-amber-700 dark:text-amber-300">
+                Connect Stripe payouts above before you can publish a paid stall.
+              </p>
+            ) : null}
+          </div>
+        ) : (
+          <p className="text-sm font-normal text-muted-foreground">
+            Free stalls are downloadable by anyone. No Stripe Connect required.
+          </p>
+        )}
+      </fieldset>
       <label className="block text-sm font-medium text-foreground">
         Scrubbed GAF JSON
         <textarea
@@ -185,11 +252,23 @@ export function SellForm() {
           {error}
         </p>
       ) : null}
+      <p className="text-sm font-normal text-muted-foreground">
+        You keep ownership of the pack. The farm keeps 10% of paid sales. You
+        are responsible for how the agent or team behaves after someone
+        installs it. Publishing agrees to the{" "}
+        <Link
+          href="/terms"
+          className="font-medium text-foreground underline-offset-4 hover:underline"
+        >
+          Terms of use
+        </Link>
+        .
+      </p>
       <Button
         type="submit"
         size="lg"
         className="h-11 rounded-full px-5"
-        disabled={pending}
+        disabled={pending || (!isFree && !canSellPaid)}
       >
         {pending ? "Publishing…" : "Publish stall"}
       </Button>

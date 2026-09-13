@@ -1,0 +1,70 @@
+import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { StallActions } from "@/components/stall-actions";
+import { StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
+import { catalogStallCardStats } from "@/lib/catalog";
+import { stallPagePath, stallToneClasses, type Stall } from "@/lib/packs";
+import { cn } from "@/lib/utils";
+
+export async function StallCard({
+  stall,
+  canDownload,
+  signedIn,
+}: {
+  stall: Stall;
+  canDownload: boolean;
+  signedIn: boolean;
+}) {
+  const tone = stallToneClasses[stall.tone];
+  const href = stallPagePath(stall);
+  const stats = await catalogStallCardStats(stall.slug);
+
+  return (
+    <Card className={cn("min-w-0 gap-4 py-6 ring-1", tone.card)}>
+      <CardHeader className="gap-3">
+        <StallHeaderMeta
+          kind={stall.kind}
+          category={stall.category}
+          categoryClassName={tone.label}
+          runtimes={stats?.runtimes ?? []}
+          author={stall.author}
+          priceCents={stall.priceCents ?? 0}
+        />
+        <CardTitle className="text-2xl font-semibold tracking-tight">
+          <Link href={href} className="underline-offset-4 hover:underline">
+            {stall.name}
+          </Link>
+        </CardTitle>
+        <CardDescription className="text-sm text-foreground/70">
+          {stall.title}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <p className="text-base leading-relaxed text-pretty text-foreground/80">
+          {stall.description}
+        </p>
+        {stats ? (
+          <StallPackStats
+            skillCount={stats.skillCount}
+            memoryLineCount={stats.memoryLineCount}
+            soulLine={stats.soulLine}
+          />
+        ) : null}
+      </CardContent>
+      <CardFooter className="flex flex-wrap gap-2 border-t-0 bg-transparent">
+        <StallActions
+          stall={stall}
+          canDownload={canDownload}
+          signedIn={signedIn}
+        />
+      </CardFooter>
+    </Card>
+  );
+}

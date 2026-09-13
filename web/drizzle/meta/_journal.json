@@ -15,6 +15,13 @@
       "when": 1789193267414,
       "tag": "0001_conscious_siren",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789288146292,
+      "tag": "0002_users_username_bio",
+      "breakpoints": true
     }
   ]
 }

@@ -64,6 +64,10 @@ export async function createListingCheckout(input: {
     return { error: "not_found" as const };
   }
 
+  if (listing.priceCents <= 0) {
+    return { error: "free_listing" as const };
+  }
+
   if (listing.sellerUserId === input.buyerUserId) {
     return { error: "own_listing" as const };
   }
