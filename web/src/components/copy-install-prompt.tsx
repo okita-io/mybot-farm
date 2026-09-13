@@ -36,14 +36,20 @@ export function CopyInstallPrompt({
   prompt,
   label = "Copy install prompt",
   variant = "outline",
+  disabled = false,
 }: {
   prompt: string;
   label?: string;
   variant?: "default" | "outline" | "ghost";
+  disabled?: boolean;
 }) {
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
 
   async function onCopy() {
+    if (disabled) {
+      return;
+    }
+
     try {
       await copyText(prompt);
       setStatus("copied");
@@ -63,6 +69,8 @@ export function CopyInstallPrompt({
       variant={variant}
       size="lg"
       className="h-9 rounded-full px-4"
+      disabled={disabled}
+      title={disabled ? "Buy this stall to unlock" : undefined}
       aria-live="polite"
       onClick={() => {
         void onCopy();
