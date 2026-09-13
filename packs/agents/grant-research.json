@@ -2,9 +2,7 @@
   "format": "mybot.farm/agent-pack",
   "version": "0.2",
   "runtime": [
-    "grok-bot",
-    "hermes",
-    "openclaw"
+    "grok-bot"
   ],
   "slug": "grant-research",
   "category": "education",
@@ -112,14 +110,6 @@
         "assisted": true,
         "webmcpPrompt": true,
         "notes": "Stall page Copy install prompt \u2192 paste into any Grok Bot; agent download_pack via WebMCP or fetch JSON."
-      },
-      "hermes": {
-        "via": "farm-cli",
-        "notes": "Translate GAF skills to ~/.hermes/skills/ via agentskills.io core."
-      },
-      "openclaw": {
-        "via": "farm-cli",
-        "notes": "Normalize skills; map persona to soul/instructions."
       }
     },
     "docs": "https://mybot.farm/agents/grant-research"
