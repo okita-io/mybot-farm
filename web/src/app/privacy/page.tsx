@@ -98,6 +98,9 @@ export default function PrivacyPage() {
               <Link href="/about">About the farm</Link>
             </li>
             <li>
+              <Link href="/press">Press</Link>
+            </li>
+            <li>
               <Link href="/teams">Agent Teams</Link>
             </li>
             <li>
