@@ -44,7 +44,6 @@ async function onboardingResponse(request: Request, country = "us") {
   const status = await refreshConnectStatus(accountId);
   const url = await createConnectOnboardingLink({
     accountId,
-    existing: status.transfersActive,
     returnUrl: `${origin}/sell?connect=return`,
     refreshUrl: `${origin}/api/connect/onboard`,
   });

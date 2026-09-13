@@ -113,32 +113,18 @@ export async function createConnectOnboardingLink(input: {
   accountId: string;
   returnUrl: string;
   refreshUrl: string;
-  existing: boolean;
 }) {
   const stripe = getStripe();
-  const type = input.existing ? "account_update" : "account_onboarding";
-  const useCase =
-    type === "account_update"
-      ? {
-          type: "account_update" as const,
-          account_update: {
-            configurations: ["recipient" as const],
-            refresh_url: input.refreshUrl,
-            return_url: input.returnUrl,
-          },
-        }
-      : {
-          type: "account_onboarding" as const,
-          account_onboarding: {
-            configurations: ["recipient" as const],
-            refresh_url: input.refreshUrl,
-            return_url: input.returnUrl,
-          },
-        };
-
   const link = await stripe.v2.core.accountLinks.create({
     account: input.accountId,
-    use_case: useCase,
+    use_case: {
+      type: "account_onboarding",
+      account_onboarding: {
+        configurations: ["recipient"],
+        refresh_url: input.refreshUrl,
+        return_url: input.returnUrl,
+      },
+    },
   });
 
   return link.url;
