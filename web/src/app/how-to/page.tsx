@@ -294,6 +294,9 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
               dump
             </li>
             <li>
+              <Link href="/press">Press</Link> — launch release
+            </li>
+            <li>
               <Link href="/teams">Agent Teams</Link> — pair, hub, and pipeline
               packs
             </li>
