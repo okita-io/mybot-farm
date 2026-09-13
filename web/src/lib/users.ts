@@ -74,12 +74,20 @@ export async function markEventProcessed(
 export async function syncClerkUser(input: ClerkUserInput) {
   const db = getDb();
   const now = new Date();
-  const stripeCustomerId = await ensureStripeCustomer(input);
-  const existing = await getUserByClerkId(input.id);
+  const existingByClerk = await getUserByClerkId(input.id);
+  const stripeCustomerId =
+    existingByClerk?.stripeCustomerId ?? (await ensureStripeCustomer(input));
+  const existing =
+    existingByClerk ??
+    (stripeCustomerId ? await getUserByStripeCustomerId(stripeCustomerId) : null) ??
+    (input.email ? await getUserByEmail(input.email) : null);
   const username =
-    existing?.username ?? (await allocateUsername(preferredUsernameBase(input)));
+    existing?.username ??
+    (await allocateUsername(preferredUsernameBase(input), input.id));
+  const customerId = existing?.stripeCustomerId ?? stripeCustomerId ?? null;
 
   const update = {
+    clerkUserId: input.id,
     email: input.email,
     firstName: input.firstName,
     lastName: input.lastName,
@@ -88,14 +96,23 @@ export async function syncClerkUser(input: ClerkUserInput) {
     lastSeenAt: now,
     updatedAt: now,
     deletedAt: null,
-    ...(stripeCustomerId ? { stripeCustomerId } : {}),
+    ...(customerId ? { stripeCustomerId: customerId } : {}),
   };
+
+  if (existing) {
+    const [row] = await db
+      .update(users)
+      .set(update)
+      .where(eq(users.id, existing.id))
+      .returning();
+    return row;
+  }
 
   const [row] = await db
     .insert(users)
     .values({
       clerkUserId: input.id,
-      stripeCustomerId,
+      stripeCustomerId: customerId,
       ...update,
     })
     .onConflictDoUpdate({
@@ -133,6 +150,47 @@ export async function getUserByClerkId(clerkUserId: string) {
     return row ?? null;
   } catch (error) {
     console.error("getUserByClerkId failed:", error);
+    return null;
+  }
+}
+
+async function getUserByStripeCustomerId(stripeCustomerId: string) {
+  if (!hasDatabase() || !stripeCustomerId) {
+    return null;
+  }
+
+  try {
+    const db = getDb();
+    const [row] = await db
+      .select()
+      .from(users)
+      .where(eq(users.stripeCustomerId, stripeCustomerId))
+      .limit(1);
+
+    return row ?? null;
+  } catch (error) {
+    console.error("getUserByStripeCustomerId failed:", error);
+    return null;
+  }
+}
+
+async function getUserByEmail(email: string) {
+  const needle = email.trim().toLowerCase();
+  if (!hasDatabase() || !needle) {
+    return null;
+  }
+
+  try {
+    const db = getDb();
+    const [row] = await db
+      .select()
+      .from(users)
+      .where(eq(sql`lower(${users.email})`, needle))
+      .limit(1);
+
+    return row ?? null;
+  } catch (error) {
+    console.error("getUserByEmail failed:", error);
     return null;
   }
 }
@@ -348,6 +406,15 @@ export async function linkStripeCustomer(
 
   const db = getDb();
   const now = new Date();
+  const owner = await getUserByStripeCustomerId(stripeCustomerId);
+
+  if (owner) {
+    await db
+      .update(users)
+      .set({ clerkUserId, stripeCustomerId, updatedAt: now })
+      .where(eq(users.id, owner.id));
+    return;
+  }
 
   await db
     .update(users)
