@@ -12,7 +12,7 @@ export const packTools = [
     name: "get_stall",
     title: "Get stall",
     description:
-      "Get one mybot.farm stall by slug (gift-day, sprout-journal, patch, probe, grant-research, pair-bench). Returns metadata plus download_pack and install-prompt API paths. Read-only.",
+      "Get one mybot.farm stall by slug (gift-day, sprout-journal, patch, probe, grant-research, pair-bench, workbench). Returns metadata plus download_pack and install-prompt API paths. Read-only.",
     method: "GET",
     path: "/api/stalls/{slug}",
     query: [],

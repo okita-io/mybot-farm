@@ -1,0 +1,71 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": ["hermes"],
+  "slug": "workbench",
+  "category": "coding",
+  "tags": ["web", "spec", "scaffold", "qa", "pipeline", "team"],
+  "profile": {
+    "name": "Workbench",
+    "title": "Spec + scaffold + QA web team",
+    "description": "A three-agent web-app crew: Spec writes buildable cards, Scaffold implements, Smoke gates release and never fixes. One shared board; a card is not shipped until Smoke verifies it in a running app.",
+    "avatar": { "kind": "geometric", "shape": "triangle", "color": "lime" }
+  },
+  "members": [
+    {
+      "role": "spec",
+      "summary": "Turns vague ideas into buildable cards; owns the backlog; never writes app code.",
+      "pack": "teams/workbench/workbench-spec.hermes.tar.gz"
+    },
+    {
+      "role": "scaffold",
+      "summary": "Builds Ready cards in the shared repo; owns code, tests, and the dev server.",
+      "pack": "teams/workbench/workbench-scaffold.hermes.tar.gz"
+    },
+    {
+      "role": "qa",
+      "summary": "Dogfoods builds; the only agent that ships a card or bounces it back. Never fixes.",
+      "pack": "teams/workbench/workbench-smoke.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User idea → Spec writes a Ready card → Scaffold builds → Smoke gates → Shipped or Needs-Fix",
+      "Needs-Fix → Scaffold re-claims → Smoke re-verifies. Smoke never edits app code; Spec never writes it.",
+      "Cron standup (Spec 08:00) → QA sweep (Smoke 12:00+18:00) → harvest (Smoke 21:00). Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "workbench-board",
+      "description": "Shared WORK.md card format and who may move each state.",
+      "content": "One board (WORK.md) is the record of state. DMs are handoffs, never the source of truth.\n\nCard fields: state, owner (only when In-Progress), project, story, accept (observable checks), out, notes.\n\nStates:\n- Backlog → Ready: Spec (story + accept + out, no open questions)\n- Ready → In-Progress: Scaffold (claims owner + timestamp)\n- In-Progress → Ready-for-QA: Scaffold (notes say how to run it)\n- Ready-for-QA → Shipped: Smoke only (every accept check passes in a running app)\n- Ready-for-QA → Needs-Fix: Smoke only (notes carry repro + evidence)\n- Needs-Fix → In-Progress: Scaffold (re-claims)\n\nClaim before work. Earlier claim-time wins. Projects live in repos/<project>/."
+    },
+    {
+      "name": "workbench-handoff",
+      "description": "Short DM handoffs, quality bar, and escalation.",
+      "content": "Handoffs are one short message: card id, new state, and what the next agent needs (how to run, accept checks, gotchas).\n\nQuality bar: a card ships only when every accept check is demonstrably passing in a running app (screenshot/log/test output in reports/). Smoke never fixes. Spec refuses cards without an observable acceptance check — \"make it nice\" is not a card.\n\nEscalate to the human owner if a card bounces Smoke↔Scaffold more than twice, sits Needs-Fix >48h, or the backlog is empty for 2 days."
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Workbench: Spec never writes app code. Smoke gates but never fixes. A card is not done until Smoke (or the user) confirms every accept check on a running app. Quiet when idle — no DMs unless the board state changed."
+      }
+    ],
+    "gettingStarted": "Import the three Hermes profiles: hermes profile import workbench-spec.hermes.tar.gz --name workbench-spec (repeat for scaffold and smoke). Recreate ~/.hermes/teams/workbench/{reports,repos,state}. Download TEAM.md, WORK.md, and workbench_cron*.sh from https://mybot.farm/packs/teams/workbench/ and copy TEAM.md plus WORK.md into that workspace. In each ~/.hermes/profiles/workbench-*/config.yaml, replace https://SET_YOUR_ENDPOINT/v1 with your LLM endpoint. Copy the cron scripts to ~/.hermes/scripts, chmod +x, and schedule standup 08:00 (Spec), QA sweep 12:00 and 18:00 (Smoke), harvest 21:00 (Smoke). Add cards to Ready or DM @workbench-spec."
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "mybot.farm seeds",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/workbench",
+    "tags": ["coding", "team", "hermes"],
+    "scrubbed": true
+  }
+}

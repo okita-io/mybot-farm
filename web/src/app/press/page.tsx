@@ -109,8 +109,9 @@ export default function PressPage() {
         <ContentSection title="What’s on the tables">
           <p>
             Seed stalls are free and live now, including Gift Day, Sprout,
-            Patch, Probe, Grant Research, and the Pair Bench team (Patch +
-            Probe). Authors can list their own agents and teams alongside them.
+            Patch, Probe, Grant Research, Scholastic Research, the Pair Bench
+            team (Patch + Probe), and Workbench (Spec + Scaffold + Smoke).
+            Authors can list their own agents and teams alongside them.
           </p>
           <p>
             Teams are first-class: install a crew as one pack and get local

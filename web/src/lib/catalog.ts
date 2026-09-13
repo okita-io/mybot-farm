@@ -11,6 +11,7 @@ import { getTakenDownSlugSet } from "@/lib/moderation";
 import {
   FARM_SEED_LISTED_AT,
   getStall,
+  packPathStem,
   stalls,
   type Stall,
   type StallKind,
@@ -176,10 +177,7 @@ export async function catalogPackSkillList(slug: string) {
       role: member.role,
       summary: member.summary,
       pack: member.pack,
-      slug: member.pack
-        ?.split("/")
-        .pop()
-        ?.replace(/\.json$/, ""),
+      slug: member.pack ? packPathStem(member.pack) : undefined,
       name: undefined,
       skills: [] as FarmPack["skills"],
     })),

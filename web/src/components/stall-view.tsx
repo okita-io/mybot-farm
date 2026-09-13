@@ -13,6 +13,7 @@ import { getStallEngagement } from "@/lib/engagement";
 import { hasUserFlaggedStall } from "@/lib/moderation";
 import { formatPriceLabel, formatUsd } from "@/lib/money";
 import {
+  memberHref,
   packFileUrl,
   stallApiPaths,
   stallPageUrl,
@@ -146,18 +147,26 @@ export async function StallView({
             <p className="mt-4 text-sm text-foreground/70">
               Members:{" "}
               {stall.members.map((member, index) => {
-                const memberSlug = member.href
-                  .split("/")
-                  .pop()
-                  ?.replace(/\.json$/, "");
-                const href = memberSlug ? `/agents/${memberSlug}` : member.href;
+                const href = memberHref(member);
+                const isStallPage =
+                  href.startsWith("/agents/") || href.startsWith("/teams/");
 
                 return (
                   <span key={member.href}>
                     {index > 0 ? ", " : null}
-                    <Link href={href} className="underline-offset-4 hover:underline">
-                      {member.name}
-                    </Link>
+                    {isStallPage ? (
+                      <Link href={href} className="underline-offset-4 hover:underline">
+                        {member.name}
+                      </Link>
+                    ) : (
+                      <a
+                        href={href}
+                        className="underline-offset-4 hover:underline"
+                        download={href.split("/").at(-1)}
+                      >
+                        {member.name}
+                      </a>
+                    )}
                   </span>
                 );
               })}

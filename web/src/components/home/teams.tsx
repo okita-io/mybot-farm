@@ -31,6 +31,13 @@ export function HomeTeams() {
           >
             Pair Bench
           </Link>
+          <span className="text-muted-foreground"> · </span>
+          <Link
+            href="/teams/workbench"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Workbench
+          </Link>
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {teams.map((team) => (

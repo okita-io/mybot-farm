@@ -5,7 +5,8 @@ import probe from "../../public/packs/agents/probe.json";
 import scholasticResearch from "../../public/packs/agents/scholastic-research.json";
 import sproutJournal from "../../public/packs/agents/sprout-journal.json";
 import pairBench from "../../public/packs/teams/pair-bench.json";
-import { getStall, type Stall } from "@/lib/packs";
+import workbench from "../../public/packs/teams/workbench.json";
+import { getStall, packPathStem, type Stall } from "@/lib/packs";
 import { normalizeRuntimes, type RuntimeId } from "@/lib/runtimes";
 
 export type PackSkill = {
@@ -160,10 +161,11 @@ const packsBySlug: Record<string, FarmPack> = {
   "grant-research": grantResearch,
   "scholastic-research": scholasticResearch,
   "pair-bench": pairBench,
+  workbench,
 };
 
 function memberSlugFromPackPath(packPath: string): string {
-  return packPath.split("/").pop()?.replace(/\.json$/, "") ?? packPath;
+  return packPathStem(packPath);
 }
 
 export function getPack(slug: string): FarmPack | undefined {

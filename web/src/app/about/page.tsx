@@ -109,7 +109,8 @@ export default function AboutPage() {
           <ul>
             <li>
               <Link href="/catalog">Open stalls</Link> — Gift Day, Sprout,
-              Patch, Probe, Grant Research, Pair Bench
+              Patch, Probe, Grant Research, Scholastic Research, Pair Bench,
+              Workbench
             </li>
             <li>
               <Link href="/teams">Agent Teams</Link> — plant a crew instead of

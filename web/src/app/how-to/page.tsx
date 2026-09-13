@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `How-To | ${site.name}`,
     description:
-      "Grok Bot uses GAF JSON. Hermes uses a scrubbed .tar.gz. Seed stalls today are GAF. Scrub chat history and secrets before you share.",
+      "Grok Bot uses GAF JSON. Hermes uses a scrubbed .tar.gz — including seed stalls like Scholastic Research and Workbench. Scrub chat history and secrets before you share.",
     url: "/how-to",
     images: [siteOgImage],
   },
@@ -32,7 +32,7 @@ export default function HowToPage() {
       <ContentPage
         kicker="How-To"
         title="Install a stall, or share your own"
-        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON — that is what seed stalls serve today. Hermes installs from a scrubbed profile .tar.gz. OpenClaw translators are still coming."
+        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes installs from a scrubbed profile .tar.gz — including seed stalls like Scholastic Research and Workbench. OpenClaw translators are still coming."
       >
         <ContentSection id="install" title="Install an agent in Grok Bot">
           <p>
@@ -99,8 +99,12 @@ export default function HowToPage() {
             Hermes does not install GAF JSON.{" "}
             <code>hermes profile import</code> wants a{" "}
             <strong>scrubbed profile archive</strong> (<code>.tar.gz</code>).
-            Seed stall downloads today are GAF files for Grok Bot — they will
-            not import. Use this path when you have a clean Hermes pack from
+            Some seed stalls ship that way —{" "}
+            <Link href="/agents/scholastic-research">Scholastic Research</Link>{" "}
+            (one profile) and{" "}
+            <Link href="/teams/workbench">Workbench</Link> (three team
+            members). Grok Bot stalls still download as GAF JSON and will not
+            import. Use this path for those Hermes packs, a clean archive from
             another farmer, or after you ran{" "}
             <a href="#hermes-share">scrub.py</a> on your own export.
           </p>

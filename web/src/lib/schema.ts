@@ -81,7 +81,7 @@ export const howToHermesImportLd = {
   "@type": "HowTo",
   name: "Import a Hermes profile from a scrubbed archive",
   description:
-    "Hermes installs from a scrubbed profile .tar.gz, not from GAF JSON. Seed stalls on mybot.farm today are GAF files for Grok Bot. Import a clean archive with hermes profile import, then add your own API keys.",
+    "Hermes installs from a scrubbed profile .tar.gz, not from GAF JSON. Some seed stalls ship Hermes archives (Scholastic Research, Workbench). Import a clean archive with hermes profile import, then add your own API keys.",
   url: `${site.url}/how-to#hermes-import`,
   step: [
     {
@@ -92,7 +92,7 @@ export const howToHermesImportLd = {
     {
       "@type": "HowToStep",
       name: "Get a scrubbed profile archive",
-      text: "Use a .tar.gz that has already been through scrub.py. Do not import a raw hermes profile export. Seed stall downloads are GAF JSON and will not import.",
+      text: "Use a .tar.gz that has already been through scrub.py. Do not import a raw hermes profile export. Hermes seed stalls (Scholastic Research, Workbench members) download as .tar.gz; Grok Bot stalls are GAF JSON and will not import.",
     },
     {
       "@type": "HowToStep",
