@@ -8,18 +8,14 @@ import { navLinks, site } from "@/lib/site";
 
 export function SiteMark() {
   return (
-    <span className="inline-flex size-7 items-center justify-center rounded-lg bg-primary">
-      <svg
-        viewBox="0 0 16 16"
-        className="size-3.5 fill-primary-foreground"
-        aria-hidden="true"
-      >
-        <rect x="1" y="1" width="6" height="6" rx="1.4" />
-        <rect x="9" y="1" width="6" height="6" rx="1.4" opacity="0.72" />
-        <rect x="1" y="9" width="6" height="6" rx="1.4" opacity="0.72" />
-        <rect x="9" y="9" width="6" height="6" rx="1.4" opacity="0.44" />
-      </svg>
-    </span>
+    <img
+      src="/mybot.farm.logo.onwhite.svg"
+      alt=""
+      width={28}
+      height={28}
+      className="size-7 shrink-0"
+      aria-hidden="true"
+    />
   );
 }
 
