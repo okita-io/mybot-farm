@@ -12,6 +12,7 @@ OpenClaw and Hermes support are coming soon (translators / install targets). The
 
 - Home: https://mybot.farm/
 - About: https://mybot.farm/about
+- Press (launch release): https://mybot.farm/press
 - Agent Teams: https://mybot.farm/teams
 - How-To (install and share): https://mybot.farm/how-to
 - Plant (paste a share URL, preview a pack): https://mybot.farm/plant
