@@ -1,9 +1,15 @@
+"use client";
+
 import { Download } from "lucide-react";
 import { BuyButton, SignedOutBuyButton } from "@/components/buy-button";
 import { CopyInstallPrompt } from "@/components/copy-install-prompt";
 import { Button } from "@/components/ui/button";
 import { installPrompt, shortInstallPrompt } from "@/lib/install-prompt";
 import { packFilename, type Stall } from "@/lib/packs";
+
+function tracksViaPackApi(href: string) {
+  return href.includes("/api/packs/") && /[?&]download=1(?:&|$)/.test(href);
+}
 
 export function StallActions({
   stall,
@@ -30,7 +36,17 @@ export function StallActions({
         )
       ) : (
         <Button asChild size="lg" className="h-9 rounded-full px-4">
-          <a href={stall.downloadHref} download={filename}>
+          <a
+            href={stall.downloadHref}
+            download={filename}
+            onClick={() => {
+              if (!tracksViaPackApi(stall.downloadHref)) {
+                void fetch(`/api/stalls/${encodeURIComponent(stall.slug)}/download`, {
+                  method: "POST",
+                });
+              }
+            }}
+          >
             <Download data-icon="inline-start" />
             Download pack
           </a>

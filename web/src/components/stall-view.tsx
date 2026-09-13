@@ -1,10 +1,16 @@
 import Link from "next/link";
+import { Pencil } from "lucide-react";
+import { StallAdminRemove } from "@/components/stall-admin-remove";
 import { StallActions } from "@/components/stall-actions";
-import { StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
+import { StallEngagement } from "@/components/stall-engagement";
+import { StallDates, StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
 import { Container } from "@/components/container";
 import { JsonLd } from "@/components/json-ld";
+import { Button } from "@/components/ui/button";
 import { installPrompt, shortInstallPrompt } from "@/lib/install-prompt";
 import { catalogStallCardStats } from "@/lib/catalog";
+import { getStallEngagement } from "@/lib/engagement";
+import { hasUserFlaggedStall } from "@/lib/moderation";
 import { formatPriceLabel, formatUsd } from "@/lib/money";
 import {
   packFileUrl,
@@ -13,6 +19,8 @@ import {
   stallToneClasses,
   type Stall,
 } from "@/lib/packs";
+import { isAdminEmail } from "@/lib/admin";
+import { getCachedViewer } from "@/lib/users";
 import { cn } from "@/lib/utils";
 
 export function stallJsonLd(stall: Stall) {
@@ -25,6 +33,8 @@ export function stallJsonLd(stall: Stall) {
     description: stall.description,
     url: stallPageUrl(stall),
     applicationCategory: stall.category,
+    datePublished: stall.listedAt,
+    dateModified: stall.updatedAt ?? stall.listedAt,
     offers: {
       "@type": "Offer",
       price: (cents / 100).toFixed(2),
@@ -48,8 +58,15 @@ export async function StallView({
   const prompt = installPrompt(stall);
   const shortPrompt = shortInstallPrompt(stall);
   const api = stallApiPaths(stall.slug);
-  const stats = await catalogStallCardStats(stall.slug);
+  const viewer = await getCachedViewer();
+  const [stats, engagement, flagged] = await Promise.all([
+    catalogStallCardStats(stall.slug),
+    getStallEngagement(stall.slug, viewer?.id),
+    viewer ? hasUserFlaggedStall(stall.slug, viewer.id) : Promise.resolve(false),
+  ]);
   const paid = (stall.priceCents ?? 0) > 0;
+  const isOwner = Boolean(viewer && stall.sellerUserId === viewer.id);
+  const isAdmin = isAdminEmail(viewer?.email);
 
   return (
     <section className="py-16 sm:py-20">
@@ -114,6 +131,17 @@ export async function StallView({
               />
             </div>
           ) : null}
+          <div className="mt-4 space-y-3">
+            <StallDates listedAt={stall.listedAt} updatedAt={stall.updatedAt} />
+            <StallEngagement
+              slug={stall.slug}
+              downloadCount={engagement.downloadCount}
+              likeCount={engagement.likeCount}
+              liked={engagement.liked}
+              signedIn={signedIn}
+              flagged={flagged}
+            />
+          </div>
           {stall.members?.length ? (
             <p className="mt-4 text-sm text-foreground/70">
               Members:{" "}
@@ -135,7 +163,23 @@ export async function StallView({
               })}
             </p>
           ) : null}
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap gap-2">
+            {isOwner ? (
+              <Button asChild variant="outline" size="lg" className="h-9 rounded-full px-4">
+                <Link href={`/sell?edit=${encodeURIComponent(stall.slug)}`}>
+                  <Pencil data-icon="inline-start" />
+                  Update stall
+                </Link>
+              </Button>
+            ) : null}
+            {isAdmin ? (
+              <>
+                <StallAdminRemove slug={stall.slug} />
+                <Button asChild variant="outline" size="lg" className="h-9 rounded-full px-4">
+                  <Link href="/admin">Review reports</Link>
+                </Button>
+              </>
+            ) : null}
             <StallActions
               stall={stall}
               showShortCopy

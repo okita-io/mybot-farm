@@ -22,22 +22,52 @@ const SAMPLE_PACK = `{
 
 const PRICE_SUGGESTIONS = ["2.00", "5.00", "8.00", "10.00"] as const;
 
+export type EditableListing = {
+  id: string;
+  slug: string;
+  kind: "agent" | "team";
+  name: string;
+  title: string;
+  description: string;
+  category: string;
+  priceCents: number;
+  pack: unknown;
+};
+
+function packToText(pack: unknown) {
+  try {
+    return JSON.stringify(pack, null, 2);
+  } catch {
+    return SAMPLE_PACK;
+  }
+}
+
+function dollarsFromCents(cents: number) {
+  return (cents / 100).toFixed(2);
+}
+
 export function SellForm({
   canSellPaid = false,
+  listing,
 }: {
   canSellPaid?: boolean;
+  listing?: EditableListing;
 }) {
   const router = useRouter();
-  const [kind, setKind] = useState<"agent" | "team">("agent");
-  const [name, setName] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [kind, setKind] = useState<"agent" | "team">(listing?.kind ?? "agent");
+  const [name, setName] = useState(listing?.name ?? "");
+  const [title, setTitle] = useState(listing?.title ?? "");
+  const [description, setDescription] = useState(listing?.description ?? "");
   const [category, setCategory] = useState<string>(
-    categories[0]?.label ?? "Lifestyle",
+    listing?.category ?? categories[0]?.label ?? "Lifestyle",
   );
-  const [isFree, setIsFree] = useState(true);
-  const [price, setPrice] = useState("5.00");
-  const [packText, setPackText] = useState(SAMPLE_PACK);
+  const [isFree, setIsFree] = useState(!listing || listing.priceCents <= 0);
+  const [price, setPrice] = useState(
+    listing && listing.priceCents > 0 ? dollarsFromCents(listing.priceCents) : "5.00",
+  );
+  const [packText, setPackText] = useState(
+    listing ? packToText(listing.pack) : SAMPLE_PACK,
+  );
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -74,19 +104,22 @@ export function SellForm({
     }
 
     try {
-      const response = await fetch("/api/listings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          kind,
-          name,
-          title,
-          description,
-          category,
-          priceCents,
-          pack,
-        }),
-      });
+      const response = await fetch(
+        listing ? `/api/listings/${listing.id}` : "/api/listings",
+        {
+          method: listing ? "PATCH" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            kind,
+            name,
+            title,
+            description,
+            category,
+            priceCents,
+            pack,
+          }),
+        },
+      );
       const data: unknown = await response.json().catch(() => null);
       const record = data && typeof data === "object" ? (data as Record<string, unknown>) : {};
 
@@ -99,10 +132,12 @@ export function SellForm({
       setError(
         typeof record.message === "string"
           ? record.message
-          : "Could not publish that stall.",
+          : listing
+            ? "Could not update that stall."
+            : "Could not publish that stall.",
       );
     } catch {
-      setError("Could not publish that stall.");
+      setError(listing ? "Could not update that stall." : "Could not publish that stall.");
     } finally {
       setPending(false);
     }
@@ -116,6 +151,12 @@ export function SellForm({
         void publish();
       }}
     >
+      {listing ? (
+        <p className="text-sm text-muted-foreground">
+          Updating <span className="font-medium text-foreground">{listing.name}</span>.
+          The stall URL stays <code className="font-mono text-[0.9em]">{listing.slug}</code>.
+        </p>
+      ) : null}
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block text-sm font-medium text-foreground">
           Kind
@@ -270,7 +311,13 @@ export function SellForm({
         className="h-11 rounded-full px-5"
         disabled={pending || (!isFree && !canSellPaid)}
       >
-        {pending ? "Publishing…" : "Publish stall"}
+        {pending
+          ? listing
+            ? "Saving…"
+            : "Publishing…"
+          : listing
+            ? "Save updates"
+            : "Publish stall"}
       </Button>
     </form>
   );

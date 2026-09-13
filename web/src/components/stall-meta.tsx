@@ -117,3 +117,44 @@ export function StallPackStats({
     </div>
   );
 }
+
+export function formatStallDate(value?: string | null) {
+  if (!value) {
+    return null;
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+}
+
+export function StallDates({
+  listedAt,
+  updatedAt,
+}: {
+  listedAt?: string | null;
+  updatedAt?: string | null;
+}) {
+  const created = formatStallDate(listedAt);
+  const updated = formatStallDate(updatedAt);
+
+  if (!created && !updated) {
+    return null;
+  }
+
+  return (
+    <p className="text-sm text-foreground/70">
+      {created ? `Created ${created}` : null}
+      {created && updated ? " · " : null}
+      {updated ? `Updated ${updated}` : null}
+    </p>
+  );
+}

@@ -1,12 +1,15 @@
 import type { FarmPack } from "@/lib/pack-files";
 import { getPack, packCardStats, packSkillList, packSummaryFields } from "@/lib/pack-files";
+import { getStallStatsBySlugs } from "@/lib/engagement";
 import {
   getListingBySlug,
   listPublishedListings,
   listPublishedListingsBySeller,
   type ListingRow,
 } from "@/lib/listings";
+import { getTakenDownSlugSet } from "@/lib/moderation";
 import {
+  FARM_SEED_LISTED_AT,
   getStall,
   stalls,
   type Stall,
@@ -48,16 +51,42 @@ export function listingToStall(
     sellerUserId: listing.sellerUserId,
     author,
     listedAt: listing.createdAt.toISOString(),
+    updatedAt: listing.updatedAt.toISOString(),
   };
 }
 
 export function withSeedPrice(stall: Stall): Stall {
+  const listedAt = stall.listedAt ?? FARM_SEED_LISTED_AT;
+
   return {
     ...stall,
     priceCents: stall.priceCents ?? 0,
     currency: stall.currency ?? "usd",
     author: stall.author ?? FARM_AUTHOR,
+    listedAt,
+    updatedAt: stall.updatedAt ?? listedAt,
   };
+}
+
+async function withStallStats(stallsList: Stall[]): Promise<Stall[]> {
+  if (!stallsList.length) {
+    return stallsList;
+  }
+
+  const stats = await getStallStatsBySlugs(stallsList.map((stall) => stall.slug));
+  return stallsList.map((stall) => {
+    const row = stats.get(stall.slug);
+    return {
+      ...stall,
+      downloadCount: row?.downloadCount ?? 0,
+      likeCount: row?.likeCount ?? 0,
+    };
+  });
+}
+
+async function isHiddenStall(slug: string) {
+  const takenDown = await getTakenDownSlugSet();
+  return takenDown.has(slug);
 }
 
 async function hydrateListingStalls(listings: ListingRow[]): Promise<Stall[]> {
@@ -69,28 +98,38 @@ async function hydrateListingStalls(listings: ListingRow[]): Promise<Stall[]> {
 }
 
 export async function findStall(slug: string): Promise<Stall | undefined> {
-  const seed = getStall(slug);
-  if (seed) {
-    return withSeedPrice(seed);
-  }
-
-  const listing = await getListingBySlug(slug);
-  if (!listing?.published) {
+  if (await isHiddenStall(slug)) {
     return undefined;
   }
 
-  const [stall] = await hydrateListingStalls([listing]);
+  const seed = getStall(slug);
+  if (seed) {
+    const [stall] = await withStallStats([withSeedPrice(seed)]);
+    return stall;
+  }
+
+  const listing = await getListingBySlug(slug);
+  if (!listing?.published || listing.deletedAt) {
+    return undefined;
+  }
+
+  const hydrated = await hydrateListingStalls([listing]);
+  const [stall] = await withStallStats(hydrated);
   return stall;
 }
 
 export async function getCatalogPack(slug: string): Promise<FarmPack | undefined> {
+  if (await isHiddenStall(slug)) {
+    return undefined;
+  }
+
   const seed = getPack(slug);
   if (seed) {
     return seed;
   }
 
   const listing = await getListingBySlug(slug);
-  if (!listing?.published) {
+  if (!listing?.published || listing.deletedAt) {
     return undefined;
   }
 
@@ -148,17 +187,21 @@ export async function catalogPackSkillList(slug: string) {
 }
 
 export async function listCatalogStalls(): Promise<Stall[]> {
+  const takenDown = await getTakenDownSlugSet();
   const published = await listPublishedListings();
   const extras = await hydrateListingStalls(
-    published.filter((listing) => !getStall(listing.slug)),
+    published.filter((listing) => !getStall(listing.slug) && !takenDown.has(listing.slug)),
   );
+  const seeds = stalls
+    .filter((stall) => !takenDown.has(stall.slug))
+    .map(withSeedPrice);
 
-  return [...stalls.map(withSeedPrice), ...extras];
+  return withStallStats([...seeds, ...extras]);
 }
 
 export async function listAuthorStalls(sellerUserId: string): Promise<Stall[]> {
   const published = await listPublishedListingsBySeller(sellerUserId);
-  return hydrateListingStalls(published);
+  return withStallStats(await hydrateListingStalls(published));
 }
 
 function stallMatchesQuery(stall: Stall, needle?: string, kind?: StallKind) {
@@ -238,11 +281,14 @@ export async function resolvePackAccess(
   const seedStall = getStall(slug);
   const seedPack = getPack(slug);
   if (seedStall && seedPack) {
+    if (await isHiddenStall(slug)) {
+      return { ok: false, reason: "not_found" };
+    }
     return { ok: true, stall: withSeedPrice(seedStall), pack: seedPack };
   }
 
   const listing = await getListingBySlug(slug);
-  if (!listing) {
+  if (!listing || listing.deletedAt || (await isHiddenStall(slug))) {
     return { ok: false, reason: "not_found" };
   }
 

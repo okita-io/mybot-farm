@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { corsHeaders, jsonResponse, notFoundResponse, optionsResponse, paymentRequiredResponse } from "@/lib/http";
+import { recordStallDownload } from "@/lib/engagement";
 import { packFilename } from "@/lib/packs";
 import { resolvePackAccess } from "@/lib/catalog";
 
@@ -31,6 +32,7 @@ export async function GET(
   );
 
   if (asDownload) {
+    await recordStallDownload(slug);
     headers.set(
       "Content-Disposition",
       `attachment; filename="${packFilename(stall)}"`,

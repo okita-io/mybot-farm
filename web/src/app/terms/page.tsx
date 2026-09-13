@@ -119,10 +119,11 @@ export default function TermsPage() {
         <ContentSection title="Acceptable stalls">
           <p>
             Do not list malware, packs designed to steal credentials, or
-            content you do not have the right to share. The farm can take a
-            stall down if it is unlawful, abusive, or a secret leak. Taking a
-            stall down is not an admission that we reviewed or endorse what
-            remains.
+            content you do not have the right to share. Signed-in visitors can
+            report a stall as illegal, harmful, corrupt, or unusable. The farm
+            can take a stall down if it is unlawful, abusive, broken, or a
+            secret leak. Taking a stall down is not an admission that we
+            reviewed or endorse what remains.
           </p>
         </ContentSection>
 

@@ -32,6 +32,7 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
   const query = await searchParams;
   const user = await requireAppUser();
   const connectStatus = query.connect === "return" ? "return" : query.connect === "error" ? "error" : null;
+  const editSlug = typeof query.edit === "string" ? query.edit.trim() : "";
 
   if (!user) {
     return (
@@ -60,6 +61,9 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
     seller.stripeConnectAccountId && seller.stripeConnectTransfersActive,
   );
   const listings = await listSellerListings(seller.id);
+  const editing = editSlug
+    ? listings.find((listing) => listing.slug === editSlug && !listing.deletedAt) ?? null
+    : null;
 
   return (
     <ContentPage
@@ -103,15 +107,28 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
           <ul>
             {listings.map((listing) => (
               <li key={listing.id}>
-                <Link
-                  href={stallPagePath({
-                    kind: listing.kind === "team" ? "team" : "agent",
-                    slug: listing.slug,
-                  })}
-                >
-                  {listing.name}
-                </Link>
-                {` — ${formatPriceLabel(listing.priceCents)}${listing.published ? "" : " (unpublished)"}`}
+                {listing.deletedAt ? (
+                  <>
+                    {listing.name}
+                    {` — ${formatPriceLabel(listing.priceCents)} (removed by the farm)`}
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href={stallPagePath({
+                        kind: listing.kind === "team" ? "team" : "agent",
+                        slug: listing.slug,
+                      })}
+                    >
+                      {listing.name}
+                    </Link>
+                    {` — ${formatPriceLabel(listing.priceCents)}${listing.published ? "" : " (unpublished)"}`}
+                    {" · "}
+                    <Link href={`/sell?edit=${encodeURIComponent(listing.slug)}`}>
+                      Update
+                    </Link>
+                  </>
+                )}
               </li>
             ))}
           </ul>
@@ -129,16 +146,51 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
         </ContentSection>
       ) : null}
 
-      <ContentSection title="New stall">
+      <ContentSection title={editing ? "Update stall" : "New stall"}>
+        {editing ? (
+          <p className="text-sm text-muted-foreground">
+            <Link href="/sell" className="font-medium text-foreground underline-offset-4 hover:underline">
+              List a new stall
+            </Link>
+            {" instead."}
+          </p>
+        ) : null}
+        {editSlug && !editing ? (
+          <p className="text-sm text-destructive" role="alert">
+            That stall is not in your list, was removed, or cannot be updated here.
+          </p>
+        ) : null}
         <p>
-          Scrub keys, private URLs, and customer data first. The pack you
-          paste is what buyers download. You keep ownership; listing it
-          does not transfer the pack to the farm. Hermes authors:{" "}
-          <Link href="/how-to#hermes-share">export, then run scrub.py</Link>{" "}
-          before you translate or paste a GAF pack. Publishing agrees to the{" "}
+          {editing
+            ? "Change the listing details or replace the scrubbed pack. Buyers keep the same stall URL. Publishing agrees to the "
+            : "Scrub keys, private URLs, and customer data first. The pack you paste is what buyers download. You keep ownership; listing it does not transfer the pack to the farm. Hermes authors: "}
+          {editing ? null : (
+            <>
+              <Link href="/how-to#hermes-share">export, then run scrub.py</Link>{" "}
+              before you translate or paste a GAF pack. Publishing agrees to the{" "}
+            </>
+          )}
           <Link href="/terms">Terms of use</Link>.
         </p>
-        <SellForm canSellPaid={ready} />
+        <SellForm
+          key={editing?.id ?? "new"}
+          canSellPaid={ready}
+          listing={
+            editing
+              ? {
+                  id: editing.id,
+                  slug: editing.slug,
+                  kind: editing.kind === "team" ? "team" : "agent",
+                  name: editing.name,
+                  title: editing.title,
+                  description: editing.description,
+                  category: editing.category,
+                  priceCents: editing.priceCents,
+                  pack: editing.pack,
+                }
+              : undefined
+          }
+        />
       </ContentSection>
     </ContentPage>
   );

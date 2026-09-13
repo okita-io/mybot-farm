@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { and, eq, inArray, isNotNull, isNull, ne, sql } from "drizzle-orm";
 import { getDb, hasDatabase } from "@/lib/db";
@@ -226,6 +227,7 @@ export async function listAuthorUsernamesWithListings() {
       .where(
         and(
           eq(listings.published, true),
+          isNull(listings.deletedAt),
           isNotNull(users.username),
           isNull(users.deletedAt),
         ),
@@ -267,6 +269,15 @@ export async function updateUserBio(userId: string, bio: string) {
 
   return row ?? null;
 }
+
+export const getCachedViewer = cache(async () => {
+  const { userId } = await auth();
+  if (!userId) {
+    return null;
+  }
+
+  return getUserByClerkId(userId);
+});
 
 export async function requireAppUser() {
   const { userId } = await auth();
