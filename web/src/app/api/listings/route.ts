@@ -1,22 +1,13 @@
 import { NextResponse } from "next/server";
-import { categories } from "@/lib/site";
 import {
   createListing,
-  parseListingKind,
-  parsePackJson,
-  parsePriceCents,
+  listingWriteFromBody,
   uniqueListingSlug,
 } from "@/lib/listings";
+import { stallPagePath } from "@/lib/packs";
 import { requireAppUser } from "@/lib/users";
-import type { FarmPack } from "@/lib/pack-files";
 
 export const runtime = "nodejs";
-
-const categoryLabels = new Set<string>(categories.map((category) => category.label));
-
-function readString(value: unknown) {
-  return typeof value === "string" ? value.trim() : "";
-}
 
 export async function POST(request: Request) {
   const user = await requireAppUser();
@@ -25,43 +16,17 @@ export async function POST(request: Request) {
   }
 
   const body: unknown = await request.json().catch(() => null);
-  if (!body || typeof body !== "object") {
-    return NextResponse.json({ error: "invalid_body" }, { status: 400 });
-  }
-
-  const record = body as Record<string, unknown>;
-  const kind = parseListingKind(record.kind);
-  const name = readString(record.name);
-  const title = readString(record.title);
-  const description = readString(record.description);
-  const category = readString(record.category);
-  const priceCents = parsePriceCents(record.priceCents);
-  const packResult = parsePackJson(record.pack);
-
-  if (!kind) {
-    return NextResponse.json({ error: "invalid_kind" }, { status: 400 });
-  }
-
-  if (!name || !title || !description) {
-    return NextResponse.json({ error: "missing_fields" }, { status: 400 });
-  }
-
-  if (!categoryLabels.has(category)) {
-    return NextResponse.json({ error: "invalid_category" }, { status: 400 });
-  }
-
-  if (priceCents === null) {
+  const parsed = listingWriteFromBody(body);
+  if (!parsed.ok) {
     return NextResponse.json(
-      {
-        error: "invalid_price",
-        message: "Choose Free, or a price between $2.00 and $9,999.00.",
-      },
-      { status: 400 },
+      { error: parsed.error, message: parsed.message },
+      { status: parsed.status },
     );
   }
 
+  const { value } = parsed;
   if (
-    priceCents > 0 &&
+    value.priceCents > 0 &&
     (!user.stripeConnectAccountId || !user.stripeConnectTransfersActive)
   ) {
     return NextResponse.json(
@@ -73,32 +38,11 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!packResult.ok) {
-    return NextResponse.json({ error: "invalid_pack", message: packResult.error }, { status: 400 });
-  }
-
-  const pack: FarmPack = {
-    ...packResult.pack,
-    slug: packResult.pack.slug,
-    category: packResult.pack.category,
-    profile: {
-      name: packResult.pack.profile?.name ?? name,
-      title: packResult.pack.profile?.title ?? title,
-      description: packResult.pack.profile?.description ?? description,
-    },
-  };
-
-  const slug = await uniqueListingSlug(name);
+  const slug = await uniqueListingSlug(value.name);
   const listing = await createListing({
     sellerUserId: user.id,
     slug,
-    kind,
-    name,
-    title,
-    description,
-    category,
-    priceCents,
-    pack,
+    ...value,
   });
 
   return NextResponse.json(
@@ -106,7 +50,10 @@ export async function POST(request: Request) {
       ok: true,
       slug: listing.slug,
       kind: listing.kind,
-      pagePath: listing.kind === "team" ? `/teams/${listing.slug}` : `/agents/${listing.slug}`,
+      pagePath: stallPagePath({
+        kind: listing.kind === "team" ? "team" : "agent",
+        slug: listing.slug,
+      }),
     },
     { status: 201 },
   );

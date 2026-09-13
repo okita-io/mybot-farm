@@ -26,7 +26,12 @@ export type Stall = {
   sellerUserId?: string;
   author?: StallAuthor;
   listedAt?: string;
+  updatedAt?: string;
+  downloadCount?: number;
+  likeCount?: number;
 };
+
+export const FARM_SEED_LISTED_AT = "2026-09-12T00:00:00.000Z";
 
 export const stallToneClasses: Record<
   StallTone,
@@ -60,7 +65,12 @@ export function packFileUrl(stall: Pick<Stall, "downloadHref">): string {
 }
 
 export function packFilename(stall: Pick<Stall, "downloadHref" | "slug">): string {
-  return stall.downloadHref.split("/").at(-1) ?? `${stall.slug}.json`;
+  const last = stall.downloadHref.split("/").at(-1)?.split("?")[0];
+  if (last && last.includes(".")) {
+    return last;
+  }
+
+  return `${stall.slug}.json`;
 }
 
 export function getStall(slug: string): Stall | undefined {
@@ -134,6 +144,10 @@ export function stallRecord(stall: Stall) {
     priceCents: stall.priceCents ?? 0,
     currency: stall.currency ?? "usd",
     author: stall.author ?? null,
+    listedAt: stall.listedAt ?? null,
+    updatedAt: stall.updatedAt ?? null,
+    downloadCount: stall.downloadCount ?? 0,
+    likeCount: stall.likeCount ?? 0,
     api: stallApiPaths(stall.slug),
   };
 }

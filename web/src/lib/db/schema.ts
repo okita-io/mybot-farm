@@ -63,11 +63,13 @@ export const listings = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true })
       .defaultNow()
       .notNull(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
   },
   (table) => [
     uniqueIndex("listings_slug_idx").on(table.slug),
     index("listings_seller_idx").on(table.sellerUserId),
     index("listings_published_idx").on(table.published),
+    index("listings_deleted_idx").on(table.deletedAt),
   ],
 );
 
@@ -105,6 +107,69 @@ export const processedEvents = pgTable("processed_events", {
   id: text("id").primaryKey(),
   source: text("source").notNull(),
   processedAt: timestamp("processed_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const stallStats = pgTable("stall_stats", {
+  slug: text("slug").primaryKey(),
+  downloadCount: integer("download_count").notNull().default(0),
+  likeCount: integer("like_count").notNull().default(0),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const stallLikes = pgTable(
+  "stall_likes",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    slug: text("slug").notNull(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex("stall_likes_user_slug_idx").on(table.userId, table.slug),
+    index("stall_likes_slug_idx").on(table.slug),
+  ],
+);
+
+export const stallFlags = pgTable(
+  "stall_flags",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    slug: text("slug").notNull(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id),
+    reason: text("reason").notNull(),
+    details: text("details"),
+    status: text("status").notNull().default("open"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+    resolvedByUserId: uuid("resolved_by_user_id").references(() => users.id),
+  },
+  (table) => [
+    uniqueIndex("stall_flags_user_slug_idx").on(table.userId, table.slug),
+    index("stall_flags_slug_idx").on(table.slug),
+    index("stall_flags_status_idx").on(table.status),
+  ],
+);
+
+export const stallTakedowns = pgTable("stall_takedowns", {
+  slug: text("slug").primaryKey(),
+  listingId: uuid("listing_id").references(() => listings.id),
+  takenDownByUserId: uuid("taken_down_by_user_id")
+    .notNull()
+    .references(() => users.id),
+  note: text("note"),
+  createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
 });

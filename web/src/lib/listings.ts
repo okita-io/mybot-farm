@@ -1,8 +1,9 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 import { getDb, hasDatabase } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
 import { getStall, isStallKind, type StallKind } from "@/lib/packs";
 import type { FarmPack } from "@/lib/pack-files";
+import { categories } from "@/lib/site";
 
 const MAX_PACK_CHARS = 500_000;
 const MIN_PAID_PRICE_CENTS = 200;
@@ -67,7 +68,7 @@ export async function listPublishedListings(): Promise<ListingRow[]> {
     return await db
       .select()
       .from(listings)
-      .where(eq(listings.published, true))
+      .where(and(eq(listings.published, true), isNull(listings.deletedAt)))
       .orderBy(desc(listings.createdAt));
   } catch (error) {
     console.error("listPublishedListings failed:", error);
@@ -95,7 +96,11 @@ export async function listPublishedListingsBySeller(sellerUserId: string) {
       .select()
       .from(listings)
       .where(
-        and(eq(listings.sellerUserId, sellerUserId), eq(listings.published, true)),
+        and(
+          eq(listings.sellerUserId, sellerUserId),
+          eq(listings.published, true),
+          isNull(listings.deletedAt),
+        ),
       )
       .orderBy(desc(listings.createdAt));
   } catch (error) {
@@ -125,7 +130,7 @@ export async function getListingBySlug(slug: string) {
 
 export async function getPublishedListingBySlug(slug: string) {
   const listing = await getListingBySlug(slug);
-  return listing?.published ? listing : null;
+  return listing?.published && !listing.deletedAt ? listing : null;
 }
 
 export async function getListingById(id: string) {
@@ -158,6 +163,99 @@ export async function uniqueListingSlug(name: string) {
   }
 
   return slug;
+}
+
+const categoryLabels = new Set<string>(categories.map((category) => category.label));
+
+export type ListingWriteInput = {
+  kind: StallKind;
+  name: string;
+  title: string;
+  description: string;
+  category: string;
+  priceCents: number;
+  pack: FarmPack;
+};
+
+export function listingWriteFromBody(
+  body: unknown,
+):
+  | { ok: true; value: ListingWriteInput }
+  | { ok: false; error: string; message?: string; status: number } {
+  if (!body || typeof body !== "object") {
+    return { ok: false, error: "invalid_body", status: 400 };
+  }
+
+  const parsed = parseListingPayload(body as Record<string, unknown>);
+  if (!parsed.kind) {
+    return { ok: false, error: "invalid_kind", status: 400 };
+  }
+
+  if (!parsed.name || !parsed.title || !parsed.description) {
+    return { ok: false, error: "missing_fields", status: 400 };
+  }
+
+  if (!categoryLabels.has(parsed.category)) {
+    return { ok: false, error: "invalid_category", status: 400 };
+  }
+
+  if (parsed.priceCents === null) {
+    return {
+      ok: false,
+      error: "invalid_price",
+      message: "Choose Free, or a price between $2.00 and $9,999.00.",
+      status: 400,
+    };
+  }
+
+  if (!parsed.packResult.ok) {
+    return {
+      ok: false,
+      error: "invalid_pack",
+      message: parsed.packResult.error,
+      status: 400,
+    };
+  }
+
+  const pack: FarmPack = {
+    ...parsed.packResult.pack,
+    slug: parsed.packResult.pack.slug,
+    category: parsed.packResult.pack.category,
+    profile: {
+      name: parsed.packResult.pack.profile?.name ?? parsed.name,
+      title: parsed.packResult.pack.profile?.title ?? parsed.title,
+      description: parsed.packResult.pack.profile?.description ?? parsed.description,
+    },
+  };
+
+  return {
+    ok: true,
+    value: {
+      kind: parsed.kind,
+      name: parsed.name,
+      title: parsed.title,
+      description: parsed.description,
+      category: parsed.category,
+      priceCents: parsed.priceCents,
+      pack,
+    },
+  };
+}
+
+export function readListingString(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+export function parseListingPayload(record: Record<string, unknown>) {
+  return {
+    kind: parseListingKind(record.kind),
+    name: readListingString(record.name),
+    title: readListingString(record.title),
+    description: readListingString(record.description),
+    category: readListingString(record.category),
+    priceCents: parsePriceCents(record.priceCents),
+    packResult: parsePackJson(record.pack),
+  };
 }
 
 export async function createListing(input: {
@@ -195,6 +293,45 @@ export async function createListing(input: {
   return row;
 }
 
+export async function updateListing(
+  id: string,
+  sellerUserId: string,
+  input: {
+    kind: StallKind;
+    name: string;
+    title: string;
+    description: string;
+    category: string;
+    priceCents: number;
+    pack: FarmPack;
+  },
+) {
+  const db = getDb();
+  const now = new Date();
+  const [row] = await db
+    .update(listings)
+    .set({
+      kind: input.kind,
+      name: input.name,
+      title: input.title,
+      description: input.description,
+      category: input.category,
+      priceCents: input.priceCents,
+      pack: input.pack as Record<string, unknown>,
+      updatedAt: now,
+    })
+    .where(
+      and(
+        eq(listings.id, id),
+        eq(listings.sellerUserId, sellerUserId),
+        isNull(listings.deletedAt),
+      ),
+    )
+    .returning();
+
+  return row ?? null;
+}
+
 export async function setListingPublished(
   id: string,
   sellerUserId: string,
@@ -205,7 +342,13 @@ export async function setListingPublished(
   const [row] = await db
     .update(listings)
     .set({ published, updatedAt: now })
-    .where(and(eq(listings.id, id), eq(listings.sellerUserId, sellerUserId)))
+    .where(
+      and(
+        eq(listings.id, id),
+        eq(listings.sellerUserId, sellerUserId),
+        isNull(listings.deletedAt),
+      ),
+    )
     .returning();
 
   return row ?? null;

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Container } from "@/components/container";
 import { HeaderAuth } from "@/components/header-auth";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { isAdminEmail } from "@/lib/admin";
+import { getCachedViewer } from "@/lib/users";
 import { navLinks, site } from "@/lib/site";
 
 export function SiteMark() {
@@ -21,7 +23,10 @@ export function SiteMark() {
   );
 }
 
-export function SiteHeader() {
+export async function SiteHeader() {
+  const viewer = await getCachedViewer();
+  const showAdmin = isAdminEmail(viewer?.email);
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur-xl">
       <Container className="flex h-14 items-center gap-2 sm:gap-3">
@@ -48,6 +53,14 @@ export function SiteHeader() {
               {link.label}
             </Link>
           ))}
+          {showAdmin ? (
+            <Link
+              href="/admin"
+              className="shrink-0 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+            >
+              Admin
+            </Link>
+          ) : null}
         </nav>
         <div className="flex shrink-0 items-center gap-1.5">
           <HeaderAuth />
