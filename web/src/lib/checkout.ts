@@ -1,7 +1,6 @@
 import type Stripe from "stripe";
 import { applicationFeeCents } from "@/lib/fees";
 import { getListingById } from "@/lib/listings";
-import { randomLetters } from "@/lib/origin";
 import { hasPaidPurchase, upsertPurchase } from "@/lib/purchases";
 import { getStripe } from "@/lib/stripe";
 import { getUserById } from "@/lib/users";
@@ -87,7 +86,15 @@ export async function createListingCheckout(input: {
   const stripe = getStripe();
 
   const session = await stripe.checkout.sessions.create({
+    ui_mode: "hosted_page",
     mode: "payment",
+    billing_address_collection: "auto",
+    phone_number_collection: { enabled: false },
+    automatic_tax: { enabled: false },
+    allow_promotion_codes: false,
+    submit_type: "auto",
+    integration_identifier: "hosted_web_0001",
+    origin_context: "web",
     ...(input.stripeCustomerId ? { customer: input.stripeCustomerId } : {}),
     line_items: [
       {
@@ -117,7 +124,6 @@ export async function createListingCheckout(input: {
       slug: listing.slug,
       applicationFeeCents: String(fee),
     },
-    integration_identifier: `farm-buy-${randomLetters(8)}`,
   });
 
   if (!session.url) {
