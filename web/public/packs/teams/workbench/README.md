@@ -55,6 +55,27 @@ cp workbench_cron*.sh ~/.hermes/scripts/ && chmod +x ~/.hermes/scripts/workbench
   the whole point of three agents.
 - Quiet-when-idle: no DMs when there's no actionable state change.
 
+## Optional: seat the team in a Group room
+
+Hermes Bot Mode supports **group chats** (2–6 bots in one shared room). Rooms are
+created from the desktop — there is no CLI command for them.
+
+1. **Bots tab** → right-click `@workbench-spec` (any of the three) → **Manage
+   groups** → create a group inline, or use the **New Group Chat** picker.
+2. Seat all three members: `@workbench-spec`, `@workbench-scaffold`,
+   `@workbench-smoke` (optionally add yourself).
+
+In the room, your message triggers up to three serial rounds of member turns —
+@-mentioned bots respond, the rest pass when they have nothing to add; hard caps
+(10 messages per send, 3 rounds) prevent loops. Each member keeps a persistent
+`Group: <name>` session. The room is the live working channel; all durable
+knowledge stays in `TEAM.md` / `WORK.md` / skills, so the transcript is cheap to
+reset and nothing is lost.
+
+Note: group membership lives in each bot's backend-synced profile metadata, so
+rooms follow gateways — a fresh install ships the three profiles but not your
+room. Create the group after installing the profiles.
+
 ## Notes
 
 - The team works anything you put in `Ready` on the board; add cards or DM `@workbench-spec`.

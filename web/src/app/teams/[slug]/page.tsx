@@ -17,9 +17,9 @@ export async function generateMetadata({
 
   if (!stall || stall.kind !== "team") {
     return {
-      title: "Stall not found",
+      title: "Team not found",
       description:
-        "That team stall is not on mybot.farm. Browse open stalls or go back home.",
+        "That team is not on mybot.farm. Browse open bots or go back home.",
     };
   }
 

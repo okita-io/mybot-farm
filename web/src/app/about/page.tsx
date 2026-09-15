@@ -8,7 +8,7 @@ import { site, siteOgImage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "mybot.farm is a farmers market for whole agents and teams — not a warehouse of skills. Browse open stalls, install GAF packs, and use WebMCP.",
+    "mybot.farm is a farmers market for whole agents and teams — not a warehouse of skills. Browse open bots, install GAF packs, and use WebMCP.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: `About ${site.productName}`,
@@ -26,7 +26,7 @@ export default function AboutPage() {
       <ContentPage
         kicker="The farm"
         title="A farmers market for whole agents"
-        lead={`${site.name} is an open marketplace for finished agents and small teams — persona, memory, skills, and routines already composed. It is not a warehouse of skills. You browse stalls, take a pack home, and cook.`}
+        lead={`${site.name} is an open marketplace for finished agents and small teams — persona, memory, skills, and routines already composed. It is not a warehouse of skills. You browse bots, take a pack home, and cook.`}
       >
         <ContentSection title="What mybot.farm is">
           <p>
@@ -60,13 +60,13 @@ export default function AboutPage() {
 
         <ContentSection title="Open marketplace">
           <p>
-            Stalls stay open. Publish, browse, search, and share without a
+            Bots stay open. Publish, browse, search, and share without a
             gated catalog-of-one. Secrets never ship: keys, private URLs, and
             chat history stay off the table. A pack that isn’t scrubbed
             shouldn’t be listed.
           </p>
           <p>
-            Seed stalls are free. Authors list their own packs on{" "}
+            Seed bots are free. Authors list their own packs on{" "}
             <Link href="/sell">Sell</Link> — connect Stripe, set a price, and
             the farm keeps 10% for hosting.
           </p>
@@ -74,13 +74,13 @@ export default function AboutPage() {
 
         <ContentSection title="GAF packs">
           <p>
-            Each stall ships a <strong>Generic Agent Format (GAF)</strong> JSON
+            Each bot ships a <strong>Generic Agent Format (GAF)</strong> JSON
             pack: profile, memory, skills, routines, and (for teams) members
             plus handoffs. Same idea as a Grok Bot template — portable enough
             that later runtimes can translate it.
           </p>
           <p>
-            Fetch a pack from the stall page, from{" "}
+            Fetch a pack from the bot page, from{" "}
             <code>/packs/agents/{"{slug}"}.json</code>, or from{" "}
             <Link href="/api/packs/grant-research">
               <code>/api/packs/{"{slug}"}</code>
@@ -108,7 +108,7 @@ export default function AboutPage() {
         <ContentSection title="Start here">
           <ul>
             <li>
-              <Link href="/catalog">Open stalls</Link> — Gift Day, Sprout,
+              <Link href="/catalog">Open bots</Link> — Gift Day, Sprout,
               Patch, Probe, Grant Research, Scholastic Research, Pair Bench,
               Workbench
             </li>

@@ -25,7 +25,7 @@ export function StallHeaderMeta({
   extra?: ReactNode;
 }) {
   const KindIcon = kind === "team" ? Users : User;
-  const kindLabel = kind === "team" ? "Team" : "Solo agent";
+  const kindLabel = kind === "team" ? "Team" : "Bot";
   const showPrice = typeof priceCents === "number";
 
   return (

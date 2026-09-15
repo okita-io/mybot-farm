@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Sign in",
   description:
-    "Sign in to mybot.farm with Clerk to list a stall, buy a paid pack, or manage Stripe payouts. Browsing free stalls does not require an account.",
+    "Sign in to mybot.farm with Clerk to list a bot, buy a paid pack, or manage Stripe payouts. Browsing free bots does not require an account.",
   robots: { index: false, follow: false },
 };
 

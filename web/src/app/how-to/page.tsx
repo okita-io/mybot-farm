@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `How-To | ${site.name}`,
     description:
-      "Grok Bot uses GAF JSON. Hermes uses a scrubbed .tar.gz — including seed stalls like Scholastic Research and Workbench. Scrub chat history and secrets before you share.",
+      "Grok Bot uses GAF JSON. Hermes uses a scrubbed .tar.gz — including seed bots like Scholastic Research and Workbench. Scrub chat history and secrets before you share.",
     url: "/how-to",
     images: [siteOgImage],
   },
@@ -31,8 +31,8 @@ export default function HowToPage() {
       <JsonLd data={howToHermesShareLd} />
       <ContentPage
         kicker="How-To"
-        title="Install a stall, or share your own"
-        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes installs from a scrubbed profile .tar.gz — including seed stalls like Scholastic Research and Workbench. OpenClaw translators are still coming."
+        title="Install a bot, or share your own"
+        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes installs from a scrubbed profile .tar.gz — including seed bots like Scholastic Research and Workbench. OpenClaw translators are still coming."
       >
         <ContentSection id="install" title="Install an agent in Grok Bot">
           <p>
@@ -40,24 +40,24 @@ export default function HowToPage() {
             memory, and routines. You do not get the author’s computer, logins,
             or chat history. You need the{" "}
             <a href="https://docs.x.ai/grok-bot/bots">Grok Bot app</a> to
-            finish. Seed stalls download as GAF JSON. That is the Grok Bot
+            finish. Seed bots download as GAF JSON. That is the Grok Bot
             path — Hermes uses a different file; jump to{" "}
             <a href="#hermes-import">import a Hermes profile</a>.
           </p>
           <ol>
             <li>
-              Browse <Link href="/catalog">open stalls</Link> and open the
+              Browse <Link href="/catalog">open bots</Link> and open the
               agent or team — for example{" "}
               <Link href="/agents/grant-research">Grant Research</Link>.
             </li>
             <li>
               Click <strong>Copy install prompt</strong> and paste it into any
-              Grok Bot. The prompt points at the stall URL and tells the Bot to
+              Grok Bot. The prompt points at the bot URL and tells the Bot to
               download the pack, create an agent, save skills, and write
               memory.
             </li>
             <li>
-              Or download the GAF JSON from the stall’s Download pack button.
+              Or download the GAF JSON from the bot’s Download pack button.
               The same file lives at{" "}
               <code>/packs/agents/{"{slug}"}.json</code> and{" "}
               <Link href="/api/packs/grant-research">
@@ -83,7 +83,7 @@ export default function HowToPage() {
             accepts the third-party bot terms.
           </p>
           <p>
-            Have a stall, pack, or <code>/api</code> URL already? Paste it on{" "}
+            Have a bot, pack, or <code>/api</code> URL already? Paste it on{" "}
             <Link href="/plant">Plant</Link>. The farm resolves the link to a
             preview of the same GAF pack — no HTML scrape.{" "}
             <strong>Plant into library</strong> is the next door (a plot’s
@@ -99,11 +99,11 @@ export default function HowToPage() {
             Hermes does not install GAF JSON.{" "}
             <code>hermes profile import</code> wants a{" "}
             <strong>scrubbed profile archive</strong> (<code>.tar.gz</code>).
-            Some seed stalls ship that way —{" "}
+            Some seed bots ship that way —{" "}
             <Link href="/agents/scholastic-research">Scholastic Research</Link>{" "}
             (one profile) and{" "}
             <Link href="/teams/workbench">Workbench</Link> (three team
-            members). Grok Bot stalls still download as GAF JSON and will not
+            members). Grok Bot packs still download as GAF JSON and will not
             import. Use this path for those Hermes packs, a clean archive from
             another farmer, or after you ran{" "}
             <a href="#hermes-share">scrub.py</a> on your own export.
@@ -313,7 +313,7 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
               <Link href="/sell">Sell</Link> — list a priced agent or team
             </li>
             <li>
-              <Link href="/catalog">Open stalls</Link>
+              <Link href="/catalog">Open bots</Link>
             </li>
             <li>
               <Link href="/privacy">Privacy</Link>

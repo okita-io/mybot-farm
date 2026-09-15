@@ -3,7 +3,7 @@
 **Product:** [mybot.farm](https://mybot.farm)
 **Date:** 2026-09-11
 **Status:** Design sketch + thin resolve/preview MVP
-**One line:** Paste a farm share link → resolve to pack/GAF data you already publish → preview → later **Plant** into a buyer library (optional: list on their stall).
+**One line:** Paste a farm share link → resolve to pack/GAF data you already publish → preview → later **Plant** into a buyer library (optional: list as their bot).
 
 This is complementary to today’s **Copy install prompt** (paste into Grok Bot) and **WebMCP / `/api`** (agents fetch packs). Those put a copy in a runtime. Plant puts a copy on the **farm** — the buyer’s library — without inventing pack contents or fetching strangers’ servers.
 
@@ -22,17 +22,17 @@ POST /api/resolve-share  (or GET ?url=)
         │
         ├─ ok → preview card (name, kind, blurb, skill/memory counts, install prompt)
         │         │
-        │         ├─ [MVP] Copy install prompt / open stall / download GAF
-        │         └─ [later] Plant into library ──► optional List on my stall
+        │         ├─ [MVP] Copy install prompt / open bot / download GAF
+        │         └─ [later] Plant into library ──► optional List my bot
         │
-        └─ fail → specific error (bad host, unknown path, stall not found, raw GAF = v2)
+        └─ fail → specific error (bad host, unknown path, bot not found, raw GAF = v2)
 ```
 
-1. **Paste URL.** A buyer (or an agent helping them) pastes a mybot.farm stall, pack, or API link. Bare slugs (`gift-day`) are a convenience, not a public share shape.
-2. **Resolve.** The farm **parses** the URL and loads the matching stall + GAF from the same loaders as `/api/stalls/{slug}` and `/api/packs/{slug}`. It does **not** scrape HTML and does **not** invent fields.
+1. **Paste URL.** A buyer (or an agent helping them) pastes a mybot.farm bot, pack, or API link. Bare slugs (`gift-day`) are a convenience, not a public share shape.
+2. **Resolve.** The farm **parses** the URL and loads the matching listing + GAF from the same loaders as `/api/stalls/{slug}` and `/api/packs/{slug}`. It does **not** scrape HTML and does **not** invent fields.
 3. **Preview card.** Show who it is, what kind, what’s in the crate (counts, scrubbed flag), and the existing install prompt. **No account required.** Anonymous visitors browse, copy the install prompt, and resolve/preview share URLs the same as signed-in ones.
-4. **Plant into library (needs a plot).** Persisting a `UserLibraryItem` is **plot/library ownership**, not a landing wall. Sign-in (Clerk) is gated behind **Start a plot** / claim stall / list agents / keep a personal library. That is a **copy reference** (slug + source URL + snapshot ref), not a live tether to the seller.
-5. **List on my stall (later, optional).** Also behind a plot. Separate publish step — planting does not auto-list or auto-outbound.
+4. **Plant into library (needs a plot).** Persisting a `UserLibraryItem` is **plot/library ownership**, not a landing wall. Sign-in (Clerk) is gated behind **Start a plot** / claim a listing / list agents / keep a personal library. That is a **copy reference** (slug + source URL + snapshot ref), not a live tether to the seller.
+5. **List my bot (later, optional).** Also behind a plot. Separate publish step — planting does not auto-list or auto-outbound.
 
 ---
 
@@ -42,15 +42,15 @@ v1 accepts **mybot.farm URLs only** (plus localhost / the current request host s
 
 | Shape | Example | Notes |
 |-------|---------|--------|
-| Stall page (**preferred share URL**) | `https://mybot.farm/agents/gift-day` · `https://mybot.farm/teams/pair-bench` | Same URLs the install prompt already cites |
+| Bot page (**preferred share URL**) | `https://mybot.farm/agents/gift-day` · `https://mybot.farm/teams/pair-bench` | Same URLs the install prompt already cites |
 | Pack file | `https://mybot.farm/packs/agents/gift-day.json` · `/packs/teams/pair-bench.json` | Public GAF; same bytes as `/api/packs/{slug}` |
-| Read API | `/api/stalls/{slug}` · `/api/packs/{slug}` · `/api/packs/{slug}/skills` · `/api/install-prompt/{slug}` | CORS-open today; resolve maps them back to the stall |
+| Read API | `/api/stalls/{slug}` · `/api/packs/{slug}` · `/api/packs/{slug}/skills` · `/api/install-prompt/{slug}` | CORS-open today; resolve maps them back to the bot |
 | Plant deep link | `https://mybot.farm/plant?url={urlencoded}` | Unwrap **once**; then resolve the inner URL |
 | Slug convenience | `gift-day` or `/plant?slug=gift-day` | Handy for the form; not a share contract |
 
 **Canonical share shapes we define:**
 
-1. **Stall page** — `https://mybot.farm/agents/{slug}` or `https://mybot.farm/teams/{slug}`
+1. **Bot page** — `https://mybot.farm/agents/{slug}` or `https://mybot.farm/teams/{slug}`
 2. **Pack file** — `https://mybot.farm/packs/{agents\|teams}/{slug}.json`
 3. **Plant carry URL** — `https://mybot.farm/plant?url=` + encodeURIComponent(shape 1 or 2)
 
@@ -99,20 +99,20 @@ Kind mismatch (e.g. `/teams/gift-day` when Gift Day is an agent) still resolves 
 
 ### What gets loaded
 
-Reuse `getStall` / `requireStallAndPack` / `installPromptPayload` in `web/src/lib/`. Pack summary is **counts + profile already on the stall**, never synthesized skills or memory.
+Reuse `getStall` / `requireStallAndPack` / `installPromptPayload` in `web/src/lib/`. Pack summary is **counts + profile already on the listing**, never synthesized skills or memory.
 
 ---
 
 ## Auth / plot (constraint)
 
-**No forced login on landing.** The home page, stall pages, Copy install prompt, How-To, and `/plant` resolve/preview are public. Do **not** add a login modal on home.
+**No forced login on landing.** The home page, bot pages, Copy install prompt, How-To, and `/plant` resolve/preview are public. Do **not** add a login modal on home.
 
 | Action | Auth |
 |--------|------|
-| Browse stalls | Anonymous |
+| Browse bots | Anonymous |
 | Copy install prompt / download GAF | Anonymous |
 | Paste share URL → resolve → preview | Anonymous (`GET\|POST /api/resolve-share`) |
-| **Start a plot** / claim a stall / list agents | Clerk (later) |
+| **Start a plot** / claim a listing / list agents | Clerk (later) |
 | Persist personal library (`POST /api/library/plant`) | Clerk — framed as plot/library ownership |
 
 Clerk is the intended vendor **only when someone starts a plot**. This sketch does **not** wire Clerk, sessions, or a sign-in UI. The plant stub returns `401` and tells the client to keep using preview.
@@ -233,7 +233,7 @@ Alternate body: `{ "slug": "gift-day", "sourceUrl": "https://mybot.farm/agents/g
 
 **MVP stub:** `401` + `error: "auth_required"`. Message should say persist needs a plot (Clerk later), not “log in to use the farm.” If a URL/slug was sent, include a `preview` object from resolve so the UI can keep showing the card. No write, no outbound, no sign-in redirect.
 
-`List on my stall` is **not** an API yet.
+`List my bot` is **not** an API yet.
 
 ---
 
@@ -242,9 +242,9 @@ Alternate body: `{ "slug": "gift-day", "sourceUrl": "https://mybot.farm/agents/g
 ```text
 UserLibraryItem
   userId            plot owner (Clerk user id, once Start a plot exists)
-  slug              stall slug (catalog key)
+  slug              listing slug (catalog key)
   kind              agent | team
-  sourceUrl         the URL they pasted (or the canonical stall URL)
+  sourceUrl         the URL they pasted (or the canonical bot URL)
   plantedAt         ISO-8601
   gafSnapshotRef    content-addressed pack (sha256 of canonical GAF JSON)
                     — or pack hash / object key once we store blobs
@@ -253,7 +253,7 @@ UserLibraryItem
 Notes:
 
 - Plant is a **copy reference**. Seller edits do not mutate the buyer’s item unless we later add an explicit refresh.
-- Prefer `gafSnapshotRef` over “whatever the stall is today” so a listing dispute has a byte-stable pack.
+- Prefer `gafSnapshotRef` over “whatever the listing is today” so a listing dispute has a byte-stable pack.
 - Team plant = **one** library item for the team slug (members stay inside the team pack). Exploding members into N items is an open question.
 - Do not store secrets; packs are already scrubbed public JSON.
 
@@ -266,11 +266,11 @@ No table is created in this PR.
 | Rule | v1 behavior |
 |------|-------------|
 | **SSRF allowlist** | Parse mybot.farm (and local/request host) only. **Do not fetch** the pasted URL. |
-| **No invented contents** | Preview fields come from existing pack/stall loaders. Missing profile/skills stay missing. |
+| **No invented contents** | Preview fields come from existing pack/listing loaders. Missing profile/skills stay missing. |
 | **Size limits** | URL ≤ 2048 chars; slug ≤ 64; `[a-z0-9-]`. v2 fetch should cap body (suggest 512 KiB) before JSON parse. |
-| **No auto-outbound** | Resolve and plant must not email, ping Grok Bot, charge Stripe, or publish a stall. |
+| **No auto-outbound** | Resolve and plant must not email, ping Grok Bot, charge Stripe, or publish a bot. |
 | **No HTML scrape** | Path + local JSON only. |
-| **No landing login wall** | Home, stalls, install prompt, and resolve/preview stay public. No modal. |
+| **No landing login wall** | Home, bots, install prompt, and resolve/preview stay public. No modal. |
 | **Plant persist** | `POST /api/library/plant` waits for a **plot** (Clerk). Preview stays public. |
 | **CORS** | Resolve is public read (GET/POST). Plant persist is authenticated once plots exist. |
 
@@ -284,13 +284,13 @@ Three doors, one crate:
 
 | Path | Who | What it does | Live today |
 |------|-----|--------------|------------|
-| **Copy install prompt** | Human in Grok Bot | Paste instructions; Bot downloads GAF and creates a **runtime copy** | Stall pages, How-To |
+| **Copy install prompt** | Human in Grok Bot | Paste instructions; Bot downloads GAF and creates a **runtime copy** | Bot pages, How-To |
 | **WebMCP + `/api`** | Agent | `search_stalls`, `get_stall`, `download_pack`, `list_pack_skills`, `get_install_prompt` | Every page + CORS JSON |
-| **Plant from share** | Buyer on the farm | Resolve a share URL → preview → **library item** (later stall listing) | Resolve + `/plant` preview; plant write is stubbed |
+| **Plant from share** | Buyer on the farm | Resolve a share URL → preview → **library item** (later catalog listing) | Resolve + `/plant` preview; plant write is stubbed |
 
 They compose:
 
-- Preview on `/plant` can still offer **Copy install prompt** (same helper as stall pages).
+- Preview on `/plant` can still offer **Copy install prompt** (same helper as bot pages).
 - Agents can call `GET /api/resolve-share?url=` instead of guessing slugs. A `resolve_share` WebMCP tool is a later add — not registered in this sketch so the live catalog stays slug-based.
 - Planting does **not** replace Grok Bot install. Library = farm collection; install prompt = runtime.
 
@@ -300,13 +300,13 @@ They compose:
 
 Research tone for what is still open. Auth **gating** is decided (above): no landing login; Clerk only on Start a plot / persist library. Do not invent Clerk or Stripe wiring in this PR.
 
-- [ ] **Buyer library vs seller stall.** Is the library a private collection (shopping basket / “my copies”), or the draft queue for “my stall”? Same plot, two lists — or one?
-- [ ] **Start a plot UX.** Where does the first Clerk prompt live (dedicated `/plot`, a button on `/plant`, claim-stall)? Must not interrupt browse/preview.
-- [ ] **Stripe later.** Paid stalls, tips, featured placement — does `plant` check an entitlement, or is money only on **List on my stall** / download? Free seed packs should keep working without a wallet.
+- [ ] **Buyer library vs seller listing.** Is the library a private collection (shopping basket / “my copies”), or the draft queue for “my bots”? Same plot, two lists — or one?
+- [ ] **Start a plot UX.** Where does the first Clerk prompt live (dedicated `/plot`, a button on `/plant`, claim-listing)? Must not interrupt browse/preview.
+- [ ] **Stripe later.** Paid bots, tips, featured placement — does `plant` check an entitlement, or is money only on **List my bot** / download? Free seed packs should keep working without a wallet.
 - [ ] **Grok Bot share links.** Do we ever resolve `x.ai/bot/…`, or do those stay on the official Add-to-Grok-Bot path ([How-To](/how-to#share))?
 - [ ] **Raw GAF (v2).** Allowlist of hosts vs any HTTPS? Who is liable if the JSON is hostile or unscrubbed?
 - [ ] **Install vs plant.** Should Plant also kick off a Grok Bot copy, or always leave that to the install prompt?
-- [ ] **Updates.** Pin `gafSnapshotRef` forever, or offer “refresh from stall”?
+- [ ] **Updates.** Pin `gafSnapshotRef` forever, or offer “refresh from listing”?
 - [ ] **Teams.** One library row vs N member rows?
 - [ ] **WebMCP.** Add `resolve_share` to `document.modelContext`, or keep it HTTP-only?
 
@@ -317,7 +317,7 @@ Research tone for what is still open. Auth **gating** is decided (above): no lan
 | Piece | What shipped |
 |-------|----------------|
 | This doc | Product + API sketch |
-| `GET\|POST /api/resolve-share` | Parse URL, local stall/pack load, preview JSON |
+| `GET\|POST /api/resolve-share` | Parse URL, local listing/pack load, preview JSON |
 | `POST /api/library/plant` | `401 auth_required` stub; optional `preview` |
 | `/plant` | URL field + preview card; Plant button shows the stub |
 | How-To | Short pointer at the flow |
@@ -328,7 +328,7 @@ No buyer table, no Clerk SDK, no login modal, no Stripe, no listing API.
 
 ## Related
 
-- [positioning-farmers-market.md](./positioning-farmers-market.md) — copy on install; open stalls
+- [positioning-farmers-market.md](./positioning-farmers-market.md) — copy on install; open bots
 - [teams.md](./teams.md) — team packs
 - [How-To](https://mybot.farm/how-to) — Grok Bot install + share
 - Read APIs: `/api`, `/api/stalls`, `/api/packs/{slug}`, `/api/install-prompt/{slug}`

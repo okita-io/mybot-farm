@@ -37,7 +37,7 @@ export const aboutPageLd = {
   name: `About ${site.productName}`,
   url: `${site.url}/about`,
   description:
-    "mybot.farm is a farmers market for whole agents and teams — not a warehouse of skills. Browse open stalls, install GAF packs, and use WebMCP.",
+    "mybot.farm is a farmers market for whole agents and teams — not a warehouse of skills. Browse open bots, install GAF packs, and use WebMCP.",
   isPartOf: {
     "@type": "WebSite",
     name: site.productName,
@@ -50,18 +50,18 @@ export const howToInstallLd = {
   "@type": "HowTo",
   name: "Install an agent from mybot.farm in Grok Bot",
   description:
-    "Copy a stall’s install prompt into Grok Bot, or download the GAF JSON from /packs or /api/packs/{slug}. Seed stalls today are GAF files. WebMCP tools can fetch the same pack.",
+    "Copy a bot’s install prompt into Grok Bot, or download the GAF JSON from /packs or /api/packs/{slug}. Seed bots today are GAF files. WebMCP tools can fetch the same pack.",
   url: `${site.url}/how-to#install`,
   step: [
     {
       "@type": "HowToStep",
-      name: "Open a stall",
-      text: "Browse the catalog and open the agent or team you want, such as /agents/grant-research.",
+      name: "Open a bot",
+      text: "Browse the catalog and open the bot or team you want, such as /agents/grant-research.",
     },
     {
       "@type": "HowToStep",
       name: "Copy the install prompt or download the pack",
-      text: "Use Copy install prompt and paste it into a Grok Bot, or download the GAF JSON from the stall, /packs, or /api/packs/{slug}.",
+      text: "Use Copy install prompt and paste it into a Grok Bot, or download the GAF JSON from the bot page, /packs, or /api/packs/{slug}.",
     },
     {
       "@type": "HowToStep",
@@ -81,7 +81,7 @@ export const howToHermesImportLd = {
   "@type": "HowTo",
   name: "Import a Hermes profile from a scrubbed archive",
   description:
-    "Hermes installs from a scrubbed profile .tar.gz, not from GAF JSON. Some seed stalls ship Hermes archives (Scholastic Research, Workbench). Import a clean archive with hermes profile import, then add your own API keys.",
+    "Hermes installs from a scrubbed profile .tar.gz, not from GAF JSON. Some seed bots ship Hermes archives (Scholastic Research, Workbench). Import a clean archive with hermes profile import, then add your own API keys.",
   url: `${site.url}/how-to#hermes-import`,
   step: [
     {
@@ -92,7 +92,7 @@ export const howToHermesImportLd = {
     {
       "@type": "HowToStep",
       name: "Get a scrubbed profile archive",
-      text: "Use a .tar.gz that has already been through scrub.py. Do not import a raw hermes profile export. Hermes seed stalls (Scholastic Research, Workbench members) download as .tar.gz; Grok Bot stalls are GAF JSON and will not import.",
+      text: "Use a .tar.gz that has already been through scrub.py. Do not import a raw hermes profile export. Hermes seed bots (Scholastic Research, Workbench members) download as .tar.gz; Grok Bot packs are GAF JSON and will not import.",
     },
     {
       "@type": "HowToStep",
@@ -149,7 +149,7 @@ export const pressPageLd = {
   dateModified: "2026-09-12",
   url: `${site.url}/press`,
   description:
-    "mybot.farm is live: an open market for finished AI agents and small teams, with creator payouts when someone plants a stall.",
+    "mybot.farm is live: an open market for finished AI agents and small teams, with creator payouts when someone plants a bot.",
   author: {
     "@type": "Person",
     name: "Alex Okita",
@@ -187,7 +187,7 @@ export const termsPageLd = {
   name: `Terms | ${site.name}`,
   url: `${site.url}/terms`,
   description:
-    "Creators own the agents and teams they list. mybot.farm hosts the stall and keeps 10% of each sale. The farm is not responsible for how a pack behaves after someone installs it.",
+    "Creators own the agents and teams they list. mybot.farm hosts the bot and keeps 10% of each sale. The farm is not responsible for how a pack behaves after someone installs it.",
 };
 
 export const teamsPageLd = {

@@ -36,13 +36,13 @@ An agent pack ≈ Grok Bot **bot template**: profile + memory + skills + routine
 
 ## Marketplace ideas (v0 backlog)
 
-- **Stalls:** each agent or team is a stall page — face, blurb, contents, runtime badges, install.
+- **Bots:** each agent or team is a bot page — face, blurb, contents, runtime badges, install.
 - **Open publish:** anyone can list a scrubbed pack (allowlist optional later); secrets never ship.
 - **Search + categories:** human browse and agent-friendly index (see site WebMCP goal in root README).
-- **Featured / seasonal:** “this week’s stalls” without killing open discovery.
+- **Featured / seasonal:** “this week’s bots” without killing open discovery.
 - **Collections:** curated baskets (e.g. “new parent lifestyle”, “solo founder GTM”).
 - **Trust shelf:** show scrubbed=true, what’s excluded (no seller computer, logins, chat history).
-- **Version stalls:** v1 / v2 of the same agent; install is always a **copy**, not live sync (v0).
+- **Versioned bots:** v1 / v2 of the same agent; install is always a **copy**, not live sync (v0).
 - **Cross-runtime later:** Grok Bot first; Hermes / OpenClaw exporters when packs allow.
 
 ---
@@ -53,7 +53,7 @@ An agent pack ≈ Grok Bot **bot template**: profile + memory + skills + routine
 2. **Teams are first-class.** Pairs and small crews matter as much as solo agents.
 3. **Open by default.** Farmers market energy — publish and browse without a gatekeeping catalog-of-one.
 4. **Copy on install.** Buyer owns the instance; seller’s machine stays private.
-5. **Scrub or don’t ship.** Keys, PII, private URLs out before a stall goes up.
+5. **Scrub or don’t ship.** Keys, PII, private URLs out before a bot goes up.
 6. **Clear categories.** Lifestyle next to coding next to sales — people shop by life job, not by file format.
 
 ---
@@ -62,7 +62,7 @@ An agent pack ≈ Grok Bot **bot template**: profile + memory + skills + routine
 
 - A farmers market for AI teammates.
 - Bring home a whole agent — or a whole team.
-- Open stalls. Portable packs. Not just skills.
+- Open bots. Portable packs. Not just skills.
 
 ---
 

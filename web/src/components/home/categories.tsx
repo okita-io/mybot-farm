@@ -20,7 +20,7 @@ export function HomeCategories() {
           Shop by life job
         </h2>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Categories name the outcome, not the file format. Every public stall
+          Categories name the outcome, not the file format. Every public bot
           picks one primary.
         </p>
         <ul className="mt-8 flex flex-wrap gap-2">

@@ -68,7 +68,7 @@ export async function PATCH(
     return NextResponse.json(
       {
         error: "connect_required",
-        message: "Finish Stripe payouts before listing a paid stall.",
+        message: "Finish Stripe payouts before listing a paid bot.",
       },
       { status: 403 },
     );

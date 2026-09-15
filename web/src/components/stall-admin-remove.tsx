@@ -12,7 +12,7 @@ export function StallAdminRemove({ slug }: { slug: string }) {
   async function remove() {
     if (pending) return;
     const confirmed = window.confirm(
-      "Remove this stall from the farm? It will disappear from the catalog and downloads.",
+      "Remove this bot from the farm? It will disappear from the catalog and downloads.",
     );
     if (!confirmed) return;
 
@@ -22,16 +22,16 @@ export function StallAdminRemove({ slug }: { slug: string }) {
       const response = await fetch(`/api/admin/stalls/${encodeURIComponent(slug)}/remove`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ note: "Removed from stall page" }),
+        body: JSON.stringify({ note: "Removed from bot page" }),
       });
       if (!response.ok) {
-        setError("Could not remove that stall.");
+        setError("Could not remove that bot.");
         return;
       }
       router.push("/admin");
       router.refresh();
     } catch {
-      setError("Could not remove that stall.");
+      setError("Could not remove that bot.");
     } finally {
       setPending(false);
     }
@@ -47,7 +47,7 @@ export function StallAdminRemove({ slug }: { slug: string }) {
         disabled={pending}
         onClick={() => void remove()}
       >
-        {pending ? "Removing…" : "Remove stall"}
+        {pending ? "Removing…" : "Remove bot"}
       </Button>
       {error ? (
         <span className="text-xs text-destructive" role="alert">

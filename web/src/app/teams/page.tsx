@@ -41,7 +41,7 @@ const comparison = [
   },
   {
     name: "Pre-coordinated pack",
-    body: "One stall ships the members, topology, and standing instructions. Install creates a copy of each member.",
+    body: "One pack ships the members, topology, and standing instructions. Install creates a copy of each member.",
   },
 ] as const;
 
@@ -82,7 +82,7 @@ export default async function TeamsPage() {
       >
         <ContentSection title="Why plant a team">
           <p>
-            A team stall is a small group with roles and standing handoffs,
+            A team is a small group with roles and standing handoffs,
             installable as <strong>one pack</strong>. Installing creates a{" "}
             <strong>copy</strong> of each member, plus suggested grouping when
             the runtime can do it. There is still no live tether back to the
@@ -147,7 +147,7 @@ export default async function TeamsPage() {
           </div>
         </ContentSection>
 
-        <ContentSection title="Open team stalls">
+        <ContentSection title="Open teams">
           <p>
             Browse anonymously. Live team packs:{" "}
             <Link href="/teams/pair-bench">Pair Bench</Link> — Patch implements,
@@ -170,11 +170,11 @@ export default async function TeamsPage() {
               each team member
             </li>
             <li>
-              <Link href="/plant">Plant</Link> — paste a stall or pack URL and
+              <Link href="/plant">Plant</Link> — paste a bot or pack URL and
               preview
             </li>
             <li>
-              <Link href="/catalog">Open stalls</Link> — agents and teams on
+              <Link href="/catalog">Open bots</Link> — agents and teams on
               the same market
             </li>
           </ul>

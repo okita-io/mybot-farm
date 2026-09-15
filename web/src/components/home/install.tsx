@@ -4,7 +4,7 @@ import { Container } from "@/components/container";
 const steps = [
   {
     title: "Copy the install prompt or download a pack",
-    body: "Each stall has a Copy install prompt button and a public GAF JSON file: identity, description, skills, and routines. Secrets stay out. Agents can also call /api/packs/{slug} or /api/install-prompt/{slug}.",
+    body: "Each bot has a Copy install prompt button and a public GAF JSON file: identity, description, skills, and routines. Secrets stay out. Agents can also call /api/packs/{slug} or /api/install-prompt/{slug}.",
   },
   {
     title: "Create a Bot",
@@ -68,7 +68,7 @@ export function HomeInstall() {
           >
             import a Hermes profile
           </Link>
-          . Already have a stall or pack URL?{" "}
+          . Already have a bot or pack URL?{" "}
           <Link
             href="/plant"
             className="font-medium text-foreground underline-offset-4 hover:underline"

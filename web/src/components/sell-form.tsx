@@ -99,7 +99,7 @@ export function SellForm({
 
     if (!isFree && !canSellPaid) {
       setPending(false);
-      setError("Connect Stripe payouts before listing a paid stall.");
+      setError("Connect Stripe payouts before listing a paid bot.");
       return;
     }
 
@@ -133,11 +133,11 @@ export function SellForm({
         typeof record.message === "string"
           ? record.message
           : listing
-            ? "Could not update that stall."
-            : "Could not publish that stall.",
+            ? "Could not update that bot."
+            : "Could not publish that bot.",
       );
     } catch {
-      setError(listing ? "Could not update that stall." : "Could not publish that stall.");
+      setError(listing ? "Could not update that bot." : "Could not publish that bot.");
     } finally {
       setPending(false);
     }
@@ -154,7 +154,7 @@ export function SellForm({
       {listing ? (
         <p className="text-sm text-muted-foreground">
           Updating <span className="font-medium text-foreground">{listing.name}</span>.
-          The stall URL stays <code className="font-mono text-[0.9em]">{listing.slug}</code>.
+          The bot URL stays <code className="font-mono text-[0.9em]">{listing.slug}</code>.
         </p>
       ) : null}
       <div className="grid gap-4 sm:grid-cols-2">
@@ -267,13 +267,13 @@ export function SellForm({
             </p>
             {!canSellPaid ? (
               <p className="text-sm text-amber-700 dark:text-amber-300">
-                Connect Stripe payouts above before you can publish a paid stall.
+                Connect Stripe payouts above before you can publish a paid bot.
               </p>
             ) : null}
           </div>
         ) : (
           <p className="text-sm font-normal text-muted-foreground">
-            Free stalls are downloadable by anyone. No Stripe Connect required.
+            Free bots are downloadable by anyone. No Stripe Connect required.
           </p>
         )}
       </fieldset>
@@ -317,7 +317,7 @@ export function SellForm({
             : "Publishing…"
           : listing
             ? "Save updates"
-            : "Publish stall"}
+            : "Publish bot"}
       </Button>
     </form>
   );
