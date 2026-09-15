@@ -4,12 +4,13 @@
 Farm mirror (same bytes when deployed): `https://mybot.farm/scripts/scrub.py`.
 Prefer pinning a commit SHA when agents `curl` the raw GitHub URL.
 
-Tooling for the mybot.farm sharing pipeline. Right now one tool:
+Tooling for the mybot.farm sharing pipeline:
 
 | File | What it is |
 |---|---|
 | [`scrub.py`](./scrub.py) | Sanitizes a Hermes agent profile export so it can be safely shared |
-| `share-agent-scrub/SKILL.md` | Hermes skill that drives it (persona-facing workflow) — landing next |
+| [`import-agency-agents/`](./import-agency-agents/) | Converts the MIT [agency-agents](https://github.com/msitarzewski/agency-agents) roster into farm GAF packs |
+| `share-agent-scrub/SKILL.md` | Hermes skill that drives scrub (persona-facing workflow) — landing next |
 
 ---
 
