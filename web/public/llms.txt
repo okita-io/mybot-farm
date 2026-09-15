@@ -27,8 +27,12 @@ OpenClaw and Hermes support are coming soon (translators / install targets). The
 - Patch: https://mybot.farm/agents/patch
 - Probe: https://mybot.farm/agents/probe
 - Grant Research: https://mybot.farm/agents/grant-research
+- Scout: https://mybot.farm/agents/scout
+- Finders: https://mybot.farm/agents/finders
+- Pitch: https://mybot.farm/agents/pitch
 - Pair Bench (team): https://mybot.farm/teams/pair-bench
 - Workbench (team): https://mybot.farm/teams/workbench
+- Road Crew (team): https://mybot.farm/teams/road-crew
 
 ## GAF JSON packs
 
@@ -37,8 +41,12 @@ OpenClaw and Hermes support are coming soon (translators / install targets). The
 - Patch: https://mybot.farm/packs/agents/patch.json
 - Probe: https://mybot.farm/packs/agents/probe.json
 - Grant Research: https://mybot.farm/packs/agents/grant-research.json
+- Scout: https://mybot.farm/packs/agents/scout.json
+- Finders: https://mybot.farm/packs/agents/finders.json
+- Pitch: https://mybot.farm/packs/agents/pitch.json
 - Pair Bench (team): https://mybot.farm/packs/teams/pair-bench.json
 - Workbench (team): https://mybot.farm/packs/teams/workbench.json
+- Road Crew (team): https://mybot.farm/packs/teams/road-crew.json
 
 ## Read-only APIs (CORS open)
 

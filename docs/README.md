@@ -9,6 +9,6 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | [categories.md](./categories.md) | Browse taxonomy (lifestyle, coding, marketing, …) |
 | [ultimate-aeo-seo-geo.md](./ultimate-aeo-seo-geo.md) | SEO / AEO / GEO doctrine for the site |
 | [plant-from-share.md](./plant-from-share.md) | Share URL → preview → plant into buyer library (API + `/plant` sketch) |
-| [../packs/](../packs/) | Seed agent & team bots (Gift Day, Sprout, Patch, Probe, Grant Research, Pair Bench, Workbench) |
+| [../packs/](../packs/) | Seed agent & team bots (Gift Day, Sprout, Patch, Probe, Grant Research, Pair Bench, Workbench, Road Crew) |
 
 Vault twin (editable scratch): `~/Documents/GlobalNotes/2026-09-11-mybot-farm-agent-marketplace.md`

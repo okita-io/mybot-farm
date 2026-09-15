@@ -12,6 +12,10 @@ Format: `mybot.farm/agent-pack` / `mybot.farm/team-pack` v0.1 (see `docs/` + Glo
 | Grant Research | agent | education | [agents/grant-research.json](./agents/grant-research.json) |
 | Pair Bench | team | coding | [teams/pair-bench.json](./teams/pair-bench.json) |
 | Workbench | team | coding | [teams/workbench.json](./teams/workbench.json) |
+| Scout | agent | music | [agents/scout.json](./agents/scout.json) |
+| Finders | agent | music | [agents/finders.json](./agents/finders.json) |
+| Pitch | agent | music | [agents/pitch.json](./agents/pitch.json) |
+| Road Crew | team | music | [teams/road-crew.json](./teams/road-crew.json) |
 
 These are **marketplace seeds** (scrubbed, installable copies). They are not automatically your live Grok Bot sidebar agents until you import / create them.
 

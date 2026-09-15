@@ -313,4 +313,69 @@ export const stalls: Stall[] = [
       },
     ],
   },
+  {
+    kind: "agent",
+    slug: "scout",
+    name: "Scout",
+    title: "Live-music venue scout",
+    description:
+      "Finds bars, halls, DIY spaces, and house shows. Cites public sources; never invents venues. Hands venue cards to Finders.",
+    seoDescription:
+      "Install Scout from mybot.farm: a live-music venue scout for small bands. Shortlists bars, halls, and DIY spaces from public sources, then hands venue cards to Finders.",
+    category: "Music",
+    tone: "find",
+    downloadHref: "/packs/agents/scout.json",
+    priceCents: 0,
+    listedAt: "2026-09-15T00:00:00.000Z",
+  },
+  {
+    kind: "agent",
+    slug: "finders",
+    name: "Finders",
+    title: "Booking contact digger",
+    description:
+      "Turns Scout’s venue cards into contact sheets with confidence levels. Never guesses emails. Hands sheets to Pitch.",
+    seoDescription:
+      "Install Finders from mybot.farm: a booking contact digger that turns venue cards into sourced contact sheets. Never fabricates emails or phones.",
+    category: "Music",
+    tone: "find",
+    downloadHref: "/packs/agents/finders.json",
+    priceCents: 0,
+    listedAt: "2026-09-15T00:00:00.000Z",
+  },
+  {
+    kind: "agent",
+    slug: "pitch",
+    name: "Pitch",
+    title: "Booking email drafter",
+    description:
+      "Writes the booking email and one follow-up. Drafts only — the band always sends.",
+    seoDescription:
+      "Install Pitch from mybot.farm: a booking email drafter for small bands. One email, one follow-up, drafts only — the band always presses send.",
+    category: "Music",
+    tone: "share",
+    downloadHref: "/packs/agents/pitch.json",
+    priceCents: 0,
+    listedAt: "2026-09-15T00:00:00.000Z",
+  },
+  {
+    kind: "team",
+    slug: "road-crew",
+    name: "Road Crew",
+    title: "Live-music booking pipeline: scout, dig, draft",
+    description:
+      "Install Scout, Finders, and Pitch. Scout finds venues; Finders digs up bookers; Pitch drafts the email. The band always sends.",
+    seoDescription:
+      "Install Road Crew from mybot.farm: a free Grok Bot and OpenClaw team for small bands. Scout finds venues, Finders digs contacts, Pitch drafts emails — the band always sends.",
+    category: "Music",
+    tone: "agent",
+    downloadHref: "/packs/teams/road-crew.json",
+    priceCents: 0,
+    listedAt: "2026-09-15T00:00:00.000Z",
+    members: [
+      { name: "Scout", href: "/packs/agents/scout.json" },
+      { name: "Finders", href: "/packs/agents/finders.json" },
+      { name: "Pitch", href: "/packs/agents/pitch.json" },
+    ],
+  },
 ];
