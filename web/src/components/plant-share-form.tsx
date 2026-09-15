@@ -32,21 +32,21 @@ function errorText(result: ResolveShareFailure | { message: string }): string {
 
   switch (result.error) {
     case "url_required":
-      return "Paste a mybot.farm stall, pack, or API URL.";
+      return "Paste a mybot.farm bot, pack, or API URL.";
     case "url_too_long":
       return "That URL is too long (max 2048 characters).";
     case "invalid_url":
-      return "That does not look like a URL or stall slug.";
+      return "That does not look like a URL or bot slug.";
     case "host_not_allowed":
       return "v1 only resolves mybot.farm share links.";
     case "raw_gaf_not_supported":
       return "Raw GAF JSON on other hosts is v2. Paste a mybot.farm URL for now.";
     case "unsupported_path":
-      return "That mybot.farm path is not a stall, pack, or API share link.";
+      return "That mybot.farm path is not a bot, pack, or API share link.";
     case "stall_not_found":
       return result.slug
-        ? `No stall named “${result.slug}”.`
-        : "No stall matches that link.";
+        ? `No bot named “${result.slug}”.`
+        : "No bot matches that link.";
     default:
       return "Could not resolve that link.";
   }
@@ -208,7 +208,7 @@ export function PlantShareForm({
           </Button>
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Stall pages, <code className="font-mono text-[0.9em] text-foreground">/packs/…json</code>,
+          Bot pages, <code className="font-mono text-[0.9em] text-foreground">/packs/…json</code>,
           or <code className="font-mono text-[0.9em] text-foreground">/api/…</code> on this farm.
           Bare slugs work too. Raw GAF on other hosts is later.
         </p>
@@ -268,7 +268,7 @@ export function PlantShareForm({
           ) : null}
           <div className="mt-6 flex flex-wrap gap-2">
             <Button asChild size="lg" className="h-9 rounded-full px-4">
-              <Link href={preview.stall.pagePath}>Open stall</Link>
+              <Link href={preview.stall.pagePath}>Open bot</Link>
             </Button>
             <CopyInstallPrompt prompt={preview.installPrompt.prompt} />
             <Button

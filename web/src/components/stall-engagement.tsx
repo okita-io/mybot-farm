@@ -105,7 +105,7 @@ export function StallEngagement({
     }
   }
 
-  const likeLabel = isLiked ? "Unlike this stall" : "Like this stall";
+  const likeLabel = isLiked ? "Unlike this bot" : "Like this bot";
   const likeButton = (
     <Button
       type="button"
@@ -113,7 +113,7 @@ export function StallEngagement({
       size="sm"
       className="h-8 rounded-full px-3"
       aria-pressed={signedIn ? isLiked : undefined}
-      aria-label={signedIn ? likeLabel : "Sign in to like this stall"}
+      aria-label={signedIn ? likeLabel : "Sign in to like this bot"}
       disabled={pending}
       onClick={signedIn ? () => void toggleLike() : undefined}
     >
@@ -135,10 +135,10 @@ export function StallEngagement({
       aria-expanded={signedIn ? flagOpen : undefined}
       aria-label={
         isFlagged
-          ? "You already reported this stall"
+          ? "You already reported this bot"
           : signedIn
-            ? "Report this stall"
-            : "Sign in to report this stall"
+            ? "Report this bot"
+            : "Sign in to report this bot"
       }
       disabled={isFlagged}
       onClick={
@@ -179,7 +179,7 @@ export function StallEngagement({
             void submitFlag();
           }}
         >
-          <p className="text-sm font-medium text-foreground">Why are you reporting this stall?</p>
+          <p className="text-sm font-medium text-foreground">Why are you reporting this bot?</p>
           <div className="grid gap-2">
             {FLAG_REASONS.map((item) => (
               <label key={item.id} className="flex items-center gap-2 text-sm text-foreground/80">

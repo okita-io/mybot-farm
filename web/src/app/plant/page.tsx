@@ -9,7 +9,7 @@ import { site, siteOgImage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Plant",
   description:
-    "Paste a mybot.farm stall, pack, or API URL to preview the agent. No login required. Persisting a library item waits until you Start a plot.",
+    "Paste a mybot.farm bot, pack, or API URL to preview the agent. No login required. Persisting a library item waits until you Start a plot.",
   alternates: { canonical: "/plant" },
   openGraph: {
     title: `Plant | ${site.name}`,
@@ -37,7 +37,7 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
     <ContentPage
       kicker="Plant"
       title="Paste a share link, preview the pack"
-      lead="Bring a mybot.farm stall or pack URL here. The farm resolves it to the same GAF data the read APIs already serve — no HTML scrape, no invented skills, no login. Saving into a library waits until you Start a plot."
+      lead="Bring a mybot.farm bot or pack URL here. The farm resolves it to the same GAF data the read APIs already serve — no HTML scrape, no invented skills, no login. Saving into a library waits until you Start a plot."
     >
       <PlantShareForm initialUrl={initialUrl} initialResult={initialResult} />
       <p className="text-sm leading-relaxed text-muted-foreground">

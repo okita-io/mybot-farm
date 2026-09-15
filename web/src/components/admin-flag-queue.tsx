@@ -46,7 +46,7 @@ export function AdminFlagQueue({ groups }: { groups: AdminFlagGroup[] }) {
     if (pendingSlug) return;
     if (action === "remove") {
       const confirmed = window.confirm(
-        `Remove ${slug} from the catalog? Downloads and the public stall page will stop.`,
+        `Remove ${slug} from the catalog? Downloads and the public bot page will stop.`,
       );
       if (!confirmed) return;
     }
@@ -67,7 +67,7 @@ export function AdminFlagQueue({ groups }: { groups: AdminFlagGroup[] }) {
       if (!response.ok) {
         setError(
           action === "remove"
-            ? "Could not remove that stall."
+            ? "Could not remove that bot."
             : "Could not dismiss those reports.",
         );
         return;
@@ -121,7 +121,7 @@ export function AdminFlagQueue({ groups }: { groups: AdminFlagGroup[] }) {
                   disabled={pendingSlug === group.slug}
                   onClick={() => void act(group.slug, "remove")}
                 >
-                  {pendingSlug === group.slug ? "Working…" : "Remove stall"}
+                  {pendingSlug === group.slug ? "Working…" : "Remove bot"}
                 </Button>
               ) : null}
               <Button

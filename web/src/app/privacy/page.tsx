@@ -30,7 +30,7 @@ export default function PrivacyPage() {
       >
         <ContentSection title="What this site is">
           <p>
-            The farm shows stalls, GAF packs, and install prompts. Those are
+            The farm shows bots, GAF packs, and install prompts. Those are
             product features: you asked to read a page or download a pack. That
             is not a side channel for profiling you.
           </p>
@@ -48,7 +48,7 @@ export default function PrivacyPage() {
               data brokers or advertisers
             </li>
             <li>Sell personal data</li>
-            <li>Ask for an account to browse stalls or download free packs</li>
+            <li>Ask for an account to browse bots or download free packs</li>
             <li>Use pack downloads or install prompts as hidden trackers</li>
             <li>
               Collect conversation history from a Bot you install — that copy
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
 
         <ContentSection title="Stripe (payments and payouts)">
           <p>
-            If you buy a stall, Stripe handles the card. If you sell a stall,
+            If you buy a bot, Stripe handles the card. If you sell a bot,
             Stripe Connect handles onboarding and payouts. We store the listing,
             the price, your Stripe account id, and enough purchase records to
             unlock that pack for the buyer. The farm keeps 10% of the listing
@@ -145,7 +145,7 @@ export default function PrivacyPage() {
           <p>
             High-level use of the site may include visits, which pages are
             viewed, rough geography or device class if the analytics tool
-            reports it, and maybe clicks on stalls, downloads, or
+            reports it, and maybe clicks on bots, downloads, or
             install-prompt copies. That helps decide what to plant next. It is
             not an invitation to build identity graphs.
           </p>
@@ -196,10 +196,10 @@ export default function PrivacyPage() {
               <Link href="/how-to">How to install or share</Link>
             </li>
             <li>
-              <Link href="/sell">Sell a stall</Link>
+              <Link href="/sell">Sell a bot</Link>
             </li>
             <li>
-              <Link href="/catalog">Open stalls</Link>
+              <Link href="/catalog">Open bots</Link>
             </li>
           </ul>
         </ContentSection>

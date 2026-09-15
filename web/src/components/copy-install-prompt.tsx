@@ -70,7 +70,7 @@ export function CopyInstallPrompt({
       size="lg"
       className="h-9 rounded-full px-4"
       disabled={disabled}
-      title={disabled ? "Buy this stall to unlock" : undefined}
+      title={disabled ? "Buy this bot to unlock" : undefined}
       aria-live="polite"
       onClick={() => {
         void onCopy();

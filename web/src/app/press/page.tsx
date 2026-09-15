@@ -51,14 +51,14 @@ export default function PressPage() {
           </p>
           <p>
             Browse and plant a working crew the way you’d pull a finished pack
-            from an open hub. Authors can list a scrubbed stall, set a price,
+            from an open hub. Authors can list a scrubbed bot, set a price,
             and get paid when someone else installs their work — Etsy-style
             creator commerce on top of public discovery. The farm hosts the
             market; buyers run agents in their own apps (Grok Bot, Hermes,
             OpenClaw, and more).
           </p>
           <blockquote>
-            “Think of it as an open hub for agent packs, with a real stall for
+            “Think of it as an open hub for agent packs, with a real listing for
             makers,” said Alex Okita, founder of {site.name}. “People can browse
             and plant a working crew — and creators can earn when someone else
             installs that work. We built the market so finished teams can
@@ -79,7 +79,7 @@ export default function PressPage() {
         <ContentSection title="How it works">
           <ul>
             <li>
-              <strong>Discover:</strong> Browse stalls by life job (Lifestyle,
+              <strong>Discover:</strong> Browse bots by life job (Lifestyle,
               Coding, Writing, Marketing, Research, Education, and more).
             </li>
             <li>
@@ -108,7 +108,7 @@ export default function PressPage() {
 
         <ContentSection title="What’s on the tables">
           <p>
-            Seed stalls are free and live now, including Gift Day, Sprout,
+            Seed bots are free and live now, including Gift Day, Sprout,
             Patch, Probe, Grant Research, Scholastic Research, the Pair Bench
             team (Patch + Probe), and Workbench (Spec + Scaffold + Smoke).
             Authors can list their own agents and teams alongside them.
@@ -141,7 +141,7 @@ export default function PressPage() {
         <ContentSection title="Availability">
           <p>
             {site.name} is live at <a href={site.url}>{site.url}</a>. Seed
-            stalls are free. Paid listings are open via Stripe Connect at{" "}
+            bots are free. Paid listings are open via Stripe Connect at{" "}
             <Link href="/sell">{site.url}/sell</Link>.
           </p>
         </ContentSection>
@@ -149,7 +149,7 @@ export default function PressPage() {
         <ContentSection title="About mybot.farm">
           <p>
             {site.name} is an open marketplace for sharing and installing whole
-            agents and teams — with creator payouts for priced stalls and no
+            agents and teams — with creator payouts for priced bots and no
             hosted compute. Clear, searchable, sharable, and agent-friendly.
           </p>
         </ContentSection>
@@ -160,7 +160,7 @@ export default function PressPage() {
             build them.”
           </blockquote>
           <blockquote>
-            “List your stall. Get paid when someone plants your crew.”
+            “List your bot. Get paid when someone plants your crew.”
           </blockquote>
         </ContentSection>
 
@@ -180,7 +180,7 @@ export default function PressPage() {
               {" · "}
               Product: <a href={site.url}>{site.name}</a>
               {" · "}
-              List a stall: <Link href="/sell">/sell</Link>
+              List a bot: <Link href="/sell">/sell</Link>
             </li>
             <li>
               Spokesperson: Alex Okita ·{" "}
@@ -195,7 +195,7 @@ export default function PressPage() {
 
         <ContentSection title="Disclaimer">
           <p>
-            Shared Bots and third-party stalls are created by their authors, not
+            Shared Bots and third-party listings are created by their authors, not
             by SpaceXAI. Adding a pack creates a copy on the buyer’s account
             and does not include the author’s computer, logins, or conversation
             history.

@@ -17,12 +17,12 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Sell",
   description:
-    "Sign in, post a scrubbed agent or team pack for free or a price, and sell it on mybot.farm. Paid stalls need Stripe Connect. The farm keeps 10% of paid sales.",
+    "Sign in, post a scrubbed agent or team pack for free or a price, and sell it on mybot.farm. Paid bots need Stripe Connect. The farm keeps 10% of paid sales.",
   alternates: { canonical: "/sell" },
   openGraph: {
     title: `Sell | ${site.name}`,
     description:
-      "List a scrubbed GAF pack on mybot.farm. Free listings need sign-in; paid stalls check out through Stripe. The farm keeps 10%.",
+      "List a scrubbed GAF pack on mybot.farm. Free listings need sign-in; paid bots check out through Stripe. The farm keeps 10%.",
     url: "/sell",
     images: [siteOgImage],
   },
@@ -39,7 +39,7 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
       <ContentPage
         kicker="Sell"
         title="List an agent or team"
-        lead="Sign in, then post a scrubbed pack as free or paid. Paid stalls need Stripe payouts. You keep ownership. The farm hosts the stall, keeps 10% of each sale, and does not take responsibility for how the pack behaves after someone installs it."
+        lead="Sign in, then post a scrubbed pack as free or paid. Paid bots need Stripe payouts. You keep ownership. The farm hosts the bot, keeps 10% of each sale, and does not take responsibility for how the pack behaves after someone installs it."
       >
         <SignInButton mode="modal" forceRedirectUrl="/sell" fallbackRedirectUrl="/sell">
           <Button type="button" size="lg" className="h-11 rounded-full px-5">
@@ -68,8 +68,8 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
   return (
     <ContentPage
       kicker="Sell"
-      title="Post a stall"
-      lead="List a free stall right away, or connect Stripe to sell paid packs. Buyers check out on mybot.farm. The farm keeps 10% of paid sales for hosting — not the author’s computer, logins, or chat history."
+      title="Post a bot"
+      lead="List a free bot right away, or connect Stripe to sell paid packs. Buyers check out on mybot.farm. The farm keeps 10% of paid sales for hosting — not the author’s computer, logins, or chat history."
     >
       {connectStatus === "error" ? (
         <p className="text-sm text-destructive" role="alert">
@@ -80,21 +80,21 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
       <ContentSection title="Payouts">
         {ready ? (
           <div className="space-y-4">
-            <p>Stripe payouts are active. Open the dashboard to see transfers, or list a new stall below.</p>
+            <p>Stripe payouts are active. Open the dashboard to see transfers, or list a new bot below.</p>
             <ConnectDashboardButton />
           </div>
         ) : seller.stripeConnectAccountId ? (
           <div className="space-y-4">
             <p>
               Stripe still needs a bit more information before you can get paid.
-              Continue onboarding for paid stalls. Free listings work without it.
+              Continue onboarding for paid bots. Free listings work without it.
             </p>
             <ConnectOnboardButton label="Continue Stripe onboarding" />
           </div>
         ) : (
           <div className="space-y-4">
             <p>
-              Free stalls do not need Stripe. To sell paid packs, connect a Stripe
+              Free bots do not need Stripe. To sell paid packs, connect a Stripe
               Express account so the farm can send you 90% of each sale.
             </p>
             <ConnectOnboardButton />
@@ -103,7 +103,7 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
       </ContentSection>
 
       {listings.length ? (
-        <ContentSection title="Your stalls">
+        <ContentSection title="Your bots">
           <ul>
             {listings.map((listing) => (
               <li key={listing.id}>
@@ -146,23 +146,23 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
         </ContentSection>
       ) : null}
 
-      <ContentSection title={editing ? "Update stall" : "New stall"}>
+      <ContentSection title={editing ? "Update bot" : "New bot"}>
         {editing ? (
           <p className="text-sm text-muted-foreground">
             <Link href="/sell" className="font-medium text-foreground underline-offset-4 hover:underline">
-              List a new stall
+              List a new bot
             </Link>
             {" instead."}
           </p>
         ) : null}
         {editSlug && !editing ? (
           <p className="text-sm text-destructive" role="alert">
-            That stall is not in your list, was removed, or cannot be updated here.
+            That bot is not in your list, was removed, or cannot be updated here.
           </p>
         ) : null}
         <p>
           {editing
-            ? "Change the listing details or replace the scrubbed pack. Buyers keep the same stall URL. Publishing agrees to the "
+            ? "Change the listing details or replace the scrubbed pack. Buyers keep the same bot URL. Publishing agrees to the "
             : "Scrub keys, private URLs, and customer data first. The pack you paste is what buyers download. You keep ownership; listing it does not transfer the pack to the farm. Hermes authors: "}
           {editing ? null : (
             <>

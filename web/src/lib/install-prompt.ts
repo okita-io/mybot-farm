@@ -18,7 +18,7 @@ export function installPrompt(stall: Stall): string {
 ${url}
 
 1. Open that page (or call mybot.farm WebMCP / API: get_stall / download_pack for slug "${stall.slug}").
-2. This is a Hermes team. Download each member's scrubbed profile .tar.gz from the stall page.
+2. This is a Hermes team. Download each member's scrubbed profile .tar.gz from the bot page.
 3. Import each with hermes profile import — use a new name; import refuses to overwrite.
 4. ${gettingStarted || "Follow pack.shared.gettingStarted for workspace files, endpoints, and cron."}
 5. Add your own API keys. auth.json and .env never ship.

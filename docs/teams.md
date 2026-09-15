@@ -53,7 +53,7 @@ Document handoffs in prose the host can turn into group membership + standing in
 
 ## Marketplace UX ideas
 
-- Team stall shows **member faces in a row** + one-line roles.
+- Team page shows **member faces in a row** + one-line roles.
 - Filter: `type=agent | team`.
 - “Also works with…” soft links between solo agents that often pair.
 - Example featured team early: **Programmer + Debugger** reference pack.
@@ -72,4 +72,4 @@ Document handoffs in prose the host can turn into group membership + standing in
 
 - [ ] Hard cap on members per team (suggest ≤ 6 for UX)
 - [ ] Can a team reference already-published solo agents by id vs embed full packs?
-- [ ] Author = one publisher vs multi-author stalls
+- [ ] Author = one publisher vs multi-author listings

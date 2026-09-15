@@ -1,9 +1,9 @@
 # Farm inventory — seed packs
 
-Portable **agent** and **team** stalls for [mybot.farm](https://mybot.farm).  
+Portable **agent** and **team** bots for [mybot.farm](https://mybot.farm).  
 Format: `mybot.farm/agent-pack` / `mybot.farm/team-pack` v0.1 (see `docs/` + GlobalNotes schema).
 
-| Stall | Type | Category | Path |
+| Bot | Type | Category | Path |
 |-------|------|----------|------|
 | Gift Day | agent | lifestyle | [agents/gift-day.json](./agents/gift-day.json) |
 | Sprout Journal | agent | lifestyle | [agents/sprout-journal.json](./agents/sprout-journal.json) |
@@ -15,7 +15,7 @@ Format: `mybot.farm/agent-pack` / `mybot.farm/team-pack` v0.1 (see `docs/` + Glo
 
 These are **marketplace seeds** (scrubbed, installable copies). They are not automatically your live Grok Bot sidebar agents until you import / create them.
 
-The landing page serves the same files from `web/public/packs/` so people can download a copy, then in Grok Bot: **New → Create new agent → Edit Profile**. Each stall page (`/agents/{slug}`, `/teams/{slug}`) also has **Copy install prompt**. Agents can skip HTML via `/api/packs/{slug}` and `/api/install-prompt/{slug}`. Adding a Bot copies configuration only — not the author’s computer, logins, or chat history ([Grok Bot docs](https://docs.x.ai/grok-bot/bots)). Keep `packs/` and `web/public/packs/` in sync.
+The landing page serves the same files from `web/public/packs/` so people can download a copy, then in Grok Bot: **New → Create new agent → Edit Profile**. Each bot page (`/agents/{slug}`, `/teams/{slug}`) also has **Copy install prompt**. Agents can skip HTML via `/api/packs/{slug}` and `/api/install-prompt/{slug}`. Adding a Bot copies configuration only — not the author’s computer, logins, or chat history ([Grok Bot docs](https://docs.x.ai/grok-bot/bots)). Keep `packs/` and `web/public/packs/` in sync.
 
 ## Live Grok Bot instances (Alex)
 

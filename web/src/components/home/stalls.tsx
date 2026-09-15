@@ -17,18 +17,18 @@ export async function HomeStalls() {
   const preview = stalls.slice(0, 4);
 
   return (
-    <section id="stalls" aria-labelledby="stalls-heading" className="pb-16 sm:pb-20">
+    <section id="bots" aria-labelledby="bots-heading" className="pb-16 sm:pb-20">
       <Container>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h2
-              id="stalls-heading"
+              id="bots-heading"
               className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
             >
-              Open stalls
+              Open bots
             </h2>
             <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Seed stalls are free. Authors can also list a free or priced pack —
+              Seed bots are free. Authors can also list a free or priced pack —
               the farm hosts it and keeps 10% of paid sales.
             </p>
           </div>
@@ -65,14 +65,14 @@ export async function HomeStalls() {
             <CardContent>
               <p className="text-base leading-relaxed text-pretty text-muted-foreground">
                 Sign in, post a scrubbed agent or team, mark it free or set a
-                price. Connect Stripe when you sell paid stalls — the farm keeps
+                price. Connect Stripe when you sell paid bots — the farm keeps
                 10%.
               </p>
               <Link
                 href="/sell"
                 className="mt-4 inline-block text-sm font-medium text-foreground underline-offset-4 hover:underline"
               >
-                Open the sell stall
+                List a bot
               </Link>
             </CardContent>
           </Card>

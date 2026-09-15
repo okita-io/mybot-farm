@@ -127,7 +127,7 @@ hermes profile export ──► scrub.py ──► clean pack ──► mybot.fa
 
 `scrub.py` is the Hermes→GAF **edge translator's first step** — the same
 code path works client-side (this script) and can run server-side on uploads,
-so what a farmer sees locally is exactly what the stall serves. The GAF JSON
+so what a farmer sees locally is exactly what the bot page serves. The GAF JSON
 itself is *not* built here; the marketplace translator maps `SOUL.md` +
 `memories/` → `memory[]`, kept skills → `skills[]`, `cron/` → `routines[]`,
 identity → `profile`, per the translator contract in

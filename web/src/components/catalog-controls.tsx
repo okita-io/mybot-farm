@@ -63,7 +63,7 @@ export function CatalogControls({
         <input
           value={q}
           onChange={(event) => setQ(event.target.value)}
-          placeholder="Find agents, teams, authors…"
+          placeholder="Find bots, teams, authors…"
           className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         />
       </label>
@@ -80,7 +80,7 @@ export function CatalogControls({
             className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <option value="">All</option>
-            <option value="agent">Agents</option>
+            <option value="agent">Bots</option>
             <option value="team">Teams</option>
           </select>
         </label>

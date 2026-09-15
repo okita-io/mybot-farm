@@ -51,7 +51,7 @@ export function BuyButton({ stall }: { stall: Stall }) {
       }
 
       if (record.error === "unauthorized") {
-        setMessage("Sign in to buy this stall.");
+        setMessage("Sign in to buy this bot.");
         return;
       }
 

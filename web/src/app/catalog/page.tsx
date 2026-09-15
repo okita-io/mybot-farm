@@ -9,7 +9,7 @@ import {
   searchCatalogStalls,
   type CatalogSort,
 } from "@/lib/catalog";
-import { isStallKind, type StallKind } from "@/lib/packs";
+import { isStallKind, listingNoun, type StallKind } from "@/lib/packs";
 import { site, siteOgImage } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
@@ -17,12 +17,12 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Catalog",
   description:
-    "Browse every agent and team stall on mybot.farm. Search by name, author, or category. Filter agents and teams, sort by newest, name, or price.",
+    "Browse bots and teams on mybot.farm. Search by name, author, or category. Filter bots and teams, sort by newest, name, or price.",
   alternates: { canonical: "/catalog" },
   openGraph: {
     title: `Catalog | ${site.name}`,
     description:
-      "Browse every agent and team stall on mybot.farm. Search, filter, and sort open stalls.",
+      "Browse bots and teams on mybot.farm. Search, filter, and sort open bots.",
     url: "/catalog",
     images: [siteOgImage],
   },
@@ -60,11 +60,11 @@ export default async function CatalogPage({
           Catalog
         </p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-          All stalls
+          All bots
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
-          Search agents and teams by name, description, category, or author.
-          Free seed stalls sit next to community listings.
+          Search bots and teams by name, description, category, or author.
+          Free seed bots sit next to community listings.
         </p>
 
         <div className="mt-10 max-w-3xl">
@@ -76,7 +76,9 @@ export default async function CatalogPage({
         </div>
 
         <p className="mt-8 text-sm text-muted-foreground">
-          {stalls.length === 1 ? "1 stall" : `${stalls.length} stalls`}
+          {stalls.length === 1
+            ? `1 ${listingNoun(kind)}`
+            : `${stalls.length} ${listingNoun(kind, "many")}`}
           {q ? ` matching “${q}”` : ""}
         </p>
 
@@ -98,7 +100,7 @@ export default async function CatalogPage({
           </div>
         ) : (
           <p className="mt-10 rounded-3xl bg-card/50 px-6 py-10 text-base text-muted-foreground ring-1 ring-foreground/10">
-            No stalls match that search. Try a different query, or{" "}
+            No bots match that search. Try a different query, or{" "}
             <a href="/catalog" className="font-medium text-foreground underline-offset-4 hover:underline">
               clear filters
             </a>

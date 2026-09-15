@@ -31,7 +31,7 @@ export async function generateMetadata({
 
   const description =
     author.bio?.trim() ||
-    `Stalls by ${author.username} on mybot.farm — free contributions and packs for sale.`;
+    `Bots by ${author.username} on mybot.farm — free contributions and packs for sale.`;
 
   return {
     title: author.username,
@@ -113,7 +113,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
 
         {!stalls.length ? (
           <p className="mt-12 rounded-3xl bg-card/50 px-6 py-10 text-base text-muted-foreground ring-1 ring-foreground/10">
-            No stalls yet.
+            No bots yet.
           </p>
         ) : (
           <div className="mt-12 space-y-12">
@@ -126,7 +126,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
                   Contributions
                 </h2>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Free stalls this author shared with the farm.
+                  Free bots this author shared with the farm.
                 </p>
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
                   {await Promise.all(

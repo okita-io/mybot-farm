@@ -25,7 +25,7 @@ export default function TermsPage() {
       <JsonLd data={termsPageLd} />
       <ContentPage
         kicker="Terms of use"
-        title="You own the pack. We host the stall."
+        title="You own the pack. We host the bot."
         lead="mybot.farm does not claim ownership of the agents or teams you submit. The farm keeps 10% of each sale as a hosting fee. The creator is responsible for how that agent or team behaves once a buyer installs it."
       >
         <ContentSection title="The short version">
@@ -35,7 +35,7 @@ export default function TermsPage() {
               does not take title to your pack.
             </li>
             <li>
-              If a stall sells, mybot.farm collects 10% of the listing price.
+              If a bot sells, mybot.farm collects 10% of the listing price.
               The rest goes to the creator through Stripe.
             </li>
             <li>
@@ -58,7 +58,7 @@ export default function TermsPage() {
             When you publish an agent or a team, you keep ownership of that
             work. mybot.farm does not claim copyright, trademark, or other
             ownership of your submission. You grant the farm only the license
-            it needs to host the stall, show the listing, and deliver a copy to
+            it needs to host the bot, show the listing, and deliver a copy to
             someone who is allowed to download it (free seed packs, or a paid
             purchase).
           </p>
@@ -71,14 +71,14 @@ export default function TermsPage() {
 
         <ContentSection title="The 10% hosting fee">
           <p>
-            Paid stalls check out on mybot.farm. Stripe processes the payment.
+            Paid bots check out on mybot.farm. Stripe processes the payment.
             The farm keeps <strong>10% of the listing price</strong> as a
             hosting fee. The remaining 90% is owed to the creator, minus
             Stripe’s own processing fees, through Stripe Connect.
           </p>
           <p>
-            Seed stalls from the farm stay free. Listing a pack is not a sale
-            of the creator’s IP to mybot.farm — it is a stall on a market.
+            Seed bots from the farm stay free. Listing a pack is not a sale
+            of the creator’s IP to mybot.farm — it is a bot on a market.
           </p>
         </ContentSection>
 
@@ -100,7 +100,7 @@ export default function TermsPage() {
             copy.
           </p>
           <p>
-            Buyers use packs at their own risk. Read the stall, scrub your own
+            Buyers use packs at their own risk. Read the bot, scrub your own
             secrets, and keep keys off the table. Third-party runtimes (Grok
             Bot, Hermes, and the rest) have their own terms; those are not
             ours.
@@ -116,13 +116,13 @@ export default function TermsPage() {
           </p>
         </ContentSection>
 
-        <ContentSection title="Acceptable stalls">
+        <ContentSection title="Acceptable bots">
           <p>
             Do not list malware, packs designed to steal credentials, or
             content you do not have the right to share. Signed-in visitors can
-            report a stall as illegal, harmful, corrupt, or unusable. The farm
-            can take a stall down if it is unlawful, abusive, broken, or a
-            secret leak. Taking a stall down is not an admission that we
+            report a bot as illegal, harmful, corrupt, or unusable. The farm
+            can take a bot down if it is unlawful, abusive, broken, or a
+            secret leak. Taking a bot down is not an admission that we
             reviewed or endorse what remains.
           </p>
         </ContentSection>
@@ -133,13 +133,13 @@ export default function TermsPage() {
               <Link href="/privacy">Privacy and cookies</Link>
             </li>
             <li>
-              <Link href="/sell">Sell a stall</Link>
+              <Link href="/sell">Sell a bot</Link>
             </li>
             <li>
               <Link href="/about">About the farm</Link>
             </li>
             <li>
-              <Link href="/catalog">Open stalls</Link>
+              <Link href="/catalog">Open bots</Link>
             </li>
           </ul>
         </ContentSection>

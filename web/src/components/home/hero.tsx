@@ -57,7 +57,7 @@ export function HomeHero() {
                 href="/catalog"
                 className="font-medium text-foreground underline-offset-4 hover:underline"
               >
-                Open stalls
+                Open bots
               </Link>
             </p>
           </div>

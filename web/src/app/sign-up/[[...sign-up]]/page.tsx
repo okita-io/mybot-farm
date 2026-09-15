@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Sign up",
   description:
-    "Create a mybot.farm account with Clerk to sell a stall or unlock a paid pack. We do not sell personal data. See Privacy and Terms.",
+    "Create a mybot.farm account with Clerk to sell a bot or unlock a paid pack. We do not sell personal data. See Privacy and Terms.",
   robots: { index: false, follow: false },
 };
 

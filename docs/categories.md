@@ -20,7 +20,7 @@
 | `creative` | Creative | Image/video workflows, clip desks, brand kits |
 | `education` | Education | Tutors, study plans, course builders |
 | `ops` | Ops / admin | Inbox zero crews, CRM hygiene, meeting notes |
-| `experimental` | Experimental | Weird stalls, demos, WebMCP toys |
+| `experimental` | Experimental | Weird bots, demos, WebMCP toys |
 
 Listings can take **one primary** + optional **tags** (freeform or curated).
 
@@ -36,13 +36,13 @@ These make the farmers-market feel human, not only “dev tools”:
 - **Travel packing co-pilot** — trip-length packing lists + reminders.
 - **Thank-you note nudger** — after events, drafts a note; you send.
 
-Coding stalls (programmer + debugger **team**) sit beside these — same market, different aisle.
+Coding bots (programmer + debugger **team**) sit beside these — same market, different aisle.
 
 ---
 
 ## Category rules
 
-1. **Primary category required** for every public stall.  
+1. **Primary category required** for every public bot.  
 2. **Teams inherit** the primary of their main job (e.g. programmer+debugger → `coding`) and may add tags (`pair`, `debugging`).  
 3. Prefer **outcomes people recognize** over runtime jargon (`lifestyle` not `cron-reminder-agent`).  
 4. No medical diagnosis / regulated advice categories without a later policy pass.  
@@ -65,5 +65,5 @@ Coding stalls (programmer + debugger **team**) sit beside these — same market,
 ## Open decisions
 
 - [ ] Fixed enum vs admin-editable categories  
-- [ ] Age / safety labeling for lifestyle stalls that touch kids’ birthdays (family data scrub)  
+- [ ] Age / safety labeling for lifestyle bots that touch kids’ birthdays (family data scrub)  
 - [ ] “Featured in lifestyle” editorial slot vs pure open sort

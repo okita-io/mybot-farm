@@ -199,15 +199,15 @@ async function resolveFromSlug(
   const warnings: string[] = [];
 
   if (pathKind === "agent" && stall.kind !== "agent") {
-    warnings.push(`Path says /agents/ but "${slug}" is a ${stall.kind} stall.`);
+    warnings.push(`Path says /agents/ but "${slug}" is a ${stall.kind}.`);
   }
 
   if (pathKind === "team" && stall.kind !== "team") {
-    warnings.push(`Path says /teams/ but "${slug}" is a ${stall.kind} stall.`);
+    warnings.push(`Path says /teams/ but "${slug}" is a ${stall.kind}.`);
   }
 
   if (pathKind === "install-prompt") {
-    warnings.push("That URL is an install-prompt API. Preview uses the stall pack, not the prompt text as the pack.");
+    warnings.push("That URL is an install-prompt API. Preview uses the bot pack, not the prompt text as the pack.");
   }
 
   const summary = packSummaryFields(pack);

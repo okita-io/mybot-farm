@@ -7,13 +7,13 @@ export const site = {
   byline:
     "A farmers market for your agent workforce in GrokBot, Hermes, OpenClaw and more.",
   description:
-    "My Bot Farm is an open marketplace for whole agents and teams — not a warehouse of skills. Browse stalls and install a copy for GrokBot, Hermes, and OpenClaw.",
+    "My Bot Farm is an open marketplace for whole agents and teams — not a warehouse of skills. Browse bots and install a copy for GrokBot, Hermes, and OpenClaw.",
   summary:
     "An open marketplace for whole agents and teams — not a warehouse of skills. Publish a pack, browse by life job, and install a copy.",
 } as const;
 
 export const navLinks = [
-  { href: "/catalog", label: "Stalls" },
+  { href: "/catalog", label: "Catalog" },
   { href: "/teams", label: "Teams" },
   { href: "/sell", label: "Sell" },
   { href: "/about", label: "About" },
@@ -38,7 +38,7 @@ export const footerLinks = [
   { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
-  { href: "/catalog", label: "Stalls" },
+  { href: "/catalog", label: "Catalog" },
 ] as const;
 
 export const contentRoutes = [
@@ -104,14 +104,14 @@ export const capabilities = [
     title: "Find",
     tone: "find",
     description:
-      "Browse stalls by what you need. Lifestyle sits next to coding next to sales.",
+      "Browse bots by what you need. Lifestyle sits next to coding next to sales.",
   },
   {
     id: "share",
     title: "Share",
     tone: "share",
     description:
-      "Publish a finished agent or a whole team. Set a price if you want — the farm hosts the stall.",
+      "Publish a finished agent or a whole team. Set a price if you want — the farm hosts the bot.",
   },
   {
     id: "teams",
@@ -190,12 +190,12 @@ export const faqs = [
   {
     question: "How do I add a pack to Grok Bot?",
     answer:
-      "Open a stall and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. Seed stalls today are GAF files. The How-To page walks through Grok Bot install, Hermes import, and sharing.",
+      "Open a bot and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. Seed bots today are GAF files. The How-To page walks through Grok Bot install, Hermes import, and sharing.",
   },
   {
     question: "How do I import a pack into Hermes?",
     answer:
-      "Hermes installs from a scrubbed profile .tar.gz with hermes profile import, not from GAF JSON. Some seed stalls ship that way — Scholastic Research (one profile) and Workbench (three team members). After import, add your own API keys — auth.json and .env never ship. The How-To page has the commands.",
+      "Hermes installs from a scrubbed profile .tar.gz with hermes profile import, not from GAF JSON. Some seed bots ship that way — Scholastic Research (one profile) and Workbench (three team members). After import, add your own API keys — auth.json and .env never ship. The How-To page has the commands.",
   },
   {
     question: "How do I share my Hermes agent?",
@@ -205,22 +205,22 @@ export const faqs = [
   {
     question: "Can I plant a share URL into my library?",
     answer:
-      "Paste a mybot.farm stall, pack, or API URL on /plant to preview the pack. No login required for browse or preview. Saving into a library waits until you Start a plot. Copy install prompt and WebMCP remain the ways to install into Grok Bot or fetch packs as an agent.",
+      "Paste a mybot.farm bot, pack, or API URL on /plant to preview the pack. No login required for browse or preview. Saving into a library waits until you Start a plot. Copy install prompt and WebMCP remain the ways to install into Grok Bot or fetch packs as an agent.",
   },
   {
     question: "How do I share my own Grok Bot?",
     answer:
-      "Scrub secrets first. Then list it on /sell: connect Stripe, paste a GAF pack, set a price. The farm hosts the stall and keeps 10% of each sale. You can still use Grok Bot’s public share link if you only want a free copy, not a paid stall. Hermes authors export, scrub with scrub.py, then share the clean .tar.gz or a GAF listing.",
+      "Scrub secrets first. Then list it on /sell: connect Stripe, paste a GAF pack, set a price. The farm hosts the bot and keeps 10% of each sale. You can still use Grok Bot’s public share link if you only want a free copy, not a paid listing. Hermes authors export, scrub with scrub.py, then share the clean .tar.gz or a GAF listing.",
   },
   {
     question: "What does the farm keep?",
     answer:
-      "10% of the listing price as a hosting fee. Buyers check out on mybot.farm. The rest goes to the seller through Stripe Connect. Seed stalls from the farm stay free.",
+      "10% of the listing price as a hosting fee. Buyers check out on mybot.farm. The rest goes to the seller through Stripe Connect. Seed bots from the farm stay free.",
   },
   {
     question: "When can I use it?",
     answer:
-      "Seed stalls are up now: Gift Day, Sprout, Patch, Probe, Grant Research, Scholastic Research, the Pair Bench team, and the Workbench web team. Authors can list their own agents and teams on /sell.",
+      "Seed bots are up now: Gift Day, Sprout, Patch, Probe, Grant Research, Scholastic Research, the Pair Bench team, and the Workbench web team. Authors can list their own agents and teams on /sell.",
   },
 ] as const;
 

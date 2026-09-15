@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Admin",
-  description: "Review flagged stalls on mybot.farm.",
+  description: "Review flagged bots on mybot.farm.",
   robots: { index: false, follow: false },
 };
 
@@ -32,7 +32,7 @@ export default async function AdminPage() {
       <ContentPage
         kicker="Admin"
         title="Review reports"
-        lead="Sign in with an admin account to review flagged stalls and remove bad listings."
+        lead="Sign in with an admin account to review flagged bots and remove bad listings."
       >
         <SignInButton mode="modal" forceRedirectUrl="/admin" fallbackRedirectUrl="/admin">
           <Button type="button" size="lg" className="h-11 rounded-full px-5">
@@ -50,7 +50,7 @@ export default async function AdminPage() {
         title="Not an admin"
         lead="This queue is only for emails listed in ADMIN_EMAILS."
       >
-        <p>You are signed in, but this account cannot moderate stalls.</p>
+        <p>You are signed in, but this account cannot moderate bots.</p>
       </ContentPage>
     );
   }
@@ -63,8 +63,8 @@ export default async function AdminPage() {
   return (
     <ContentPage
       kicker="Admin"
-      title="Flagged stalls"
-      lead="Reports from signed-in users land here. Remove a stall to take it off the catalog and stop downloads. Dismiss reports if the listing is fine."
+      title="Flagged bots"
+      lead="Reports from signed-in users land here. Remove a bot to take it off the catalog and stop downloads. Dismiss reports if the listing is fine."
     >
       <ContentSection title="Open reports">
         <AdminFlagQueue groups={groups} />
