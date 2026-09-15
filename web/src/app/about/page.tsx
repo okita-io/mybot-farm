@@ -110,7 +110,7 @@ export default function AboutPage() {
             <li>
               <Link href="/catalog">Open bots</Link> — Gift Day, Sprout,
               Patch, Probe, Grant Research, Scholastic Research, Pair Bench,
-              Workbench
+              Workbench, Road Crew
             </li>
             <li>
               <Link href="/teams">Agent Teams</Link> — plant a crew instead of

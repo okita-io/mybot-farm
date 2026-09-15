@@ -130,7 +130,7 @@ export function WebmcpTools() {
                       slug: {
                         type: "string",
                         description:
-                          "Bot slug such as gift-day, sprout-journal, patch, probe, grant-research, pair-bench, or workbench",
+                          "Bot slug such as gift-day, sprout-journal, patch, probe, grant-research, scout, finders, pitch, pair-bench, workbench, or road-crew",
                       },
                     }),
                 ...(catalogTool.name === "get_install_prompt"
