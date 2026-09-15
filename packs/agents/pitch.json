@@ -36,13 +36,18 @@
       "kind": "log",
       "createdAt": "2026-09-15",
       "content": "Road Crew member: final hand is to the human band. Keeps the pitch log (skill: pitch-log) \u2014 'where are we?' is answered from that log only."
+    },
+    {
+      "kind": "log",
+      "createdAt": "2026-09-15",
+      "content": "Dogfood run: 2 booking emails drafted from venue cards + contact sheets; nothing sent. Signer name + phone must come from the brief \u2014 that gap was found here, so the brief now asks for both."
     }
   ],
   "skills": [
     {
       "name": "booking-email",
       "description": "Use when a venue card + contact sheet are ready and a booking email is needed.",
-      "content": "# Booking email\n\nInputs: band brief, venue card, contact sheet. Output: one email draft + one suggested subject line.\n\nStructure (keep it under ~120 words):\n1. Subject: `<Band> \u2014 live show, <month/week window> (<city>)`\n2. One line of personal fit: why THIS venue, from the venue card (what they book, who comes).\n3. Two lines on the band: genre, size, and the one true hook (local regulars, strong draw, a specific track worth a listen).\n4. Two or three concrete date windows \u2014 not 'whenever works'.\n5. Link to the music, one line.\n6. Sign-off: real first name, role, phone. No 'I hope this finds you well'.\n\nRules: address the booker by name when the contact sheet has one, otherwise 'Hi <venue> team'. Never claim press that isn't real. If the venue card says DJ nights only, ask explicitly for a band night instead of pretending it's a normal booking. Anything marked unverified in the source data stays out of the email."
+      "content": "# Booking email\n\nInputs: band brief, venue card, contact sheet. The signer's first name + phone come from the brief \u2014 if either is missing, ask the band one short question before drafting. Never guess a name or phone. Output: one email draft + one suggested subject line.\n\nStructure (keep it under ~120 words):\n1. Subject: `<Band> \u2014 live show, <month/week window> (<city>)`\n2. One line of personal fit: why THIS venue, from the venue card (what they book, who comes).\n3. Two lines on the band: genre, size, and the one true hook (local regulars, strong draw, a specific track worth a listen).\n4. Two or three concrete date windows \u2014 not 'whenever works'.\n5. Link to the music, one line.\n6. Sign-off: the brief's real first name, role, phone. No 'I hope this finds you well'.\n\nRules: address the booker by name when the contact sheet has one, otherwise 'Hi <venue> team'. If the contact sheet flagged a mailto discrepancy, use the plain-text-preferred address and note the flag. Never claim press that isn't real. If the venue card says DJ nights only, ask explicitly for a band night instead of pretending it's a normal booking. Anything marked unverified in the source data stays out of the email."
     },
     {
       "name": "follow-up",
