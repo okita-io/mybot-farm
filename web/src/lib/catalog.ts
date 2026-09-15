@@ -1,3 +1,4 @@
+import { getAgencyPack, getAgencyStalls } from "@/lib/agency-catalog";
 import type { FarmPack } from "@/lib/pack-files";
 import { getPack, packCardStats, packSkillList, packSummaryFields } from "@/lib/pack-files";
 import { getStallStatsBySlugs } from "@/lib/engagement";
@@ -101,12 +102,20 @@ async function hydrateListingStalls(listings: ListingRow[]): Promise<Stall[]> {
   );
 }
 
+function getCatalogStall(slug: string): Stall | undefined {
+  return getStall(slug) ?? getAgencyStalls().find((stall) => stall.slug === slug);
+}
+
+function getCatalogSeedPack(slug: string): FarmPack | undefined {
+  return getPack(slug) ?? getAgencyPack(slug);
+}
+
 export async function findStall(slug: string): Promise<Stall | undefined> {
   if (await isHiddenStall(slug)) {
     return undefined;
   }
 
-  const seed = getStall(slug);
+  const seed = getCatalogStall(slug);
   if (seed) {
     const [stall] = await withStallStats([withSeedPrice(seed)]);
     return stall;
@@ -127,7 +136,7 @@ export async function getCatalogPack(slug: string): Promise<FarmPack | undefined
     return undefined;
   }
 
-  const seed = getPack(slug);
+  const seed = getCatalogSeedPack(slug);
   if (seed) {
     return seed;
   }
@@ -191,10 +200,13 @@ export async function listCatalogStalls(): Promise<Stall[]> {
   const takenDown = await getTakenDownSlugSet();
   const published = await listPublishedListings();
   const extras = await hydrateListingStalls(
-    published.filter((listing) => !getStall(listing.slug) && !takenDown.has(listing.slug)),
+    published.filter(
+      (listing) =>
+        !getCatalogStall(listing.slug) && !takenDown.has(listing.slug),
+    ),
   );
   const seeds = await Promise.all(
-    stalls
+    [...stalls, ...getAgencyStalls()]
       .filter((stall) => !takenDown.has(stall.slug))
       .map(withSeedPrice)
       .map((stall) => withSeedReadme(stall)),
@@ -283,8 +295,8 @@ export async function resolvePackAccess(
   slug: string,
   clerkUserId?: string | null,
 ): Promise<PackAccess> {
-  const seedStall = getStall(slug);
-  const seedPack = getPack(slug);
+  const seedStall = getCatalogStall(slug);
+  const seedPack = getCatalogSeedPack(slug);
   if (seedStall && seedPack) {
     if (await isHiddenStall(slug)) {
       return { ok: false, reason: "not_found" };

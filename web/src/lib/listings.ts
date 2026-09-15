@@ -1,6 +1,7 @@
 import { and, desc, eq, isNull } from "drizzle-orm";
 import { getDb, hasDatabase } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
+import { isAgencyPackSlug } from "@/lib/agency-catalog";
 import { getStall, isStallKind, type StallKind } from "@/lib/packs";
 import type { FarmPack } from "@/lib/pack-files";
 import { categories } from "@/lib/site";
@@ -144,7 +145,7 @@ export async function getListingById(id: string) {
 }
 
 export async function isSlugTaken(slug: string) {
-  if (getStall(slug)) {
+  if (getStall(slug) || isAgencyPackSlug(slug)) {
     return true;
   }
 

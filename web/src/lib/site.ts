@@ -225,7 +225,7 @@ export const faqs = [
   {
     question: "When can I use it?",
     answer:
-      "Seed bots are up now: Gift Day, Sprout, Patch, Probe, Grant Research, Scholastic Research, Scout, Finders, Pitch, the Pair Bench team, the Workbench web team, and the Road Crew booking team. Authors can list their own agents and teams on /sell.",
+      "Seed bots are up now: Gift Day, Sprout, Patch, Probe, Grant Research, Scholastic Research, Scout, Finders, Pitch, the Pair Bench team, the Workbench web team, and the Road Crew booking team. The catalog also includes the MIT Agency Agents roster as plantable packs. Authors can list their own agents and teams on /sell.",
   },
 ] as const;
 
