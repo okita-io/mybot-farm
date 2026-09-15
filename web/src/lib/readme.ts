@@ -1,5 +1,5 @@
 import { lint as lintMarkdown } from "markdownlint/sync";
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtmlLib from "sanitize-html";
 import { marked, type Token, type Tokens } from "marked";
 
 export const MAX_README_CHARS = 64_000;
@@ -195,78 +195,83 @@ function sanitizeHtml(html: string): {
   const warnings: ReadmeIssue[] = [];
   const seen = new Set<string>();
 
-  DOMPurify.removeAllHooks();
-
-  DOMPurify.addHook("uponSanitizeElement", (_node, data) => {
-    if (
-      data.allowedTags[data.tagName] ||
-      data.tagName === "body" ||
-      data.tagName === "html" ||
-      data.tagName === "#document-fragment" ||
-      data.tagName === "head"
-    ) {
-      return;
-    }
-    const key = `tag:${data.tagName}`;
-    if (seen.has(key)) {
-      return;
-    }
-    seen.add(key);
-    warnings.push({
-      severity: "warning",
-      source: "dompurify",
-      message: `Tag <${data.tagName}> was removed. Rewrite with basic markdown so it displays correctly.`,
-      detail: data.tagName,
-      rule: data.tagName,
-    });
-  });
-
-  DOMPurify.addHook("uponSanitizeAttribute", (node, data) => {
-    if (data.attrName === "href") {
-      const value = data.attrValue.trim().toLowerCase();
-      if (value.startsWith("javascript:") || value.startsWith("data:")) {
-        data.keepAttr = false;
-        const key = `attr:href:${value.slice(0, 24)}`;
-        if (!seen.has(key)) {
-          seen.add(key);
-          warnings.push({
-            severity: "warning",
-            source: "dompurify",
-            message:
-              "Unsafe link was removed. Use http(s) or relative links only.",
-            detail: `href=${data.attrValue.slice(0, 60)}`,
-            rule: "href",
-          });
-        }
+  const clean = sanitizeHtmlLib(html, {
+    allowedTags: ALLOWED_TAGS,
+    allowedAttributes: {
+      a: ["href", "title"],
+      th: ["colspan", "rowspan", "align"],
+      td: ["colspan", "rowspan", "align"],
+    },
+    allowedSchemes: ["http", "https", "mailto"],
+    allowProtocolRelative: false,
+    exclusiveFilter(frame) {
+      const tag = frame.tag;
+      if (!tag || ALLOWED_TAGS.includes(tag)) {
+        return false;
       }
-    }
-
-    if (!data.keepAttr && data.attrName) {
-      const tag =
-        typeof (node as Element).tagName === "string"
-          ? (node as Element).tagName.toLowerCase()
-          : "element";
-      const key = `attr:${tag}.${data.attrName}`;
+      const key = `tag:${tag}`;
       if (!seen.has(key)) {
         seen.add(key);
         warnings.push({
           severity: "warning",
           source: "dompurify",
-          message: `Attribute ${data.attrName} on <${tag}> was not allowed — remove it or rewrite as basic markdown.`,
-          detail: `${tag}.${data.attrName}`,
-          rule: `${tag}.${data.attrName}`,
+          message: `Tag <${tag}> was removed. Rewrite with basic markdown so it displays correctly.`,
+          detail: tag,
+          rule: tag,
         });
       }
+      return true;
+    },
+    transformTags: {
+      a(tagName, attribs) {
+        const href = attribs.href ?? "";
+        const lower = href.trim().toLowerCase();
+        if (
+          lower.startsWith("javascript:") ||
+          lower.startsWith("data:") ||
+          lower.startsWith("vbscript:")
+        ) {
+          const key = `attr:href:${lower.slice(0, 24)}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            warnings.push({
+              severity: "warning",
+              source: "dompurify",
+              message:
+                "Unsafe link was removed. Use http(s) or relative links only.",
+              detail: `href=${href.slice(0, 60)}`,
+              rule: "href",
+            });
+          }
+          const { href: _removed, ...rest } = attribs;
+          return { tagName, attribs: rest };
+        }
+        return { tagName, attribs };
+      },
+    },
+  });
+
+  // Flag common disallowed attributes present in the raw HTML.
+  for (const match of html.matchAll(
+    /\s(on\w+|style|src|srcset|class|id)\s*=/gi,
+  )) {
+    const attr = match[1].toLowerCase();
+    if (ALLOWED_ATTR.includes(attr)) {
+      continue;
     }
-  });
-
-  const clean = DOMPurify.sanitize(html, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ALLOW_DATA_ATTR: false,
-  });
-
-  DOMPurify.removeAllHooks();
+    const key = `attr:${attr}`;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    warnings.push({
+      severity: "warning",
+      source: "dompurify",
+      message: `Attribute ${attr} was not allowed — remove it or rewrite as basic markdown.`,
+      detail: attr,
+      rule: attr,
+    });
+  }
 
   return { html: clean, warnings };
 }
