@@ -17,6 +17,7 @@ import {
   type StallKind,
 } from "@/lib/packs";
 import { hasPaidPurchase } from "@/lib/purchases";
+import { withSeedReadme } from "@/lib/seed-readme";
 import {
   FARM_AUTHOR,
   getUserByClerkId,
@@ -53,6 +54,8 @@ export function listingToStall(
     author,
     listedAt: listing.createdAt.toISOString(),
     updatedAt: listing.updatedAt.toISOString(),
+    readmeMarkdown: listing.readmeMarkdown,
+    readmeHtml: listing.readmeHtml,
   };
 }
 
@@ -190,9 +193,12 @@ export async function listCatalogStalls(): Promise<Stall[]> {
   const extras = await hydrateListingStalls(
     published.filter((listing) => !getStall(listing.slug) && !takenDown.has(listing.slug)),
   );
-  const seeds = stalls
-    .filter((stall) => !takenDown.has(stall.slug))
-    .map(withSeedPrice);
+  const seeds = await Promise.all(
+    stalls
+      .filter((stall) => !takenDown.has(stall.slug))
+      .map(withSeedPrice)
+      .map((stall) => withSeedReadme(stall)),
+  );
 
   return withStallStats([...seeds, ...extras]);
 }
@@ -219,6 +225,7 @@ function stallMatchesQuery(stall: Stall, needle?: string, kind?: StallKind) {
     stall.category,
     stall.kind,
     stall.author?.username,
+    stall.readmeMarkdown,
     ...(stall.members?.map((member) => member.name) ?? []),
   ]
     .filter(Boolean)

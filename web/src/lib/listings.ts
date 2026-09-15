@@ -19,7 +19,7 @@ export function slugifyName(name: string) {
     .replace(/^-+|-+$/g, "")
     .slice(0, 48);
 
-  return slug || "stall";
+  return slug || "bot";
 }
 
 export function parseListingKind(value: unknown): StallKind | null {
@@ -268,6 +268,8 @@ export async function createListing(input: {
   category: string;
   priceCents: number;
   pack: FarmPack;
+  readmeMarkdown?: string | null;
+  readmeHtml?: string | null;
 }) {
   const db = getDb();
   const now = new Date();
@@ -284,6 +286,8 @@ export async function createListing(input: {
       priceCents: input.priceCents,
       currency: "usd",
       pack: input.pack as Record<string, unknown>,
+      readmeMarkdown: input.readmeMarkdown ?? null,
+      readmeHtml: input.readmeHtml ?? null,
       published: true,
       createdAt: now,
       updatedAt: now,
@@ -291,6 +295,54 @@ export async function createListing(input: {
     .returning();
 
   return row;
+}
+
+export async function updateListingReadme(
+  id: string,
+  sellerUserId: string,
+  input: { readmeMarkdown: string; readmeHtml: string },
+) {
+  const db = getDb();
+  const now = new Date();
+  const [row] = await db
+    .update(listings)
+    .set({
+      readmeMarkdown: input.readmeMarkdown,
+      readmeHtml: input.readmeHtml,
+      updatedAt: now,
+    })
+    .where(
+      and(
+        eq(listings.id, id),
+        eq(listings.sellerUserId, sellerUserId),
+        isNull(listings.deletedAt),
+      ),
+    )
+    .returning();
+
+  return row ?? null;
+}
+
+export async function clearListingReadme(id: string, sellerUserId: string) {
+  const db = getDb();
+  const now = new Date();
+  const [row] = await db
+    .update(listings)
+    .set({
+      readmeMarkdown: null,
+      readmeHtml: null,
+      updatedAt: now,
+    })
+    .where(
+      and(
+        eq(listings.id, id),
+        eq(listings.sellerUserId, sellerUserId),
+        isNull(listings.deletedAt),
+      ),
+    )
+    .returning();
+
+  return row ?? null;
 }
 
 export async function updateListing(

@@ -171,3 +171,125 @@
     color: oklch(0.96 0.008 260);
   }
 }
+
+@layer components {
+  .stall-readme {
+    overflow-wrap: anywhere;
+  }
+
+  .stall-readme > :first-child {
+    margin-top: 0;
+  }
+
+  .stall-readme > :last-child {
+    margin-bottom: 0;
+  }
+
+  .stall-readme h1,
+  .stall-readme h2,
+  .stall-readme h3,
+  .stall-readme h4,
+  .stall-readme h5,
+  .stall-readme h6 {
+    margin-top: 1.25em;
+    margin-bottom: 0.4em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--foreground);
+  }
+
+  .stall-readme h1 {
+    font-size: 1.5rem;
+  }
+
+  .stall-readme h2 {
+    font-size: 1.25rem;
+  }
+
+  .stall-readme h3 {
+    font-size: 1.125rem;
+  }
+
+  .stall-readme p,
+  .stall-readme ul,
+  .stall-readme ol,
+  .stall-readme blockquote,
+  .stall-readme pre,
+  .stall-readme table {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
+  .stall-readme ul,
+  .stall-readme ol {
+    padding-left: 1.25rem;
+  }
+
+  .stall-readme ul {
+    list-style: disc;
+  }
+
+  .stall-readme ol {
+    list-style: decimal;
+  }
+
+  .stall-readme li + li {
+    margin-top: 0.25em;
+  }
+
+  .stall-readme a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .stall-readme blockquote {
+    border-left: 3px solid color-mix(in oklch, var(--foreground) 20%, transparent);
+    padding-left: 0.9rem;
+    color: var(--muted-foreground);
+  }
+
+  .stall-readme code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    border-radius: 0.35rem;
+    background: color-mix(in oklch, var(--foreground) 6%, transparent);
+    padding: 0.1em 0.35em;
+  }
+
+  .stall-readme pre {
+    overflow-x: auto;
+    border-radius: 1rem;
+    background: var(--card);
+    padding: 1rem 1.15rem;
+    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 10%, transparent);
+  }
+
+  .stall-readme pre code {
+    background: transparent;
+    padding: 0;
+  }
+
+  .stall-readme table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+  }
+
+  .stall-readme th,
+  .stall-readme td {
+    border: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+  }
+
+  .stall-readme th {
+    font-weight: 600;
+    background: color-mix(in oklch, var(--foreground) 4%, transparent);
+  }
+
+  .stall-readme hr {
+    margin: 1.25em 0;
+    border: none;
+    border-top: 1px solid color-mix(in oklch, var(--foreground) 12%, transparent);
+  }
+}

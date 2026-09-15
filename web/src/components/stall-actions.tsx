@@ -5,10 +5,81 @@ import { BuyButton, SignedOutBuyButton } from "@/components/buy-button";
 import { CopyInstallPrompt } from "@/components/copy-install-prompt";
 import { Button } from "@/components/ui/button";
 import { installPrompt, shortInstallPrompt } from "@/lib/install-prompt";
-import { packFilename, type Stall } from "@/lib/packs";
+import { memberHref, packFilename, type Stall } from "@/lib/packs";
 
 function tracksViaPackApi(href: string) {
   return href.includes("/api/packs/") && /[?&]download=1(?:&|$)/.test(href);
+}
+
+export function StallMembers({
+  stall,
+  canDownload = true,
+  className,
+}: {
+  stall: Stall;
+  canDownload?: boolean;
+  className?: string;
+}) {
+  if (!stall.members?.length) {
+    return null;
+  }
+
+  const paid = (stall.priceCents ?? 0) > 0;
+  const locked = paid && !canDownload;
+
+  return (
+    <div className={className ?? "mt-3 flex flex-wrap gap-2"}>
+      {stall.members.map((member) => {
+        const href = memberHref(member);
+        const isStallPage =
+          href.startsWith("/agents/") || href.startsWith("/teams/");
+
+        if (locked) {
+          return (
+            <Button
+              key={member.href}
+              type="button"
+              variant="outline"
+              size="lg"
+              className="h-9 rounded-full px-4"
+              disabled
+              title="Buy this bot to unlock"
+            >
+              {member.name}
+            </Button>
+          );
+        }
+
+        if (isStallPage) {
+          return (
+            <Button
+              key={member.href}
+              asChild
+              variant="outline"
+              size="lg"
+              className="h-9 rounded-full px-4"
+            >
+              <a href={href}>{member.name}</a>
+            </Button>
+          );
+        }
+
+        return (
+          <Button
+            key={member.href}
+            asChild
+            variant="outline"
+            size="lg"
+            className="h-9 rounded-full px-4"
+          >
+            <a href={href} download={href.split("/").at(-1)}>
+              {member.name}
+            </a>
+          </Button>
+        );
+      })}
+    </div>
+  );
 }
 
 export function StallActions({
@@ -42,7 +113,7 @@ export function StallActions({
           size="lg"
           className="h-9 rounded-full px-4"
           disabled
-          title="Buy this stall to unlock"
+          title="Buy this bot to unlock"
         >
           <Download data-icon="inline-start" />
           Download pack
@@ -74,33 +145,6 @@ export function StallActions({
           disabled={locked}
         />
       ) : null}
-      {stall.members?.map((member) =>
-        locked ? (
-          <Button
-            key={member.href}
-            type="button"
-            variant="outline"
-            size="lg"
-            className="h-9 rounded-full px-4"
-            disabled
-            title="Buy this stall to unlock"
-          >
-            {member.name}
-          </Button>
-        ) : (
-          <Button
-            key={member.href}
-            asChild
-            variant="outline"
-            size="lg"
-            className="h-9 rounded-full px-4"
-          >
-            <a href={member.href} download={member.href.split("/").at(-1)}>
-              {member.name}
-            </a>
-          </Button>
-        ),
-      )}
     </div>
   );
 }
