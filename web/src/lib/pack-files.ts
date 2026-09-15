@@ -58,6 +58,13 @@ export type FarmPack = {
     homepage?: string;
     scrubbed?: boolean;
     license?: string;
+    author?: string;
+    sourceNote?: string;
+    sourceRepo?: string;
+    sourcePath?: string;
+    attribution?: string;
+    skillCount?: number;
+    tags?: string[];
   };
 };
 

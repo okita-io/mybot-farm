@@ -5,6 +5,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.join(__dirname),
   },
+  outputFileTracingIncludes: {
+    "/*": [
+      "./src/data/agency-catalog.generated.json",
+      "./public/packs/agents/**/*.json",
+    ],
+  },
   images: {
     remotePatterns: [
       {

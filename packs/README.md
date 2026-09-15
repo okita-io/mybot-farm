@@ -21,6 +21,18 @@ These are **marketplace seeds** (scrubbed, installable copies). They are not aut
 
 The landing page serves the same files from `web/public/packs/` so people can download a copy, then in Grok Bot: **New → Create new agent → Edit Profile**. Each bot page (`/agents/{slug}`, `/teams/{slug}`) also has **Copy install prompt**. Agents can skip HTML via `/api/packs/{slug}` and `/api/install-prompt/{slug}`. Adding a Bot copies configuration only — not the author’s computer, logins, or chat history ([Grok Bot docs](https://docs.x.ai/grok-bot/bots)). Keep `packs/` and `web/public/packs/` in sync.
 
+## Agency Agents (generated)
+
+MIT-adapted catalog fill-ins from [msitarzewski/agency-agents](https://github.com/msitarzewski/agency-agents). Personality is in `memory`; procedures are `skills[]`. Copyright (c) 2025 AgentLand Contributors.
+
+| Path | What |
+|------|------|
+| [agency-agents/](./agency-agents/) | Generated GAF JSON + [ATTRIBUTION.md](./agency-agents/ATTRIBUTION.md) |
+| [agency-agents/import-report.json](./agency-agents/import-report.json) | Per-division counts and skipped files |
+
+Refresh: `python3 scripts/import-agency-agents/convert.py --source /tmp/agency-agents-src --clean`  
+Docs: [docs/agency-agents.md](../docs/agency-agents.md).
+
 ## Live Grok Bot instances (Alex)
 
 Planted 2026-09-11 — personas match these packs:
