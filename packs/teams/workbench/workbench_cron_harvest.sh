@@ -1,3 +1,2 @@
 #!/bin/bash
-DIR="$(cd "$(dirname "$0")" && pwd)"
-exec "$DIR/workbench_cron.sh" harvest
+exec "/Users/alexokita/.hermes/scripts/workbench_cron.sh" harvest
