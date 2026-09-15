@@ -56,6 +56,8 @@ export const listings = pgTable(
     priceCents: integer("price_cents").notNull(),
     currency: text("currency").notNull().default("usd"),
     pack: jsonb("pack").$type<Record<string, unknown>>().notNull(),
+    readmeMarkdown: text("readme_markdown"),
+    readmeHtml: text("readme_html"),
     published: boolean("published").notNull().default(true),
     createdAt: timestamp("created_at", { withTimezone: true })
       .defaultNow()

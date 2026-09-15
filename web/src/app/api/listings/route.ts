@@ -4,6 +4,7 @@ import {
   listingWriteFromBody,
   uniqueListingSlug,
 } from "@/lib/listings";
+import { extractPackReadme, parseStallReadme } from "@/lib/readme";
 import { stallPagePath } from "@/lib/packs";
 import { requireAppUser } from "@/lib/users";
 
@@ -32,10 +33,21 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         error: "connect_required",
-        message: "Finish Stripe payouts before listing a paid stall.",
+        message: "Finish Stripe payouts before listing a paid bot.",
       },
       { status: 403 },
     );
+  }
+
+  let readmeMarkdown: string | null = null;
+  let readmeHtml: string | null = null;
+  const packReadme = extractPackReadme(value.pack as Record<string, unknown>);
+  if (packReadme) {
+    const readme = parseStallReadme(packReadme);
+    if (readme.ok) {
+      readmeMarkdown = readme.markdown;
+      readmeHtml = readme.html;
+    }
   }
 
   const slug = await uniqueListingSlug(value.name);
@@ -43,6 +55,8 @@ export async function POST(request: Request) {
     sellerUserId: user.id,
     slug,
     ...value,
+    readmeMarkdown,
+    readmeHtml,
   });
 
   return NextResponse.json(
@@ -54,6 +68,7 @@ export async function POST(request: Request) {
         kind: listing.kind === "team" ? "team" : "agent",
         slug: listing.slug,
       }),
+      hasReadme: Boolean(readmeHtml),
     },
     { status: 201 },
   );

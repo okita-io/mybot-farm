@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Pencil } from "lucide-react";
 import { StallAdminRemove } from "@/components/stall-admin-remove";
-import { StallActions } from "@/components/stall-actions";
+import { StallActions, StallMembers } from "@/components/stall-actions";
 import { StallEngagement } from "@/components/stall-engagement";
 import { StallDates, StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
+import { StallReadmeCard } from "@/components/stall-readme-card";
 import { Container } from "@/components/container";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
@@ -13,13 +14,13 @@ import { getStallEngagement } from "@/lib/engagement";
 import { hasUserFlaggedStall } from "@/lib/moderation";
 import { formatPriceLabel, formatUsd } from "@/lib/money";
 import {
-  memberHref,
   packFileUrl,
   stallApiPaths,
   stallPageUrl,
   stallToneClasses,
   type Stall,
 } from "@/lib/packs";
+import { withSeedReadme } from "@/lib/seed-readme";
 import { isAdminEmail } from "@/lib/admin";
 import { getCachedViewer } from "@/lib/users";
 import { cn } from "@/lib/utils";
@@ -60,6 +61,7 @@ export async function StallView({
   const shortPrompt = shortInstallPrompt(stall);
   const api = stallApiPaths(stall.slug);
   const viewer = await getCachedViewer();
+  const stallWithReadme = await withSeedReadme(stall);
   const [stats, engagement, flagged] = await Promise.all([
     catalogStallCardStats(stall.slug),
     getStallEngagement(stall.slug, viewer?.id),
@@ -98,6 +100,7 @@ export async function StallView({
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
             {stall.name}
           </h1>
+          <StallMembers stall={stall} canDownload={canDownload} />
           <p className="mt-3 text-lg text-foreground/70">{stall.title}</p>
           <p className="mt-4 text-base leading-relaxed text-pretty text-foreground/80 sm:text-lg">
             {stall.description}
@@ -120,7 +123,7 @@ export async function StallView({
           ) : null}
           {checkout === "cancel" ? (
             <p className="mt-3 text-sm text-muted-foreground" role="status">
-              Checkout canceled. The stall is still here if you want it later.
+              Checkout canceled. The bot is still here if you want it later.
             </p>
           ) : null}
           {stats ? (
@@ -143,41 +146,12 @@ export async function StallView({
               flagged={flagged}
             />
           </div>
-          {stall.members?.length ? (
-            <p className="mt-4 text-sm text-foreground/70">
-              Members:{" "}
-              {stall.members.map((member, index) => {
-                const href = memberHref(member);
-                const isStallPage =
-                  href.startsWith("/agents/") || href.startsWith("/teams/");
-
-                return (
-                  <span key={member.href}>
-                    {index > 0 ? ", " : null}
-                    {isStallPage ? (
-                      <Link href={href} className="underline-offset-4 hover:underline">
-                        {member.name}
-                      </Link>
-                    ) : (
-                      <a
-                        href={href}
-                        className="underline-offset-4 hover:underline"
-                        download={href.split("/").at(-1)}
-                      >
-                        {member.name}
-                      </a>
-                    )}
-                  </span>
-                );
-              })}
-            </p>
-          ) : null}
           <div className="mt-8 flex flex-wrap gap-2">
             {isOwner ? (
               <Button asChild variant="outline" size="lg" className="h-9 rounded-full px-4">
                 <Link href={`/sell?edit=${encodeURIComponent(stall.slug)}`}>
                   <Pencil data-icon="inline-start" />
-                  Update stall
+                  Update bot
                 </Link>
               </Button>
             ) : null}
@@ -198,6 +172,13 @@ export async function StallView({
           </div>
         </div>
 
+        <StallReadmeCard
+          listingId={stallWithReadme.listingId}
+          isOwner={isOwner}
+          toneCardClassName={tone.card}
+          initialHtml={stallWithReadme.readmeHtml}
+        />
+
         <article className="mt-12">
           <h2 className="text-2xl font-semibold tracking-tight">
             Copy-paste install
@@ -205,7 +186,7 @@ export async function StallView({
           <p className="mt-3 text-base leading-relaxed text-muted-foreground">
             {canDownload
               ? "Paste this into a Grok Bot (or another agent). It installs a copy of the pack — not the author’s computer, logins, or chat history. Step by step:"
-              : "Buy this stall to unlock the pack download and install prompt. Seed stalls on the farm stay free."}{" "}
+              : "Buy this bot to unlock the pack download and install prompt. Seed bots on the farm stay free."}{" "}
             <Link href="/how-to" className="underline-offset-4 hover:underline">
               How-To
             </Link>{" "}

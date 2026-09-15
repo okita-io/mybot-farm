@@ -29,6 +29,8 @@ export type Stall = {
   updatedAt?: string;
   downloadCount?: number;
   likeCount?: number;
+  readmeMarkdown?: string | null;
+  readmeHtml?: string | null;
 };
 
 export const FARM_SEED_LISTED_AT = "2026-09-12T00:00:00.000Z";
@@ -50,6 +52,24 @@ export const stallToneClasses: Record<
 
 export function isStallKind(value: string | null | undefined): value is StallKind {
   return value === "agent" || value === "team";
+}
+
+/** User-facing noun. Catalog listings are bots; a team listing stays a team. */
+export function listingNoun(
+  kind?: StallKind | null,
+  form: "one" | "many" | "One" | "Many" = "one",
+): string {
+  const isTeam = kind === "team";
+  switch (form) {
+    case "many":
+      return isTeam ? "teams" : "bots";
+    case "One":
+      return isTeam ? "Team" : "Bot";
+    case "Many":
+      return isTeam ? "Teams" : "Bots";
+    default:
+      return isTeam ? "team" : "bot";
+  }
 }
 
 export function stallPagePath(stall: Pick<Stall, "kind" | "slug">): string {
@@ -161,6 +181,7 @@ export function stallRecord(stall: Stall) {
     updatedAt: stall.updatedAt ?? null,
     downloadCount: stall.downloadCount ?? 0,
     likeCount: stall.likeCount ?? 0,
+    hasReadme: Boolean(stall.readmeHtml?.trim() || stall.readmeMarkdown?.trim()),
     api: stallApiPaths(stall.slug),
   };
 }

@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { StallActions } from "@/components/stall-actions";
+import { StallActions, StallMembers } from "@/components/stall-actions";
 import { StallEngagement } from "@/components/stall-engagement";
 import { StallDates, StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
 import { catalogStallCardStats } from "@/lib/catalog";
@@ -56,6 +56,7 @@ export async function StallCard({
             {stall.name}
           </Link>
         </CardTitle>
+        <StallMembers stall={stall} canDownload={canDownload} className="flex flex-wrap gap-2" />
         <CardDescription className="text-sm text-foreground/70">
           {stall.title}
         </CardDescription>
