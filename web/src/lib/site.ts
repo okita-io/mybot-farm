@@ -143,6 +143,10 @@ export const teams = [
     name: "Spec + Scaffold + QA",
     roles: "One writes cards. One builds. One gates release and never patches.",
   },
+  {
+    name: "Scout + Finders + Pitch",
+    roles: "One finds venues. One digs up bookers. One drafts the email — the band sends.",
+  },
 ] as const;
 
 export const categories = [
@@ -155,6 +159,7 @@ export const categories = [
   { slug: "research", label: "Research", tone: "share" },
   { slug: "finance-personal", label: "Personal finance", tone: "find" },
   { slug: "creative", label: "Creative", tone: "find" },
+  { slug: "music", label: "Music", tone: "find" },
   { slug: "education", label: "Education", tone: "find" },
   { slug: "ops", label: "Ops / admin", tone: "share" },
   { slug: "experimental", label: "Experimental", tone: "agent" },
@@ -220,7 +225,7 @@ export const faqs = [
   {
     question: "When can I use it?",
     answer:
-      "Seed bots are up now: Gift Day, Sprout, Patch, Probe, Grant Research, Scholastic Research, the Pair Bench team, and the Workbench web team. Authors can list their own agents and teams on /sell.",
+      "Seed bots are up now: Gift Day, Sprout, Patch, Probe, Grant Research, Scholastic Research, Scout, Finders, Pitch, the Pair Bench team, the Workbench web team, and the Road Crew booking team. Authors can list their own agents and teams on /sell.",
   },
 ] as const;
 

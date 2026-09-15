@@ -287,7 +287,10 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
           <p>
             Today’s live paths are Grok Bot (copy-paste prompt or GAF download)
             and Hermes (scrubbed <code>.tar.gz</code> import, plus export →{" "}
-            <code>scrub.py</code>). If you are building an OpenClaw translator,
+            <code>scrub.py</code>).{" "}
+            <Link href="/teams/road-crew">Road Crew</Link> is tagged for OpenClaw
+            as well as Grok Bot — still install from GAF JSON until the
+            translator ships. If you are building an OpenClaw translator,
             start from the public JSON — don’t wait on a fake one-click.
           </p>
         </ContentSection>

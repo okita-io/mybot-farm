@@ -151,9 +151,11 @@ export default async function TeamsPage() {
           <p>
             Browse anonymously. Live team packs:{" "}
             <Link href="/teams/pair-bench">Pair Bench</Link> — Patch implements,
-            Probe verifies. And{" "}
+            Probe verifies.{" "}
             <Link href="/teams/workbench">Workbench</Link> — Spec writes cards,
-            Scaffold builds, Smoke gates a running app and never fixes.
+            Scaffold builds, Smoke gates a running app and never fixes. And{" "}
+            <Link href="/teams/road-crew">Road Crew</Link> — Scout finds venues,
+            Finders digs bookers, Pitch drafts; the band always sends.
           </p>
           <ul>
             {teamStalls.map((stall) => (
