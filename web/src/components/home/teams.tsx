@@ -38,6 +38,13 @@ export function HomeTeams() {
           >
             Workbench
           </Link>
+          <span className="text-muted-foreground"> · </span>
+          <Link
+            href="/teams/road-crew"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Road Crew
+          </Link>
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {teams.map((team) => (

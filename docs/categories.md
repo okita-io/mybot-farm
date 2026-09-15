@@ -18,6 +18,7 @@
 | `research` | Research | Competitive intel, librarians, brief writers |
 | `finance-personal` | Personal finance | Budgets, card rewards, bill reminders — scrub bank secrets |
 | `creative` | Creative | Image/video workflows, clip desks, brand kits |
+| `music` | Music | Venue scouting, booking contacts, set lists, tour ops (send still human-gated) |
 | `education` | Education | Tutors, study plans, course builders |
 | `ops` | Ops / admin | Inbox zero crews, CRM hygiene, meeting notes |
 | `experimental` | Experimental | Weird bots, demos, WebMCP toys |
@@ -56,6 +57,7 @@ Coding bots (programmer + debugger **team**) sit beside these — same market, d
 /categories
 /categories/lifestyle
 /categories/coding
+/categories/music
 /agents?category=lifestyle
 /teams?category=coding
 ```

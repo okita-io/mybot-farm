@@ -16,6 +16,7 @@ Solo agents are useful. Many real workflows are **pairs or crews**:
 | **Researcher + Librarian** | One hunts; one files, indexes, and retrieves |
 | **Writer + Editor** | One drafts; one humanizes, fact-checks, cuts |
 | **Hunter + Enricher** | One finds leads; one verifies contacts and deepens accounts |
+| **Scout + Finders + Pitch** | One finds venues; one digs bookers; one drafts — the band always sends |
 | **Planner + Doer** | One breaks work down; one executes and reports |
 
 mybot.farm should make **“install this team”** as obvious as “install this agent.”
