@@ -230,7 +230,7 @@ export const faqs = [
   {
     question: "How do I import a pack into Hermes?",
     answer:
-      "Install the mybot-farm plugin (symlink packages/hermes-mybot-farm into ~/.hermes/plugins/mybot-farm, then hermes plugins enable mybot-farm). Tools: farm_search, farm_get_stall, farm_get_pack, farm_plant, farm_reinstall. farm_reinstall clears ~/.hermes/profiles/.deleted tombstones so a same-name re-import is actually spawnable. Manual path: hermes profile import on a scrubbed .tar.gz (Scholastic Research, Workbench). After import, add your own API keys. Full steps: /install/hermes.",
+      "Install the mybot-farm plugin (symlink packages/hermes-mybot-farm into ~/.hermes/plugins/mybot-farm, then hermes plugins enable mybot-farm). After Plugin Catalog admission: hermes plugins install mybot-farm. Tools: farm_search, farm_get_stall, farm_get_pack, farm_plant, farm_reinstall. farm_reinstall clears ~/.hermes/profiles/.deleted tombstones so a same-name re-import is actually spawnable. Manual path: hermes profile import on a scrubbed .tar.gz (Scholastic Research, Workbench). After import, add your own API keys. Full steps: /install/hermes.",
   },
   {
     question: "How do I plant a pack in OpenClaw?",

@@ -180,6 +180,10 @@ python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v`}</pre>
           <p>GitHub (subdir required) or the public zip:</p>
           <pre>{`hermes plugins install ${hermesPlugin.gitInstall} --enable
 
+# after Plugin Catalog admission:
+hermes plugins install mybot-farm
+hermes plugins enable mybot-farm
+
 curl -LO ${hermesPlugin.downloadUrl}
 mkdir -p ~/.hermes/plugins/mybot-farm
 unzip hermes-mybot-farm-0.1.0.zip -d ~/.hermes/plugins/mybot-farm

@@ -47,6 +47,17 @@ hermes plugins install okita-io/mybot-farm/packages/hermes-mybot-farm --enable
 
 `--enable` skips the Enable now? prompt. Private clone uses your existing git credentials.
 
+## Install from the Plugin Catalog (after admission)
+
+Once `plugin-catalog/mybot-farm.yaml` is merged into [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent/blob/main/plugin-catalog/README.md), current Hermes installs by catalog name (SHA-pinned):
+
+```bash
+hermes plugins install mybot-farm
+hermes plugins enable mybot-farm
+```
+
+That PR is **not** opened from this repo. Draft entry + release checklist: [`packages/hermes-mybot-farm/catalog/`](../packages/hermes-mybot-farm/catalog/). Gates: public `https://` clone, tag `hermes-mybot-farm-v0.1.0`, paste the 40-hex SHA, capabilities match `plugin.yaml`.
+
 ## Install from the public zip
 
 `https://mybot.farm/downloads/hermes-mybot-farm-0.1.0.zip` is the plugin directory packed. Unzip into `~/.hermes/plugins/mybot-farm`, then enable:
@@ -129,6 +140,7 @@ PyPI 0.19.0: skip that; the unittest probe above is the admission check (`regist
 ## Notes
 
 - Source: [`packages/hermes-mybot-farm`](../packages/hermes-mybot-farm).
+- Catalog draft (NousResearch/hermes-agent, after tag): [`packages/hermes-mybot-farm/catalog/`](../packages/hermes-mybot-farm/catalog/).
 - Package copy: [`packages/hermes-mybot-farm/INSTALL.md`](../packages/hermes-mybot-farm/INSTALL.md).
 - Team stall contract: [`hermes-team-stall-bundle.md`](./hermes-team-stall-bundle.md).
 - GAF JSON packs stay on the OpenClaw plugin / Grok Bot path.
