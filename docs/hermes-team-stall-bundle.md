@@ -94,56 +94,48 @@ carried machine-local state.
 
 The live download was **byte-complete** (all 9 artifacts present, tarballs
 hash-identical to the source pack), and the team reinstalled and ran a full
-functional handoff. Two documentation/install gaps remain:
+functional handoff. Status after PR #18 (`fix/workbench-v1.1-gaf`) and the
+Hermes installer plugin:
 
-### GAP 1 (HIGH) — GAF `shared.gettingStarted` is v1.0: missing the kanban step
-The live GAF pack's gettingStarted says: import 3 profiles → recreate
-`~/.hermes/teams/workbench/{reports,repos,state}` → fetch TEAM.md/WORK.md/cron
-→ set endpoints → schedule cron. It does **not** say:
+### GAP 1 (HIGH) — GAF `shared.gettingStarted` missing the kanban step — **fixed in PR #18**
+Live `GET /api/packs/workbench` gettingStarted now includes
+`hermes kanban boards create workbench`.
 
-```
-hermes kanban boards create workbench --name "Workbench team"
-```
-
-An installer following the GAF literally gets a team whose cron jobs and SOULs
-refer to a board that doesn't exist → standup/QA-sweep/harvest all break on
-first run, and any handoff (which the SOULs implement via kanban tasks) fails.
-The README.md in the pack dir has the correct step; the GAF (what WebMCP /
-Grok-Bot installs use) does not. **Fix: regenerate the GAF's
-`shared.gettingStarted` from the v1.1 README install section and redeploy.**
-
-### GAP 2 (MEDIUM) — same-name re-import hits a name tombstone
+### GAP 2 (MEDIUM) — same-name re-import hits a name tombstone — **open upstream; plugin automates the workaround**
 Hermes records profile deletion as a tombstone under
 `~/.hermes/profiles/.deleted/<name>`. `hermes profile import --name <existing
 deleted name>` extracts the files and prints success, but the profile stays
 invisible (not in `profile list`, not spawnable by the kanban dispatcher:
 "Skipped (non-spawnable assignee)"). The import did not clear the tombstone.
-Workaround observed: `rm ~/.hermes/profiles/.deleted/<name>` after import.
-**Doc: gettingStarted should note that after a failed/abandoned prior install,
-`hermes profile list` must show the three profiles before proceeding; if not,
-remove the matching `~/.hermes/profiles/.deleted/<name>` entries and re-check.
-Upstream: `hermes profile import` should `clear_named_profile_deleted` for the
-target name.**
 
-### GAP 3 (MEDIUM) — GAF `skills[]` are stale v1.0, not the team's real skills
-The live GAF serves two skills — `workbench-board` ("Shared WORK.md card format")
-and `workbench-handoff` ("Short DM handoffs") — both with **v1.0 content, no
-kanban**. These do not match the skills actually inside the tarballs:
-`workbench-team` (Spec), `workbench-card-build` (Scaffold), and the kanban-aware
-MEMORY/SOULs. So a consumer reading the GAF's skills tab / `list_pack_skills` sees
-the old board-based protocol, not the kanban one the team now runs.
-**Fix: regenerate the GAF `skills[]` from the current profiles' skill tree.**
+**Workaround:** `rm ~/.hermes/profiles/.deleted/<name>` after import (or before
+the next import). **Automated:** the Hermes `mybot-farm` plugin
+(`packages/hermes-mybot-farm`, docs: [hermes-plugin.md](./hermes-plugin.md),
+install: `/install/hermes`) always clears matching tombstones before
+`hermes profile import`, and `farm_reinstall` / `scripts/clear-tombstones.py`
+cover clean re-installs. After `force` deletes (which create new tombstones),
+it clears those too, then verifies `hermes profile list` before success.
+**Upstream:** `hermes profile import` should `clear_named_profile_deleted` for the
+target name.
+
+### GAP 3 (MEDIUM) — GAF `skills[]` stale v1.0 — **fixed in PR #18**
+Live pack skills are `workbench-team` and `workbench-card-build` (kanban protocol).
 
 ### Non-gaps verified OK
 - TEAM.md/WORK.md/cron scripts all served live from the pack dir (byte-identical)
 - the **tarballs** carry the correct v1.1 skills intact (`workbench-team`,
-  `workbench-card-build`) — only the GAF's *displayed* `skills[]` is stale
+  `workbench-card-build`)
 - tarballs import cleanly; SOULs/skills/memories intact; endpoints
   placeholder-neutralized; no secret leaks in any artifact
 - board created at install time; dispatcher spawned the re-imported profiles
   correctly; parent→child QA handoff auto-promoted; QA verdict PASS with
   evidence attached — the reinstalled team works end-to-end
-- `list_pack_skills` serves 2 team skills (workbench-board, workbench-handoff)
+
+### Installer plugin
+
+Prefer `farm_search` → `farm_get_stall` → `farm_get_pack` → `farm_plant` /
+`farm_reinstall` over a hand-rolled gettingStarted walk. See
+[hermes-plugin.md](./hermes-plugin.md).
 
 ---
 

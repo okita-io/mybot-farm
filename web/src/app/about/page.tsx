@@ -128,6 +128,10 @@ export default function AboutPage() {
               with the mybot-farm plugin
             </li>
             <li>
+              <Link href="/install/hermes">Hermes</Link> — plant a scrubbed
+              profile with the mybot-farm plugin
+            </li>
+            <li>
               <Link href="/press">Press</Link> — launch story
             </li>
             <li>

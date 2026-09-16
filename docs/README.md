@@ -11,6 +11,7 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | [plant-from-share.md](./plant-from-share.md) | Share URL → preview → plant into buyer library (API + `/plant` sketch) |
 | [agency-agents.md](./agency-agents.md) | Agency Agents MIT roster → farm packs (split, attribution, refresh) |
 | [openclaw-plugin.md](./openclaw-plugin.md) | OpenClaw `mybot-farm` plant plugin — install from ClawHub, repo, or public tarball |
+| [hermes-plugin.md](./hermes-plugin.md) | Hermes `mybot-farm` plant plugin — profiles, team dirs, GAP 2 tombstone reinstall, catalog draft |
 | [hermes-team-stall-bundle.md](./hermes-team-stall-bundle.md) | Hermes team stall contract: download/bundle shape, GAF install flow, shipping gates |
 | [../packs/](../packs/) | Seed agent & team bots plus [Agency Agents packs](../packs/agency-agents/) |
 

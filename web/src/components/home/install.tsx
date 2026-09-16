@@ -92,6 +92,18 @@ export function HomeInstall() {
           </Link>
           .
         </p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+          Running Hermes? Plant scrubbed profiles with the mybot-farm plugin —
+          search, fetch member tarballs, <code className="font-mono text-[0.9em] text-foreground">hermes profile import</code>, and
+          clear delete-tombstones on reinstall.{" "}
+          <Link
+            href="/install/hermes"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Install in Hermes
+          </Link>
+          .
+        </p>
       </Container>
     </section>
   );
