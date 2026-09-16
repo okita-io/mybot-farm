@@ -4,6 +4,22 @@ Plant agent packs from [mybot.farm](https://mybot.farm) into OpenClaw with the `
 
 ## 1. Install the plugin
 
+### ClawHub (recommended)
+
+Package `@okita-io/openclaw-mybot-farm` is published and live on ClawHub:
+
+```bash
+openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm
+openclaw plugins enable mybot-farm
+openclaw gateway restart
+```
+
+Optional discover: `openclaw plugins search mybot-farm`.
+
+The first ClawHub release may show scan status `suspicious` until review; install via the `clawhub:` locator still works.
+
+### From a local checkout
+
 From a local checkout (or a downloaded release folder):
 
 ```bash
@@ -60,15 +76,6 @@ Ask your OpenClaw agent to call:
 - `farm_plant` with `{ "slug": "frontend-developer" }`
 
 Optional plant params: `agentId`, `workspace`, `force`.
-
-## ClawHub (later)
-
-When published:
-
-```bash
-openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm
-# or: openclaw plugins search mybot-farm
-```
 
 ## Notes
 

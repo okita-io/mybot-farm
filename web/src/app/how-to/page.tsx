@@ -282,17 +282,40 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
         <ContentSection id="openclaw" title="Plant an agent in OpenClaw">
           <p>
             OpenClaw plants the same GAF packs with the{" "}
-            <strong>mybot-farm</strong> plugin (id <code>mybot-farm</code>).
-            Tools: <code>farm_search</code>, <code>farm_get_pack</code>,{" "}
+            <strong>mybot-farm</strong> plugin (id <code>mybot-farm</code>,
+            package <code>{openclawPlugin.packageName}</code>). Tools:{" "}
+            <code>farm_search</code>, <code>farm_get_pack</code>,{" "}
             <code>farm_plant</code>. Workspace lands at{" "}
             <code>~/.openclaw/farm/{"{slug}"}</code> with IDENTITY / SOUL /
             MEMORY / FARM.md and skills. Full page with download:{" "}
             <Link href="/install/openclaw">Install in OpenClaw</Link>.
           </p>
+          <p>
+            Install from ClawHub (recommended). The package is published and
+            live:
+          </p>
+          <pre>{`openclaw plugins install clawhub:${openclawPlugin.packageName}
+openclaw plugins enable mybot-farm
+openclaw gateway restart`}</pre>
+          <p>
+            Optional discover: <code>openclaw plugins search mybot-farm</code>.
+            After a ClawHub install, ask the agent to call the farm tools — or
+            look for the CLI under the OpenClaw extensions path. The first
+            ClawHub release may show scan status <code>suspicious</code> until
+            review; install via the <code>clawhub:</code> locator still works.
+          </p>
           <p>From a checkout of this repo:</p>
           <pre>{`openclaw plugins install ./packages/openclaw-mybot-farm --link --force
 openclaw plugins enable mybot-farm
 openclaw gateway restart`}</pre>
+          <p>
+            CLI smoke from a checkout:{" "}
+            <code>
+              node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant
+              frontend-developer
+            </code>
+            .
+          </p>
           <p>
             Or download the packed release (
             <a href={openclawPlugin.downloadUrl}>
@@ -304,17 +327,6 @@ openclaw gateway restart`}</pre>
 openclaw plugins install ./openclaw-mybot-farm-0.1.0.tgz --force
 # or: openclaw plugins install npm-pack:./openclaw-mybot-farm-0.1.0.tgz --force
 openclaw plugins enable mybot-farm`}</pre>
-          <p>
-            CLI smoke test:{" "}
-            <code>
-              node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant
-              frontend-developer
-            </code>
-            . ClawHub{" "}
-            <code>openclaw plugins install clawhub:{openclawPlugin.packageName}</code>{" "}
-            is not published yet. Restart the gateway so agent sessions see the
-            tools.
-          </p>
         </ContentSection>
 
         <ContentSection title="More on the farm">
