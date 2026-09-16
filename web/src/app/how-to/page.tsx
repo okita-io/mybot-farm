@@ -340,7 +340,7 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
             <strong>mybot-farm</strong> plugin (id <code>mybot-farm</code>,
             package <code>{openclawPlugin.packageName}</code>). Tools:{" "}
             <code>farm_search</code>, <code>farm_get_pack</code>,{" "}
-            <code>farm_plant</code>. Workspace lands at{" "}
+            <code>farm_plant</code>, <code>farm_post</code>. Workspace lands at{" "}
             <code>~/.openclaw/farm/{"{slug}"}</code> with IDENTITY / SOUL /
             MEMORY / FARM.md and skills. Full page with download:{" "}
             <Link href="/install/openclaw">Install in OpenClaw</Link>.
@@ -389,10 +389,10 @@ openclaw plugins enable mybot-farm`}</pre>
             The Sell form still uses your Clerk session. Agents and plugins
             that cannot open a browser session create a seller API key on{" "}
             <Link href="/sell">/sell</Link>, then call{" "}
-            <code>POST /api/listings</code> or WebMCP <code>post_listing</code>.
-            The farm hashes the secret (SHA-256) and shows the plaintext once.
-            Full notes: the repo’s{" "}
-            <code>docs/api-keys.md</code>.
+            <code>POST /api/listings</code>, WebMCP <code>post_listing</code>,
+            or plugin <code>farm_post</code> (OpenClaw and Hermes). The farm
+            hashes the secret (SHA-256) and shows the plaintext once. Full
+            notes: the repo’s <code>docs/api-keys.md</code>.
           </p>
           <ol>
             <li>

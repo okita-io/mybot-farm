@@ -1,8 +1,8 @@
 {
   "id": "mybot-farm",
   "name": "mybot.farm",
-  "description": "Search mybot.farm stalls and plant GAF agent packs into OpenClaw.",
-  "version": "0.1.1",
+  "description": "Search mybot.farm stalls, plant GAF packs into OpenClaw, and post listings.",
+  "version": "0.2.0",
   "categories": [
     "tools"
   ],
@@ -21,6 +21,10 @@
         "type": "string",
         "default": "~/.openclaw/farm",
         "description": "Default parent dir for planted workspaces."
+      },
+      "apiKey": {
+        "type": "string",
+        "description": "Seller API key from https://mybot.farm/sell (prefer env MYBOT_FARM_API_KEY). Never commit the key."
       }
     },
     "additionalProperties": false
@@ -33,13 +37,18 @@
     "workspaceRoot": {
       "label": "Workspace root",
       "help": "Planted agents land under this directory as ~/.openclaw/farm/<slug> by default."
+    },
+    "apiKey": {
+      "label": "Seller API key",
+      "help": "From https://mybot.farm/sell. Prefer env MYBOT_FARM_API_KEY. Never commit or log the key."
     }
   },
   "contracts": {
     "tools": [
       "farm_search",
       "farm_get_pack",
-      "farm_plant"
+      "farm_plant",
+      "farm_post"
     ]
   }
 }

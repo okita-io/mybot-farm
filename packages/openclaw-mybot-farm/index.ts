@@ -1,6 +1,6 @@
 /**
  * OpenClaw plugin: mybot-farm
- * Tools: farm_search, farm_get_pack, farm_plant
+ * Tools: farm_search, farm_get_pack, farm_plant, farm_post
  *
  * Uses defineToolPlugin (OpenClaw 2026.9 tool-plugin SDK; wraps definePluginEntry).
  */
@@ -8,6 +8,7 @@
 import { Type } from "typebox";
 import { defineToolPlugin } from "openclaw/plugin-sdk/tool-plugin";
 import {
+  FarmError,
   getPack,
   packSummary,
   resolveFarmConfig,
@@ -15,6 +16,7 @@ import {
   stallSummary,
 } from "./src/farm-api.mjs";
 import { plantPack } from "./src/plant.mjs";
+import { postListing } from "./src/post.mjs";
 
 function textResult(text: string, details: unknown) {
   return {
@@ -26,7 +28,7 @@ function textResult(text: string, details: unknown) {
 export default defineToolPlugin({
   id: "mybot-farm",
   name: "mybot.farm",
-  description: "Search mybot.farm stalls and plant GAF agent packs into OpenClaw.",
+  description: "Search mybot.farm stalls, plant GAF packs into OpenClaw, and post listings.",
   configSchema: Type.Object(
     {
       baseUrl: Type.Optional(
@@ -39,6 +41,12 @@ export default defineToolPlugin({
         Type.String({
           default: "~/.openclaw/farm",
           description: "Default parent dir for planted workspaces.",
+        }),
+      ),
+      apiKey: Type.Optional(
+        Type.String({
+          description:
+            "Seller API key from https://mybot.farm/sell (prefer env MYBOT_FARM_API_KEY). Never commit the key.",
         }),
       ),
     },
@@ -148,6 +156,65 @@ export default defineToolPlugin({
           result.attribution ? `Attribution: ${result.attribution}` : "",
         ].filter(Boolean);
         return textResult(lines.join("\n"), result);
+      },
+    }),
+    tool({
+      name: "farm_post",
+      label: "Farm Post",
+      description:
+        "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. " +
+        "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. " +
+        "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath " +
+        "to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). " +
+        "category is an exact farm label (Lifestyle, Coding, Experimental, …). " +
+        "priceCents is 0 (free) or 200–999900. Paid listings need Stripe Connect on the seller " +
+        "(403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money.",
+      parameters: Type.Object({
+        kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
+        name: Type.String({ description: "Listing name (used to derive the slug)." }),
+        title: Type.String({ description: "Short stall title shown on the farm." }),
+        description: Type.String({ description: "Stall description (non-empty)." }),
+        category: Type.String({
+          description:
+            "Exact farm category label: Lifestyle, Productivity, Coding, Writing, " +
+            "Marketing, Sales, Research, Personal finance, Creative, Music, " +
+            "Education, Ops / admin, Experimental.",
+        }),
+        priceCents: Type.Number({
+          description: "0 for free, or integer cents in [200, 999900] ($2.00–$9,999.00).",
+        }),
+        pack: Type.Optional(
+          Type.Unknown({
+            description:
+              "GAF JSON object (mybot.farm/agent-pack or team-pack). OpenClaw plants GAF; this posts GAF.",
+          }),
+        ),
+        packPath: Type.Optional(
+          Type.String({
+            description: "Path to a .json GAF file. Use pack or packPath, not both.",
+          }),
+        ),
+        apiKey: Type.Optional(
+          Type.String({
+            description:
+              "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin config apiKey. Never log the key.",
+          }),
+        ),
+        dryRun: Type.Optional(
+          Type.Boolean({
+            description: "Validate and show a payload summary without POSTing. Redacts any key.",
+          }),
+        ),
+      }),
+      async execute(params, config) {
+        const result = await postListing({
+          args: params as Record<string, unknown>,
+          pluginConfig: config as Record<string, unknown>,
+        });
+        if (!result.ok) {
+          throw new FarmError(result.error, result.status);
+        }
+        return textResult(result.text, result);
       },
     }),
   ],

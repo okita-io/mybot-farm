@@ -174,13 +174,13 @@ export const howToOpenClawLd = {
   "@type": "HowTo",
   name: "Plant a mybot.farm agent in OpenClaw",
   description:
-    "Install the mybot-farm OpenClaw plugin from ClawHub (recommended), enable it, restart the gateway, then search and plant GAF packs with farm_search, farm_get_pack, and farm_plant.",
+    "Install the mybot-farm OpenClaw plugin from ClawHub (recommended), enable it, restart the gateway, then search, plant, and post GAF packs with farm_search, farm_get_pack, farm_plant, and farm_post.",
   url: `${site.url}/install/openclaw`,
   step: [
     {
       "@type": "HowToStep",
       name: "Install from ClawHub",
-      text: "Run openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm. Optional: openclaw plugins search mybot-farm. Alternatives: from a checkout, openclaw plugins install ./packages/openclaw-mybot-farm --link --force; or download https://mybot.farm/downloads/openclaw-mybot-farm-0.1.1.tgz and install the .tgz (or npm-pack:).",
+      text: "Run openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm. Optional: openclaw plugins search mybot-farm. Alternatives: from a checkout, openclaw plugins install ./packages/openclaw-mybot-farm --link --force; or download https://mybot.farm/downloads/openclaw-mybot-farm-0.2.0.tgz and install the .tgz (or npm-pack:).",
     },
     {
       "@type": "HowToStep",
@@ -190,12 +190,17 @@ export const howToOpenClawLd = {
     {
       "@type": "HowToStep",
       name: "Restart the gateway",
-      text: "Restart the OpenClaw gateway so existing agent sessions see farm_search, farm_get_pack, and farm_plant.",
+      text: "Restart the OpenClaw gateway so existing agent sessions see farm_search, farm_get_pack, farm_plant, and farm_post.",
     },
     {
       "@type": "HowToStep",
       name: "Plant a pack",
       text: "Ask the agent to farm_plant a slug such as frontend-developer. From a checkout you can also run node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant frontend-developer. The copy lands in ~/.openclaw/farm/<slug>.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Post a listing",
+      text: "Set MYBOT_FARM_API_KEY from https://mybot.farm/sell, then ask the agent to farm_post a GAF pack (or run farm-plant post --kind agent --price-cents 0 --pack ./pack.json). Prefer dryRun first. Free listings skip Stripe Connect.",
     },
   ],
 };
@@ -205,7 +210,7 @@ export const howToPostListingLd = {
   "@type": "HowTo",
   name: "Post a mybot.farm listing with a seller API key",
   description:
-    "Create a seller API key on /sell, then publish a GAF listing with POST /api/listings or the WebMCP post_listing tool. Free listings use priceCents 0. Unattended/agent posts send Authorization Bearer mbf_…",
+    "Create a seller API key on /sell, then publish a GAF listing with POST /api/listings, WebMCP post_listing, or the OpenClaw/Hermes farm_post tools. Free listings use priceCents 0. Unattended/agent posts send Authorization Bearer mbf_…",
   url: `${site.url}/how-to#api-keys`,
   step: [
     {
@@ -221,7 +226,7 @@ export const howToPostListingLd = {
     {
       "@type": "HowToStep",
       name: "POST /api/listings or call post_listing",
-      text: "Send Authorization: Bearer mbf_… (or X-Api-Key). Signed-in sellers can omit the key in the browser WebMCP tool. A 201 response includes slug and pagePath.",
+      text: "Send Authorization: Bearer mbf_… (or X-Api-Key). Signed-in sellers can omit the key in the browser WebMCP tool. Plugins use farm_post with MYBOT_FARM_API_KEY. A 201 response includes slug and pagePath.",
     },
   ],
 };
