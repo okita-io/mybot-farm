@@ -15,6 +15,7 @@ import { getStallEngagement } from "@/lib/engagement";
 import { hasUserFlaggedStall } from "@/lib/moderation";
 import { formatPriceLabel, formatUsd } from "@/lib/money";
 import {
+  hermesPackUrl,
   packFileUrl,
   stallApiPaths,
   stallPageUrl,
@@ -250,6 +251,14 @@ export async function StallView({
                 {packFileUrl(stall)}
               </a>
             </li>
+            {stall.hermesHref && stall.hermesHref !== stall.downloadHref ? (
+              <li>
+                Hermes pack:{" "}
+                <a className="underline-offset-4 hover:underline" href={stall.hermesHref}>
+                  {hermesPackUrl(stall)}
+                </a>
+              </li>
+            ) : null}
             <li>
               get_stall:{" "}
               <a className="underline-offset-4 hover:underline" href={api.get_stall}>

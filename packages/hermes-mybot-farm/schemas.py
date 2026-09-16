@@ -4,7 +4,8 @@ FARM_SEARCH = {
     "name": "farm_search",
     "description": (
         "Search mybot.farm stalls by query. Returns slug, kind, name, title, pageUrl, "
-        "packUrl, and member tarball hrefs when present. Use this before planting."
+        "packUrl, hermesHref when a .hermes.tar.gz exists, and member tarball hrefs. "
+        "Use this before planting."
     ),
     "parameters": {
         "type": "object",
@@ -45,8 +46,8 @@ FARM_GET_STALL = {
     "name": "farm_get_stall",
     "description": (
         "Fetch mybot.farm stall metadata by slug (GET /api/stalls/{slug}), including "
-        "member tarball hrefs, packUrl, and api paths. Prefer this to find download URLs "
-        "before farm_plant."
+        "member tarball hrefs, packUrl, hermesHref when a .hermes.tar.gz exists, and api "
+        "paths. Prefer this to find download URLs before farm_plant."
     ),
     "parameters": {
         "type": "object",
@@ -64,7 +65,8 @@ FARM_PLANT = {
     "name": "farm_plant",
     "description": (
         "Download a mybot.farm Hermes pack and import it with hermes profile import. "
-        "Agent packs: one scrubbed .tar.gz. Team packs: each member tarball, team workspace "
+        "Agent packs: one scrubbed .tar.gz (stall.hermesHref, or /packs/agents/<slug>.hermes.tar.gz "
+        "when runtime includes hermes). Team packs: each member tarball, team workspace "
         "(TEAM.md/WORK.md/cron), and kanban board when gettingStarted says so. "
         "Always clears ~/.hermes/profiles/.deleted/<name> tombstones (GAP 2) before import. "
         "Does not delete live profiles unless force is true. Does not wipe team dir/board "

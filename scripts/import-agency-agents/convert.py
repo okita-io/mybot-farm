@@ -846,6 +846,19 @@ def convert_agent(
     return pack, stall
 
 
+def attach_hermes_if_present(pack: dict[str, Any], stall: dict[str, Any], public_dir: Path) -> None:
+    slug = pack.get("slug")
+    if not isinstance(slug, str):
+        return
+    tarball = public_dir / f"{slug}.hermes.tar.gz"
+    if not tarball.is_file():
+        return
+    runtime = pack.setdefault("runtime", [])
+    if isinstance(runtime, list) and "hermes" not in runtime:
+        runtime.append("hermes")
+    stall["hermesHref"] = f"/packs/agents/{slug}.hermes.tar.gz"
+
+
 def iter_agent_files(source: Path, divisions: dict[str, Any], wanted: set[str] | None) -> list[tuple[str, Path]]:
     found: list[tuple[str, Path]] = []
     for division in sorted(divisions):
@@ -1015,6 +1028,7 @@ def convert(args: argparse.Namespace) -> int:
         if slug in packs:
             skipped.append({"path": rel, "reason": f"slug collision with {packs[slug]['manifest']['sourcePath']}"})
             continue
+        attach_hermes_if_present(pack, stall, args.public)
         errors = validate_pack(pack)
         if errors:
             skipped.append({"path": rel, "reason": "; ".join(errors)})

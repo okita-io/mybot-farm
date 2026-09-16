@@ -180,6 +180,37 @@ def is_hermes_archive(path: str | None) -> bool:
     return lower.endswith(".hermes.tar.gz") or lower.endswith(".tar.gz")
 
 
+def _runtime_list(*sources: Any) -> list[str]:
+    values: list[str] = []
+    for source in sources:
+        if isinstance(source, list):
+            values.extend(str(item) for item in source)
+    return values
+
+
+def resolve_agent_archive_href(stall: dict[str, Any], pack: dict[str, Any]) -> str:
+    """Prefer stall.hermesHref, then a .tar.gz downloadHref, then /packs/{kind}/{slug}.hermes.tar.gz."""
+    for key in ("hermesHref", "hermesUrl"):
+        value = stall.get(key)
+        if is_hermes_archive(str(value or "")):
+            return str(value)
+    download_href = str(stall.get("downloadHref") or stall.get("packUrl") or "")
+    if is_hermes_archive(download_href):
+        return download_href
+    nested = stall.get("pack") if isinstance(stall.get("pack"), dict) else {}
+    runtimes = _runtime_list(pack.get("runtime"), nested.get("runtime"))
+    if "hermes" not in {item.lower() for item in runtimes}:
+        return ""
+    slug = str(pack.get("slug") or stall.get("slug") or "")
+    if not slug:
+        return ""
+    kind = stall.get("kind") or (
+        "team" if str(pack.get("format") or "").endswith("team-pack") else "agent"
+    )
+    folder = "teams" if kind == "team" else "agents"
+    return f"/packs/{folder}/{slug}.hermes.tar.gz"
+
+
 def stall_summary(stall: dict[str, Any]) -> dict[str, Any]:
     slug = stall.get("slug") or ""
     nested_pack = stall.get("pack") if isinstance(stall.get("pack"), dict) else {}
@@ -196,6 +227,8 @@ def stall_summary(stall: dict[str, Any]) -> dict[str, Any]:
         "pageUrl": stall.get("pageUrl") or f"{DEFAULT_BASE}/agents/{slug}",
         "packUrl": stall.get("packUrl") or "",
         "downloadHref": stall.get("downloadHref") or "",
+        "hermesHref": stall.get("hermesHref") or "",
+        "hermesUrl": stall.get("hermesUrl") or "",
         "description": stall.get("description") or "",
         "category": stall.get("category") or "",
         "members": stall.get("members") or [],

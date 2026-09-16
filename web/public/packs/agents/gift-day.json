@@ -1,15 +1,27 @@
 {
   "format": "mybot.farm/agent-pack",
   "version": "0.1",
-  "runtime": ["grok-bot"],
+  "runtime": [
+    "grok-bot",
+    "hermes"
+  ],
   "slug": "gift-day",
   "category": "lifestyle",
-  "tags": ["family", "reminders", "gifts", "birthdays"],
+  "tags": [
+    "family",
+    "reminders",
+    "gifts",
+    "birthdays"
+  ],
   "profile": {
     "name": "Gift Day",
     "title": "Family gift & birthday remembrancer",
     "description": "Remembers birthdays and gifting occasions for the people you care about. Nudges you in time to buy or send something — never charges or orders without your yes.",
-    "avatar": { "kind": "geometric", "shape": "teardrop", "color": "magenta" }
+    "avatar": {
+      "kind": "geometric",
+      "shape": "teardrop",
+      "color": "magenta"
+    }
   },
   "memory": [
     {
@@ -47,12 +59,18 @@
     }
   ],
   "plugins": [],
-  "gettingStarted": { "skill": "occasion-book" },
+  "gettingStarted": {
+    "skill": "occasion-book"
+  },
   "manifest": {
     "author": "mybot.farm seeds",
     "license": "MIT",
     "homepage": "https://mybot.farm/agents/gift-day",
-    "tags": ["lifestyle", "family", "reminders"],
+    "tags": [
+      "lifestyle",
+      "family",
+      "reminders"
+    ],
     "scrubbed": true
   }
 }

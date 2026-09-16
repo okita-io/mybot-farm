@@ -160,6 +160,7 @@ def farm_get_stall(args: dict, **kwargs) -> str:
         f"Page: {summary['pageUrl']}",
         f"Pack URL: {summary['packUrl']}",
         f"Download: {summary['downloadHref']}",
+        f"Hermes archive: {summary.get('hermesHref') or summary.get('hermesUrl') or '(none)'}",
         "Members:",
         *member_lines,
     ]

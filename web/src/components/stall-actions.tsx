@@ -5,7 +5,11 @@ import { BuyButton, SignedOutBuyButton } from "@/components/buy-button";
 import { CopyInstallPrompt } from "@/components/copy-install-prompt";
 import { Button } from "@/components/ui/button";
 import { installPrompt, shortInstallPrompt } from "@/lib/install-prompt";
-import { memberHref, packFilename, type Stall } from "@/lib/packs";
+import {
+  memberHref,
+  packFilename,
+  type Stall,
+} from "@/lib/packs";
 
 function tracksViaPackApi(href: string) {
   return href.includes("/api/packs/") && /[?&]download=1(?:&|$)/.test(href);
@@ -97,6 +101,11 @@ export function StallActions({
   const prompt = installPrompt(stall);
   const paid = (stall.priceCents ?? 0) > 0;
   const locked = paid && !canDownload;
+  const hermesHref =
+    stall.hermesHref && stall.hermesHref !== stall.downloadHref
+      ? stall.hermesHref
+      : undefined;
+  const hermesFilename = hermesHref?.split("/").at(-1)?.split("?")[0];
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -136,6 +145,22 @@ export function StallActions({
           </a>
         </Button>
       )}
+      {!locked && hermesHref ? (
+        <Button asChild size="lg" variant="outline" className="h-9 rounded-full px-4">
+          <a
+            href={hermesHref}
+            download={hermesFilename}
+            onClick={() => {
+              void fetch(`/api/stalls/${encodeURIComponent(stall.slug)}/download`, {
+                method: "POST",
+              });
+            }}
+          >
+            <Download data-icon="inline-start" />
+            Download Hermes pack
+          </a>
+        </Button>
+      ) : null}
       <CopyInstallPrompt prompt={prompt} disabled={locked} />
       {showShortCopy ? (
         <CopyInstallPrompt

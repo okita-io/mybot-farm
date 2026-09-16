@@ -27,6 +27,7 @@ from farm_api import (
     get_stall,
     is_hermes_archive,
     pack_summary,
+    resolve_agent_archive_href,
     resolve_base_url,
 )
 from hermes_bin import (
@@ -273,6 +274,7 @@ def build_plant_plan(
     pack_members = _member_plans_from_pack(pack, base_url)
     members = stall_members or pack_members
     download_href = str(stall.get("downloadHref") or stall.get("packUrl") or "")
+    archive_href = resolve_agent_archive_href(stall, pack) or download_href
     is_team = (
         stall.get("kind") == "team"
         or str(pack.get("format") or "").endswith("team-pack")
@@ -299,9 +301,9 @@ def build_plant_plan(
             pack_version=pack_version,
         )
 
-    if is_hermes_archive(download_href):
-        profile_name = name_override or pack_dir_stem(download_href) or slug
-        href = absolute_url(base_url, download_href)
+    if is_hermes_archive(archive_href):
+        profile_name = name_override or pack_dir_stem(archive_href) or slug
+        href = absolute_url(base_url, archive_href)
         return PlantPlan(
             slug=slug,
             kind="agent",
