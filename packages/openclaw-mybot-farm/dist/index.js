@@ -5,6 +5,41 @@ import { defineToolPlugin } from "openclaw/plugin-sdk/tool-plugin";
 // src/farm-api.mjs
 var DEFAULT_BASE = "https://mybot.farm";
 var DEFAULT_WORKSPACE_ROOT = "~/.openclaw/farm";
+var USER_AGENT = "openclaw-mybot-farm/0.2.0";
+var CATEGORY_LABELS = Object.freeze([
+  "Lifestyle",
+  "Productivity",
+  "Coding",
+  "Writing",
+  "Marketing",
+  "Sales",
+  "Research",
+  "Personal finance",
+  "Creative",
+  "Music",
+  "Education",
+  "Ops / admin",
+  "Experimental"
+]);
+var CATEGORY_SET = new Set(CATEGORY_LABELS);
+var LISTING_KINDS = Object.freeze(["agent", "team"]);
+var LISTING_KIND_SET = new Set(LISTING_KINDS);
+var MIN_PAID_PRICE_CENTS = 200;
+var MAX_PRICE_CENTS = 999900;
+var MAX_PACK_CHARS = 5e5;
+var PRICE_HINT = "Choose Free, or a price between $2.00 and $9,999.00.";
+var FarmError = class extends Error {
+  /**
+   * HTTP or pack-shape error from mybot.farm.
+   * @param {string} message
+   * @param {number | undefined} [status]
+   */
+  constructor(message, status) {
+    super(message);
+    this.name = "FarmError";
+    this.status = status;
+  }
+};
 function resolveFarmConfig(pluginConfig) {
   const envUrl = typeof process.env.MYBOT_FARM_URL === "string" ? process.env.MYBOT_FARM_URL.trim() : "";
   const cfg = pluginConfig ?? {};
@@ -12,16 +47,69 @@ function resolveFarmConfig(pluginConfig) {
   const workspaceRoot = typeof cfg.workspaceRoot === "string" && cfg.workspaceRoot.trim() || DEFAULT_WORKSPACE_ROOT;
   return { baseUrl, workspaceRoot };
 }
-async function farmFetch(baseUrl, path2) {
-  const url = `${baseUrl}${path2.startsWith("/") ? path2 : `/${path2}`}`;
-  const res = await fetch(url, {
-    headers: { Accept: "application/json" }
-  });
+function resolveApiKey(pluginConfig, override) {
+  if (typeof override === "string" && override.trim()) {
+    return override.trim();
+  }
+  const env = typeof process.env.MYBOT_FARM_API_KEY === "string" ? process.env.MYBOT_FARM_API_KEY.trim() : "";
+  if (env) return env;
+  const cfg = pluginConfig ?? {};
+  const fromCfg = cfg.apiKey ?? cfg.api_key;
+  return typeof fromCfg === "string" ? fromCfg.trim() : "";
+}
+function shortErrorBody(raw) {
+  const text = (raw || "").trim();
+  if (!text) return "";
+  try {
+    const data = JSON.parse(text);
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
+      return text.slice(0, 200);
+    }
+    const parts = [];
+    for (const key of ["error", "message"]) {
+      const value = data[key];
+      if (typeof value === "string" && value.trim()) parts.push(value.trim());
+    }
+    return parts.length ? parts.join(": ").slice(0, 200) : text.slice(0, 200);
+  } catch {
+    return text.slice(0, 200);
+  }
+}
+async function farmRequest(url, { accept = "application/json", data, headers, method } = {}) {
+  const reqHeaders = {
+    Accept: accept,
+    "User-Agent": USER_AGENT,
+    ...headers ?? {}
+  };
+  let res;
+  try {
+    res = await fetch(url, {
+      method: method ?? (data != null ? "POST" : "GET"),
+      headers: reqHeaders,
+      body: data
+    });
+  } catch (err) {
+    const reason = err instanceof Error ? err.message : String(err);
+    throw new FarmError(`mybot.farm unreachable for ${url}: ${reason}`);
+  }
   if (!res.ok) {
     const body = await res.text().catch(() => "");
-    throw new Error(`mybot.farm ${res.status} for ${url}${body ? `: ${body.slice(0, 240)}` : ""}`);
+    const short = shortErrorBody(body);
+    throw new FarmError(
+      `mybot.farm ${res.status} for ${url}${short ? `: ${short}` : ""}`,
+      res.status
+    );
   }
-  return await res.json();
+  return Buffer.from(await res.arrayBuffer());
+}
+async function farmFetch(baseUrl, path3) {
+  const url = `${baseUrl}${path3.startsWith("/") ? path3 : `/${path3}`}`;
+  const raw = await farmRequest(url);
+  try {
+    return JSON.parse(raw.toString("utf8"));
+  } catch (err) {
+    throw new FarmError(`non-JSON from ${url}: ${err instanceof Error ? err.message : String(err)}`);
+  }
 }
 async function searchStalls(baseUrl, query, limit) {
   const q = encodeURIComponent(query);
@@ -38,9 +126,9 @@ async function searchStalls(baseUrl, query, limit) {
 }
 async function getPack(baseUrl, slug) {
   const clean = slug.trim().replace(/^\/+|\/+$/g, "");
-  if (!clean) throw new Error("slug required");
+  if (!clean) throw new FarmError("slug required");
   const pack = await farmFetch(baseUrl, `/api/packs/${encodeURIComponent(clean)}`);
-  if (!pack || typeof pack !== "object") throw new Error(`empty pack for ${clean}`);
+  if (!pack || typeof pack !== "object") throw new FarmError(`empty pack for ${clean}`);
   if (!pack.slug) pack.slug = clean;
   return pack;
 }
@@ -72,6 +160,126 @@ function packSummary(pack) {
     license: manifest.license ?? "",
     homepage: manifest.homepage ?? `https://mybot.farm/agents/${pack.slug}`
   };
+}
+function parsePriceCents(value) {
+  if (typeof value === "boolean") return null;
+  if (typeof value === "string") {
+    const text = value.trim();
+    if (!text) return null;
+    const parsed = text.includes(".") ? Number(text) : Number.parseInt(text, 10);
+    if (!Number.isFinite(parsed)) return null;
+    value = parsed;
+  }
+  if (typeof value !== "number" || !Number.isFinite(value)) return null;
+  const cents = Math.round(value);
+  if (cents === 0) return 0;
+  if (cents < MIN_PAID_PRICE_CENTS || cents > MAX_PRICE_CENTS) return null;
+  return cents;
+}
+function parseListingKind(value) {
+  if (typeof value === "string" && LISTING_KIND_SET.has(value.trim())) {
+    return value.trim();
+  }
+  return null;
+}
+function parsePackObject(value) {
+  if (typeof value === "string") {
+    try {
+      value = JSON.parse(value);
+    } catch {
+      throw new FarmError("Pack JSON must be an object.");
+    }
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new FarmError("Pack JSON must be an object.");
+  }
+  const encoded = JSON.stringify(value);
+  if (encoded.length > MAX_PACK_CHARS) {
+    throw new FarmError("Pack JSON is too large (max 500 KB).");
+  }
+  return value;
+}
+function buildListingPayload({ kind, name, title, description, category, priceCents, pack }) {
+  const parsedKind = parseListingKind(kind);
+  if (!parsedKind) {
+    throw new FarmError('kind must be "agent" or "team"');
+  }
+  const parsedName = typeof name === "string" ? name.trim() : "";
+  const parsedTitle = typeof title === "string" ? title.trim() : "";
+  const parsedDescription = typeof description === "string" ? description.trim() : "";
+  if (!parsedName || !parsedTitle || !parsedDescription) {
+    throw new FarmError("name, title, and description are required");
+  }
+  const parsedCategory = typeof category === "string" ? category.trim() : "";
+  if (!CATEGORY_SET.has(parsedCategory)) {
+    const labels = [...CATEGORY_LABELS].sort().join(", ");
+    throw new FarmError(`category must be an exact farm label (${labels})`);
+  }
+  const parsedPrice = parsePriceCents(priceCents);
+  if (parsedPrice === null) {
+    throw new FarmError(PRICE_HINT);
+  }
+  const parsedPack = parsePackObject(pack);
+  return {
+    kind: parsedKind,
+    name: parsedName,
+    title: parsedTitle,
+    description: parsedDescription,
+    category: parsedCategory,
+    priceCents: parsedPrice,
+    pack: parsedPack
+  };
+}
+function listingPayloadSummary(payload) {
+  const pack = payload.pack && typeof payload.pack === "object" ? payload.pack : {};
+  const skills = Array.isArray(pack.skills) ? pack.skills : [];
+  const encoded = JSON.stringify(pack);
+  return {
+    kind: payload.kind,
+    name: payload.name,
+    title: payload.title,
+    category: payload.category,
+    priceCents: payload.priceCents,
+    pack: {
+      format: pack.format,
+      version: pack.version,
+      runtime: pack.runtime || [],
+      skillCount: skills.length,
+      encodedChars: encoded.length
+    }
+  };
+}
+function listingPageUrl(baseUrl, pagePath) {
+  const path3 = pagePath.startsWith("/") ? pagePath : `/${pagePath}`;
+  return `${baseUrl.replace(/\/+$/, "")}${path3}`;
+}
+async function createListing(baseUrl, payload, apiKey) {
+  const key = typeof apiKey === "string" ? apiKey.trim() : "";
+  if (!key) {
+    throw new FarmError(
+      "seller API key required (env MYBOT_FARM_API_KEY or plugin config apiKey)"
+    );
+  }
+  const url = `${baseUrl.replace(/\/+$/, "")}/api/listings`;
+  const body = JSON.stringify(payload);
+  const raw = await farmRequest(url, {
+    data: body,
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${key}`
+    }
+  });
+  let data;
+  try {
+    data = JSON.parse(raw.toString("utf8"));
+  } catch (err) {
+    throw new FarmError(`non-JSON from ${url}: ${err instanceof Error ? err.message : String(err)}`);
+  }
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new FarmError(`empty listing response from ${url}`);
+  }
+  return data;
 }
 
 // src/plant.mjs
@@ -292,6 +500,132 @@ async function plantPack(opts) {
   };
 }
 
+// src/post.mjs
+import fs2 from "node:fs/promises";
+import path2 from "node:path";
+import os2 from "node:os";
+function expandHome2(p) {
+  if (!p) return p;
+  if (p === "~") return os2.homedir();
+  if (p.startsWith("~/")) return path2.join(os2.homedir(), p.slice(2));
+  return p;
+}
+function truthy(value) {
+  if (typeof value === "string") {
+    return ["1", "true", "yes", "on"].includes(value.trim().toLowerCase());
+  }
+  return Boolean(value);
+}
+async function loadPack(args) {
+  const pack = args.pack;
+  const pathArg = args.packPath ?? args.pack_path;
+  const hasPack = pack != null && pack !== "";
+  const hasPath = typeof pathArg === "string" && pathArg.trim();
+  if (hasPack && hasPath) {
+    throw new FarmError("provide pack or packPath, not both");
+  }
+  if (hasPath) {
+    const filePath = expandHome2(path2.resolve(String(pathArg).trim()));
+    let raw;
+    try {
+      raw = await fs2.readFile(filePath, "utf8");
+    } catch (err) {
+      if (err && typeof err === "object" && "code" in err && err.code === "ENOENT") {
+        throw new FarmError(`pack file not found: ${filePath}`);
+      }
+      throw new FarmError(`cannot read pack file: ${err instanceof Error ? err.message : String(err)}`);
+    }
+    try {
+      return JSON.parse(raw);
+    } catch (err) {
+      throw new FarmError(`pack file is not JSON: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
+  if (hasPack) return pack;
+  throw new FarmError("pack (GAF JSON object) or packPath (path to a .json GAF file) required");
+}
+function errPayload(message, extra = {}) {
+  return { ok: false, error: message, ...extra };
+}
+async function postListing({ args, pluginConfig } = { args: {} }) {
+  const cfg = pluginConfig && typeof pluginConfig === "object" ? pluginConfig : {};
+  const dryRun = truthy("dryRun" in args ? args.dryRun : args.dry_run);
+  const override = args.apiKey != null ? args.apiKey : args.api_key;
+  const overrideS = typeof override === "string" ? override.trim() : void 0;
+  const apiKey = resolveApiKey(cfg, overrideS);
+  let payload;
+  try {
+    const pack = await loadPack(args);
+    payload = buildListingPayload({
+      kind: args.kind,
+      name: args.name,
+      title: args.title,
+      description: args.description,
+      category: args.category,
+      priceCents: "priceCents" in args ? args.priceCents : args.price_cents,
+      pack
+    });
+  } catch (err) {
+    if (err instanceof FarmError) return errPayload(err.message, err.status != null ? { status: err.status } : {});
+    throw err;
+  }
+  const summary = listingPayloadSummary(payload);
+  const { baseUrl } = resolveFarmConfig(cfg);
+  if (dryRun) {
+    const keyNote = apiKey ? "configured (redacted)" : "missing (POST would fail)";
+    const lines2 = [
+      "Dry-run: listing payload is valid (not posted)",
+      `kind: ${payload.kind}`,
+      `name: ${payload.name}`,
+      `title: ${payload.title}`,
+      `category: ${payload.category}`,
+      `priceCents: ${payload.priceCents}`,
+      `pack format: ${summary.pack?.format || "(none)"}`,
+      `pack skills: ${summary.pack?.skillCount}`,
+      `pack encoded chars: ${summary.pack?.encodedChars}`,
+      `POST ${baseUrl}/api/listings`,
+      `apiKey: ${keyNote}`
+    ];
+    return {
+      ok: true,
+      dryRun: true,
+      text: lines2.join("\n"),
+      payload: summary,
+      endpoint: `${baseUrl}/api/listings`,
+      apiKey: keyNote
+    };
+  }
+  if (!apiKey) {
+    return errPayload(
+      "seller API key required (set MYBOT_FARM_API_KEY, plugin config apiKey, or pass apiKey). Create a key at https://mybot.farm/sell \u2014 see docs/api-keys.md"
+    );
+  }
+  let result;
+  try {
+    result = await createListing(baseUrl, payload, apiKey);
+  } catch (err) {
+    if (err instanceof FarmError) {
+      return errPayload(err.message, err.status != null ? { status: err.status } : {});
+    }
+    throw err;
+  }
+  const slug = String(result.slug || "").trim();
+  const kind = String(result.kind || payload.kind);
+  const pagePath = String(result.pagePath || "");
+  const pageUrl = pagePath ? listingPageUrl(baseUrl, pagePath) : `${baseUrl}/${kind}s/${slug}`;
+  const lines = [`Posted ${kind} \`${slug}\``, pageUrl];
+  if (result.hasReadme) lines.push("README extracted from pack.");
+  return {
+    ok: true,
+    text: lines.join("\n"),
+    slug,
+    kind,
+    pagePath,
+    pageUrl,
+    hasReadme: Boolean(result.hasReadme)
+  };
+}
+
 // index.ts
 function textResult(text, details) {
   return {
@@ -302,7 +636,7 @@ function textResult(text, details) {
 var index_default = defineToolPlugin({
   id: "mybot-farm",
   name: "mybot.farm",
-  description: "Search mybot.farm stalls and plant GAF agent packs into OpenClaw.",
+  description: "Search mybot.farm stalls, plant GAF packs into OpenClaw, and post listings.",
   configSchema: Type.Object(
     {
       baseUrl: Type.Optional(
@@ -315,6 +649,11 @@ var index_default = defineToolPlugin({
         Type.String({
           default: "~/.openclaw/farm",
           description: "Default parent dir for planted workspaces."
+        })
+      ),
+      apiKey: Type.Optional(
+        Type.String({
+          description: "Seller API key from https://mybot.farm/sell (prefer env MYBOT_FARM_API_KEY). Never commit the key."
         })
       )
     },
@@ -421,6 +760,53 @@ var index_default = defineToolPlugin({
           result.attribution ? `Attribution: ${result.attribution}` : ""
         ].filter(Boolean);
         return textResult(lines.join("\n"), result);
+      }
+    }),
+    tool({
+      name: "farm_post",
+      label: "Farm Post",
+      description: "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). category is an exact farm label (Lifestyle, Coding, Experimental, \u2026). priceCents is 0 (free) or 200\u2013999900. Paid listings need Stripe Connect on the seller (403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money.",
+      parameters: Type.Object({
+        kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
+        name: Type.String({ description: "Listing name (used to derive the slug)." }),
+        title: Type.String({ description: "Short stall title shown on the farm." }),
+        description: Type.String({ description: "Stall description (non-empty)." }),
+        category: Type.String({
+          description: "Exact farm category label: Lifestyle, Productivity, Coding, Writing, Marketing, Sales, Research, Personal finance, Creative, Music, Education, Ops / admin, Experimental."
+        }),
+        priceCents: Type.Number({
+          description: "0 for free, or integer cents in [200, 999900] ($2.00\u2013$9,999.00)."
+        }),
+        pack: Type.Optional(
+          Type.Unknown({
+            description: "GAF JSON object (mybot.farm/agent-pack or team-pack). OpenClaw plants GAF; this posts GAF."
+          })
+        ),
+        packPath: Type.Optional(
+          Type.String({
+            description: "Path to a .json GAF file. Use pack or packPath, not both."
+          })
+        ),
+        apiKey: Type.Optional(
+          Type.String({
+            description: "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin config apiKey. Never log the key."
+          })
+        ),
+        dryRun: Type.Optional(
+          Type.Boolean({
+            description: "Validate and show a payload summary without POSTing. Redacts any key."
+          })
+        )
+      }),
+      async execute(params, config) {
+        const result = await postListing({
+          args: params,
+          pluginConfig: config
+        });
+        if (!result.ok) {
+          throw new FarmError(result.error, result.status);
+        }
+        return textResult(result.text, result);
       }
     })
   ]

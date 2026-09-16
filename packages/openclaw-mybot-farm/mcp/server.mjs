@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Optional MCP stdio bridge exposing farm_search / farm_get_pack / farm_plant.
+ * Optional MCP stdio bridge exposing farm_search / farm_get_pack / farm_plant / farm_post.
  * Requires: npm i @modelcontextprotocol/sdk
  * Native OpenClaw tools remain the primary integration path.
  */
@@ -28,10 +28,11 @@ async function main() {
 
   const api = await import(pathToFileURL(path.join(root, "src/farm-api.mjs")).href);
   const { plantPack } = await import(pathToFileURL(path.join(root, "src/plant.mjs")).href);
+  const { postListing } = await import(pathToFileURL(path.join(root, "src/post.mjs")).href);
   const farm = api.resolveFarmConfig({});
 
   const server = new Server(
-    { name: "mybot-farm", version: "0.1.1" },
+    { name: "mybot-farm", version: "0.2.0" },
     { capabilities: { tools: {} } },
   );
 
@@ -71,6 +72,27 @@ async function main() {
         required: ["slug"],
       },
     },
+    {
+      name: "farm_post",
+      description:
+        "Publish a GAF listing to mybot.farm (POST /api/listings) with a seller API key.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          kind: { type: "string" },
+          name: { type: "string" },
+          title: { type: "string" },
+          description: { type: "string" },
+          category: { type: "string" },
+          priceCents: { type: "number" },
+          pack: { type: "object" },
+          packPath: { type: "string" },
+          apiKey: { type: "string" },
+          dryRun: { type: "boolean" },
+        },
+        required: ["kind", "name", "title", "description", "category", "priceCents"],
+      },
+    },
   ];
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools }));
@@ -96,6 +118,10 @@ async function main() {
         force: Boolean(args.force),
         config: farm,
       });
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    }
+    if (name === "farm_post") {
+      const result = await postListing({ args, pluginConfig: farm });
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
     }
     throw new Error(`Unknown tool: ${name}`);

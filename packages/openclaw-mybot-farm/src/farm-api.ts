@@ -1,10 +1,27 @@
 export {
+  FarmError,
+  USER_AGENT,
+  DEFAULT_BASE_URL,
+  CATEGORY_LABELS,
+  LISTING_KINDS,
+  MIN_PAID_PRICE_CENTS,
+  MAX_PRICE_CENTS,
+  MAX_PACK_CHARS,
+  PRICE_HINT,
   resolveFarmConfig,
+  resolveApiKey,
   searchStalls,
   getPack,
   getInstallPrompt,
   stallSummary,
   packSummary,
+  parsePriceCents,
+  parseListingKind,
+  parsePackObject,
+  buildListingPayload,
+  listingPayloadSummary,
+  listingPageUrl,
+  createListing,
 } from "./farm-api.mjs";
 
 export type {
@@ -15,4 +32,7 @@ export type {
   FarmPackManifest,
   FarmPack,
   FarmConfig,
+  ListingKind,
+  ListingPayload,
+  ListingPayloadSummary,
 } from "./farm-api-types.ts";

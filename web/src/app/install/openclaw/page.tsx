@@ -10,12 +10,12 @@ import { openclawPlugin, site, siteOgImage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Install in OpenClaw",
   description:
-    "Plant mybot.farm agents into OpenClaw with the mybot-farm plugin. Install from ClawHub (recommended), a repo checkout, or the packed tarball, then farm_search / farm_get_pack / farm_plant.",
+    "Plant mybot.farm agents into OpenClaw with the mybot-farm plugin. Install from ClawHub (recommended), a repo checkout, or the packed tarball, then farm_search / farm_get_pack / farm_plant / farm_post.",
   alternates: { canonical: "/install/openclaw" },
   openGraph: {
     title: `Install in OpenClaw | ${site.name}`,
     description:
-      "Install the mybot-farm plugin from ClawHub, then search and plant GAF packs into ~/.openclaw/farm/<slug>.",
+      "Install the mybot-farm plugin from ClawHub, then search, plant, and post GAF packs. Planted copies land in ~/.openclaw/farm/<slug>.",
     url: "/install/openclaw",
     images: [siteOgImage],
   },
@@ -28,7 +28,7 @@ export default function OpenClawInstallPage() {
       <ContentPage
         kicker="OpenClaw"
         title="Plant a farm agent into OpenClaw"
-        lead="Install the mybot-farm plugin, restart the gateway, then search and plant GAF packs. You get a copy under ~/.openclaw/farm/<slug> — not the author’s computer, logins, or chat history."
+        lead="Install the mybot-farm plugin, restart the gateway, then search, plant, and post GAF packs. You get a copy under ~/.openclaw/farm/<slug> — not the author’s computer, logins, or chat history."
       >
         <div className="flex flex-wrap gap-2">
           <Button asChild size="lg" className="h-9 rounded-full px-4">
@@ -48,8 +48,8 @@ export default function OpenClawInstallPage() {
         <ContentSection id="what" title="What you get">
           <p>
             Native OpenClaw tools (plugin id <code>{openclawPlugin.id}</code>,
-            package <code>{openclawPlugin.packageName}</code>), proven on
-            OpenClaw 2026.9.4:
+            package <code>{openclawPlugin.packageName}</code>{" "}
+            {openclawPlugin.version}), proven on OpenClaw 2026.9.4:
           </p>
           <ul>
             <li>
@@ -63,6 +63,10 @@ export default function OpenClawInstallPage() {
             <li>
               <code>farm_plant</code> — write IDENTITY / SOUL / MEMORY / FARM.md
               plus skills into <code>~/.openclaw/farm/{"{slug}"}</code>
+            </li>
+            <li>
+              <code>farm_post</code> — publish a GAF listing with a seller API
+              key (<code>POST /api/listings</code>)
             </li>
           </ul>
           <p>
@@ -140,16 +144,18 @@ openclaw plugins enable mybot-farm`}</pre>
         <ContentSection id="plant" title="Plant an agent">
           <p>
             After any install, ask your OpenClaw agent to call{" "}
-            <code>farm_search</code>, <code>farm_get_pack</code>, or{" "}
-            <code>farm_plant</code> with a slug such as{" "}
-            <code>frontend-developer</code>. Optional plant params:{" "}
+            <code>farm_search</code>, <code>farm_get_pack</code>,{" "}
+            <code>farm_plant</code>, or <code>farm_post</code>. Plant with a
+            slug such as <code>frontend-developer</code>. Optional plant params:{" "}
             <code>agentId</code>, <code>workspace</code>, <code>force</code>.
             ClawHub installs may place the CLI under the OpenClaw extensions
             path.
           </p>
           <p>From a checkout, CLI with no agent loop:</p>
           <pre>{`node packages/openclaw-mybot-farm/bin/farm-plant.mjs search frontend
-node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant frontend-developer`}</pre>
+node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant frontend-developer
+export MYBOT_FARM_API_KEY=mbf_YOUR_KEY
+node packages/openclaw-mybot-farm/bin/farm-plant.mjs post --kind agent --name "Smoke Bot" --title "…" --description "…" --category Experimental --price-cents 0 --pack ./smoke.gaf.json --dry-run`}</pre>
         </ContentSection>
 
         <ContentSection id="clawhub" title="ClawHub">
