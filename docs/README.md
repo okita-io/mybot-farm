@@ -8,6 +8,7 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | [teams.md](./teams.md) | **Teams**: multi-agent packs that work together (e.g. programmer + debugger) |
 | [categories.md](./categories.md) | Browse taxonomy (lifestyle, coding, marketing, …) |
 | [ultimate-aeo-seo-geo.md](./ultimate-aeo-seo-geo.md) | SEO / AEO / GEO doctrine for the site |
+| [gaf-grok-template.md](./gaf-grok-template.md) | GAF ↔ Grok Bot template mapping, avatar fallbacks, `gafToGrokTemplate`, stallId/packVersion catalog metadata |
 | [plant-from-share.md](./plant-from-share.md) | Share URL → preview → plant into buyer library (API + `/plant` sketch) |
 | [agency-agents.md](./agency-agents.md) | Agency Agents MIT roster → farm packs (split, attribution, refresh) |
 | [openclaw-plugin.md](./openclaw-plugin.md) | OpenClaw `mybot-farm` plugin — plant plus `farm_post` (GAF listings, seller API key) |

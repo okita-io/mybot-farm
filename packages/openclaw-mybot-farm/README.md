@@ -10,7 +10,7 @@ Registers agent tools:
 |------|---------|
 | `farm_search` | `GET /api/stalls?q=` — list matching stalls (slug, name, title, URLs) |
 | `farm_get_pack` | `GET /api/packs/{slug}` — pack profile, skill names, attribution |
-| `farm_plant` | Fetch pack → `openclaw agents add` → write `IDENTITY.md` / `SOUL.md` / `MEMORY.md` / `FARM.md` / `skills/*/SKILL.md` |
+| `farm_plant` | Fetch pack → `openclaw agents add` → write `IDENTITY.md` / `SOUL.md` / `MEMORY.md` / `FARM.md` / `ROUTINES.md` (when present) / `skills/*/SKILL.md` |
 | `farm_post` | `POST /api/listings` — publish or update a GAF stall (seller API key). Same slug owned by you bumps `packVersion`. |
 | `farm_update` | Same as `farm_post` with required `slug` — in-place GAF update (skills, soul/memory). |
 

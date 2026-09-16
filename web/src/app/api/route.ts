@@ -12,6 +12,7 @@ export function GET() {
       download_pack: "/api/packs/{slug}",
       list_pack_skills: "/api/packs/{slug}/skills",
       get_install_prompt: "/api/install-prompt/{slug}",
+      get_grok_template: "/api/packs/{slug}/grok-template",
       post_listing: "/api/listings",
       resolve_share: "/api/resolve-share",
     },

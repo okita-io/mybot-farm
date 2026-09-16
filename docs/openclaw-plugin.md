@@ -8,7 +8,7 @@ Proven on OpenClaw **2026.9.4**. It calls live `https://mybot.farm/api/stalls` a
 
 - Plugin id: `mybot-farm` (v0.2.0)
 - Tools: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`, `farm_update`
-- Workspace files: `IDENTITY.md`, `SOUL.md`, `MEMORY.md`, `FARM.md`, `skills/*/SKILL.md`
+- Workspace files: `IDENTITY.md`, `SOUL.md`, `MEMORY.md`, `FARM.md`, `ROUTINES.md` (when `routines[]` is present), `skills/*/SKILL.md`
 - Does not email, spend money, invent pack fields, or delete existing agents
 - Restart the OpenClaw gateway after install so agent sessions see the tools
 - ClawHub is **live**: `openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm`
