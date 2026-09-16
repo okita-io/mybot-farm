@@ -5,6 +5,8 @@
   python3 bin/farm-plant get scholastic-research
   python3 bin/farm-plant plant scholastic-research --dry-run
   python3 bin/farm-plant reinstall workbench --force --clean
+  python3 bin/farm-plant post --kind agent --name "Smoke Bot" --title "…" \
+      --description "…" --category Experimental --price-cents 0 --pack pack.json --dry-run
   python3 bin/farm-plant clear-tombstones workbench-spec workbench-scaffold
 """
 

@@ -146,3 +146,4 @@ Optional plant params: `agentId`, `workspace`, `force`. Existing agents are neve
 - Full package copy: [`packages/openclaw-mybot-farm/INSTALL.md`](../packages/openclaw-mybot-farm/INSTALL.md).
 - Existing agents (scout / finders / pitch) are never deleted.
 - Pack content keeps upstream attribution from each GAF manifest.
+- **OpenClaw `farm_post`:** not implemented. Sellers post listings from the Sell form, WebMCP `post_listing`, or the Hermes plugin `farm_post` ([hermes-plugin.md](./hermes-plugin.md), [api-keys.md](./api-keys.md)). An OpenClaw write tool is a follow-up.
