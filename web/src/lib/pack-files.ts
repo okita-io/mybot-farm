@@ -30,6 +30,42 @@ export type PackProfile = {
   name?: string;
   title?: string;
   description?: string;
+  avatar?: {
+    kind?: string;
+    shape?: string;
+    color?: string;
+  };
+};
+
+export type PackPlugin = {
+  pluginId: string;
+  name?: string;
+  description?: string;
+};
+
+export type PackRoutine = {
+  slug: string;
+  name?: string;
+  description?: string;
+  content?: string;
+};
+
+export type PackGettingStarted = {
+  skill: string;
+};
+
+export type GrokBotTemplateExport = {
+  enabled?: boolean;
+  avatarFallbacks?: {
+    shape?: Record<string, string>;
+    color?: Record<string, string>;
+  };
+  profileDescriptionOverride?: string;
+};
+
+export type PackExports = {
+  grokBotTemplate?: GrokBotTemplateExport;
+  [key: string]: unknown;
 };
 
 export type PackMemberRef = {
@@ -50,6 +86,14 @@ export type FarmPack = {
   profile?: PackProfile;
   skills?: PackSkill[];
   memory?: PackMemory[];
+  routines?: PackRoutine[];
+  /** Marketplace plugin ids only — same shape as create_bot_share_json. */
+  plugins?: PackPlugin[];
+  gettingStarted?: PackGettingStarted;
+  /** Template export visibility. Marketplace listings are public; default export is "public". */
+  visibility?: "public" | "team";
+  /** Optional projection hints. Unknown sibling keys are allowed. */
+  exports?: PackExports;
   members?: PackMemberRef[];
   team?: unknown;
   shared?: {
@@ -57,6 +101,8 @@ export type FarmPack = {
     gettingStarted?: string;
   };
   topology?: unknown;
+  support?: Record<string, unknown>;
+  commerce?: Record<string, unknown>;
   manifest?: {
     homepage?: string;
     scrubbed?: boolean;

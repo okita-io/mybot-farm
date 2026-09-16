@@ -1,5 +1,7 @@
 export type FarmStall = {
   slug: string;
+  stallId?: string;
+  packVersion?: number;
   name?: string;
   title?: string;
   description?: string;
@@ -27,7 +29,28 @@ export type FarmPackProfile = {
   name?: string;
   title?: string;
   description?: string;
-  avatar?: unknown;
+  avatar?: {
+    kind?: string;
+    shape?: string;
+    color?: string;
+  };
+};
+
+export type FarmPackRoutine = {
+  slug: string;
+  name?: string;
+  description?: string;
+  content?: string;
+};
+
+export type FarmPackPlugin = {
+  pluginId: string;
+  name?: string;
+  description?: string;
+};
+
+export type FarmPackGettingStarted = {
+  skill: string;
 };
 
 export type FarmPackManifest = {
@@ -45,6 +68,8 @@ export type FarmPackManifest = {
 export type FarmPack = {
   format?: string;
   version?: string;
+  /** Content revision for same-slug listing updates. Distinct from GAF format `version`. */
+  packVersion?: number;
   runtime?: string[];
   slug: string;
   category?: string;
@@ -52,6 +77,10 @@ export type FarmPack = {
   profile?: FarmPackProfile;
   memory?: FarmPackMemory[];
   skills?: FarmPackSkill[];
+  routines?: FarmPackRoutine[];
+  plugins?: FarmPackPlugin[];
+  gettingStarted?: FarmPackGettingStarted;
+  visibility?: "public" | "team";
   manifest?: FarmPackManifest;
   [key: string]: unknown;
 };

@@ -44,7 +44,7 @@ v1 accepts **mybot.farm URLs only** (plus localhost / the current request host s
 |-------|---------|--------|
 | Bot page (**preferred share URL**) | `https://mybot.farm/agents/gift-day` · `https://mybot.farm/teams/pair-bench` | Same URLs the install prompt already cites |
 | Pack file | `https://mybot.farm/packs/agents/gift-day.json` · `/packs/teams/pair-bench.json` | Public GAF; same bytes as `/api/packs/{slug}` |
-| Read API | `/api/stalls/{slug}` · `/api/packs/{slug}` · `/api/packs/{slug}/skills` · `/api/install-prompt/{slug}` | CORS-open today; resolve maps them back to the bot |
+| Read API | `/api/stalls/{slug}` · `/api/packs/{slug}` · `/api/packs/{slug}/skills` · `/api/packs/{slug}/grok-template` · `/api/install-prompt/{slug}` | CORS-open today; resolve maps them back to the bot |
 | Plant deep link | `https://mybot.farm/plant?url={urlencoded}` | Unwrap **once**; then resolve the inner URL |
 | Slug convenience | `gift-day` or `/plant?slug=gift-day` | Handy for the form; not a share contract |
 

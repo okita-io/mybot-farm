@@ -145,6 +145,32 @@ function buildIdentity(pack, installedAt) {
   return lines.join("\n");
 }
 
+function buildRoutinesMd(pack) {
+  const routines = Array.isArray(pack.routines) ? pack.routines : [];
+  if (routines.length === 0) {
+    return null;
+  }
+
+  const lines = [
+    "# ROUTINES.md",
+    "",
+    "Intention prose from the mybot.farm pack. Not live cron and not automation.json.",
+    "",
+  ];
+  for (const routine of routines) {
+    const name = routine.name ?? routine.slug ?? "routine";
+    lines.push(`## ${name}`);
+    if (routine.slug) {
+      lines.push(`- **Slug:** ${routine.slug}`);
+    }
+    if (routine.description) {
+      lines.push(`- **Description:** ${routine.description}`);
+    }
+    lines.push("", (routine.content ?? "").trim(), "");
+  }
+  return lines.join("\n");
+}
+
 function buildFarmMd(pack, installedAt) {
   const m = pack.manifest ?? {};
   const lines = [
@@ -167,6 +193,35 @@ function buildFarmMd(pack, installedAt) {
   if (m.attribution) {
     lines.push("", "## Attribution", "", m.attribution);
   }
+
+  const plugins = Array.isArray(pack.plugins) ? pack.plugins : [];
+  if (plugins.length) {
+    lines.push(
+      "",
+      "## Marketplace plugins",
+      "",
+      "Install these from the host marketplace. Do not add custom MCP URLs.",
+      "",
+    );
+    for (const plugin of plugins) {
+      const id = typeof plugin?.pluginId === "string" ? plugin.pluginId.trim() : "";
+      if (!id) continue;
+      const label = plugin.name ? ` — ${plugin.name}` : "";
+      lines.push(`- \`${id}\`${label}`);
+    }
+  }
+
+  const firstSkill =
+    typeof pack.gettingStarted?.skill === "string" ? pack.gettingStarted.skill.trim() : "";
+  if (firstSkill) {
+    lines.push(
+      "",
+      "## Getting started",
+      "",
+      `First-run skill from the pack: \`${firstSkill}\`.`,
+    );
+  }
+
   lines.push("");
   return lines.join("\n");
 }
@@ -185,6 +240,10 @@ export async function writePackWorkspace(pack, workspace) {
   await fs.writeFile(path.join(workspace, "SOUL.md"), buildSoul(pack), "utf8");
   await fs.writeFile(path.join(workspace, "MEMORY.md"), buildMemory(pack), "utf8");
   await fs.writeFile(path.join(workspace, "FARM.md"), buildFarmMd(pack, installedAt), "utf8");
+  const routinesMd = buildRoutinesMd(pack);
+  if (routinesMd) {
+    await fs.writeFile(path.join(workspace, "ROUTINES.md"), routinesMd, "utf8");
+  }
 
   const skillsDir = path.join(workspace, "skills");
   await fs.mkdir(skillsDir, { recursive: true });
