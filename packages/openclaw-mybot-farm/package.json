@@ -18,21 +18,24 @@
     "access": "public"
   },
   "files": [
-    "index.ts",
-    "src",
+    "INSTALL.md",
+    "README.md",
+    "assets",
     "bin",
+    "dist",
+    "index.ts",
     "mcp",
     "openclaw.plugin.json",
-    "README.md",
-    "INSTALL.md",
-    "assets"
+    "src"
   ],
   "bin": {
     "farm-plant": "./bin/farm-plant.mjs"
   },
   "scripts": {
     "plant": "node ./bin/farm-plant.mjs",
-    "plugin:validate": "openclaw plugins validate --root ."
+    "plugin:validate": "openclaw plugins validate --root .",
+    "build": "esbuild index.ts --bundle --platform=node --format=esm --target=node22 --outfile=dist/index.js --external:openclaw --external:openclaw/* --external:typebox",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "typebox": "^1.0.0"
@@ -45,7 +48,7 @@
   },
   "openclaw": {
     "extensions": [
-      "./index.ts"
+      "./dist/index.js"
     ],
     "compat": {
       "pluginApi": ">=2026.9.4",
@@ -64,6 +67,8 @@
     "clawhub"
   ],
   "devDependencies": {
-    "esbuild": "^0.28.2"
-  }
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  },
+  "main": "./dist/index.js"
 }
