@@ -55,6 +55,7 @@ export type PackGettingStarted = {
 };
 
 export type GrokBotTemplateExport = {
+  /** When present, consumers (e.g. Cursor catalog) may treat the pack as template-ready. Not a second Grok-only catalog format. */
   enabled?: boolean;
   avatarFallbacks?: {
     shape?: Record<string, string>;

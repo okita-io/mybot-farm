@@ -79,6 +79,7 @@ export type GafAvatarFallbacks = {
 };
 
 export type GrokBotTemplateExport = {
+  /** When present, consumers (e.g. Cursor catalog) may treat the pack as template-ready. */
   enabled?: boolean;
   avatarFallbacks?: GafAvatarFallbacks;
   profileDescriptionOverride?: string;
