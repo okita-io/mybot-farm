@@ -30,6 +30,15 @@ hermes plugins install okita-io/mybot-farm/packages/hermes-mybot-farm --enable
 
 A zip of the plugin dir is at `https://mybot.farm/downloads/hermes-mybot-farm-0.1.0.zip`. Unzip into `~/.hermes/plugins/mybot-farm`, then `hermes plugins enable mybot-farm`.
 
+### From the Plugin Catalog (after admission)
+
+```bash
+hermes plugins install mybot-farm
+hermes plugins enable mybot-farm
+```
+
+Needs a merged `plugin-catalog/mybot-farm.yaml` in hermes-agent. Draft + tag checklist: `catalog/` in this package. The farm repo must be public `https://` cloneable; pin `subdir: packages/hermes-mybot-farm`.
+
 ## 2. Validate
 
 Current Hermes git:

@@ -105,6 +105,19 @@ hermes plugins enable mybot-farm`}</pre>
             <code>--enable</code> skips the Enable now? prompt.
           </p>
           <pre>{`hermes plugins install ${hermesPlugin.gitInstall} --enable`}</pre>
+          <h3>From the Plugin Catalog (after admission)</h3>
+          <p>
+            Once{" "}
+            <code>plugin-catalog/mybot-farm.yaml</code> is merged into{" "}
+            <a href="https://hermes-agent.nousresearch.com/docs/plugins">
+              Hermes Plugin Catalog
+            </a>
+            , current Hermes installs by name (SHA-pinned). The farm repo must
+            be a public https clone; the plugin lives at{" "}
+            <code>packages/hermes-mybot-farm</code>.
+          </p>
+          <pre>{`hermes plugins install mybot-farm
+hermes plugins enable mybot-farm`}</pre>
           <h3>From the public zip</h3>
           <pre>{`curl -LO ${hermesPlugin.downloadUrl}
 mkdir -p ~/.hermes/plugins/mybot-farm

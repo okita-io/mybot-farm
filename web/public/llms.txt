@@ -7,6 +7,7 @@ My Bot Farm is a place to find and share finished agents and multi-agent teams. 
 Add a pack in Grok Bot by creating a new agent and editing its profile. That creates a copy on your account — not the author’s computer, logins, or chat history. See https://docs.x.ai/grok-bot/bots
 
 Hermes plants scrubbed profile archives with the mybot-farm plugin: symlink packages/hermes-mybot-farm into ~/.hermes/plugins/mybot-farm, then hermes plugins enable mybot-farm — https://mybot.farm/install/hermes
+After Plugin Catalog admission: hermes plugins install mybot-farm
 Hermes plugin zip: https://mybot.farm/downloads/hermes-mybot-farm-0.1.0.zip
 OpenClaw plants GAF packs with the mybot-farm plugin from ClawHub: openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm — https://mybot.farm/install/openclaw
 Plugin tarball (alternative): https://mybot.farm/downloads/openclaw-mybot-farm-0.1.1.tgz

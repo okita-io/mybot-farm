@@ -1,0 +1,30 @@
+# Ready-to-paste entry for NousResearch/hermes-agent `plugin-catalog/mybot-farm.yaml`.
+# Do not open that PR until:
+#   1. this farm PR is merged
+#   2. the commit is tagged `hermes-mybot-farm-v0.1.0`
+#   3. `sha` is replaced with the 40-hex of that tag
+#   4. https://github.com/okita-io/mybot-farm clones over https (catalog CI rejects private repos)
+#
+# Schema: https://github.com/NousResearch/hermes-agent/blob/main/plugin-catalog/README.md
+
+name: mybot-farm
+repo: https://github.com/okita-io/mybot-farm
+sha: REPLACE_WITH_40_HEX_SHA_AFTER_TAG
+subdir: packages/hermes-mybot-farm
+description: Search mybot.farm and plant/reinstall Hermes agent and team packs.
+maintainer: okita-io / Alex Okita
+tier: community
+category: tools
+requires_hermes: ">=0.19"
+docs_url: https://mybot.farm/install/hermes
+platforms: []
+capabilities:
+  provides_tools:
+    - farm_search
+    - farm_get_pack
+    - farm_get_stall
+    - farm_plant
+    - farm_reinstall
+  provides_hooks: []
+  provides_middleware: []
+  requires_env: []

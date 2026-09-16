@@ -32,6 +32,15 @@ GitHub (private repo needs your git credentials). Subdir is required — this pl
 hermes plugins install okita-io/mybot-farm/packages/hermes-mybot-farm --enable
 ```
 
+After catalog admission (SHA-pinned, public clone):
+
+```bash
+hermes plugins install mybot-farm
+hermes plugins enable mybot-farm
+```
+
+Draft catalog YAML + tag checklist: [`catalog/`](./catalog/).
+
 Validate. Current Hermes git has `hermes plugins validate <dir>`. PyPI `hermes-agent` 0.19.0 does not (only install/list/enable/disable):
 
 ```bash
