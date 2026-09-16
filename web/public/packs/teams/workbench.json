@@ -1,15 +1,28 @@
 {
   "format": "mybot.farm/team-pack",
   "version": "0.1",
-  "runtime": ["hermes"],
+  "runtime": [
+    "hermes"
+  ],
   "slug": "workbench",
   "category": "coding",
-  "tags": ["web", "spec", "scaffold", "qa", "pipeline", "team"],
+  "tags": [
+    "web",
+    "spec",
+    "scaffold",
+    "qa",
+    "pipeline",
+    "team"
+  ],
   "profile": {
     "name": "Workbench",
     "title": "Spec + scaffold + QA web team",
     "description": "A three-agent web-app crew: Spec writes buildable cards, Scaffold implements, Smoke gates release and never fixes. One shared board; a card is not shipped until Smoke verifies it in a running app.",
-    "avatar": { "kind": "geometric", "shape": "triangle", "color": "lime" }
+    "avatar": {
+      "kind": "geometric",
+      "shape": "triangle",
+      "color": "lime"
+    }
   },
   "members": [
     {
@@ -31,21 +44,21 @@
   "topology": {
     "kind": "pipeline",
     "handoffs": [
-      "User idea → Spec writes a Ready card → Scaffold builds → Smoke gates → Shipped or Needs-Fix",
-      "Needs-Fix → Scaffold re-claims → Smoke re-verifies. Smoke never edits app code; Spec never writes it.",
-      "Cron standup (Spec 08:00) → QA sweep (Smoke 12:00+18:00) → harvest (Smoke 21:00). Quiet when idle."
+      "User idea → Spec creates a Build task on the kanban board → the dispatcher spawns Scaffold → Scaffold completes it and creates the QA task (parent = build task) → the parent edge auto-promotes the QA task → Smoke runs the real app and records the verdict",
+      "QA verdict PASS = shipped. QA verdict FAIL + a rework task (parent = QA task) → Scaffold fixes exactly the repro → completes the rework task → creates a fresh QA task. Repeat until PASS or escalation.",
+      "Cron standup (Spec 08:00) → QA sweeps (Smoke 12:00 + 18:00) → harvest (Smoke 21:00, reconciles orphans + mirrors shipped cards to WORK.md). Quiet when idle."
     ]
   },
   "skills": [
     {
-      "name": "workbench-board",
-      "description": "Shared WORK.md card format and who may move each state.",
-      "content": "One board (WORK.md) is the record of state. DMs are handoffs, never the source of truth.\n\nCard fields: state, owner (only when In-Progress), project, story, accept (observable checks), out, notes.\n\nStates:\n- Backlog → Ready: Spec (story + accept + out, no open questions)\n- Ready → In-Progress: Scaffold (claims owner + timestamp)\n- In-Progress → Ready-for-QA: Scaffold (notes say how to run it)\n- Ready-for-QA → Shipped: Smoke only (every accept check passes in a running app)\n- Ready-for-QA → Needs-Fix: Smoke only (notes carry repro + evidence)\n- Needs-Fix → In-Progress: Scaffold (re-claims)\n\nClaim before work. Earlier claim-time wins. Projects live in repos/<project>/."
+      "name": "workbench-team",
+      "description": "The v1.1 team protocol: kanban board, two task types (Build + QA), the parent-edge handoff, verdicts, and the rework loop.",
+      "content": "Live state lives in the kanban board `workbench` (durable, atomic claims, dispatcher-driven — no manual wake-ups).\nTwo task types: a Build task (Spec creates it, assignee workbench-scaffold; body carries story/accept/out) and a QA task (Scaffold creates it, assignee workbench-smoke, parents=[build task]).\nThe handoff is the parent edge: a QA task stays in todo until its build task is done, then auto-promotes to ready and the dispatcher wakes Smoke. Completing the build task and then creating the QA task is the exact order — the gate never sees a task before its build is done.\nVerdicts live on the QA task: PASS (metadata verdict PASS + evidence paths) = shipped; FAIL (verdict FAIL + repro + evidence) → Smoke creates a rework task (assignee workbench-scaffold, parents=[QA task]) carrying the repro.\nRework loop: Scaffold fixes exactly that repro, completes the rework task, creates a fresh QA task. Never reuse a completed QA task.\nOrphan rule (harvest): a completed build/rework task with no QA task pointing at it → create the missing QA task; a card is not shipped until a QA task is done.\nDMs and the optional group room are the live channel and the receipts; the board is the only state. WORK.md is the shipped record + user backlog notes, not the live board."
     },
     {
-      "name": "workbench-handoff",
-      "description": "Short DM handoffs, quality bar, and escalation.",
-      "content": "Handoffs are one short message: card id, new state, and what the next agent needs (how to run, accept checks, gotchas).\n\nQuality bar: a card ships only when every accept check is demonstrably passing in a running app (screenshot/log/test output in reports/). Smoke never fixes. Spec refuses cards without an observable acceptance check — \"make it nice\" is not a card.\n\nEscalate to the human owner if a card bounces Smoke↔Scaffold more than twice, sits Needs-Fix >48h, or the backlog is empty for 2 days."
+      "name": "workbench-card-build",
+      "description": "Scaffold's build + verify recipe, including the worst-case-fixture lesson learned from a real QA bounce.",
+      "content": "Zero-dependency Node, no build ceremony: server.js (plain http, serves public/ + a GET /<data> JSON endpoint; BOARD/PORT env overrides), public/ (index.html + app.js + style.css), package.json with \"start\": \"node server.js\", a fixed port named in the handoff. One git repo per project under ~/.hermes/teams/workbench/repos/<project>/.\nProve acceptance checks against a running app: data/parse checks via curl + assert in a one-liner; render checks by reading rendered DOM text (a static index.html always 'passes' curl while the JS render can be broken); state-dependent behavior (e.g. 'Shipped renders first' when nothing is shipped yet) via a SECOND server instance on a spare port pointed at a fixture through the data-file env — verify in the browser, kill the instance, keep the screenshots.\nOrdering/positioning requirements need a worst-case-id fixture: 'State X renders first' is only proven when an X-state item carries a HIGHER id than every other item — a fixture where the target state has the lowest id passes even when the order is wrong. That exact mask bounced the team's first card once (fix was a stable partition).\nHandoff order: (1) kanban_complete the Build task with run command + port + verified checks + watch-outs; (2) kanban_create the QA task (assignee workbench-smoke, parents=[build task], body = run command + port + accept checks + watch-outs); (3) one short DM receipt to Smoke. Never mark Shipped — that is Smoke's gate."
     }
   ],
   "shared": {
@@ -55,7 +68,7 @@
         "content": "Workbench: Spec never writes app code. Smoke gates but never fixes. A card is not done until Smoke (or the user) confirms every accept check on a running app. Quiet when idle — no DMs unless the board state changed."
       }
     ],
-    "gettingStarted": "Import the three Hermes profiles: hermes profile import workbench-spec.hermes.tar.gz --name workbench-spec (repeat for scaffold and smoke). Recreate ~/.hermes/teams/workbench/{reports,repos,state}. Download TEAM.md, WORK.md, and workbench_cron*.sh from https://mybot.farm/packs/teams/workbench/ and copy TEAM.md plus WORK.md into that workspace. In each ~/.hermes/profiles/workbench-*/config.yaml, replace https://SET_YOUR_ENDPOINT/v1 with your LLM endpoint. Copy the cron scripts to ~/.hermes/scripts, chmod +x, and schedule standup 08:00 (Spec), QA sweep 12:00 and 18:00 (Smoke), harvest 21:00 (Smoke). Add cards to Ready or DM @workbench-spec."
+    "gettingStarted": "Install order:\n1. Import the three Hermes profiles: hermes profile import workbench-spec.hermes.tar.gz --name workbench-spec (repeat for scaffold and smoke). Verify all three appear in `hermes profile list` BEFORE continuing — if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale .deleted/<name> entries and re-check.\n2. Recreate the team workspace: mkdir -p ~/.hermes/teams/workbench/{reports,repos,state}.\n3. Download TEAM.md, WORK.md, and workbench_cron*.sh from https://mybot.farm/packs/teams/workbench/ and copy TEAM.md plus WORK.md into the workspace.\n4. Create the kanban board — v1.1's coordination substrate; the team's cron jobs and handoffs depend on it:\n   hermes kanban boards create workbench --name \"Workbench team\"  (idempotent: check `hermes kanban boards list` first)\n5. In each ~/.hermes/profiles/workbench-*/config.yaml, replace https://SET_YOUR_ENDPOINT/v1 with your LLM endpoint.\n6. Copy the cron scripts to ~/.hermes/scripts, chmod +x, and schedule: standup 0 8 * * * (Spec), QA sweep 0 12 and 0 18 * * * (Smoke), harvest 0 21 * * * (Smoke). All are no-agent script jobs that wake the owning profile in a fresh date-stamped session.\n7. Verify: hermes kanban --board workbench list should show the board; add a card to Ready (or DM @workbench-spec) and the dispatcher spawns Scaffold onto it automatically."
   },
   "commerce": {
     "pricing": "free",
@@ -65,7 +78,11 @@
     "author": "mybot.farm seeds",
     "license": "MIT",
     "homepage": "https://mybot.farm/teams/workbench",
-    "tags": ["coding", "team", "hermes"],
+    "tags": [
+      "coding",
+      "team",
+      "hermes"
+    ],
     "scrubbed": true
   }
 }
