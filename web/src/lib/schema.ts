@@ -138,6 +138,37 @@ export const howToHermesShareLd = {
   ],
 };
 
+export const howToOpenClawLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Plant a mybot.farm agent in OpenClaw",
+  description:
+    "Install the mybot-farm OpenClaw plugin from this repo or the public tarball, enable it, restart the gateway, then search and plant GAF packs with farm_search, farm_get_pack, and farm_plant.",
+  url: `${site.url}/install/openclaw`,
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Install the plugin",
+      text: "From a checkout: openclaw plugins install ./packages/openclaw-mybot-farm --link --force. Or download https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz and run openclaw plugins install on the .tgz (or npm-pack:).",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Enable mybot-farm",
+      text: "Run openclaw plugins enable mybot-farm. If plugins.allow is a closed list, add mybot-farm after backing up ~/.openclaw/openclaw.json.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Restart the gateway",
+      text: "Restart the OpenClaw gateway so existing agent sessions see farm_search, farm_get_pack, and farm_plant.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Plant a pack",
+      text: "Ask the agent to farm_plant a slug such as frontend-developer, or run node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant frontend-developer. The copy lands in ~/.openclaw/farm/<slug>.",
+    },
+  ],
+};
+
 export const pressPageLd = {
   "@context": "https://schema.org",
   "@type": "NewsArticle",

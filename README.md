@@ -23,7 +23,8 @@ Marketplace positioning and product notes:
 - [Categories](docs/categories.md)
 - [Plant from a share URL](docs/plant-from-share.md)
 - [Agency Agents catalog packs](docs/agency-agents.md)
+- [OpenClaw plant plugin](docs/openclaw-plugin.md)
 - [Docs index](docs/README.md)
 
-Live site pages: [About](https://mybot.farm/about), [Press](https://mybot.farm/press), [Agent Teams](https://mybot.farm/teams), [How-To](https://mybot.farm/how-to), [Plant](https://mybot.farm/plant), [Privacy](https://mybot.farm/privacy), [Terms](https://mybot.farm/terms).
+Live site pages: [About](https://mybot.farm/about), [Press](https://mybot.farm/press), [Agent Teams](https://mybot.farm/teams), [How-To](https://mybot.farm/how-to), [OpenClaw install](https://mybot.farm/install/openclaw), [Plant](https://mybot.farm/plant), [Privacy](https://mybot.farm/privacy), [Terms](https://mybot.farm/terms).
 
