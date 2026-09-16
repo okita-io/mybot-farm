@@ -119,6 +119,7 @@ function parsePath(pathname: string):
     { re: /^\/packs\/teams\/([^/]+)$/, pathKind: "pack" },
     { re: /^\/api\/stalls\/([^/]+)$/, pathKind: "api" },
     { re: /^\/api\/packs\/([^/]+)\/skills$/, pathKind: "api" },
+    { re: /^\/api\/packs\/([^/]+)\/grok-template$/, pathKind: "api" },
     { re: /^\/api\/packs\/([^/]+)$/, pathKind: "api" },
     { re: /^\/api\/install-prompt\/([^/]+)$/, pathKind: "install-prompt" },
   ];
