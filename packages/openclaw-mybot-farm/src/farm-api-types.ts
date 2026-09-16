@@ -59,4 +59,32 @@ export type FarmPack = {
 export type FarmConfig = {
   baseUrl: string;
   workspaceRoot: string;
+  apiKey?: string;
+};
+
+export type ListingKind = "agent" | "team";
+
+export type ListingPayload = {
+  kind: ListingKind;
+  name: string;
+  title: string;
+  description: string;
+  category: string;
+  priceCents: number;
+  pack: Record<string, unknown>;
+};
+
+export type ListingPayloadSummary = {
+  kind: ListingKind | string | undefined;
+  name: string | undefined;
+  title: string | undefined;
+  category: string | undefined;
+  priceCents: number | undefined;
+  pack: {
+    format?: unknown;
+    version?: unknown;
+    runtime: unknown;
+    skillCount: number;
+    encodedChars: number;
+  };
 };

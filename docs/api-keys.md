@@ -97,7 +97,9 @@ Registered on every page. `readOnlyHint: false`. Input matches the table above, 
 
 The Hermes `mybot-farm` plugin (v0.2.0) posts the same body via `farm_post` / `farm-plant post`. Set `MYBOT_FARM_API_KEY` (or plugin config `apiKey`). Pack input is GAF JSON, not a Hermes tarball. See [hermes-plugin.md](./hermes-plugin.md).
 
-OpenClaw `farm_post` is not implemented yet (Hermes-only for this change).
+## OpenClaw plugin `farm_post`
+
+The OpenClaw `mybot-farm` plugin (v0.2.0) posts the same body via `farm_post` / `farm-plant post`. Set `MYBOT_FARM_API_KEY` (or plugin config `apiKey`). Pack input is GAF JSON (OpenClaw already plants GAF). See [openclaw-plugin.md](./openclaw-plugin.md).
 
 ## CORS
 

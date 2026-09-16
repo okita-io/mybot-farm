@@ -10,10 +10,10 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | [ultimate-aeo-seo-geo.md](./ultimate-aeo-seo-geo.md) | SEO / AEO / GEO doctrine for the site |
 | [plant-from-share.md](./plant-from-share.md) | Share URL → preview → plant into buyer library (API + `/plant` sketch) |
 | [agency-agents.md](./agency-agents.md) | Agency Agents MIT roster → farm packs (split, attribution, refresh) |
-| [openclaw-plugin.md](./openclaw-plugin.md) | OpenClaw `mybot-farm` plant plugin — ClawHub install; `farm_post` is a Hermes follow-up |
+| [openclaw-plugin.md](./openclaw-plugin.md) | OpenClaw `mybot-farm` plugin — plant plus `farm_post` (GAF listings, seller API key) |
 | [hermes-plugin.md](./hermes-plugin.md) | Hermes `mybot-farm` plugin — plant/reinstall plus `farm_post` (GAF listings, seller API key) |
 | [hermes-team-stall-bundle.md](./hermes-team-stall-bundle.md) | Hermes team stall contract: download/bundle shape, GAF install flow, shipping gates |
-| [api-keys.md](./api-keys.md) | Seller API keys, `POST /api/listings` Bearer auth, WebMCP `post_listing`, Hermes `farm_post` |
+| [api-keys.md](./api-keys.md) | Seller API keys, `POST /api/listings` Bearer auth, WebMCP `post_listing`, Hermes/OpenClaw `farm_post` |
 | [../packs/](../packs/) | Seed agent & team bots plus [Agency Agents packs](../packs/agency-agents/) |
 
 Vault twin (editable scratch): `~/Documents/GlobalNotes/2026-09-11-mybot-farm-agent-marketplace.md`
