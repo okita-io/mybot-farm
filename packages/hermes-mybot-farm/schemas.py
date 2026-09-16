@@ -143,3 +143,73 @@ FARM_REINSTALL = {
         "required": ["slug"],
     },
 }
+
+FARM_POST = {
+    "name": "farm_post",
+    "description": (
+        "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. "
+        "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. "
+        "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath "
+        "to a .json file) — not a Hermes tarball. Plant still imports Hermes .tar.gz; posting "
+        "publishes GAF. category is an exact farm label (Lifestyle, Coding, Experimental, …). "
+        "priceCents is 0 (free) or 200–999900. Paid listings need Stripe Connect on the seller "
+        "(403 connect_required). Prefer dryRun to validate without posting. "
+        "Does not email or spend money. OpenClaw farm_post is not implemented yet."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "kind": {
+                "type": "string",
+                "description": 'Listing kind: "agent" or "team".',
+            },
+            "name": {
+                "type": "string",
+                "description": "Listing name (used to derive the slug).",
+            },
+            "title": {
+                "type": "string",
+                "description": "Short stall title shown on the farm.",
+            },
+            "description": {
+                "type": "string",
+                "description": "Stall description (non-empty).",
+            },
+            "category": {
+                "type": "string",
+                "description": (
+                    "Exact farm category label: Lifestyle, Productivity, Coding, Writing, "
+                    "Marketing, Sales, Research, Personal finance, Creative, Music, "
+                    "Education, Ops / admin, Experimental."
+                ),
+            },
+            "priceCents": {
+                "type": "number",
+                "description": "0 for free, or integer cents in [200, 999900] ($2.00–$9,999.00).",
+            },
+            "pack": {
+                "type": "object",
+                "description": (
+                    "GAF JSON object (mybot.farm/agent-pack or team-pack). "
+                    "Export/convert elsewhere; this tool does not translate Hermes tarballs."
+                ),
+            },
+            "packPath": {
+                "type": "string",
+                "description": "Path to a .json GAF file. Use pack or packPath, not both.",
+            },
+            "apiKey": {
+                "type": "string",
+                "description": (
+                    "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin "
+                    "config apiKey for unattended use. Never log the key."
+                ),
+            },
+            "dryRun": {
+                "type": "boolean",
+                "description": "Validate and show a payload summary without POSTing. Redacts any key.",
+            },
+        },
+        "required": ["kind", "name", "title", "description", "category", "priceCents"],
+    },
+}

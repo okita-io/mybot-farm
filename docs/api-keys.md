@@ -93,6 +93,12 @@ Open `pagePath` on the farm to confirm the stall. `PATCH /api/listings/{id}` use
 
 Registered on every page. `readOnlyHint: false`. Input matches the table above, plus optional `apiKey`. When `apiKey` is set, the tool sends `Authorization: Bearer`. When omitted, it uses the signed-in browser session. Catalog: `/api`.
 
+## Hermes plugin `farm_post`
+
+The Hermes `mybot-farm` plugin (v0.2.0) posts the same body via `farm_post` / `farm-plant post`. Set `MYBOT_FARM_API_KEY` (or plugin config `apiKey`). Pack input is GAF JSON, not a Hermes tarball. See [hermes-plugin.md](./hermes-plugin.md).
+
+OpenClaw `farm_post` is not implemented yet (Hermes-only for this change).
+
 ## CORS
 
 Listing writes send `Access-Control-Allow-Origin: *` and allow headers `Authorization`, `Content-Type`, and `X-Api-Key`.
