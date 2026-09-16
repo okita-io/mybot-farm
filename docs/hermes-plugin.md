@@ -4,7 +4,7 @@ Plant mybot.farm Hermes stalls into [Hermes Agent](https://hermes-agent.nousrese
 
 It calls live `https://mybot.farm/api/stalls` and `/api/packs/{slug}`, then `hermes profile import`. Team packs also recreate `~/.hermes/teams/<slug>`, fetch TEAM.md / WORK.md / cron, and create a kanban board when `shared.gettingStarted` says so. `farm_post` calls `POST /api/listings` with `Authorization: Bearer mbf_…`.
 
-This is the Hermes-side twin of [`packages/openclaw-mybot-farm`](../packages/openclaw-mybot-farm). OpenClaw writes `~/.openclaw/farm/<slug>`. Hermes writes **profiles + team dirs**. OpenClaw `farm_post` is **not** in this PR — follow-up later.
+This is the Hermes-side twin of [`packages/openclaw-mybot-farm`](../packages/openclaw-mybot-farm). OpenClaw writes `~/.openclaw/farm/<slug>`. Hermes writes **profiles + team dirs**. Both plugins implement `farm_post` (GAF + seller API key).
 
 Install page: [https://mybot.farm/install/hermes](https://mybot.farm/install/hermes)
 
@@ -174,4 +174,4 @@ PyPI 0.19.0: skip that; the unittest probe above is the admission check (`regist
 - Package copy: [`packages/hermes-mybot-farm/INSTALL.md`](../packages/hermes-mybot-farm/INSTALL.md).
 - Team stall contract: [`hermes-team-stall-bundle.md`](./hermes-team-stall-bundle.md).
 - Seller keys / write API: [`api-keys.md`](./api-keys.md).
-- GAF JSON plant (into a workspace) stays on the OpenClaw plugin / Grok Bot path. Hermes `farm_post` *publishes* GAF to the farm; OpenClaw `farm_post` is a follow-up.
+- GAF JSON plant (into a workspace) stays on the OpenClaw plugin / Grok Bot path. Both Hermes and OpenClaw `farm_post` *publish* GAF to the farm. See [openclaw-plugin.md](./openclaw-plugin.md).

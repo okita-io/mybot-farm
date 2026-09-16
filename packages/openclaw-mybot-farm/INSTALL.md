@@ -1,6 +1,6 @@
 # Install mybot.farm → OpenClaw
 
-Plant agent packs from [mybot.farm](https://mybot.farm) into OpenClaw with the `mybot-farm` plugin.
+Plant agent packs from [mybot.farm](https://mybot.farm) into OpenClaw, and post GAF listings, with the `mybot-farm` plugin (v0.2.0).
 
 ## 1. Install the plugin
 
@@ -17,6 +17,8 @@ openclaw gateway restart
 Optional discover: `openclaw plugins search mybot-farm`.
 
 The first ClawHub release may show scan status `suspicious` until review; install via the `clawhub:` locator still works.
+
+**Republish:** after this 0.2.0 `farm_post` change, run `clawhub package publish` from this package so ClawHub serves the new tool. Until then, use a checkout or the packed tarball.
 
 ### From a local checkout
 
@@ -46,7 +48,7 @@ openclaw plugins validate --root /path/to/openclaw-mybot-farm
 openclaw plugins inspect mybot-farm --runtime --json
 ```
 
-You should see tools: `farm_search`, `farm_get_pack`, `farm_plant`.
+You should see tools: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`.
 
 ## 4. Plant an agent (CLI)
 
@@ -67,13 +69,28 @@ openclaw agents list --json
 ls ~/.openclaw/farm/frontend-developer/skills
 ```
 
-## 5. Use from an agent
+## 5. Post a listing
+
+Create a seller API key at [https://mybot.farm/sell](https://mybot.farm/sell). Prefer env `MYBOT_FARM_API_KEY` (plugin config `apiKey` is the fallback). Never commit the key. Details: [`docs/api-keys.md`](../../docs/api-keys.md).
+
+```bash
+export MYBOT_FARM_API_KEY=mbf_YOUR_KEY
+node /path/to/openclaw-mybot-farm/bin/farm-plant.mjs post \
+  --kind agent --name "Smoke Bot" --title "API key smoke listing" \
+  --description "Minimal free GAF listing posted with a seller API key." \
+  --category Experimental --price-cents 0 --pack ./smoke.gaf.json --dry-run
+```
+
+Drop `--dry-run` to POST. Pack input is **GAF JSON** (OpenClaw already plants GAF). Free listings (`--price-cents 0`) skip Stripe Connect. Paid (`200`–`999900`) need Connect (`403 connect_required` otherwise). `category` is an exact farm label (`Lifestyle`, `Coding`, `Experimental`, …).
+
+## 6. Use from an agent
 
 Ask your OpenClaw agent to call:
 
 - `farm_search` with `{ "query": "frontend" }`
 - `farm_get_pack` with `{ "slug": "frontend-developer" }`
 - `farm_plant` with `{ "slug": "frontend-developer" }`
+- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `dryRun`, `apiKey`)
 
 Optional plant params: `agentId`, `workspace`, `force`.
 
@@ -82,3 +99,4 @@ Optional plant params: `agentId`, `workspace`, `force`.
 - Does not email, spend money, or invent pack fields.
 - Existing agents (scout / finders / pitch) are never deleted.
 - Override API origin with `MYBOT_FARM_URL` if you run a mirror.
+- Local plugin category stays `tools` (OpenClaw validate). ClawHub may still map taxonomy to `other` on publish.
