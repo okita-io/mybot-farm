@@ -14,6 +14,16 @@ Registers three agent tools:
 
 Default plant workspace: `~/.openclaw/farm/<slug>` (not team paths like `~/.openclaw/teams/road-crew`).
 
+## Install from ClawHub (recommended)
+
+```bash
+openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm
+openclaw plugins enable mybot-farm
+openclaw gateway restart
+```
+
+Optional discover: `openclaw plugins search mybot-farm`.
+
 ## Install (local path)
 
 ```bash
@@ -82,7 +92,7 @@ Matches the road-crew scout plant style:
 - Package name: `@okita-io/openclaw-mybot-farm`
 - Entry: `openclaw.extensions: ["./index.ts"]` (OpenClaw loads TS via its plugin loader)
 - Declares `contracts.tools`: `farm_search`, `farm_get_pack`, `farm_plant`
-- For ClawHub publish: pack with `openclaw plugins pack`, then publish the artifact; keep this README + `INSTALL.md` as marketplace copy
+- Published on ClawHub as `@okita-io/openclaw-mybot-farm` (status published as of 2026-09-15)
 - MCP stdio bridge is optional (`mcp/server.mjs`) for mcporter users; native OpenClaw tools are the primary path for v0.1
 
 ## Requirements

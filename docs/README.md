@@ -10,7 +10,7 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | [ultimate-aeo-seo-geo.md](./ultimate-aeo-seo-geo.md) | SEO / AEO / GEO doctrine for the site |
 | [plant-from-share.md](./plant-from-share.md) | Share URL → preview → plant into buyer library (API + `/plant` sketch) |
 | [agency-agents.md](./agency-agents.md) | Agency Agents MIT roster → farm packs (split, attribution, refresh) |
-| [openclaw-plugin.md](./openclaw-plugin.md) | OpenClaw `mybot-farm` plant plugin — install from repo or public tarball |
+| [openclaw-plugin.md](./openclaw-plugin.md) | OpenClaw `mybot-farm` plant plugin — install from ClawHub, repo, or public tarball |
 | [../packs/](../packs/) | Seed agent & team bots plus [Agency Agents packs](../packs/agency-agents/) |
 
 Vault twin (editable scratch): `~/Documents/GlobalNotes/2026-09-11-mybot-farm-agent-marketplace.md`
