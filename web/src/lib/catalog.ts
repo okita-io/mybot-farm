@@ -18,6 +18,10 @@ import {
   type StallKind,
 } from "@/lib/packs";
 import { packVersionOf } from "@/lib/pack-version";
+import {
+  existingHermesArchiveHref,
+  withHermesRuntime,
+} from "@/lib/hermes-archive";
 import { catalogStallId } from "@/lib/stall-id";
 import { hasPaidPurchase } from "@/lib/purchases";
 import { withSeedReadme } from "@/lib/seed-readme";
@@ -51,6 +55,10 @@ export function listingToStall(
     category: listing.category,
     tone: listing.kind === "team" ? "agent" : "share",
     downloadHref: `/api/packs/${listing.slug}?download=1`,
+    hermesHref: existingHermesArchiveHref(
+      listing.kind === "team" ? "team" : "agent",
+      listing.slug,
+    ),
     members: members.length ? members : undefined,
     priceCents: listing.priceCents,
     currency: listing.currency,
@@ -72,6 +80,8 @@ export function withSeedPrice(stall: Stall): Stall {
     ...stall,
     stallId: stall.listingId ?? stall.stallId ?? catalogStallId(stall.kind, stall.slug),
     packVersion: stall.packVersion ?? packVersionOf(pack),
+    hermesHref:
+      stall.hermesHref ?? existingHermesArchiveHref(stall.kind, stall.slug),
     priceCents: stall.priceCents ?? 0,
     currency: stall.currency ?? "usd",
     author: stall.author ?? FARM_AUTHOR,
@@ -145,7 +155,8 @@ export async function getCatalogPack(slug: string): Promise<FarmPack | undefined
 
   const seed = getCatalogSeedPack(slug);
   if (seed) {
-    return seed;
+    const kind = getCatalogStall(slug)?.kind ?? "agent";
+    return withHermesRuntime(seed, kind, slug);
   }
 
   const listing = await getListingBySlug(slug);
@@ -153,7 +164,8 @@ export async function getCatalogPack(slug: string): Promise<FarmPack | undefined
     return undefined;
   }
 
-  return listing.pack as FarmPack;
+  const kind = listing.kind === "team" ? "team" : "agent";
+  return withHermesRuntime(listing.pack as FarmPack, kind, slug);
 }
 
 export async function requireCatalogStallAndPack(slug: string) {
@@ -308,7 +320,11 @@ export async function resolvePackAccess(
     if (await isHiddenStall(slug)) {
       return { ok: false, reason: "not_found" };
     }
-    return { ok: true, stall: withSeedPrice(seedStall), pack: seedPack };
+    return {
+      ok: true,
+      stall: withSeedPrice(seedStall),
+      pack: withHermesRuntime(seedPack, seedStall.kind, slug),
+    };
   }
 
   const listing = await getListingBySlug(slug);
@@ -324,7 +340,11 @@ export async function resolvePackAccess(
   }
 
   const [stall] = await hydrateListingStalls([listing]);
-  const pack = listing.pack as FarmPack;
+  const pack = withHermesRuntime(
+    listing.pack as FarmPack,
+    listing.kind === "team" ? "team" : "agent",
+    slug,
+  );
 
   if (listing.priceCents <= 0 || isSeller) {
     return { ok: true, stall, pack };

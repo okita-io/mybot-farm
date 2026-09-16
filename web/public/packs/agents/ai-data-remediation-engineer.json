@@ -3,7 +3,8 @@
   "version": "0.2",
   "runtime": [
     "grok-bot",
-    "openclaw"
+    "openclaw",
+    "hermes"
   ],
   "slug": "ai-data-remediation-engineer",
   "category": "coding",

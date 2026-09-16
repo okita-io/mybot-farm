@@ -140,6 +140,27 @@ class PlanTests(unittest.TestCase):
             build_plant_plan(GAF_STALL, GAF_PACK, "https://mybot.farm")
         self.assertIn("not a Hermes profile archive", str(ctx.exception))
 
+    def test_gaf_with_hermes_href(self) -> None:
+        stall = {
+            **GAF_STALL,
+            "hermesHref": "/packs/agents/frontend-developer.hermes.tar.gz",
+        }
+        pack = {**GAF_PACK, "runtime": ["grok-bot", "openclaw", "hermes"]}
+        plan = build_plant_plan(stall, pack, "https://mybot.farm")
+        self.assertEqual(plan.kind, "agent")
+        self.assertTrue(
+            plan.members[0].href.endswith("frontend-developer.hermes.tar.gz")
+        )
+
+    def test_gaf_runtime_hermes_uses_sibling_tarball(self) -> None:
+        pack = {**GAF_PACK, "runtime": ["grok-bot", "hermes"]}
+        plan = build_plant_plan(GAF_STALL, pack, "https://mybot.farm")
+        self.assertTrue(
+            plan.members[0].href.endswith(
+                "/packs/agents/frontend-developer.hermes.tar.gz"
+            )
+        )
+
     def test_list_boards_imported_for_team_plant(self) -> None:
         import plant as plant_mod
 

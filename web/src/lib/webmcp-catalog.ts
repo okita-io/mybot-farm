@@ -3,7 +3,7 @@ export const packTools = [
     name: "search_stalls",
     title: "Search bots",
     description:
-      "Search mybot.farm bots (agents and teams). Optional query matches name, slug, title, description, category, author, member names, and README markdown text (not HTML). Optional sort: newest, name, price. Returns page, pack, and API URLs. Read-only.",
+      "Search mybot.farm bots (agents and teams). Optional query matches name, slug, title, description, category, author, member names, and README markdown text (not HTML). Optional sort: newest, name, price. Returns page, pack, hermesHref when a Hermes archive exists, and API URLs. Read-only.",
     method: "GET",
     path: "/api/stalls",
     query: ["q", "kind", "sort"],
@@ -12,7 +12,7 @@ export const packTools = [
     name: "get_stall",
     title: "Get bot",
     description:
-      "Get one mybot.farm bot by slug (gift-day, sprout-journal, patch, probe, grant-research, scout, finders, pitch, pair-bench, workbench, road-crew). Returns metadata plus download_pack and install-prompt API paths. Read-only.",
+      "Get one mybot.farm bot by slug. Returns metadata, pack URLs, hermesHref when a .hermes.tar.gz exists, plus download_pack and install-prompt API paths. Read-only.",
     method: "GET",
     path: "/api/stalls/{slug}",
     query: [],

@@ -168,6 +168,7 @@ export function stallSummary(stall) {
     title: stall.title ?? "",
     pageUrl: stall.pageUrl ?? `https://mybot.farm/agents/${stall.slug}`,
     packUrl: stall.packUrl ?? "",
+    hermesHref: stall.hermesHref ?? stall.hermesUrl ?? "",
     description: stall.description ?? "",
     category: stall.category ?? "",
   };

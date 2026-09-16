@@ -3,7 +3,8 @@
   "version": "0.2",
   "runtime": [
     "grok-bot",
-    "openclaw"
+    "openclaw",
+    "hermes"
   ],
   "slug": "finders",
   "category": "music",
@@ -40,19 +41,19 @@
     {
       "kind": "log",
       "createdAt": "2026-09-15",
-      "content": "Dogfood run: 3 contact sheets; caught a broken mailto on a real venue's /book page (displayed address \u2260 link target) and resolved it via the contact-page plain text. That's why the discrepancy rule exists."
+      "content": "Dogfood run: 3 contact sheets; caught a broken mailto on a real venue's /book page (displayed address ≠ link target) and resolved it via the contact-page plain text. That's why the discrepancy rule exists."
     }
   ],
   "skills": [
     {
       "name": "contact-dig",
       "description": "Use for each venue card to build its contact sheet.",
-      "content": "# Contact dig\n\nFor each venue card, check in this order:\n1. The venue's own **booking page first** (`/book`, `/booking`, 'book a show') \u2014 dedicated booking inboxes live here and outrank anything else. Then the general contact page, then about.\n2. Its social profiles: bios often carry the booking address or a link to the booking page.\n3. City arts/music listings or promoter pages \u2014 many small venues are run by a promoter who lists a booking address.\n4. If nothing is published: mark the field `needs manual` and set a next_action (band calls the front of house or asks at the door), then move on.\n\nCapture: booker name (if public), email address, phone, booking-page URL, social handles. Record source + pull-date for every fact.\n\nDiscrepancy rule: if a displayed email differs from the link's actual mailto target, log BOTH, prefer the plain-text listing on the contact page, and flag it in the sheet \u2014 broken booking links are common.\n\nRules: one venue = one contact sheet; no fabricated emails or phones; no DMs to the venue; stop after ~3 public sources if nothing is found \u2014 that's a 'needs manual' outcome, not a failure."
+      "content": "# Contact dig\n\nFor each venue card, check in this order:\n1. The venue's own **booking page first** (`/book`, `/booking`, 'book a show') — dedicated booking inboxes live here and outrank anything else. Then the general contact page, then about.\n2. Its social profiles: bios often carry the booking address or a link to the booking page.\n3. City arts/music listings or promoter pages — many small venues are run by a promoter who lists a booking address.\n4. If nothing is published: mark the field `needs manual` and set a next_action (band calls the front of house or asks at the door), then move on.\n\nCapture: booker name (if public), email address, phone, booking-page URL, social handles. Record source + pull-date for every fact.\n\nDiscrepancy rule: if a displayed email differs from the link's actual mailto target, log BOTH, prefer the plain-text listing on the contact page, and flag it in the sheet — broken booking links are common.\n\nRules: one venue = one contact sheet; no fabricated emails or phones; no DMs to the venue; stop after ~3 public sources if nothing is found — that's a 'needs manual' outcome, not a failure."
     },
     {
       "name": "contact-sheet",
       "description": "Standard output format per venue.",
-      "content": "# Contact sheet\n\nOne sheet per venue, flat and copy-paste-able:\n\n```yaml\nvenue: <name>\nbooker: <name, or 'unknown'>\nemail: <published address, or 'needs manual'>\nphone: <published number, or 'none found'>\nbooking_page: <url, or 'none'>\nsocials: <handles>\nconfidence: confirmed / weak / needs-manual\nnext_action: <one concrete step when confidence is not confirmed \u2014 call the venue, ask at the door, check the promoter's site>\nsources: <URLs, each with pull date>\n```\n\nPitch reads these without follow-up questions. When confidence is not confirmed, next_action tells the band exactly what to do instead."
+      "content": "# Contact sheet\n\nOne sheet per venue, flat and copy-paste-able:\n\n```yaml\nvenue: <name>\nbooker: <name, or 'unknown'>\nemail: <published address, or 'needs manual'>\nphone: <published number, or 'none found'>\nbooking_page: <url, or 'none'>\nsocials: <handles>\nconfidence: confirmed / weak / needs-manual\nnext_action: <one concrete step when confidence is not confirmed — call the venue, ask at the door, check the promoter's site>\nsources: <URLs, each with pull date>\n```\n\nPitch reads these without follow-up questions. When confidence is not confirmed, next_action tells the band exactly what to do instead."
     }
   ]
 }

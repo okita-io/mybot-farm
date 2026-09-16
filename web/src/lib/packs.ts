@@ -21,6 +21,8 @@ export type Stall = {
   category: string;
   tone: StallTone;
   downloadHref: string;
+  /** Public .hermes.tar.gz when one exists for this slug. */
+  hermesHref?: string;
   seoTitle?: string;
   seoDescription?: string;
   members?: { name: string; href: string }[];
@@ -86,6 +88,21 @@ export function stallPageUrl(stall: Pick<Stall, "kind" | "slug">): string {
 
 export function packFileUrl(stall: Pick<Stall, "downloadHref">): string {
   return `${site.url}${stall.downloadHref}`;
+}
+
+export function hermesPackUrl(
+  stall: Pick<Stall, "hermesHref">,
+): string | undefined {
+  if (!stall.hermesHref) {
+    return undefined;
+  }
+  if (
+    stall.hermesHref.startsWith("http://") ||
+    stall.hermesHref.startsWith("https://")
+  ) {
+    return stall.hermesHref;
+  }
+  return `${site.url}${stall.hermesHref}`;
 }
 
 export function packFilename(stall: Pick<Stall, "downloadHref" | "slug">): string {
@@ -180,6 +197,8 @@ export function stallRecord(stall: Stall) {
     pageUrl: stallPageUrl(stall),
     downloadHref: stall.downloadHref,
     packUrl: packFileUrl(stall),
+    hermesHref: stall.hermesHref ?? null,
+    hermesUrl: hermesPackUrl(stall) ?? null,
     members: stall.members,
     priceCents: stall.priceCents ?? 0,
     currency: stall.currency ?? "usd",
