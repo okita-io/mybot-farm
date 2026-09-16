@@ -72,6 +72,8 @@ export type ListingPayload = {
   category: string;
   priceCents: number;
   pack: Record<string, unknown>;
+  slug?: string;
+  packVersion?: number;
 };
 
 export type ListingPayloadSummary = {

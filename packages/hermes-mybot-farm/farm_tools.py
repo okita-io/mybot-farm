@@ -119,6 +119,7 @@ def farm_get_pack(args: dict, **kwargs) -> str:
     lines = [
         f"Pack: {(summary.get('profile') or {}).get('name') or summary.get('slug')} (`{summary.get('slug')}`)",
         f"Format: {summary.get('format')} {summary.get('version')}",
+        f"Pack version: {summary.get('packVersion') if summary.get('packVersion') is not None else 1}",
         f"Runtime: {', '.join(summary.get('runtime') or []) or '(none)'}",
         f"Skills ({summary.get('skillCount')}): {', '.join(summary.get('skillNames') or []) or '(none)'}",
         f"Members ({summary.get('memberCount')}): "
@@ -153,6 +154,8 @@ def farm_get_stall(args: dict, **kwargs) -> str:
     ] or ["  (none)"]
     lines = [
         f"Stall: {summary['name']} (`{summary['slug']}`) [{summary['kind']}]",
+        f"Stall id: {summary.get('stallId') or '(none)'}",
+        f"Pack version: {summary.get('packVersion') if summary.get('packVersion') is not None else 1}",
         f"Title: {summary['title']}",
         f"Page: {summary['pageUrl']}",
         f"Pack URL: {summary['packUrl']}",
@@ -202,6 +205,8 @@ def farm_post(args: dict, **kwargs) -> str:
             category=args.get("category"),
             price_cents=args.get("priceCents") if "priceCents" in args else args.get("price_cents"),
             pack=pack,
+            slug=args.get("slug"),
+            pack_version=args.get("packVersion") if "packVersion" in args else args.get("pack_version"),
         )
     except FarmError as exc:
         return _err(str(exc))
@@ -217,6 +222,8 @@ def farm_post(args: dict, **kwargs) -> str:
             f"title: {payload['title']}",
             f"category: {payload['category']}",
             f"priceCents: {payload['priceCents']}",
+            f"slug: {payload.get('slug') or '(from name)'}",
+            f"packVersion: {payload.get('packVersion') if payload.get('packVersion') is not None else '(auto)'}",
             f"pack format: {(summary.get('pack') or {}).get('format') or '(none)'}",
             f"pack skills: {(summary.get('pack') or {}).get('skillCount')}",
             f"pack encoded chars: {(summary.get('pack') or {}).get('encodedChars')}",
@@ -251,23 +258,43 @@ def farm_post(args: dict, **kwargs) -> str:
     kind = str(result.get("kind") or payload["kind"])
     page_path = str(result.get("pagePath") or "")
     page_url = listing_page_url(base, page_path) if page_path else f"{base}/{kind}s/{slug}"
+    listing_id = str(result.get("id") or result.get("stallId") or "").strip()
+    pack_version = result.get("packVersion")
+    updated = bool(result.get("updated"))
+    verb = "Updated" if updated else "Posted"
     lines = [
-        f"Posted {kind} `{slug}`",
+        f"{verb} {kind} `{slug}`",
         page_url,
     ]
+    if listing_id:
+        lines.append(f"stall id: {listing_id}")
+    if pack_version is not None:
+        lines.append(f"pack version: {pack_version}")
     if result.get("hasReadme"):
         lines.append("README extracted from pack.")
     return _ok(
         {
             "ok": True,
             "text": "\n".join(lines),
+            "id": listing_id or None,
+            "stallId": listing_id or None,
             "slug": slug,
             "kind": kind,
             "pagePath": page_path,
             "pageUrl": page_url,
+            "packVersion": pack_version,
+            "created": bool(result.get("created", not updated)),
+            "updated": updated,
             "hasReadme": bool(result.get("hasReadme")),
         }
     )
+
+
+def farm_update(args: dict, **kwargs) -> str:
+    slug = str(args.get("slug") or "").strip()
+    if not slug:
+        return _err("slug required")
+    return farm_post({**args, "slug": slug}, **kwargs)
 
 
 def farm_reinstall(args: dict, **kwargs) -> str:

@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { StallActions, StallMembers } from "@/components/stall-actions";
 import { StallEngagement } from "@/components/stall-engagement";
 import { StallDates, StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
+import { StallSlugMeta } from "@/components/stall-slug-meta";
 import { catalogStallCardStats } from "@/lib/catalog";
 import { getStallEngagement } from "@/lib/engagement";
 import { hasUserFlaggedStall } from "@/lib/moderation";
@@ -56,6 +57,11 @@ export async function StallCard({
             {stall.name}
           </Link>
         </CardTitle>
+        <StallSlugMeta
+          slug={stall.slug}
+          packVersion={stall.packVersion}
+          stallId={stall.stallId ?? stall.listingId}
+        />
         <StallMembers stall={stall} canDownload={canDownload} className="flex flex-wrap gap-2" />
         <CardDescription className="text-sm text-foreground/70">
           {stall.title}

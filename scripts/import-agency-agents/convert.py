@@ -790,6 +790,7 @@ def convert_agent(
     pack = {
         "format": PACK_FORMAT,
         "version": PACK_VERSION,
+        "packVersion": 1,
         "runtime": ["grok-bot", "openclaw"],
         "slug": slug,
         "category": category,

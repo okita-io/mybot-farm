@@ -182,8 +182,14 @@ def is_hermes_archive(path: str | None) -> bool:
 
 def stall_summary(stall: dict[str, Any]) -> dict[str, Any]:
     slug = stall.get("slug") or ""
+    nested_pack = stall.get("pack") if isinstance(stall.get("pack"), dict) else {}
+    pack_version = stall.get("packVersion")
+    if pack_version is None:
+        pack_version = nested_pack.get("packVersion")
     return {
         "slug": slug,
+        "stallId": stall.get("stallId") or stall.get("listingId") or "",
+        "packVersion": pack_version,
         "kind": stall.get("kind") or "",
         "name": stall.get("name") or slug,
         "title": stall.get("title") or "",
@@ -211,6 +217,7 @@ def pack_summary(pack: dict[str, Any]) -> dict[str, Any]:
         "slug": pack.get("slug"),
         "format": pack.get("format"),
         "version": pack.get("version"),
+        "packVersion": pack.get("packVersion"),
         "runtime": pack.get("runtime") or [],
         "profile": pack.get("profile") or {},
         "skillNames": [s.get("name") for s in skills if isinstance(s, dict) and s.get("name")],
@@ -288,6 +295,8 @@ def build_listing_payload(
     category: Any,
     price_cents: Any,
     pack: Any,
+    slug: Any = None,
+    pack_version: Any = None,
 ) -> dict[str, Any]:
     parsed_kind = parse_listing_kind(kind)
     if not parsed_kind:
@@ -309,7 +318,7 @@ def build_listing_payload(
         raise FarmError(PRICE_HINT)
 
     parsed_pack = parse_pack_object(pack)
-    return {
+    payload: dict[str, Any] = {
         "kind": parsed_kind,
         "name": parsed_name,
         "title": parsed_title,
@@ -318,6 +327,11 @@ def build_listing_payload(
         "priceCents": parsed_price,
         "pack": parsed_pack,
     }
+    if isinstance(slug, str) and slug.strip():
+        payload["slug"] = slug.strip().lower()
+    if pack_version is not None and pack_version != "":
+        payload["packVersion"] = pack_version
+    return payload
 
 
 def listing_payload_summary(payload: dict[str, Any]) -> dict[str, Any]:
@@ -330,9 +344,12 @@ def listing_payload_summary(payload: dict[str, Any]) -> dict[str, Any]:
         "title": payload.get("title"),
         "category": payload.get("category"),
         "priceCents": payload.get("priceCents"),
+        "slug": payload.get("slug"),
+        "packVersion": payload.get("packVersion"),
         "pack": {
             "format": pack.get("format"),
             "version": pack.get("version"),
+            "packVersion": pack.get("packVersion"),
             "runtime": pack.get("runtime") or [],
             "skillCount": len(skills),
             "encodedChars": len(encoded),

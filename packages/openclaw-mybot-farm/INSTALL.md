@@ -48,7 +48,7 @@ openclaw plugins validate --root /path/to/openclaw-mybot-farm
 openclaw plugins inspect mybot-farm --runtime --json
 ```
 
-You should see tools: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`.
+You should see tools: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`, `farm_update`.
 
 ## 4. Plant an agent (CLI)
 

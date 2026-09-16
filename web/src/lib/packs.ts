@@ -11,6 +11,10 @@ export type StallAuthor = {
 export type Stall = {
   kind: StallKind;
   slug: string;
+  /** Stable stall id: listing UUID, or uuid v5 for catalog/seed stalls. */
+  stallId?: string;
+  /** Content revision (same-slug GAF updates). Not the GAF format version. */
+  packVersion?: number;
   name: string;
   title: string;
   description: string;
@@ -165,6 +169,8 @@ export function stallRecord(stall: Stall) {
   return {
     kind: stall.kind,
     slug: stall.slug,
+    stallId: stall.stallId ?? stall.listingId ?? null,
+    packVersion: stall.packVersion ?? 1,
     name: stall.name,
     title: stall.title,
     description: stall.description,

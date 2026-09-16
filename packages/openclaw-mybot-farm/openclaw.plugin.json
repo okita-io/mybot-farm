@@ -48,7 +48,8 @@
       "farm_search",
       "farm_get_pack",
       "farm_plant",
-      "farm_post"
+      "farm_post",
+      "farm_update"
     ]
   }
 }

@@ -31,6 +31,7 @@ capabilities:
     - farm_plant
     - farm_reinstall
     - farm_post
+    - farm_update
   provides_hooks: []
   provides_middleware: []
   requires_env: []

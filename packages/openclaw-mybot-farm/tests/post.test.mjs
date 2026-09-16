@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const api = await import(pathToFileURL(path.join(root, "src/farm-api.mjs")).href);
-const { postListing } = await import(pathToFileURL(path.join(root, "src/post.mjs")).href);
+const { postListing, updateListing } = await import(pathToFileURL(path.join(root, "src/post.mjs")).href);
 const { run } = await import(pathToFileURL(path.join(root, "bin/farm-plant.mjs")).href);
 
 const SAMPLE_PACK = {
@@ -131,9 +131,14 @@ test("free listing 201 sends Bearer without asserting full key", async () => {
     captured.body = opts.body;
     return jsonResponse({
       ok: true,
+      id: "11111111-1111-4111-8111-111111111111",
+      stallId: "11111111-1111-4111-8111-111111111111",
       slug: "smoke-bot",
       kind: "agent",
       pagePath: "/agents/smoke-bot",
+      packVersion: 1,
+      created: true,
+      updated: false,
       hasReadme: false,
     });
   };
@@ -142,6 +147,9 @@ test("free listing 201 sends Bearer without asserting full key", async () => {
     const payload = await postListing({ args: listingArgs() });
     assert.equal(payload.ok, true);
     assert.equal(payload.slug, "smoke-bot");
+    assert.equal(payload.id, "11111111-1111-4111-8111-111111111111");
+    assert.equal(payload.packVersion, 1);
+    assert.equal(payload.updated, false);
     assert.match(payload.text, /https:\/\/mybot\.farm\/agents\/smoke-bot/);
     assert.equal(payload.pageUrl, "https://mybot.farm/agents/smoke-bot");
     assert.equal(captured.method, "POST");
@@ -313,5 +321,50 @@ test("CLI post --json dry-run", async () => {
     assert.equal(data.payload.priceCents, 0);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("farm_update requires slug", async () => {
+  const payload = await updateListing({ args: listingArgs({ apiKey: TEST_KEY }) });
+  assert.equal(payload.ok, false);
+  assert.match(payload.error, /slug required/);
+});
+
+test("owned slug upsert forwards id and pack version", async () => {
+  const captured = {};
+  const prev = globalThis.fetch;
+  globalThis.fetch = async (_url, opts = {}) => {
+    captured.body = opts.body;
+    return jsonResponse(
+      {
+        ok: true,
+        id: "22222222-2222-4222-8222-222222222222",
+        stallId: "22222222-2222-4222-8222-222222222222",
+        slug: "smoke-bot",
+        kind: "agent",
+        pagePath: "/agents/smoke-bot",
+        packVersion: 2,
+        created: false,
+        updated: true,
+        hasReadme: false,
+      },
+      200,
+    );
+  };
+  process.env.MYBOT_FARM_API_KEY = TEST_KEY;
+  try {
+    const payload = await updateListing({
+      args: listingArgs({ slug: "smoke-bot", packVersion: 2 }),
+    });
+    assert.equal(payload.ok, true);
+    assert.equal(payload.updated, true);
+    assert.equal(payload.packVersion, 2);
+    assert.equal(payload.id, "22222222-2222-4222-8222-222222222222");
+    assert.match(payload.text, /Updated/);
+    const posted = JSON.parse(captured.body || "{}");
+    assert.equal(posted.slug, "smoke-bot");
+    assert.equal(posted.packVersion, 2);
+  } finally {
+    globalThis.fetch = prev;
   }
 });

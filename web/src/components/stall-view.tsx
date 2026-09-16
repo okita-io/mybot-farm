@@ -5,6 +5,7 @@ import { StallActions, StallMembers } from "@/components/stall-actions";
 import { StallEngagement } from "@/components/stall-engagement";
 import { StallDates, StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
 import { StallReadmeCard } from "@/components/stall-readme-card";
+import { StallSlugMeta } from "@/components/stall-slug-meta";
 import { Container } from "@/components/container";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
@@ -100,6 +101,13 @@ export async function StallView({
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
             {stall.name}
           </h1>
+          <div className="mt-2">
+            <StallSlugMeta
+              slug={stall.slug}
+              packVersion={stall.packVersion}
+              stallId={stall.stallId ?? stall.listingId}
+            />
+          </div>
           <StallMembers stall={stall} canDownload={canDownload} />
           <p className="mt-3 text-lg text-foreground/70">{stall.title}</p>
           <p className="mt-4 text-base leading-relaxed text-pretty text-foreground/80 sm:text-lg">

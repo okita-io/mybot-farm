@@ -75,19 +75,24 @@ curl -sS -X POST https://mybot.farm/api/listings \
   }'
 ```
 
-Expect `201`:
+Expect `201` on create and `200` on an in-place update of a slug you already own:
 
 ```json
 {
   "ok": true,
+  "id": "uuid",
+  "stallId": "uuid",
   "slug": "smoke-bot",
   "kind": "agent",
   "pagePath": "/agents/smoke-bot",
+  "packVersion": 1,
+  "created": true,
+  "updated": false,
   "hasReadme": false
 }
 ```
 
-Open `pagePath` on the farm to confirm the stall. `PATCH /api/listings/{id}` uses the same auth.
+Same seller + same slug replaces the GAF pack (skills, soul/memory) and bumps `packVersion`. Optional body fields: `slug` (target stall), `packVersion` (must be greater than the live revision, or omit to auto-increment). Catalog/agency slugs return `409 catalog_reserved`. Another seller's slug returns `409 slug_taken` (no `slug-2`). `PATCH /api/listings/{id}` uses the same auth and also bumps `packVersion`.
 
 ## WebMCP `post_listing`
 
