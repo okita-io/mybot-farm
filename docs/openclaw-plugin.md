@@ -53,18 +53,18 @@ You should see tools: `farm_search`, `farm_get_pack`, `farm_plant`.
 
 The packed release is an `openclaw plugins pack` artifact served at:
 
-`https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz`
+`https://mybot.farm/downloads/openclaw-mybot-farm-0.1.1.tgz`
 
 OpenClaw accepts a local archive path, or `npm-pack:` when you want the managed npm-project install path used by registry packs ([plugin install docs](https://docs.openclaw.ai/cli/plugins/install)):
 
 ```bash
-curl -LO https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz
+curl -LO https://mybot.farm/downloads/openclaw-mybot-farm-0.1.1.tgz
 
 # packed archive (works for .tgz produced by `openclaw plugins pack`)
-openclaw plugins install ./openclaw-mybot-farm-0.1.0.tgz --force
+openclaw plugins install ./openclaw-mybot-farm-0.1.1.tgz --force
 
 # same file, npm-pack locator
-openclaw plugins install npm-pack:./openclaw-mybot-farm-0.1.0.tgz --force
+openclaw plugins install npm-pack:./openclaw-mybot-farm-0.1.1.tgz --force
 
 openclaw plugins enable mybot-farm
 ```
