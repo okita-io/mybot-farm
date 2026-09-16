@@ -192,6 +192,10 @@ export async function StallView({
             </Link>{" "}
             covers Grok Bot (this GAF prompt) and Hermes (a scrubbed{" "}
             <code className="font-mono text-[0.9em] text-foreground">.tar.gz</code>
+            , or the{" "}
+            <Link href="/install/hermes" className="underline-offset-4 hover:underline">
+              Hermes mybot-farm plugin
+            </Link>
             ). OpenClaw plants the same pack with the{" "}
             <Link href="/install/openclaw" className="underline-offset-4 hover:underline">
               mybot-farm plugin

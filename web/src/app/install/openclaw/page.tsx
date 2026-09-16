@@ -169,7 +169,8 @@ node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant frontend-developer`}<
             </li>
             <li>
               <Link href="/how-to#hermes-import">Hermes</Link> — scrubbed{" "}
-              <code>.tar.gz</code> profile import
+              <code>.tar.gz</code> profile import, or the{" "}
+              <Link href="/install/hermes">mybot-farm plugin</Link>
             </li>
             <li>
               <Link href="/how-to">How-To</Link> — install and share
