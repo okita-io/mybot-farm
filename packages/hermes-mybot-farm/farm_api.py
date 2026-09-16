@@ -10,12 +10,40 @@ from urllib.parse import quote, urljoin
 from urllib.request import Request, urlopen
 
 DEFAULT_BASE = "https://mybot.farm"
-USER_AGENT = "hermes-mybot-farm/0.1.0"
+USER_AGENT = "hermes-mybot-farm/0.2.0"
 TIMEOUT_S = 60
+
+# Exact category *labels* from web/src/lib/site.ts `categories[].label`.
+CATEGORY_LABELS = frozenset(
+    {
+        "Lifestyle",
+        "Productivity",
+        "Coding",
+        "Writing",
+        "Marketing",
+        "Sales",
+        "Research",
+        "Personal finance",
+        "Creative",
+        "Music",
+        "Education",
+        "Ops / admin",
+        "Experimental",
+    }
+)
+LISTING_KINDS = frozenset({"agent", "team"})
+MIN_PAID_PRICE_CENTS = 200
+MAX_PRICE_CENTS = 999_900
+MAX_PACK_CHARS = 500_000
+PRICE_HINT = "Choose Free, or a price between $2.00 and $9,999.00."
 
 
 class FarmError(Exception):
     """HTTP or pack-shape error from mybot.farm."""
+
+    def __init__(self, message: str, status: int | None = None) -> None:
+        super().__init__(message)
+        self.status = status
 
 
 def resolve_base_url(plugin_config: dict[str, Any] | None = None) -> str:
@@ -26,14 +54,56 @@ def resolve_base_url(plugin_config: dict[str, Any] | None = None) -> str:
     return base.rstrip("/")
 
 
-def _request(url: str, *, accept: str = "application/json") -> bytes:
-    req = Request(
-        url,
-        headers={
-            "Accept": accept,
-            "User-Agent": USER_AGENT,
-        },
-    )
+def resolve_api_key(
+    plugin_config: dict[str, Any] | None = None,
+    override: str | None = None,
+) -> str:
+    """Seller key: per-call override, else env MYBOT_FARM_API_KEY, else config apiKey.
+
+    Never log the returned value.
+    """
+    if isinstance(override, str) and override.strip():
+        return override.strip()
+    env = (os.environ.get("MYBOT_FARM_API_KEY") or "").strip()
+    if env:
+        return env
+    cfg = plugin_config or {}
+    return str(cfg.get("apiKey") or cfg.get("api_key") or "").strip()
+
+
+def _short_error_body(raw: str) -> str:
+    text = (raw or "").strip()
+    if not text:
+        return ""
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return text[:200]
+    if not isinstance(data, dict):
+        return text[:200]
+    parts: list[str] = []
+    for key in ("error", "message"):
+        value = data.get(key)
+        if isinstance(value, str) and value.strip():
+            parts.append(value.strip())
+    return ": ".join(parts)[:200] if parts else text[:200]
+
+
+def _request(
+    url: str,
+    *,
+    accept: str = "application/json",
+    data: bytes | None = None,
+    headers: dict[str, str] | None = None,
+    method: str | None = None,
+) -> bytes:
+    req_headers = {
+        "Accept": accept,
+        "User-Agent": USER_AGENT,
+    }
+    if headers:
+        req_headers.update(headers)
+    req = Request(url, data=data, headers=req_headers, method=method)
     try:
         with urlopen(req, timeout=TIMEOUT_S) as resp:
             return resp.read()
@@ -43,8 +113,10 @@ def _request(url: str, *, accept: str = "application/json") -> bytes:
             body = exc.read().decode("utf-8", errors="replace")[:240]
         except Exception:
             body = ""
+        short = _short_error_body(body)
         raise FarmError(
-            f"mybot.farm {exc.code} for {url}{(': ' + body) if body else ''}"
+            f"mybot.farm {exc.code} for {url}{(': ' + short) if short else ''}",
+            status=exc.code,
         ) from exc
     except URLError as exc:
         raise FarmError(f"mybot.farm unreachable for {url}: {exc.reason}") from exc
@@ -161,3 +233,143 @@ def pack_summary(pack: dict[str, Any]) -> dict[str, Any]:
         "homepage": manifest.get("homepage") or "",
         "scrubbed": manifest.get("scrubbed"),
     }
+
+
+def parse_price_cents(value: Any) -> int | None:
+    """Match web/src/lib/listings.ts parsePriceCents (plus string ints for CLI)."""
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, str):
+        text = value.strip()
+        if not text:
+            return None
+        try:
+            value = float(text) if "." in text else int(text)
+        except ValueError:
+            return None
+    if not isinstance(value, (int, float)):
+        return None
+    if isinstance(value, float) and (value != value or value in {float("inf"), float("-inf")}):
+        return None
+    cents = int(round(value))
+    if cents == 0:
+        return 0
+    if cents < MIN_PAID_PRICE_CENTS or cents > MAX_PRICE_CENTS:
+        return None
+    return cents
+
+
+def parse_listing_kind(value: Any) -> str | None:
+    if isinstance(value, str) and value.strip() in LISTING_KINDS:
+        return value.strip()
+    return None
+
+
+def parse_pack_object(value: Any) -> dict[str, Any]:
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except json.JSONDecodeError as exc:
+            raise FarmError("Pack JSON must be an object.") from exc
+    if not isinstance(value, dict) or isinstance(value, list):
+        raise FarmError("Pack JSON must be an object.")
+    encoded = json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    if len(encoded) > MAX_PACK_CHARS:
+        raise FarmError("Pack JSON is too large (max 500 KB).")
+    return value
+
+
+def build_listing_payload(
+    *,
+    kind: Any,
+    name: Any,
+    title: Any,
+    description: Any,
+    category: Any,
+    price_cents: Any,
+    pack: Any,
+) -> dict[str, Any]:
+    parsed_kind = parse_listing_kind(kind)
+    if not parsed_kind:
+        raise FarmError('kind must be "agent" or "team"')
+
+    parsed_name = name.strip() if isinstance(name, str) else ""
+    parsed_title = title.strip() if isinstance(title, str) else ""
+    parsed_description = description.strip() if isinstance(description, str) else ""
+    if not parsed_name or not parsed_title or not parsed_description:
+        raise FarmError("name, title, and description are required")
+
+    parsed_category = category.strip() if isinstance(category, str) else ""
+    if parsed_category not in CATEGORY_LABELS:
+        labels = ", ".join(sorted(CATEGORY_LABELS))
+        raise FarmError(f"category must be an exact farm label ({labels})")
+
+    parsed_price = parse_price_cents(price_cents)
+    if parsed_price is None:
+        raise FarmError(PRICE_HINT)
+
+    parsed_pack = parse_pack_object(pack)
+    return {
+        "kind": parsed_kind,
+        "name": parsed_name,
+        "title": parsed_title,
+        "description": parsed_description,
+        "category": parsed_category,
+        "priceCents": parsed_price,
+        "pack": parsed_pack,
+    }
+
+
+def listing_payload_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    pack = payload.get("pack") if isinstance(payload.get("pack"), dict) else {}
+    skills = pack.get("skills") if isinstance(pack.get("skills"), list) else []
+    encoded = json.dumps(pack, ensure_ascii=False, separators=(",", ":"))
+    return {
+        "kind": payload.get("kind"),
+        "name": payload.get("name"),
+        "title": payload.get("title"),
+        "category": payload.get("category"),
+        "priceCents": payload.get("priceCents"),
+        "pack": {
+            "format": pack.get("format"),
+            "version": pack.get("version"),
+            "runtime": pack.get("runtime") or [],
+            "skillCount": len(skills),
+            "encodedChars": len(encoded),
+        },
+    }
+
+
+def listing_page_url(base_url: str, page_path: str) -> str:
+    path = page_path if page_path.startswith("/") else f"/{page_path}"
+    return f"{base_url.rstrip('/')}{path}"
+
+
+def create_listing(
+    base_url: str,
+    payload: dict[str, Any],
+    api_key: str,
+) -> dict[str, Any]:
+    key = (api_key or "").strip()
+    if not key:
+        raise FarmError(
+            "seller API key required (env MYBOT_FARM_API_KEY or plugin config apiKey)"
+        )
+    url = f"{base_url.rstrip('/')}/api/listings"
+    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    raw = _request(
+        url,
+        data=body,
+        method="POST",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {key}",
+        },
+    )
+    try:
+        data = json.loads(raw.decode("utf-8"))
+    except json.JSONDecodeError as exc:
+        raise FarmError(f"non-JSON from {url}: {exc}") from exc
+    if not isinstance(data, dict):
+        raise FarmError(f"empty listing response from {url}")
+    return data

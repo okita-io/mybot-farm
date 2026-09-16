@@ -46,17 +46,23 @@ def register(ctx):
         schema=schemas.FARM_REINSTALL,
         handler=farm_tools.farm_reinstall,
     )
+    ctx.register_tool(
+        name="farm_post",
+        toolset=toolset,
+        schema=schemas.FARM_POST,
+        handler=farm_tools.farm_post,
+    )
     ctx.register_cli_command(
         name="farm",
-        help="Search and plant mybot.farm stalls into Hermes",
+        help="Search, plant, or post mybot.farm stalls from Hermes",
         setup_fn=setup_farm_cli,
         handler_fn=handle_farm_cli,
     )
     ctx.register_command(
         "farm",
         _slash_farm,
-        description="Search or plant mybot.farm stalls (search <q> | plant <slug> | reinstall <slug>)",
-        args_hint="search <query> | plant <slug> | reinstall <slug>",
+        description="Search, plant, or post mybot.farm stalls (search <q> | plant <slug> | reinstall <slug> | post …)",
+        args_hint="search <query> | plant <slug> | reinstall <slug> | post --kind agent --name … --pack file.json",
     )
 
 
@@ -65,7 +71,11 @@ def _slash_farm(raw_args: str) -> str:
 
     parts = (raw_args or "").split()
     if not parts:
-        return "Usage: /farm search <query> | /farm plant <slug> | /farm reinstall <slug> [--force] [--clean]"
+        return (
+            "Usage: /farm search <query> | /farm plant <slug> | /farm reinstall <slug> "
+            "[--force] [--clean] | /farm post --kind agent --name NAME --title TITLE "
+            "--description DESC --category LABEL --price-cents 0 --pack pack.json [--dry-run]"
+        )
     try:
         return run_argv(parts, as_text=True)
     except SystemExit as exc:

@@ -17,15 +17,15 @@ After the farm PR merges to `main`:
 
 ```bash
 git checkout main && git pull
-git tag hermes-mybot-farm-v0.1.0
-git push origin hermes-mybot-farm-v0.1.0
-git rev-parse hermes-mybot-farm-v0.1.0
+git tag hermes-mybot-farm-v0.2.0
+git push origin hermes-mybot-farm-v0.2.0
+git rev-parse hermes-mybot-farm-v0.2.0
 # → 40-hex; paste into sha: in mybot-farm.yaml (branches/tags are rejected)
 
 # GitHub Release on that tag (catalog wants a real release, not only default branch):
-gh release create hermes-mybot-farm-v0.1.0 \
-  --title "hermes-mybot-farm 0.1.0" \
-  --notes "Hermes mybot-farm plugin v0.1.0 — search/plant/reinstall mybot.farm stalls."
+gh release create hermes-mybot-farm-v0.2.0 \
+  --title "hermes-mybot-farm 0.2.0" \
+  --notes "Hermes mybot-farm plugin v0.2.0 — search/plant/reinstall plus farm_post (GAF listings with seller API key)."
 ```
 
 Then:
