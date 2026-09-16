@@ -46,6 +46,10 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
           How-To
         </Link>{" "}
         (Grok Bot GAF prompt, Hermes scrubbed archive),{" "}
+        <Link href="/install/openclaw" className="font-medium text-foreground underline-offset-4 hover:underline">
+          OpenClaw plant
+        </Link>
+        ,{" "}
         <Link href="/teams" className="font-medium text-foreground underline-offset-4 hover:underline">
           Agent Teams
         </Link>

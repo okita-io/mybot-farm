@@ -36,6 +36,10 @@ const nextConfig: NextConfig = {
         headers: cors,
       },
       {
+        source: "/downloads/:path*",
+        headers: cors,
+      },
+      {
         source: "/:path*",
         headers: [{ key: "Permissions-Policy", value: "tools=(self)" }],
       },
