@@ -4,7 +4,7 @@
   "description": "Search mybot.farm stalls and plant GAF agent packs into OpenClaw.",
   "version": "0.1.0",
   "categories": [
-    "tools"
+    "developer-tools"
   ],
   "activation": {
     "onStartup": true
