@@ -7,13 +7,19 @@ package, so `from tools import …` inside a plugin binds the host, not us.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any
 
 from farm_api import (
     FarmError,
+    build_listing_payload,
+    create_listing,
     get_pack,
     get_stall,
+    listing_page_url,
+    listing_payload_summary,
     pack_summary,
+    resolve_api_key,
     resolve_base_url,
     search_stalls,
     stall_summary,
@@ -36,6 +42,39 @@ def _err(message: str, **extra: Any) -> str:
 def _base(kwargs: dict[str, Any]) -> str:
     cfg = kwargs.get("plugin_config") if isinstance(kwargs.get("plugin_config"), dict) else {}
     return resolve_base_url(cfg)
+
+
+def _plugin_config(kwargs: dict[str, Any]) -> dict[str, Any]:
+    return kwargs.get("plugin_config") if isinstance(kwargs.get("plugin_config"), dict) else {}
+
+
+def _truthy(value: Any) -> bool:
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "on"}
+    return bool(value)
+
+
+def _load_pack(args: dict) -> Any:
+    pack = args.get("pack")
+    path = args.get("packPath") or args.get("pack_path")
+    has_pack = pack is not None and pack != ""
+    has_path = isinstance(path, str) and path.strip()
+    if has_pack and has_path:
+        raise FarmError("provide pack or packPath, not both")
+    if has_path:
+        file_path = Path(str(path)).expanduser()
+        if not file_path.is_file():
+            raise FarmError(f"pack file not found: {file_path}")
+        try:
+            raw = file_path.read_text(encoding="utf-8")
+            return json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise FarmError(f"pack file is not JSON: {exc}") from exc
+        except OSError as exc:
+            raise FarmError(f"cannot read pack file: {exc}") from exc
+    if has_pack:
+        return pack
+    raise FarmError("pack (GAF JSON object) or packPath (path to a .json GAF file) required")
 
 
 def farm_search(args: dict, **kwargs) -> str:
@@ -145,6 +184,90 @@ def farm_plant(args: dict, **kwargs) -> str:
     payload = result.as_dict()
     payload["text"] = _plant_text(result)
     return _ok(payload)
+
+
+def farm_post(args: dict, **kwargs) -> str:
+    cfg = _plugin_config(kwargs)
+    dry_run = _truthy(args.get("dryRun") if "dryRun" in args else args.get("dry_run"))
+    override = args.get("apiKey") if args.get("apiKey") is not None else args.get("api_key")
+    override_s = override.strip() if isinstance(override, str) else None
+    api_key = resolve_api_key(cfg, override_s)
+    try:
+        pack = _load_pack(args)
+        payload = build_listing_payload(
+            kind=args.get("kind"),
+            name=args.get("name"),
+            title=args.get("title"),
+            description=args.get("description"),
+            category=args.get("category"),
+            price_cents=args.get("priceCents") if "priceCents" in args else args.get("price_cents"),
+            pack=pack,
+        )
+    except FarmError as exc:
+        return _err(str(exc))
+
+    summary = listing_payload_summary(payload)
+    base = resolve_base_url(cfg)
+    if dry_run:
+        key_note = "configured (redacted)" if api_key else "missing (POST would fail)"
+        lines = [
+            "Dry-run: listing payload is valid (not posted)",
+            f"kind: {payload['kind']}",
+            f"name: {payload['name']}",
+            f"title: {payload['title']}",
+            f"category: {payload['category']}",
+            f"priceCents: {payload['priceCents']}",
+            f"pack format: {(summary.get('pack') or {}).get('format') or '(none)'}",
+            f"pack skills: {(summary.get('pack') or {}).get('skillCount')}",
+            f"pack encoded chars: {(summary.get('pack') or {}).get('encodedChars')}",
+            f"POST {base}/api/listings",
+            f"apiKey: {key_note}",
+        ]
+        return _ok(
+            {
+                "ok": True,
+                "dryRun": True,
+                "text": "\n".join(lines),
+                "payload": summary,
+                "endpoint": f"{base}/api/listings",
+                "apiKey": key_note,
+            }
+        )
+
+    if not api_key:
+        return _err(
+            "seller API key required (set MYBOT_FARM_API_KEY, plugin config apiKey, "
+            "or pass apiKey). Create a key at https://mybot.farm/sell — see docs/api-keys.md"
+        )
+    try:
+        result = create_listing(base, payload, api_key)
+    except FarmError as exc:
+        extra: dict[str, Any] = {}
+        if exc.status is not None:
+            extra["status"] = exc.status
+        return _err(str(exc), **extra)
+
+    slug = str(result.get("slug") or "").strip()
+    kind = str(result.get("kind") or payload["kind"])
+    page_path = str(result.get("pagePath") or "")
+    page_url = listing_page_url(base, page_path) if page_path else f"{base}/{kind}s/{slug}"
+    lines = [
+        f"Posted {kind} `{slug}`",
+        page_url,
+    ]
+    if result.get("hasReadme"):
+        lines.append("README extracted from pack.")
+    return _ok(
+        {
+            "ok": True,
+            "text": "\n".join(lines),
+            "slug": slug,
+            "kind": kind,
+            "pagePath": page_path,
+            "pageUrl": page_url,
+            "hasReadme": bool(result.get("hasReadme")),
+        }
+    )
 
 
 def farm_reinstall(args: dict, **kwargs) -> str:

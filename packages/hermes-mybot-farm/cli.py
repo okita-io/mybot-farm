@@ -15,6 +15,7 @@ from farm_tools import (
     farm_get_pack,
     farm_get_stall,
     farm_plant,
+    farm_post,
     farm_reinstall,
     farm_search,
 )
@@ -40,7 +41,7 @@ def setup_farm_cli(subparser) -> None:
     subparser.add_argument(
         "farm_command",
         nargs="?",
-        choices=["search", "get", "stall", "plant", "reinstall", "clear-tombstones"],
+        choices=["search", "get", "stall", "plant", "reinstall", "post", "clear-tombstones"],
         help="farm subcommand",
     )
     subparser.add_argument("rest", nargs=argparse.REMAINDER, help="command arguments")
@@ -59,15 +60,39 @@ def handle_farm_cli(args) -> None:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="farm-plant",
-        description="Search and plant mybot.farm Hermes stalls (no agent loop).",
+        description="Search, plant, or post mybot.farm stalls (no agent loop).",
     )
     parser.add_argument(
         "command",
-        choices=["search", "get", "stall", "plant", "reinstall", "clear-tombstones"],
+        choices=["search", "get", "stall", "plant", "reinstall", "post", "clear-tombstones"],
         nargs="?",
     )
     parser.add_argument("rest", nargs=argparse.REMAINDER)
     return parser
+
+
+_BOOL_FLAGS = {
+    "--force": "force",
+    "--clean": "clean",
+    "--dry-run": "dry_run",
+    "--dry_run": "dry_run",
+    "--json": "json",
+}
+
+_VALUE_FLAGS = {
+    "--limit": ("limit", int),
+    "--name": ("name", str),
+    "--kind": ("kind", str),
+    "--title": ("title", str),
+    "--description": ("description", str),
+    "--category": ("category", str),
+    "--price-cents": ("priceCents", int),
+    "--priceCents": ("priceCents", int),
+    "--pack": ("packPath", str),
+    "--pack-path": ("packPath", str),
+    "--api-key": ("apiKey", str),
+    "--apiKey": ("apiKey", str),
+}
 
 
 def _parse_flags(rest: list[str]) -> tuple[list[str], dict[str, Any]]:
@@ -76,20 +101,21 @@ def _parse_flags(rest: list[str]) -> tuple[list[str], dict[str, Any]]:
     i = 0
     while i < len(rest):
         tok = rest[i]
-        if tok in {"--force"}:
-            flags["force"] = True
-        elif tok in {"--clean"}:
-            flags["clean"] = True
-        elif tok in {"--dry-run", "--dry_run"}:
-            flags["dry_run"] = True
-        elif tok in {"--limit"}:
-            i += 1
-            flags["limit"] = int(rest[i])
-        elif tok in {"--name"}:
-            i += 1
-            flags["name"] = rest[i]
-        elif tok in {"--help", "-h"}:
+        if tok in {"--help", "-h"}:
             flags["help"] = True
+        elif tok in _BOOL_FLAGS:
+            flags[_BOOL_FLAGS[tok]] = True
+        elif tok in _VALUE_FLAGS:
+            key, caster = _VALUE_FLAGS[tok]
+            i += 1
+            if i >= len(rest):
+                flags["flag_error"] = f"{tok} requires a value"
+                break
+            try:
+                flags[key] = caster(rest[i])
+            except (TypeError, ValueError):
+                flags["flag_error"] = f"{tok} expected a {'number' if caster is int else 'value'}"
+                break
         else:
             positional.append(tok)
         i += 1
@@ -103,12 +129,20 @@ def usage() -> str:
   farm-plant stall <slug>
   farm-plant plant <slug> [--name NAME] [--force] [--clean] [--dry-run]
   farm-plant reinstall <slug> [--force] [--clean] [--dry-run]
+  farm-plant post --kind agent|team --name NAME --title TITLE --description DESC
+                 --category LABEL --price-cents N --pack pack.json
+                 [--api-key KEY] [--dry-run] [--json]
   farm-plant clear-tombstones [name ...]
 
 Env:
-  MYBOT_FARM_URL   override API origin (default https://mybot.farm)
-  HERMES_HOME      override Hermes home (default ~/.hermes)
-  HERMES_BIN       override hermes executable
+  MYBOT_FARM_URL      override API origin (default https://mybot.farm)
+  MYBOT_FARM_API_KEY  seller key for post (from https://mybot.farm/sell)
+  HERMES_HOME         override Hermes home (default ~/.hermes)
+  HERMES_BIN          override hermes executable
+
+Post publishes GAF JSON to the farm. Plant still imports Hermes tarballs.
+Category must be an exact farm label (Lifestyle, Coding, Experimental, …).
+price-cents is 0 (free) or 200–999900. Paid listings need Stripe Connect.
 """
 
 
@@ -122,6 +156,11 @@ def _dispatch(argv: list[str], *, as_text: bool) -> int:
     if flags.get("help"):
         print(usage())
         return 0
+    if flags.get("flag_error"):
+        print(flags["flag_error"], file=sys.stderr)
+        return 1
+    if flags.get("json"):
+        printer = _print_json
 
     if cmd == "search":
         query = " ".join(rest).strip()
@@ -158,6 +197,39 @@ def _dispatch(argv: list[str], *, as_text: bool) -> int:
             return 1
         args = {"slug": rest[0], **{k: flags[k] for k in ("force", "clean", "dry_run", "name") if k in flags}}
         return printer(farm_reinstall(args))
+
+    if cmd == "post":
+        missing = [
+            name
+            for name in ("kind", "name", "title", "description", "category", "priceCents")
+            if name not in flags
+        ]
+        pack_path = flags.get("packPath")
+        if rest and not pack_path:
+            pack_path = rest[0]
+        if missing or not pack_path:
+            print(
+                "post requires --kind --name --title --description --category "
+                "--price-cents and --pack <gaf.json>",
+                file=sys.stderr,
+            )
+            return 1
+        args = {
+            "kind": flags["kind"],
+            "name": flags["name"],
+            "title": flags["title"],
+            "description": flags["description"],
+            "category": flags["category"],
+            "priceCents": flags["priceCents"],
+            "packPath": pack_path,
+        }
+        if flags.get("dry_run"):
+            args["dryRun"] = True
+        if flags.get("apiKey"):
+            args["apiKey"] = flags["apiKey"]
+        # Human-readable by default; --json keeps machine output.
+        post_printer = _print_json if flags.get("json") else _print_text
+        return post_printer(farm_post(args))
 
     if cmd in {"clear-tombstones", "clear_tombstones"}:
         payload = clear_named_tombstones(rest or None)

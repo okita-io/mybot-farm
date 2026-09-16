@@ -1,6 +1,6 @@
 name: mybot-farm
-version: 0.1.0
-description: Search mybot.farm stalls and plant Hermes packs (profiles, team dirs, kanban).
+version: 0.2.0
+description: Search, plant, and post mybot.farm stalls (Hermes profiles + GAF listings).
 author: mybot.farm
 homepage: https://mybot.farm/install/hermes
 provides_tools:
@@ -9,7 +9,11 @@ provides_tools:
   - farm_get_stall
   - farm_plant
   - farm_reinstall
+  - farm_post
 config_schema:
   baseUrl:
     type: str
     description: mybot.farm API origin (env MYBOT_FARM_URL overrides).
+  apiKey:
+    type: str
+    description: Seller API key from https://mybot.farm/sell (prefer env MYBOT_FARM_API_KEY). Never commit the key.
