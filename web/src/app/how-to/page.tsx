@@ -324,8 +324,8 @@ openclaw gateway restart`}</pre>
             ) and install the archive:
           </p>
           <pre>{`curl -LO ${openclawPlugin.downloadUrl}
-openclaw plugins install ./openclaw-mybot-farm-0.1.0.tgz --force
-# or: openclaw plugins install npm-pack:./openclaw-mybot-farm-0.1.0.tgz --force
+openclaw plugins install ./openclaw-mybot-farm-${openclawPlugin.version}.tgz --force
+# or: openclaw plugins install npm-pack:./openclaw-mybot-farm-${openclawPlugin.version}.tgz --force
 openclaw plugins enable mybot-farm`}</pre>
         </ContentSection>
 

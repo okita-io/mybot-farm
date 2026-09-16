@@ -149,7 +149,7 @@ export const howToOpenClawLd = {
     {
       "@type": "HowToStep",
       name: "Install from ClawHub",
-      text: "Run openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm. Optional: openclaw plugins search mybot-farm. Alternatives: from a checkout, openclaw plugins install ./packages/openclaw-mybot-farm --link --force; or download https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz and install the .tgz (or npm-pack:).",
+      text: "Run openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm. Optional: openclaw plugins search mybot-farm. Alternatives: from a checkout, openclaw plugins install ./packages/openclaw-mybot-farm --link --force; or download https://mybot.farm/downloads/openclaw-mybot-farm-0.1.1.tgz and install the .tgz (or npm-pack:).",
     },
     {
       "@type": "HowToStep",

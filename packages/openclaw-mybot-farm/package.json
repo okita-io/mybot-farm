@@ -1,6 +1,6 @@
 {
   "name": "@okita-io/openclaw-mybot-farm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenClaw native tools to search and plant mybot.farm GAF agent packs",
   "type": "module",
   "license": "MIT",
