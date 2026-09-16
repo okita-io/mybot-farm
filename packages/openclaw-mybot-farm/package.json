@@ -5,10 +5,17 @@
   "type": "module",
   "license": "MIT",
   "author": "okita-io",
+  "homepage": "https://mybot.farm/install/openclaw",
+  "bugs": {
+    "url": "https://github.com/okita-io/mybot-farm/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/okita-io/mybot-farm",
+    "url": "git+https://github.com/okita-io/mybot-farm.git",
     "directory": "packages/openclaw-mybot-farm"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "index.ts",
@@ -17,7 +24,8 @@
     "mcp",
     "openclaw.plugin.json",
     "README.md",
-    "INSTALL.md"
+    "INSTALL.md",
+    "assets"
   ],
   "bin": {
     "farm-plant": "./bin/farm-plant.mjs"
@@ -40,7 +48,12 @@
       "./index.ts"
     ],
     "compat": {
-      "pluginApi": ">=2026.9.4"
+      "pluginApi": ">=2026.9.4",
+      "minGatewayVersion": "2026.9.4"
+    },
+    "build": {
+      "openclawVersion": "2026.9.4",
+      "pluginSdkVersion": "2026.9.4"
     }
   },
   "keywords": [
