@@ -5,7 +5,7 @@ import {
   updateListingReadme,
 } from "@/lib/listings";
 import { parseStallReadme } from "@/lib/readme";
-import { requireAppUser } from "@/lib/users";
+import { requireSeller } from "@/lib/seller-auth";
 
 export const runtime = "nodejs";
 
@@ -13,7 +13,7 @@ export async function PUT(
   request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
-  const user = await requireAppUser();
+  const user = await requireSeller(request);
   if (!user) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
@@ -85,7 +85,7 @@ export async function DELETE(
   _request: Request,
   context: { params: Promise<{ id: string }> },
 ) {
-  const user = await requireAppUser();
+  const user = await requireSeller(_request);
   if (!user) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }

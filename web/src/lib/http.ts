@@ -1,7 +1,7 @@
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Authorization, Content-Type, X-Api-Key",
   "Access-Control-Max-Age": "86400",
 } as const;
 
@@ -50,5 +50,17 @@ export function optionsResponse() {
   return new Response(null, {
     status: 204,
     headers: corsHeaders,
+  });
+}
+
+export function noStoreJson(data: unknown, init?: ResponseInit) {
+  const headers = new Headers(init?.headers);
+  if (!headers.has("Cache-Control")) {
+    headers.set("Cache-Control", "no-store");
+  }
+
+  return jsonResponse(data, {
+    ...init,
+    headers,
   });
 }

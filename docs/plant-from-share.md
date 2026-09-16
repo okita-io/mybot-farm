@@ -285,7 +285,7 @@ Three doors, one crate:
 | Path | Who | What it does | Live today |
 |------|-----|--------------|------------|
 | **Copy install prompt** | Human in Grok Bot | Paste instructions; Bot downloads GAF and creates a **runtime copy** | Bot pages, How-To |
-| **WebMCP + `/api`** | Agent | `search_stalls`, `get_stall`, `download_pack`, `list_pack_skills`, `get_install_prompt` | Every page + CORS JSON |
+| **WebMCP + `/api`** | Agent | `search_stalls`, `get_stall`, `download_pack`, `list_pack_skills`, `get_install_prompt`, `post_listing` | Every page + CORS JSON. `post_listing` needs a seller API key or a signed-in session |
 | **Plant from share** | Buyer on the farm | Resolve a share URL → preview → **library item** (later catalog listing) | Resolve + `/plant` preview; plant write is stubbed |
 
 They compose:

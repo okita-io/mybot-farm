@@ -44,4 +44,13 @@ export const packTools = [
     path: "/api/install-prompt/{slug}",
     query: ["short"],
   },
+  {
+    name: "post_listing",
+    title: "Post listing",
+    description:
+      "Publish a seller listing via POST /api/listings. Required JSON fields: kind (\"agent\" or \"team\"); name, title, description (non-empty strings); category (exact label: Lifestyle, Productivity, Coding, Writing, Marketing, Sales, Research, Personal finance, Creative, Music, Education, Ops / admin, Experimental); priceCents (0 for free, or integer cents from 200 to 999900 for $2–$9999); pack (GAF JSON object, max ~500KB encoded). Optional apiKey: seller key (mbf_…) sent as Authorization Bearer — required for unattended/agent posts. Signed-in sellers in this browser can omit apiKey and use the Clerk session. Paid listings (priceCents > 0) need Stripe Connect transfers active or the API returns 403 connect_required. Creates the same published stall as the Sell form.",
+    method: "POST",
+    path: "/api/listings",
+    query: [],
+  },
 ] as const;
