@@ -11,9 +11,9 @@ export type StallAuthor = {
 export type Stall = {
   kind: StallKind;
   slug: string;
-  /** Stable stall id: listing UUID, or uuid v5 for catalog/seed stalls. */
+  /** Stable stall id: listing UUID, or uuid v5 for catalog/seed stalls. Marketplace identity for consumers (e.g. Cursor catalog); not a create_bot_share_json field. */
   stallId?: string;
-  /** Content revision (same-slug GAF updates). Not the GAF format version. */
+  /** Content revision (same-slug GAF updates). Not the GAF format version. Pair with stallId + slug from GET /api/stalls. */
   packVersion?: number;
   name: string;
   title: string;
@@ -162,6 +162,7 @@ export function stallApiPaths(slug: string) {
     download_pack: `/api/packs/${slug}`,
     list_pack_skills: `/api/packs/${slug}/skills`,
     get_install_prompt: `/api/install-prompt/${slug}`,
+    get_grok_template: `/api/packs/${slug}/grok-template`,
   };
 }
 

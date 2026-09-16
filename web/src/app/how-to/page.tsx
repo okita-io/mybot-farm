@@ -58,9 +58,11 @@ export default function HowToPage() {
             </li>
             <li>
               Click <strong>Copy install prompt</strong> and paste it into any
-              Grok Bot. The prompt points at the bot URL and tells the Bot to
-              download the pack, create an agent, save skills, and write
-              memory.
+              Grok Bot. The prompt points at the bot URL (and catalog{" "}
+              <code>stallId</code> / <code>packVersion</code>) and tells the Bot
+              to download the pack, set the mapped avatar, save skills, write
+              memory, save routines, list marketplace plugins, and start from{" "}
+              <code>gettingStarted.skill</code>.
             </li>
             <li>
               Or download the GAF JSON from the bot’s Download pack button.
@@ -78,10 +80,29 @@ export default function HowToPage() {
             <li>
               In Grok Bot: <strong>New</strong> (or Cmd/Ctrl+N) →{" "}
               <strong>Create new agent</strong> → Bot actions →{" "}
-              <strong>Edit Profile</strong>. Set name, title, description, and
-              avatar from <code>profile</code>. Save each{" "}
+              <strong>Edit Profile</strong>. Set name and description from{" "}
+              <code>profile</code>. Map nested <code>profile.avatar</code>{" "}
+              (<code>shape</code>/<code>color</code>) to Grok{" "}
+              <code>avatarShape</code>/<code>avatarColor</code>. Farm-only
+              values: book→tablet, triangle→wedge, circle→pebble, diamond→gem;
+              indigo→violet, amber→yellow, lime→green. Omit{" "}
+              <code>profile.title</code> (farm listing/UI). Save each{" "}
               <code>pack.skills</code> entry. Write <code>pack.memory</code>{" "}
-              into durable memory. For a team pack, create each member.
+              into durable memory. Save <code>pack.routines</code> as routines
+              (prose triggers; confirm any schedule). If{" "}
+              <code>pack.plugins</code> is non-empty, list each{" "}
+              <code>pluginId</code> for the owner to install from the Grok
+              marketplace — never a custom MCP URL. If{" "}
+              <code>pack.gettingStarted.skill</code> is set, use that skill for
+              the first conversation. For a team pack, create each{" "}
+              <code>members[]</code> agent; there is no 1:1 team template.{" "}
+              <code>stallId</code> and <code>packVersion</code> from{" "}
+              <Link href="/api/stalls">
+                <code>GET /api/stalls</code>
+              </Link>{" "}
+              are catalog metadata — cite them in install notes, not in{" "}
+              <code>create_bot_share_json</code>. Optional projector:{" "}
+              <code>/api/packs/{"{slug}"}/grok-template</code>.
             </li>
           </ol>
           <p>

@@ -3,6 +3,7 @@ import { getDb, hasDatabase } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
 import { isAgencyPackSlug } from "@/lib/agency-catalog";
 import { getStall, isStallKind, stallPagePath, type StallKind } from "@/lib/packs";
+import { validateGafPack } from "@/lib/gaf-pack";
 import type { FarmPack } from "@/lib/pack-files";
 import {
   applyPackVersion,
@@ -82,6 +83,11 @@ export function parsePackJson(
   const encoded = JSON.stringify(value);
   if (encoded.length > MAX_PACK_CHARS) {
     return { ok: false, error: "Pack JSON is too large (max 500 KB)." };
+  }
+
+  const gaf = validateGafPack(value);
+  if (!gaf.ok) {
+    return { ok: false, error: gaf.error };
   }
 
   return { ok: true, pack: value as FarmPack };
@@ -253,6 +259,7 @@ export function listingWriteFromBody(
     slug: parsed.packResult.pack.slug,
     category: parsed.packResult.pack.category,
     profile: {
+      ...parsed.packResult.pack.profile,
       name: parsed.packResult.pack.profile?.name ?? parsed.name,
       title: parsed.packResult.pack.profile?.title ?? parsed.title,
       description: parsed.packResult.pack.profile?.description ?? parsed.description,
