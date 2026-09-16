@@ -36,11 +36,20 @@ export const footerLinks = [
   { href: "/sell", label: "Sell" },
   { href: "/how-to", label: "How-To" },
   { href: "/install/openclaw", label: "OpenClaw" },
+  { href: "/install/hermes", label: "Hermes" },
   { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
   { href: "/catalog", label: "Catalog" },
 ] as const;
+
+export const hermesPlugin = {
+  id: "mybot-farm",
+  version: "0.1.0",
+  downloadPath: "/downloads/hermes-mybot-farm-0.1.0.zip",
+  downloadUrl: "https://mybot.farm/downloads/hermes-mybot-farm-0.1.0.zip",
+  gitInstall: "okita-io/mybot-farm/packages/hermes-mybot-farm",
+} as const;
 
 export const openclawPlugin = {
   id: "mybot-farm",
@@ -84,6 +93,12 @@ export const contentRoutes = [
   {
     path: "/install/openclaw",
     title: "Install in OpenClaw",
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  },
+  {
+    path: "/install/hermes",
+    title: "Install in Hermes",
     changeFrequency: "monthly" as const,
     priority: 0.8,
   },
@@ -215,7 +230,7 @@ export const faqs = [
   {
     question: "How do I import a pack into Hermes?",
     answer:
-      "Hermes installs from a scrubbed profile .tar.gz with hermes profile import, not from GAF JSON. Some seed bots ship that way — Scholastic Research (one profile) and Workbench (three team members). After import, add your own API keys — auth.json and .env never ship. The How-To page has the commands.",
+      "Install the mybot-farm plugin (symlink packages/hermes-mybot-farm into ~/.hermes/plugins/mybot-farm, then hermes plugins enable mybot-farm). After Plugin Catalog admission: hermes plugins install mybot-farm. Tools: farm_search, farm_get_stall, farm_get_pack, farm_plant, farm_reinstall. farm_reinstall clears ~/.hermes/profiles/.deleted tombstones so a same-name re-import is actually spawnable. Manual path: hermes profile import on a scrubbed .tar.gz (Scholastic Research, Workbench). After import, add your own API keys. Full steps: /install/hermes.",
   },
   {
     question: "How do I plant a pack in OpenClaw?",
