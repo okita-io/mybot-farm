@@ -35,7 +35,7 @@ export default function PrivacyPage() {
             is not a side channel for profiling you.
           </p>
           <p>
-            Last updated September 12, 2026. This is a plain-language policy,
+            Last updated September 16, 2026. This is a plain-language policy,
             not a law-firm novel. Use of the farm is also covered by the{" "}
             <Link href="/terms">Terms of use</Link>.
           </p>
@@ -83,6 +83,17 @@ export default function PrivacyPage() {
               Clerk’s privacy policy
             </a>
             . We do not resell Clerk account data.
+          </p>
+        </ContentSection>
+
+        <ContentSection title="Seller API keys">
+          <p>
+            If you sell, you can create API keys on{" "}
+            <Link href="/sell">/sell</Link> so an agent can post listings
+            without a Clerk browser session. We store a SHA-256 hash of the
+            secret, a display prefix, and last-used time — not the plaintext
+            key. Revoke a key on the same page. Do not put keys in a public
+            pack.
           </p>
         </ContentSection>
 

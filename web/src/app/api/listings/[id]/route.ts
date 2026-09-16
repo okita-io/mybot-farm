@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
 import {
   listingWriteFromBody,
   setListingPublished,
   updateListing,
 } from "@/lib/listings";
+import { noStoreJson, optionsResponse } from "@/lib/http";
 import { stallPagePath } from "@/lib/packs";
-import { requireAppUser } from "@/lib/users";
+import { requireSeller } from "@/lib/seller-auth";
 
 export const runtime = "nodejs";
 
@@ -13,9 +13,9 @@ export async function POST(
   request: Request,
   context: RouteContext<"/api/listings/[id]">,
 ) {
-  const user = await requireAppUser();
+  const user = await requireSeller(request);
   if (!user) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    return noStoreJson({ error: "unauthorized" }, { status: 401 });
   }
 
   const { id } = await context.params;
@@ -26,15 +26,15 @@ export async function POST(
       : null;
 
   if (published === null) {
-    return NextResponse.json({ error: "invalid_body" }, { status: 400 });
+    return noStoreJson({ error: "invalid_body" }, { status: 400 });
   }
 
   const listing = await setListingPublished(id, user.id, published);
   if (!listing) {
-    return NextResponse.json({ error: "not_found" }, { status: 404 });
+    return noStoreJson({ error: "not_found" }, { status: 404 });
   }
 
-  return NextResponse.json({
+  return noStoreJson({
     ok: true,
     id: listing.id,
     published: listing.published,
@@ -45,16 +45,16 @@ export async function PATCH(
   request: Request,
   context: RouteContext<"/api/listings/[id]">,
 ) {
-  const user = await requireAppUser();
+  const user = await requireSeller(request);
   if (!user) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    return noStoreJson({ error: "unauthorized" }, { status: 401 });
   }
 
   const { id } = await context.params;
   const body: unknown = await request.json().catch(() => null);
   const parsed = listingWriteFromBody(body);
   if (!parsed.ok) {
-    return NextResponse.json(
+    return noStoreJson(
       { error: parsed.error, message: parsed.message },
       { status: parsed.status },
     );
@@ -65,7 +65,7 @@ export async function PATCH(
     value.priceCents > 0 &&
     (!user.stripeConnectAccountId || !user.stripeConnectTransfersActive)
   ) {
-    return NextResponse.json(
+    return noStoreJson(
       {
         error: "connect_required",
         message: "Finish Stripe payouts before listing a paid bot.",
@@ -76,10 +76,10 @@ export async function PATCH(
 
   const listing = await updateListing(id, user.id, value);
   if (!listing) {
-    return NextResponse.json({ error: "not_found" }, { status: 404 });
+    return noStoreJson({ error: "not_found" }, { status: 404 });
   }
 
-  return NextResponse.json({
+  return noStoreJson({
     ok: true,
     slug: listing.slug,
     kind: listing.kind,
@@ -88,4 +88,8 @@ export async function PATCH(
       slug: listing.slug,
     }),
   });
+}
+
+export function OPTIONS() {
+  return optionsResponse();
 }

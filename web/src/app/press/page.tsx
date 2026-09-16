@@ -98,10 +98,12 @@ export default function PressPage() {
               history.
             </li>
             <li>
-              <strong>Agent-native:</strong> WebMCP and public JSON APIs (
+              <strong>Agent-native:</strong> WebMCP and JSON APIs (
               <code>search_stalls</code>, <code>get_stall</code>,{" "}
-              <code>download_pack</code>, and more) let agents use the farm as
-              a tool, not a webpage to scrape.
+              <code>download_pack</code>, <code>post_listing</code>, and more)
+              let agents use the farm as a tool, not a webpage to scrape.
+              Seller API keys on <Link href="/sell">/sell</Link> authorize
+              unattended posts.
             </li>
           </ul>
         </ContentSection>
