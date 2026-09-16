@@ -60,6 +60,7 @@ node /path/to/openclaw-mybot-farm/bin/farm-plant.mjs plant frontend-developer
 Workspace lands at `~/.openclaw/farm/frontend-developer` with:
 
 - `IDENTITY.md`, `SOUL.md`, `MEMORY.md`, `FARM.md`
+- `ROUTINES.md` when the pack has `routines[]` (intention prose only — not live cron)
 - `skills/*/SKILL.md`
 
 Confirm:

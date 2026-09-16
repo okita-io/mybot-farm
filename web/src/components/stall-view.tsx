@@ -269,6 +269,12 @@ export async function StallView({
               </a>
             </li>
             <li>
+              get_grok_template:{" "}
+              <a className="underline-offset-4 hover:underline" href={api.get_grok_template}>
+                {api.get_grok_template}
+              </a>
+            </li>
+            <li>
               get_install_prompt:{" "}
               <a
                 className="underline-offset-4 hover:underline"

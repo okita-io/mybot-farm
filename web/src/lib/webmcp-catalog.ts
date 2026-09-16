@@ -36,6 +36,15 @@ export const packTools = [
     query: [],
   },
   {
+    name: "get_grok_template",
+    title: "Get Grok Bot template",
+    description:
+      "Project a GAF agent-pack into a create_bot_share_json-shaped recipe (profile, mapped avatarShape/avatarColor, memory, skills, routines, plugins, gettingStarted, visibility). Team packs return 400. Paid listings return 402 until purchased. Read-only.",
+    method: "GET",
+    path: "/api/packs/{slug}/grok-template",
+    query: [],
+  },
+  {
     name: "get_install_prompt",
     title: "Get install prompt",
     description:

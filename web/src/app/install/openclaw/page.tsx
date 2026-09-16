@@ -62,7 +62,8 @@ export default function OpenClawInstallPage() {
             </li>
             <li>
               <code>farm_plant</code> — write IDENTITY / SOUL / MEMORY / FARM.md
-              plus skills into <code>~/.openclaw/farm/{"{slug}"}</code>
+              / optional ROUTINES.md plus skills into{" "}
+              <code>~/.openclaw/farm/{"{slug}"}</code>
             </li>
             <li>
               <code>farm_post</code> — publish a GAF listing with a seller API

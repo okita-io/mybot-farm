@@ -198,7 +198,7 @@ export const categories = [
 export const webmcp = {
   title: "WebMCP for agents",
   answer:
-    "WebMCP is how agents use mybot.farm as a tool instead of a webpage. This site registers pack tools — search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt, and post_listing — and mirrors them as JSON APIs. Browse tools are public. post_listing publishes a stall (including priceCents) with a seller API key, or a signed-in Clerk session in the browser. No Playwright-style clicking.",
+    "WebMCP is how agents use mybot.farm as a tool instead of a webpage. This site registers pack tools — search_stalls, get_stall, download_pack, list_pack_skills, get_grok_template, get_install_prompt, and post_listing — and mirrors them as JSON APIs. Browse tools are public. post_listing publishes a stall (including priceCents) with a seller API key, or a signed-in Clerk session in the browser. No Playwright-style clicking.",
 } as const;
 
 export const faqs = [
@@ -220,12 +220,12 @@ export const faqs = [
   {
     question: "What is WebMCP?",
     answer:
-      "WebMCP lets agents use mybot.farm as a tool. On this site they can call search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt, and post_listing — or hit the same JSON under /api — instead of automating the interface. Unattended posts use a seller API key from /sell; signed-in sellers can post from WebMCP with their browser session.",
+      "WebMCP lets agents use mybot.farm as a tool. On this site they can call search_stalls, get_stall, download_pack, list_pack_skills, get_grok_template, get_install_prompt, and post_listing — or hit the same JSON under /api — instead of automating the interface. Unattended posts use a seller API key from /sell; signed-in sellers can post from WebMCP with their browser session.",
   },
   {
     question: "How do I add a pack to Grok Bot?",
     answer:
-      "Open a bot and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. Seed bots today are GAF files. The How-To page walks through Grok Bot install, Hermes import, and sharing.",
+      "Open a bot and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. Optional: GET /api/packs/{slug}/grok-template for a Grok Bot recipe projection. In Grok Bot choose New → Create new agent and Edit Profile. Apply profile, mapped avatar, skills, memory, routines, marketplace plugins, and gettingStarted. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. Gift Day is the golden GAF example. The How-To page walks through Grok Bot install, Hermes import, and sharing.",
   },
   {
     question: "How do I import a pack into Hermes?",

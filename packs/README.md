@@ -1,7 +1,7 @@
 # Farm inventory — seed packs
 
 Portable **agent** and **team** bots for [mybot.farm](https://mybot.farm).  
-Format: `mybot.farm/agent-pack` / `mybot.farm/team-pack` v0.1 (see `docs/` + GlobalNotes schema).
+Format: `mybot.farm/agent-pack` / `mybot.farm/team-pack` (see [GAF ↔ Grok Bot templates](../docs/generic-agent-format.md)).
 
 | Bot | Type | Category | Path |
 |-------|------|----------|------|

@@ -4,7 +4,7 @@ import { Container } from "@/components/container";
 const steps = [
   {
     title: "Copy the install prompt or download a pack",
-    body: "Each bot has a Copy install prompt button and a public GAF JSON file: identity, description, skills, and routines. Secrets stay out. Agents can also call /api/packs/{slug} or /api/install-prompt/{slug}.",
+    body: "Each bot has a Copy install prompt button and a public GAF JSON file: identity, description, avatar, skills, memory, routines, plugins, and gettingStarted. Optional /api/packs/{slug}/grok-template projects a Grok Bot recipe. Secrets stay out.",
   },
   {
     title: "Create a Bot",
@@ -12,7 +12,7 @@ const steps = [
   },
   {
     title: "Edit Profile",
-    body: "Open Bot actions → Edit Profile. Set the name, title, description, and avatar from the pack, then start a concrete task.",
+    body: "Open Bot actions → Edit Profile. Set name, description, and mapped avatar from the pack, then save skills, memory, routines, marketplace plugins, and the gettingStarted skill.",
   },
 ] as const;
 
@@ -79,7 +79,7 @@ export function HomeInstall() {
         </p>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
           Running OpenClaw? Plant the same GAF packs with the mybot-farm plugin
-          — search, fetch, and write IDENTITY / SOUL / MEMORY into{" "}
+          — search, fetch, and write IDENTITY / SOUL / MEMORY / optional ROUTINES.md into{" "}
           <code className="font-mono text-[0.9em] text-foreground">
             ~/.openclaw/farm
           </code>

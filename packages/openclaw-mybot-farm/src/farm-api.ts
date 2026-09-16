@@ -28,6 +28,8 @@ export type {
   FarmStall,
   FarmPackSkill,
   FarmPackMemory,
+  FarmPackRoutine,
+  FarmPackPlugin,
   FarmPackProfile,
   FarmPackManifest,
   FarmPack,

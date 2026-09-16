@@ -64,8 +64,9 @@ Tools: farm_search, farm_get_pack, farm_plant, farm_post (GAF listings with MYBO
 - get_stall: https://mybot.farm/api/stalls/{slug}
 - download_pack: https://mybot.farm/api/packs/{slug}
 - list_pack_skills: https://mybot.farm/api/packs/{slug}/skills
+- get_grok_template: https://mybot.farm/api/packs/{slug}/grok-template
 - get_install_prompt: https://mybot.farm/api/install-prompt/{slug}
 - resolve_share: https://mybot.farm/api/resolve-share?url=
 - plant_into_library (auth stub): https://mybot.farm/api/library/plant
 
-WebMCP tools on every page (when document.modelContext is available): search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt.
+WebMCP tools on every page (when document.modelContext is available): search_stalls, get_stall, download_pack, list_pack_skills, get_grok_template, get_install_prompt.

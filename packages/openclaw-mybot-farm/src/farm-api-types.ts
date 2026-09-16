@@ -23,6 +23,19 @@ export type FarmPackMemory = {
   createdAt?: string;
 };
 
+export type FarmPackRoutine = {
+  slug: string;
+  name?: string;
+  description?: string;
+  content?: string;
+};
+
+export type FarmPackPlugin = {
+  pluginId: string;
+  name?: string;
+  description?: string;
+};
+
 export type FarmPackProfile = {
   name?: string;
   title?: string;
@@ -52,6 +65,20 @@ export type FarmPack = {
   profile?: FarmPackProfile;
   memory?: FarmPackMemory[];
   skills?: FarmPackSkill[];
+  routines?: FarmPackRoutine[];
+  plugins?: FarmPackPlugin[];
+  gettingStarted?: { skill?: string };
+  visibility?: "public" | "team";
+  exports?: {
+    grokBotTemplate?: {
+      enabled?: boolean;
+      avatarFallbacks?: {
+        shape?: Record<string, string>;
+        color?: Record<string, string>;
+      };
+      profileDescriptionOverride?: string;
+    };
+  };
   manifest?: FarmPackManifest;
   [key: string]: unknown;
 };
