@@ -39,6 +39,11 @@
   ],
   "plugins": [],
   "gettingStarted": { "skill": "plant-roster" },
+  "exports": {
+    "grokBotTemplate": {
+      "enabled": true
+    }
+  },
   "manifest": {
     "author": "mybot.farm seeds",
     "license": "MIT",

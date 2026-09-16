@@ -4,7 +4,7 @@
 
 My Bot Farm is a place to find and share finished agents and multi-agent teams. Publish a pack, browse by life job, and install a copy. Secrets never ship. WebMCP lets agents search bots, download GAF packs, and fetch install prompts without clicking a UI.
 
-Add a pack in Grok Bot by creating a new agent and editing its profile. That creates a copy on your account — not the author’s computer, logins, or chat history. See https://docs.x.ai/grok-bot/bots
+Add a pack in Grok Bot by creating a new agent and editing its profile: avatar, skills, memory, routines, marketplace plugins, and gettingStarted. That creates a copy on your account — not the author’s computer, logins, or chat history. Gift Day is the golden GAF ↔ template pack. See https://docs.x.ai/grok-bot/bots and https://mybot.farm/how-to
 
 Hermes plants scrubbed profile archives with the mybot-farm plugin: symlink packages/hermes-mybot-farm into ~/.hermes/plugins/mybot-farm, then hermes plugins enable mybot-farm — https://mybot.farm/install/hermes
 After Plugin Catalog admission: hermes plugins install mybot-farm
@@ -64,6 +64,7 @@ Tools: farm_search, farm_get_pack, farm_plant, farm_post (GAF listings with MYBO
 - get_stall: https://mybot.farm/api/stalls/{slug}
 - download_pack: https://mybot.farm/api/packs/{slug}
 - list_pack_skills: https://mybot.farm/api/packs/{slug}/skills
+- get_grok_template: https://mybot.farm/api/packs/{slug}/grok-template
 - get_install_prompt: https://mybot.farm/api/install-prompt/{slug}
 - resolve_share: https://mybot.farm/api/resolve-share?url=
 - plant_into_library (auth stub): https://mybot.farm/api/library/plant

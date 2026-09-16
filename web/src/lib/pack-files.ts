@@ -26,10 +26,40 @@ export type PackMemory = {
   createdAt?: string;
 };
 
+export type PackAvatar = {
+  kind?: string;
+  shape?: string;
+  color?: string;
+};
+
 export type PackProfile = {
   name?: string;
   title?: string;
   description?: string;
+  avatar?: PackAvatar;
+};
+
+export type PackRoutine = {
+  slug: string;
+  name?: string;
+  description?: string;
+  content?: string;
+};
+
+/** Marketplace plugin ids only — never url/command/custom MCP. */
+export type PackPlugin = {
+  pluginId: string;
+  name?: string;
+  description?: string;
+};
+
+export type GrokBotTemplateExports = {
+  enabled?: boolean;
+  avatarFallbacks?: {
+    shape?: Record<string, string>;
+    color?: Record<string, string>;
+  };
+  profileDescriptionOverride?: string;
 };
 
 export type PackMemberRef = {
@@ -50,6 +80,14 @@ export type FarmPack = {
   profile?: PackProfile;
   skills?: PackSkill[];
   memory?: PackMemory[];
+  routines?: PackRoutine[];
+  plugins?: PackPlugin[];
+  gettingStarted?: { skill: string };
+  /** Template export hint; projector defaults to "public". */
+  visibility?: "public" | "team" | string;
+  exports?: {
+    grokBotTemplate?: GrokBotTemplateExports;
+  };
   members?: PackMemberRef[];
   team?: unknown;
   shared?: {

@@ -118,6 +118,14 @@
     "pricing": "free",
     "currency": "usd"
   },
+  "routines": [],
+  "plugins": [],
+  "gettingStarted": { "skill": "Grant writing router" },
+  "exports": {
+    "grokBotTemplate": {
+      "enabled": true
+    }
+  },
   "manifest": {
     "author": "mybot.farm seeds",
     "license": "MIT",

@@ -66,7 +66,7 @@ export const howToInstallLd = {
     {
       "@type": "HowToStep",
       name: "Create a Bot and edit the profile",
-      text: "In Grok Bot choose New → Create new agent, then Edit Profile. Set name, title, description, and avatar from the pack. Save skills and memory.",
+      text: "In Grok Bot choose New → Create new agent, then Edit Profile. Set name, description, and avatar from the pack (map nested profile.avatar to avatarShape/avatarColor). Save skills, memory, and routines (prose triggers; confirm schedules). Note marketplace plugins. If gettingStarted.skill is set, use it for the first conversation. Team packs use members[], not pack.team.",
     },
     {
       "@type": "HowToStep",

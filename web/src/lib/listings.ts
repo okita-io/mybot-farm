@@ -11,6 +11,7 @@ import {
   resolveCreatePackVersion,
   resolveUpdatePackVersion,
 } from "@/lib/pack-version";
+import { validateGafListingPack } from "@/lib/gaf-grok-template";
 import { categories } from "@/lib/site";
 
 const MAX_PACK_CHARS = 500_000;
@@ -82,6 +83,11 @@ export function parsePackJson(
   const encoded = JSON.stringify(value);
   if (encoded.length > MAX_PACK_CHARS) {
     return { ok: false, error: "Pack JSON is too large (max 500 KB)." };
+  }
+
+  const fields = validateGafListingPack(value);
+  if (!fields.ok) {
+    return fields;
   }
 
   return { ok: true, pack: value as FarmPack };
@@ -253,6 +259,7 @@ export function listingWriteFromBody(
     slug: parsed.packResult.pack.slug,
     category: parsed.packResult.pack.category,
     profile: {
+      ...parsed.packResult.pack.profile,
       name: parsed.packResult.pack.profile?.name ?? parsed.name,
       title: parsed.packResult.pack.profile?.title ?? parsed.title,
       description: parsed.packResult.pack.profile?.description ?? parsed.description,

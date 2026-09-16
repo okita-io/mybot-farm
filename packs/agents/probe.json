@@ -36,6 +36,11 @@
   "routines": [],
   "plugins": [],
   "gettingStarted": { "skill": "reproduce-first" },
+  "exports": {
+    "grokBotTemplate": {
+      "enabled": true
+    }
+  },
   "manifest": {
     "author": "mybot.farm seeds",
     "license": "MIT",
