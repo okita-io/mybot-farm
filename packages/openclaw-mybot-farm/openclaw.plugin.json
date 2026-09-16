@@ -1,0 +1,45 @@
+{
+  "id": "mybot-farm",
+  "name": "mybot.farm",
+  "description": "Search mybot.farm stalls and plant GAF agent packs into OpenClaw.",
+  "version": "0.1.0",
+  "categories": [
+    "tools"
+  ],
+  "activation": {
+    "onStartup": true
+  },
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "baseUrl": {
+        "type": "string",
+        "default": "https://mybot.farm",
+        "description": "mybot.farm API origin (env MYBOT_FARM_URL overrides)."
+      },
+      "workspaceRoot": {
+        "type": "string",
+        "default": "~/.openclaw/farm",
+        "description": "Default parent dir for planted workspaces."
+      }
+    },
+    "additionalProperties": false
+  },
+  "uiHints": {
+    "baseUrl": {
+      "label": "Farm base URL",
+      "help": "Defaults to https://mybot.farm. Env MYBOT_FARM_URL wins when set."
+    },
+    "workspaceRoot": {
+      "label": "Workspace root",
+      "help": "Planted agents land under this directory as ~/.openclaw/farm/<slug> by default."
+    }
+  },
+  "contracts": {
+    "tools": [
+      "farm_search",
+      "farm_get_pack",
+      "farm_plant"
+    ]
+  }
+}

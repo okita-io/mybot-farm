@@ -77,6 +77,21 @@ export function HomeInstall() {
           </Link>{" "}
           it to preview the pack.
         </p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+          Running OpenClaw? Plant the same GAF packs with the mybot-farm plugin
+          — search, fetch, and write IDENTITY / SOUL / MEMORY into{" "}
+          <code className="font-mono text-[0.9em] text-foreground">
+            ~/.openclaw/farm
+          </code>
+          .{" "}
+          <Link
+            href="/install/openclaw"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Install in OpenClaw
+          </Link>
+          .
+        </p>
       </Container>
     </section>
   );

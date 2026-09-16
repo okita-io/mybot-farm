@@ -6,13 +6,14 @@ import {
   howToHermesImportLd,
   howToHermesShareLd,
   howToInstallLd,
+  howToOpenClawLd,
 } from "@/lib/schema";
-import { site, siteOgImage } from "@/lib/site";
+import { openclawPlugin, site, siteOgImage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "How-To",
   description:
-    "Install a mybot.farm agent in Grok Bot from GAF JSON, or import a scrubbed Hermes profile. Export, run scrub.py, then share. OpenClaw is coming soon.",
+    "Install a mybot.farm agent in Grok Bot from GAF JSON, import a scrubbed Hermes profile, or plant a pack in OpenClaw with the mybot-farm plugin.",
   alternates: { canonical: "/how-to" },
   openGraph: {
     title: `How-To | ${site.name}`,
@@ -29,10 +30,11 @@ export default function HowToPage() {
       <JsonLd data={howToInstallLd} />
       <JsonLd data={howToHermesImportLd} />
       <JsonLd data={howToHermesShareLd} />
+      <JsonLd data={howToOpenClawLd} />
       <ContentPage
         kicker="How-To"
         title="Install a bot, or share your own"
-        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes installs from a scrubbed profile .tar.gz — including seed bots like Scholastic Research and Workbench. OpenClaw translators are still coming."
+        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes installs from a scrubbed profile .tar.gz — including seed bots like Scholastic Research and Workbench. OpenClaw plants the same GAF packs with the mybot-farm plugin."
       >
         <ContentSection id="install" title="Install an agent in Grok Bot">
           <p>
@@ -277,21 +279,41 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
           </p>
         </ContentSection>
 
-        <ContentSection id="coming-soon" title="OpenClaw — coming soon">
+        <ContentSection id="openclaw" title="Plant an agent in OpenClaw">
           <p>
-            <strong>OpenClaw support is coming soon.</strong> Planned work is
-            a translator and install target: map a GAF pack into OpenClaw
-            soul/instructions. That installer is not live. There is no working
-            OpenClaw install button on the farm today.
+            OpenClaw plants the same GAF packs with the{" "}
+            <strong>mybot-farm</strong> plugin (id <code>mybot-farm</code>).
+            Tools: <code>farm_search</code>, <code>farm_get_pack</code>,{" "}
+            <code>farm_plant</code>. Workspace lands at{" "}
+            <code>~/.openclaw/farm/{"{slug}"}</code> with IDENTITY / SOUL /
+            MEMORY / FARM.md and skills. Full page with download:{" "}
+            <Link href="/install/openclaw">Install in OpenClaw</Link>.
           </p>
+          <p>From a checkout of this repo:</p>
+          <pre>{`openclaw plugins install ./packages/openclaw-mybot-farm --link --force
+openclaw plugins enable mybot-farm
+openclaw gateway restart`}</pre>
           <p>
-            Today’s live paths are Grok Bot (copy-paste prompt or GAF download)
-            and Hermes (scrubbed <code>.tar.gz</code> import, plus export →{" "}
-            <code>scrub.py</code>).{" "}
-            <Link href="/teams/road-crew">Road Crew</Link> is tagged for OpenClaw
-            as well as Grok Bot — still install from GAF JSON until the
-            translator ships. If you are building an OpenClaw translator,
-            start from the public JSON — don’t wait on a fake one-click.
+            Or download the packed release (
+            <a href={openclawPlugin.downloadUrl}>
+              <code>{openclawPlugin.downloadUrl}</code>
+            </a>
+            ) and install the archive:
+          </p>
+          <pre>{`curl -LO ${openclawPlugin.downloadUrl}
+openclaw plugins install ./openclaw-mybot-farm-0.1.0.tgz --force
+# or: openclaw plugins install npm-pack:./openclaw-mybot-farm-0.1.0.tgz --force
+openclaw plugins enable mybot-farm`}</pre>
+          <p>
+            CLI smoke test:{" "}
+            <code>
+              node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant
+              frontend-developer
+            </code>
+            . ClawHub{" "}
+            <code>openclaw plugins install clawhub:{openclawPlugin.packageName}</code>{" "}
+            is not published yet. Restart the gateway so agent sessions see the
+            tools.
           </p>
         </ContentSection>
 
@@ -307,6 +329,10 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
             <li>
               <Link href="/teams">Agent Teams</Link> — pair, hub, and pipeline
               packs
+            </li>
+            <li>
+              <Link href="/install/openclaw">OpenClaw</Link> — plant a GAF pack
+              with the mybot-farm plugin
             </li>
             <li>
               <Link href="/plant">Plant</Link> — paste a share URL and preview

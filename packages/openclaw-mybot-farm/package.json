@@ -1,0 +1,56 @@
+{
+  "name": "@okita-io/openclaw-mybot-farm",
+  "version": "0.1.0",
+  "description": "OpenClaw native tools to search and plant mybot.farm GAF agent packs",
+  "type": "module",
+  "license": "MIT",
+  "author": "okita-io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/okita-io/mybot-farm",
+    "directory": "packages/openclaw-mybot-farm"
+  },
+  "files": [
+    "index.ts",
+    "src",
+    "bin",
+    "mcp",
+    "openclaw.plugin.json",
+    "README.md",
+    "INSTALL.md"
+  ],
+  "bin": {
+    "farm-plant": "./bin/farm-plant.mjs"
+  },
+  "scripts": {
+    "plant": "node ./bin/farm-plant.mjs",
+    "plugin:validate": "openclaw plugins validate --root ."
+  },
+  "dependencies": {
+    "typebox": "^1.0.0"
+  },
+  "optionalDependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.9.4"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "compat": {
+      "pluginApi": ">=2026.9.4"
+    }
+  },
+  "keywords": [
+    "openclaw",
+    "mybot.farm",
+    "gaf",
+    "agent-pack",
+    "clawhub"
+  ],
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}
