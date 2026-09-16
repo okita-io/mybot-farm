@@ -48,6 +48,12 @@
   ],
   "plugins": [],
   "gettingStarted": { "skill": "occasion-book" },
+  "visibility": "public",
+  "exports": {
+    "grokBotTemplate": {
+      "enabled": true
+    }
+  },
   "manifest": {
     "author": "mybot.farm seeds",
     "license": "MIT",

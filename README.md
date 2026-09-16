@@ -4,7 +4,7 @@
 
 A place to find and share. The site is clear, simple, sharable, searchable, and agent-friendly.
 
-**WebMCP** lets agents search, download packs, fetch install prompts, and post listings — without Playwright-style UI clicking. Public JSON lives under `/api` (`search_stalls`, `get_stall`, `download_pack`, `list_pack_skills`, `get_install_prompt`, `post_listing`). Seller API keys on `/sell` authorize unattended `POST /api/listings`. Free GAF files stay at `/packs/`.
+**WebMCP** lets agents search, download packs, fetch install prompts, and post listings — without Playwright-style UI clicking. Public JSON lives under `/api` (`search_stalls`, `get_stall`, `download_pack`, `list_pack_skills`, `get_grok_template`, `get_install_prompt`, `post_listing`). Seller API keys on `/sell` authorize unattended `POST /api/listings`. Free GAF files stay at `/packs/`.
 
 See [Seller API keys](docs/api-keys.md).
 
@@ -20,6 +20,7 @@ git clone https://github.com/okita-io/mybot-farm.git
 
 Marketplace positioning and product notes:
 
+- [Generic Agent Format (GAF) ↔ Grok Bot templates](docs/generic-agent-format.md)
 - [Farmers market positioning](docs/positioning-farmers-market.md)
 - [Teams (multi-agent packs)](docs/teams.md)
 - [Categories](docs/categories.md)

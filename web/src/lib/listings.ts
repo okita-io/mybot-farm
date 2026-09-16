@@ -3,6 +3,7 @@ import { getDb, hasDatabase } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
 import { isAgencyPackSlug } from "@/lib/agency-catalog";
 import { getStall, isStallKind, stallPagePath, type StallKind } from "@/lib/packs";
+import { validateFarmPack } from "@/lib/gaf-to-grok-template";
 import type { FarmPack } from "@/lib/pack-files";
 import {
   applyPackVersion,
@@ -82,6 +83,11 @@ export function parsePackJson(
   const encoded = JSON.stringify(value);
   if (encoded.length > MAX_PACK_CHARS) {
     return { ok: false, error: "Pack JSON is too large (max 500 KB)." };
+  }
+
+  const checked = validateFarmPack(value);
+  if (!checked.ok) {
+    return checked;
   }
 
   return { ok: true, pack: value as FarmPack };

@@ -95,7 +95,8 @@ export default function AboutPage() {
             When the browser exposes <code>document.modelContext</code>, this
             site registers tools: <code>search_stalls</code>,{" "}
             <code>get_stall</code>, <code>download_pack</code>,{" "}
-            <code>list_pack_skills</code>, <code>get_install_prompt</code>, and{" "}
+            <code>list_pack_skills</code>, <code>get_grok_template</code>,{" "}
+            <code>get_install_prompt</code>, and{" "}
             <code>post_listing</code>. Browse JSON is public under{" "}
             <Link href="/api">/api</Link>. Publishing a stall from an agent
             needs a seller API key from <Link href="/sell">/sell</Link> (or a

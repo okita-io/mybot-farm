@@ -221,6 +221,13 @@ export function WebmcpTools() {
         }
         return fetchJson(`/api/packs/${encodeURIComponent(slug)}/skills`);
       },
+      get_grok_template: (args) => {
+        const slug = slugFromArgs(args);
+        if (!slug) {
+          return Promise.resolve(toolResult({ error: "slug_required" }));
+        }
+        return fetchJson(`/api/packs/${encodeURIComponent(slug)}/grok-template`);
+      },
       get_install_prompt: (args) => {
         const slug = slugFromArgs(args);
         if (!slug) {

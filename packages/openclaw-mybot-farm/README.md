@@ -10,7 +10,7 @@ Registers agent tools:
 |------|---------|
 | `farm_search` | `GET /api/stalls?q=` — list matching stalls (slug, name, title, URLs) |
 | `farm_get_pack` | `GET /api/packs/{slug}` — pack profile, skill names, attribution |
-| `farm_plant` | Fetch pack → `openclaw agents add` → write `IDENTITY.md` / `SOUL.md` / `MEMORY.md` / `FARM.md` / `skills/*/SKILL.md` |
+| `farm_plant` | Fetch pack → `openclaw agents add` → write `IDENTITY.md` / `SOUL.md` / `MEMORY.md` / `FARM.md` / optional `ROUTINES.md` / `skills/*/SKILL.md` |
 | `farm_post` | `POST /api/listings` — publish or update a GAF stall (seller API key). Same slug owned by you bumps `packVersion`. |
 | `farm_update` | Same as `farm_post` with required `slug` — in-place GAF update (skills, soul/memory). |
 
@@ -113,7 +113,7 @@ Prefer env `MYBOT_FARM_API_KEY` over config `apiKey`. Never commit the key.
 Matches the road-crew scout plant style:
 
 - `openclaw agents add <id> --workspace <dir> --non-interactive --json`
-- Workspace files: `IDENTITY.md`, `SOUL.md`, `MEMORY.md`, `FARM.md`, `skills/<name>/SKILL.md`
+- Workspace files: `IDENTITY.md`, `SOUL.md`, `MEMORY.md`, `FARM.md`, optional `ROUTINES.md`, `skills/<name>/SKILL.md`
 - Skill frontmatter: `name` + `description`
 - Attribution from `manifest.attribution` / `sourceNote` preserved in `IDENTITY.md` and `FARM.md`
 - Does **not** overwrite an existing agent unless `force: true`

@@ -26,10 +26,44 @@ export type PackMemory = {
   createdAt?: string;
 };
 
+export type PackAvatar = {
+  kind?: "geometric" | string;
+  shape?: string;
+  color?: string;
+};
+
 export type PackProfile = {
   name?: string;
   title?: string;
   description?: string;
+  avatar?: PackAvatar;
+};
+
+export type PackRoutine = {
+  slug: string;
+  name?: string;
+  description: string;
+  content: string;
+};
+
+/** Marketplace plugin ids only — never custom MCP URLs. */
+export type PackPlugin = {
+  pluginId: string;
+  name?: string;
+  description?: string;
+};
+
+export type PackGettingStarted = {
+  skill: string;
+};
+
+export type GrokBotTemplateExport = {
+  enabled?: boolean;
+  avatarFallbacks?: {
+    shape?: Record<string, string>;
+    color?: Record<string, string>;
+  };
+  profileDescriptionOverride?: string;
 };
 
 export type PackMemberRef = {
@@ -50,6 +84,14 @@ export type FarmPack = {
   profile?: PackProfile;
   skills?: PackSkill[];
   memory?: PackMemory[];
+  routines?: PackRoutine[];
+  plugins?: PackPlugin[];
+  gettingStarted?: PackGettingStarted;
+  /** Template export default `"public"`. Farm listings stay public stall pages. */
+  visibility?: "public" | "team";
+  exports?: {
+    grokBotTemplate?: GrokBotTemplateExport;
+  };
   members?: PackMemberRef[];
   team?: unknown;
   shared?: {
@@ -57,6 +99,8 @@ export type FarmPack = {
     gettingStarted?: string;
   };
   topology?: unknown;
+  support?: Record<string, unknown>;
+  commerce?: Record<string, unknown>;
   manifest?: {
     homepage?: string;
     scrubbed?: boolean;
@@ -169,7 +213,7 @@ export function packSummaryFields(pack: FarmPack) {
 }
 
 const packsBySlug: Record<string, FarmPack> = {
-  "gift-day": giftDay,
+  "gift-day": giftDay as FarmPack,
   "sprout-journal": sproutJournal,
   patch,
   probe,

@@ -50,7 +50,7 @@ export const howToInstallLd = {
   "@type": "HowTo",
   name: "Install an agent from mybot.farm in Grok Bot",
   description:
-    "Copy a bot’s install prompt into Grok Bot, or download the GAF JSON from /packs or /api/packs/{slug}. Seed bots today are GAF files. WebMCP tools can fetch the same pack.",
+    "Copy a bot’s install prompt into Grok Bot, or download the GAF JSON from /packs or /api/packs/{slug}. Optional grok-template projection maps avatar, routines, plugins, and gettingStarted. Seed bots today are GAF files. WebMCP tools can fetch the same pack.",
   url: `${site.url}/how-to#install`,
   step: [
     {
@@ -61,12 +61,12 @@ export const howToInstallLd = {
     {
       "@type": "HowToStep",
       name: "Copy the install prompt or download the pack",
-      text: "Use Copy install prompt and paste it into a Grok Bot, or download the GAF JSON from the bot page, /packs, or /api/packs/{slug}.",
+      text: "Use Copy install prompt and paste it into a Grok Bot, or download the GAF JSON from the bot page, /packs, or /api/packs/{slug}. Optional: GET /api/packs/{slug}/grok-template for a create_bot_share_json-shaped recipe.",
     },
     {
       "@type": "HowToStep",
       name: "Create a Bot and edit the profile",
-      text: "In Grok Bot choose New → Create new agent, then Edit Profile. Set name, title, description, and avatar from the pack. Save skills and memory.",
+      text: "In Grok Bot choose New → Create new agent, then Edit Profile. Set name, description, and avatar from the pack (map nested profile.avatar to avatarShape/avatarColor). Save skills, memory, routines, marketplace plugins, and gettingStarted.",
     },
     {
       "@type": "HowToStep",

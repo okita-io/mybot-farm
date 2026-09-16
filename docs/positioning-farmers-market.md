@@ -30,7 +30,7 @@ Not a closed app store of anonymous binaries. Not ClawHub’s “50k skills.” 
 | “Add this skill” | “Add this **agent**” or “Add this **team**” |
 | Stack pieces yourself | Arrive with memory, skills, routines, avatar, plugins already composed |
 
-An agent pack ≈ Grok Bot **bot template**: profile + memory + skills + routines + plugins (+ avatar). A **team** pack is several agents plus how they hand off (see [teams.md](./teams.md)).
+An agent pack ≈ Grok Bot **bot template**: profile + memory + skills + routines + plugins (+ avatar). Mapping: [generic-agent-format.md](./generic-agent-format.md). A **team** pack is several agents plus how they hand off (see [teams.md](./teams.md)).
 
 ---
 

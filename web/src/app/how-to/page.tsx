@@ -43,8 +43,8 @@ export default function HowToPage() {
         <ContentSection id="install" title="Install an agent in Grok Bot">
           <p>
             You are installing a <strong>copy</strong>. You get profile, skills,
-            memory, and routines. You do not get the author’s computer, logins,
-            or chat history. You need the{" "}
+            memory, routines, marketplace plugins, and a first-run skill. You do
+            not get the author’s computer, logins, or chat history. You need the{" "}
             <a href="https://docs.x.ai/grok-bot/bots">Grok Bot app</a> to
             finish. Seed bots download as GAF JSON. That is the Grok Bot
             path — Hermes uses a different file; jump to{" "}
@@ -53,14 +53,17 @@ export default function HowToPage() {
           <ol>
             <li>
               Browse <Link href="/catalog">open bots</Link> and open the
-              agent or team — for example{" "}
+              agent or team — start with{" "}
+              <Link href="/agents/gift-day">Gift Day</Link> (the golden GAF
+              example) or{" "}
               <Link href="/agents/grant-research">Grant Research</Link>.
             </li>
             <li>
               Click <strong>Copy install prompt</strong> and paste it into any
               Grok Bot. The prompt points at the bot URL and tells the Bot to
-              download the pack, create an agent, save skills, and write
-              memory.
+              download the pack, create an agent, map the geometric avatar,
+              save skills, write memory, apply routines and marketplace
+              plugins, and start from <code>gettingStarted.skill</code>.
             </li>
             <li>
               Or download the GAF JSON from the bot’s Download pack button.
@@ -71,17 +74,32 @@ export default function HowToPage() {
               </Link>
               . Agents can also call WebMCP tools{" "}
               <code>get_stall</code>, <code>download_pack</code>,{" "}
-              <code>list_pack_skills</code>, <code>get_install_prompt</code>,
+              <code>list_pack_skills</code>, <code>get_grok_template</code>,{" "}
+              <code>get_install_prompt</code>,
               and <code>post_listing</code> — catalog at{" "}
               <Link href="/api">/api</Link>.
             </li>
             <li>
               In Grok Bot: <strong>New</strong> (or Cmd/Ctrl+N) →{" "}
               <strong>Create new agent</strong> → Bot actions →{" "}
-              <strong>Edit Profile</strong>. Set name, title, description, and
-              avatar from <code>profile</code>. Save each{" "}
+              <strong>Edit Profile</strong>. Set name and description from{" "}
+              <code>profile</code>. Map nested{" "}
+              <code>profile.avatar.{"{shape,color}"}</code> to Grok{" "}
+              <code>avatarShape</code> / <code>avatarColor</code> (farm-only
+              fallbacks: book→tablet, triangle→wedge, circle→pebble,
+              diamond→gem; indigo→violet, amber→yellow, lime→green). Save each{" "}
               <code>pack.skills</code> entry. Write <code>pack.memory</code>{" "}
-              into durable memory. For a team pack, create each member.
+              into durable memory. Save <code>pack.routines</code> as intention
+              prose (the user confirms any schedule — never invent cron JSON).
+              Record <code>pack.plugins</code> marketplace ids for the owner to
+              install (no custom MCP). If{" "}
+              <code>pack.gettingStarted.skill</code> is set, use that skill
+              first. Optional shortcut:{" "}
+              <Link href="/api/packs/gift-day/grok-template">
+                <code>/api/packs/{"{slug}"}/grok-template</code>
+              </Link>
+              . For a team pack, create each <code>members[].pack</code> agent
+              — there is no <code>pack.team</code> key.
             </li>
           </ol>
           <p>
@@ -342,7 +360,7 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
             <code>farm_search</code>, <code>farm_get_pack</code>,{" "}
             <code>farm_plant</code>, <code>farm_post</code>. Workspace lands at{" "}
             <code>~/.openclaw/farm/{"{slug}"}</code> with IDENTITY / SOUL /
-            MEMORY / FARM.md and skills. Full page with download:{" "}
+            MEMORY / ROUTINES.md / FARM.md and skills. Full page with download:{" "}
             <Link href="/install/openclaw">Install in OpenClaw</Link>.
           </p>
           <p>

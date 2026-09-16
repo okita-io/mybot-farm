@@ -452,8 +452,61 @@ function buildFarmMd(pack, installedAt) {
   if (m.attribution) {
     lines.push("", "## Attribution", "", m.attribution);
   }
+  const gettingStarted = pack.gettingStarted?.skill?.trim();
+  if (gettingStarted) {
+    lines.push(
+      "",
+      "## Getting started",
+      "",
+      `First-run skill: \`${gettingStarted}\` (must match a planted skill name).`
+    );
+  }
+  const plugins = Array.isArray(pack.plugins) ? pack.plugins.filter((p) => p?.pluginId) : [];
+  if (plugins.length) {
+    lines.push(
+      "",
+      "## Marketplace plugins",
+      "",
+      "These are marketplace plugin ids only. Do not auto-install arbitrary MCP.",
+      ""
+    );
+    for (const plugin of plugins) {
+      const label = plugin.name?.trim() ? ` \u2014 ${plugin.name.trim()}` : "";
+      const desc = plugin.description?.trim() ? ` \u2014 ${plugin.description.trim()}` : "";
+      lines.push(`- \`${plugin.pluginId}\`${label}${desc}`);
+    }
+  }
   lines.push("");
   return lines.join("\n");
+}
+function buildRoutinesMd(pack) {
+  const routines = Array.isArray(pack.routines) ? pack.routines : [];
+  const blocks = [];
+  for (const routine of routines) {
+    const slug = routine?.slug?.trim();
+    if (!slug) continue;
+    const title = (routine.name ?? slug).trim();
+    const parts = [`## ${slug}`, "", `**${title}**`];
+    if (routine.description?.trim()) {
+      parts.push("", routine.description.trim());
+    }
+    if (routine.content?.trim()) {
+      parts.push("", routine.content.trim());
+    }
+    blocks.push(parts.join("\n"));
+  }
+  if (blocks.length === 0) {
+    return null;
+  }
+  const name = pack.profile?.name ?? pack.slug;
+  return [
+    `# ROUTINES.md - ${name}`,
+    "",
+    "Intention prose from the mybot.farm pack. These are not live schedules \u2014 confirm any cron or automation with the user. Never copy automation.json.",
+    "",
+    blocks.join("\n\n"),
+    ""
+  ].join("\n");
 }
 function buildSkillMd(skill) {
   const name = skill.name?.trim() || "skill";
@@ -468,6 +521,10 @@ async function writePackWorkspace(pack, workspace) {
   await fs.writeFile(path.join(workspace, "SOUL.md"), buildSoul(pack), "utf8");
   await fs.writeFile(path.join(workspace, "MEMORY.md"), buildMemory(pack), "utf8");
   await fs.writeFile(path.join(workspace, "FARM.md"), buildFarmMd(pack, installedAt), "utf8");
+  const routinesMd = buildRoutinesMd(pack);
+  if (routinesMd) {
+    await fs.writeFile(path.join(workspace, "ROUTINES.md"), routinesMd, "utf8");
+  }
   const skillsDir = path.join(workspace, "skills");
   await fs.mkdir(skillsDir, { recursive: true });
   const installed = [];

@@ -8,7 +8,7 @@ Proven on OpenClaw **2026.9.4**. It calls live `https://mybot.farm/api/stalls` a
 
 - Plugin id: `mybot-farm` (v0.2.0)
 - Tools: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`, `farm_update`
-- Workspace files: `IDENTITY.md`, `SOUL.md`, `MEMORY.md`, `FARM.md`, `skills/*/SKILL.md`
+- Workspace files: `IDENTITY.md`, `SOUL.md`, `MEMORY.md`, `FARM.md`, `ROUTINES.md` (when `routines[]` is present), `skills/*/SKILL.md`
 - Does not email, spend money, invent pack fields, or delete existing agents
 - Restart the OpenClaw gateway after install so agent sessions see the tools
 - ClawHub is **live**: `openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm`
@@ -185,5 +185,6 @@ Mocks `fetch`. Does not post a live listing. Optional: `openclaw plugins validat
 - Full package copy: [`packages/openclaw-mybot-farm/INSTALL.md`](../packages/openclaw-mybot-farm/INSTALL.md).
 - Existing agents (scout / finders / pitch) are never deleted.
 - Pack content keeps upstream attribution from each GAF manifest.
+- `routines[]` write `ROUTINES.md` (prose only). Plugin ids are noted in `FARM.md`; `exports` / `visibility` are ignored. See [generic-agent-format.md](./generic-agent-format.md).
 - Local OpenClaw category remains `tools` (0.1.1 fix). ClawHub taxonomy may still map to `other` on publish.
 - Twin write path: Hermes plugin `farm_post` ([hermes-plugin.md](./hermes-plugin.md)).
