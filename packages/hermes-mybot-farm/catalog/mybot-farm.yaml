@@ -14,7 +14,7 @@
 
 name: mybot-farm
 repo: https://github.com/okita-io/mybot-farm
-sha: REPLACE_WITH_40_HEX_SHA_AFTER_TAG
+sha: 8f90f522e46568a8c8b7f2f3ca0edc3f2b640f31
 subdir: packages/hermes-mybot-farm
 description: Search mybot.farm and plant/reinstall Hermes agent and team packs.
 maintainer: okita-io / Alex Okita
