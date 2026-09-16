@@ -12,6 +12,7 @@ import {
   type GrokBotMarkShape,
 } from "./gaf-pack.ts";
 
+/** Projected create_bot_share_json-shaped recipe. Marketplace identity (stallId, packVersion, slug) stays on GET /api/stalls. */
 export type GrokBotTemplateRecipe = {
   profile: {
     name: string;

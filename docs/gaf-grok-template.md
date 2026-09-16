@@ -24,6 +24,27 @@ Slug remains the public URL key (`/agents/{slug}`). `stallId` is the stable list
 
 ---
 
+## Cursor catalog consumer contract
+
+Cursor may enrich Grok data in **their** catalog as a consumer of farm stalls. The farm ships the fields below; Cursor stores, displays, and indexes them. We do **not** invent a second Grok-only catalog format inside GAF.
+
+1. **Marketplace identity** (enrichment key): `stallId` (stable UUID) + `packVersion` (integer) + `slug`. Read these from `GET /api/stalls` / `get_stall` (`stallRecord`). They are **not** on `create_bot_share_json`.
+2. **Template-ready payload** (Grok recipe): either the GAF agent-pack fields already on the pack — `profile`, `memory`, `skills`, `routines`, `plugins`, `gettingStarted` — or the projected object from `gafToGrokTemplate()` / `GET /api/packs/{slug}/grok-template` (`recipe`). Team packs are not 1:1; project each `members[]` agent.
+3. **Recommended enrichments** if Cursor lists farm stalls for Grok Bot:
+
+   | Store / display / index | Source |
+   |-------------------------|--------|
+   | `stallId`, `packVersion`, `slug`, `kind` | Stall card (`GET /api/stalls`) |
+   | `name`, `title`, `description`, `category`, `priceCents` | Stall card |
+   | `packUrl` | Stall card (`packUrl` / `downloadHref`) |
+   | `exports.grokBotTemplate.enabled` when present | Pack JSON (`GET /api/packs/{slug}`) |
+   | Skill / memory / routine counts | Pack JSON, or `get_stall` `pack.skillCount` / `memoryCount` plus `routines.length` |
+   | Projected template recipe (link or blob) | `GET /api/packs/{slug}/grok-template` or client-side `gafToGrokTemplate(pack)` |
+
+Identity stays on the stall API; the recipe stays GAF-shaped (or the thin projection). Cursor’s catalog is the enrichment layer.
+
+---
+
 ## Compatibility matrix
 
 | Field | GAF agent-pack | Grok Bot template | Mapping |
@@ -169,6 +190,7 @@ The farm **cannot** call `create_bot_share_json` server-side. Clients map GAF �
 | Consumer | memory / skills | routines | plugins | gettingStarted | exports / visibility / stall ids |
 |----------|-----------------|----------|---------|----------------|----------------------------------|
 | Grok install prompt | Consume | Consume | Marketplace id list | First-run skill | Provenance in prompt; visibility on export |
+| Cursor catalog (consumer) | Index / display | Index count | Optional | Optional | Enrich from stall API + pack; do not add a Grok-only GAF fork |
 | `gafToGrokTemplate` | 1:1 | 1:1 + name fallback | 1:1 | If set | `visibility` default public; strip farm meta |
 | OpenClaw `farm_plant` | IDENTITY / SOUL / MEMORY / skills | `ROUTINES.md` prose | Note ids in `FARM.md` | Tip in `FARM.md` | `packVersion` already in `FARM.md`; stallId from stall API if cited |
 | Hermes `farm_plant` | N/A (rejects GAF JSON) | Ignore | Ignore | Team `shared.gettingStarted` string on tarball packs | Ignore |
