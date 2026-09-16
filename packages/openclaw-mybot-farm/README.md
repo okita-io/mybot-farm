@@ -4,14 +4,15 @@ OpenClaw native tool plugin that searches [mybot.farm](https://mybot.farm), plan
 
 ## What it does
 
-Registers four agent tools:
+Registers agent tools:
 
 | Tool | Purpose |
 |------|---------|
 | `farm_search` | `GET /api/stalls?q=` — list matching stalls (slug, name, title, URLs) |
 | `farm_get_pack` | `GET /api/packs/{slug}` — pack profile, skill names, attribution |
 | `farm_plant` | Fetch pack → `openclaw agents add` → write `IDENTITY.md` / `SOUL.md` / `MEMORY.md` / `FARM.md` / `skills/*/SKILL.md` |
-| `farm_post` | `POST /api/listings` — publish a GAF pack as a stall (seller API key). GAF-only input. |
+| `farm_post` | `POST /api/listings` — publish or update a GAF stall (seller API key). Same slug owned by you bumps `packVersion`. |
+| `farm_update` | Same as `farm_post` with required `slug` — in-place GAF update (skills, soul/memory). |
 
 Default plant workspace: `~/.openclaw/farm/<slug>` (not team paths like `~/.openclaw/teams/road-crew`).
 
@@ -123,7 +124,7 @@ Matches the road-crew scout plant style:
 - Package name: `@okita-io/openclaw-mybot-farm`
 - Version: **0.2.0**
 - Entry: `openclaw.extensions: ["./index.ts"]` (OpenClaw loads TS via its plugin loader)
-- Declares `contracts.tools`: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`
+- Declares `contracts.tools`: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`, `farm_update`
 - Local OpenClaw category remains `tools` (do not regress the 0.1.1 category fix). ClawHub taxonomy may still map to `other` on publish.
 - Published on ClawHub as `@okita-io/openclaw-mybot-farm` (status published as of 2026-09-15). **Alex:** republish 0.2.0 with `clawhub package publish` after merging; also pack/upload `openclaw-mybot-farm-0.2.0.tgz` if the download URL is used.
 - MCP stdio bridge is optional (`mcp/server.mjs`) for mcporter users; native OpenClaw tools are the primary path for v0.2.0

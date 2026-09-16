@@ -1,11 +1,15 @@
 import {
+  getListingById,
   listingWriteFromBody,
+  listingWriteResponse,
+  packForListingWrite,
   setListingPublished,
   updateListing,
 } from "@/lib/listings";
 import { noStoreJson, optionsResponse } from "@/lib/http";
-import { stallPagePath } from "@/lib/packs";
+import { packVersionOf } from "@/lib/pack-version";
 import { requireSeller } from "@/lib/seller-auth";
+import type { FarmPack } from "@/lib/pack-files";
 
 export const runtime = "nodejs";
 
@@ -74,20 +78,47 @@ export async function PATCH(
     );
   }
 
-  const listing = await updateListing(id, user.id, value);
+  const existing = await getListingById(id);
+  if (
+    !existing ||
+    existing.sellerUserId !== user.id ||
+    existing.deletedAt
+  ) {
+    return noStoreJson({ error: "not_found" }, { status: 404 });
+  }
+
+  const finalized = packForListingWrite(
+    value,
+    existing.slug,
+    packVersionOf(existing.pack as FarmPack),
+  );
+  if (!finalized.ok) {
+    return noStoreJson(
+      { error: finalized.error, message: finalized.message },
+      { status: finalized.status },
+    );
+  }
+
+  const listing = await updateListing(id, user.id, {
+    kind: value.kind,
+    name: value.name,
+    title: value.title,
+    description: value.description,
+    category: value.category,
+    priceCents: value.priceCents,
+    pack: finalized.pack,
+  });
   if (!listing) {
     return noStoreJson({ error: "not_found" }, { status: 404 });
   }
 
-  return noStoreJson({
-    ok: true,
-    slug: listing.slug,
-    kind: listing.kind,
-    pagePath: stallPagePath({
-      kind: listing.kind === "team" ? "team" : "agent",
-      slug: listing.slug,
+  return noStoreJson(
+    listingWriteResponse(listing, {
+      created: false,
+      updated: true,
+      hasReadme: Boolean(listing.readmeHtml),
     }),
-  });
+  );
 }
 
 export function OPTIONS() {

@@ -11,7 +11,7 @@ Install page: [https://mybot.farm/install/hermes](https://mybot.farm/install/her
 ## In short
 
 - Plugin name: `mybot-farm` (`plugin.yaml`)
-- Tools: `farm_search`, `farm_get_pack`, `farm_get_stall`, `farm_plant`, `farm_reinstall`, `farm_post`
+- Tools: `farm_search`, `farm_get_pack`, `farm_get_stall`, `farm_plant`, `farm_reinstall`, `farm_post`, `farm_update`
 - Also: `hermes farm …` and `/farm`
 - Does not email, spend money, invent pack fields, or delete live profiles unless `force` is true
 - Plugins are opt-in: `hermes plugins enable mybot-farm`
@@ -36,7 +36,7 @@ hermes plugins validate ./packages/hermes-mybot-farm
 python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v
 ```
 
-You should see tools: `farm_search`, `farm_get_pack`, `farm_get_stall`, `farm_plant`, `farm_reinstall`, `farm_post`.
+You should see tools: `farm_search`, `farm_get_pack`, `farm_get_stall`, `farm_plant`, `farm_reinstall`, `farm_post`, `farm_update`.
 
 ## Install from GitHub
 
@@ -127,7 +127,9 @@ python3 packages/hermes-mybot-farm/bin/farm-plant post \
   --category Experimental --price-cents 0 --pack ./smoke.gaf.json
 ```
 
-Human-readable success prints the slug and `https://mybot.farm{pagePath}`. `--json` prints the machine payload. `--dry-run` validates locally (category/price/pack) and redacts the key.
+Human-readable success prints the slug and `https://mybot.farm{pagePath}`. `--json` prints the machine payload (`id`, `stallId`, `packVersion`, `updated`). `--dry-run` validates locally (category/price/pack) and redacts the key.
+
+If you already own that slug, `farm_post` **updates the same stall** (skills, soul/memory, other GAF fields) and bumps `packVersion`. Pass `--slug` / `slug` to target it, or `farm_update` which requires the slug. Catalog stalls cannot be overwritten (`409 catalog_reserved`).
 
 Free listings (`priceCents: 0`) skip Stripe Connect. Paid (`200`–`999900`) need Connect transfers active (`403 connect_required` otherwise). `category` is an exact taxonomy **label** (`Lifestyle`, `Coding`, `Experimental`, `Personal finance`, `Ops / admin`, …).
 
@@ -140,7 +142,8 @@ Ask Hermes to call:
 - `farm_get_pack` with `{ "slug": "workbench" }`
 - `farm_plant` with `{ "slug": "scholastic-research" }` (optional `force`, `clean`, `dry_run`, `name`)
 - `farm_reinstall` with `{ "slug": "workbench" }`
-- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `dryRun`, `apiKey`)
+- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `slug`, `packVersion`, `dryRun`, `apiKey`)
+- `farm_update` with the same fields as `farm_post` plus required `slug`
 
 ## Test notes
 

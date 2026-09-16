@@ -11,6 +11,7 @@ import pairBench from "../../public/packs/teams/pair-bench.json";
 import roadCrew from "../../public/packs/teams/road-crew.json";
 import workbench from "../../public/packs/teams/workbench.json";
 import { getStall, packPathStem, type Stall } from "@/lib/packs";
+import { packVersionOf } from "@/lib/pack-version";
 import { normalizeRuntimes, type RuntimeId } from "@/lib/runtimes";
 
 export type PackSkill = {
@@ -40,6 +41,8 @@ export type PackMemberRef = {
 export type FarmPack = {
   format?: string;
   version?: string;
+  /** Content revision for same-slug updates. Distinct from GAF format `version`. */
+  packVersion?: number;
   runtime?: string[];
   slug?: string;
   category?: string;
@@ -146,6 +149,7 @@ export function packSummaryFields(pack: FarmPack) {
   return {
     format: pack.format,
     version: pack.version,
+    packVersion: packVersionOf(pack),
     profile: pack.profile
       ? {
           name: pack.profile.name,

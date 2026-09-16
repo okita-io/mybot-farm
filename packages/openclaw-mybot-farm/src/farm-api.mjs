@@ -162,6 +162,8 @@ export async function getInstallPrompt(baseUrl, slug) {
 export function stallSummary(stall) {
   return {
     slug: stall.slug,
+    stallId: stall.stallId ?? stall.listingId ?? "",
+    packVersion: stall.packVersion ?? null,
     name: stall.name ?? stall.slug,
     title: stall.title ?? "",
     pageUrl: stall.pageUrl ?? `https://mybot.farm/agents/${stall.slug}`,
@@ -178,6 +180,7 @@ export function packSummary(pack) {
     slug: pack.slug,
     format: pack.format,
     version: pack.version,
+    packVersion: pack.packVersion,
     profile: pack.profile ?? {},
     skillNames: skills.map((s) => s.name).filter(Boolean),
     skillCount: skills.length,
@@ -232,7 +235,17 @@ export function parsePackObject(value) {
   return value;
 }
 
-export function buildListingPayload({ kind, name, title, description, category, priceCents, pack }) {
+export function buildListingPayload({
+  kind,
+  name,
+  title,
+  description,
+  category,
+  priceCents,
+  pack,
+  slug,
+  packVersion,
+}) {
   const parsedKind = parseListingKind(kind);
   if (!parsedKind) {
     throw new FarmError('kind must be "agent" or "team"');
@@ -257,7 +270,7 @@ export function buildListingPayload({ kind, name, title, description, category, 
   }
 
   const parsedPack = parsePackObject(pack);
-  return {
+  const payload = {
     kind: parsedKind,
     name: parsedName,
     title: parsedTitle,
@@ -266,6 +279,13 @@ export function buildListingPayload({ kind, name, title, description, category, 
     priceCents: parsedPrice,
     pack: parsedPack,
   };
+  if (typeof slug === "string" && slug.trim()) {
+    payload.slug = slug.trim().toLowerCase();
+  }
+  if (packVersion != null && packVersion !== "") {
+    payload.packVersion = packVersion;
+  }
+  return payload;
 }
 
 export function listingPayloadSummary(payload) {
@@ -278,9 +298,12 @@ export function listingPayloadSummary(payload) {
     title: payload.title,
     category: payload.category,
     priceCents: payload.priceCents,
+    slug: payload.slug,
+    packVersion: payload.packVersion,
     pack: {
       format: pack.format,
       version: pack.version,
+      packVersion: pack.packVersion,
       runtime: pack.runtime || [],
       skillCount: skills.length,
       encodedChars: encoded.length,

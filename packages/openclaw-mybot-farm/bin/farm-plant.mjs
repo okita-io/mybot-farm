@@ -7,7 +7,9 @@
  *   node bin/farm-plant.mjs plant <slug> [--agent-id ID] [--workspace DIR] [--force]
  *   node bin/farm-plant.mjs post --kind agent|team --name NAME --title TITLE --description DESC
  *                               --category LABEL --price-cents N --pack pack.json
- *                               [--api-key KEY] [--dry-run] [--json]
+ *                               [--slug SLUG] [--pack-version N] [--api-key KEY] [--dry-run] [--json]
+ *   node bin/farm-plant.mjs update --slug SLUG --kind agent|team --name NAME --title TITLE
+ *                               --description DESC --category LABEL --price-cents N --pack pack.json
  */
 
 import path from "node:path";
@@ -22,14 +24,18 @@ export function usage() {
   farm-plant plant <slug> [--agent-id ID] [--workspace DIR] [--force]
   farm-plant post --kind agent|team --name NAME --title TITLE --description DESC
                  --category LABEL --price-cents N --pack pack.json
-                 [--api-key KEY] [--dry-run] [--json]
+                 [--slug SLUG] [--pack-version N] [--api-key KEY] [--dry-run] [--json]
+  farm-plant update --slug SLUG --kind agent|team --name NAME --title TITLE --description DESC
+                 --category LABEL --price-cents N --pack pack.json
+                 [--pack-version N] [--api-key KEY] [--dry-run] [--json]
 
 Env:
   MYBOT_FARM_URL              override API origin (default https://mybot.farm)
   MYBOT_FARM_WORKSPACE_ROOT   override workspace root (default ~/.openclaw/farm)
   MYBOT_FARM_API_KEY          seller key for post (from https://mybot.farm/sell)
 
-Post publishes GAF JSON to the farm. Plant still imports GAF packs into OpenClaw.
+Post publishes GAF JSON to the farm. If you already own the slug, post updates
+that stall in place and bumps packVersion. Plant still imports GAF packs into OpenClaw.
 Category must be an exact farm label (Lifestyle, Coding, Experimental, …).
 price-cents is 0 (free) or 200–999900. Paid listings need Stripe Connect.
 `;
@@ -57,6 +63,14 @@ function parseArgs(argv) {
       }
     } else if (a === "--pack" || a === "--pack-path") args.packPath = argv[++i];
     else if (a === "--api-key" || a === "--apiKey") args.apiKey = argv[++i];
+    else if (a === "--slug") args.slug = argv[++i];
+    else if (a === "--pack-version" || a === "--packVersion") {
+      const raw = argv[++i];
+      args.packVersion = Number(raw);
+      if (!Number.isFinite(args.packVersion)) {
+        args.flagError = `${a} expected a number`;
+      }
+    }
     else if (a === "--dry-run" || a === "--dry_run") args.dryRun = true;
     else if (a === "--json") args.json = true;
     else args._.push(a);
@@ -114,19 +128,23 @@ export async function run(argv, { stdout = console.log, stderr = console.error }
     return 0;
   }
 
-  if (cmd === "post") {
+  if (cmd === "post" || cmd === "update") {
     const missing = ["kind", "name", "title", "description", "category", "priceCents"].filter(
       (name) => args[name] == null || args[name] === "",
     );
     let packPath = args.packPath;
     if (rest.length && !packPath) packPath = rest[0];
+    if (cmd === "update" && !args.slug) {
+      stderr("update requires --slug");
+      return 1;
+    }
     if (missing.length || !packPath) {
       stderr(
-        "post requires --kind --name --title --description --category --price-cents and --pack <gaf.json>",
+        `${cmd} requires --kind --name --title --description --category --price-cents and --pack <gaf.json>`,
       );
       return 1;
     }
-    const { postListing } = await import(pathToFileURL(path.join(root, "src/post.mjs")).href);
+    const { postListing, updateListing } = await import(pathToFileURL(path.join(root, "src/post.mjs")).href);
     const postArgs = {
       kind: args.kind,
       name: args.name,
@@ -138,7 +156,11 @@ export async function run(argv, { stdout = console.log, stderr = console.error }
     };
     if (args.dryRun) postArgs.dryRun = true;
     if (args.apiKey) postArgs.apiKey = args.apiKey;
-    const result = await postListing({ args: postArgs, pluginConfig: farm });
+    if (args.slug) postArgs.slug = args.slug;
+    if (args.packVersion != null) postArgs.packVersion = args.packVersion;
+    const result = cmd === "update"
+      ? await updateListing({ args: postArgs, pluginConfig: farm })
+      : await postListing({ args: postArgs, pluginConfig: farm });
     if (args.json) {
       stdout(JSON.stringify(result, null, 2));
     } else if (result.text) {

@@ -174,7 +174,7 @@ export const howToOpenClawLd = {
   "@type": "HowTo",
   name: "Plant a mybot.farm agent in OpenClaw",
   description:
-    "Install the mybot-farm OpenClaw plugin from ClawHub (recommended), enable it, restart the gateway, then search, plant, and post GAF packs with farm_search, farm_get_pack, farm_plant, and farm_post.",
+    "Install the mybot-farm OpenClaw plugin from ClawHub (recommended), enable it, restart the gateway, then search, plant, and post GAF packs with farm_search, farm_get_pack, farm_plant, farm_post, and farm_update.",
   url: `${site.url}/install/openclaw`,
   step: [
     {
@@ -190,7 +190,7 @@ export const howToOpenClawLd = {
     {
       "@type": "HowToStep",
       name: "Restart the gateway",
-      text: "Restart the OpenClaw gateway so existing agent sessions see farm_search, farm_get_pack, farm_plant, and farm_post.",
+      text: "Restart the OpenClaw gateway so existing agent sessions see farm_search, farm_get_pack, farm_plant, farm_post, and farm_update.",
     },
     {
       "@type": "HowToStep",

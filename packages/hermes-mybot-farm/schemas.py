@@ -148,13 +148,14 @@ FARM_POST = {
     "name": "farm_post",
     "description": (
         "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. "
+        "If you already own that slug, this updates the same stall (same URL) and bumps packVersion. "
         "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. "
         "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath "
         "to a .json file) — not a Hermes tarball. Plant still imports Hermes .tar.gz; posting "
         "publishes GAF. category is an exact farm label (Lifestyle, Coding, Experimental, …). "
         "priceCents is 0 (free) or 200–999900. Paid listings need Stripe Connect on the seller "
         "(403 connect_required). Prefer dryRun to validate without posting. "
-        "Does not email or spend money. OpenClaw farm_post is not implemented yet."
+        "Does not email or spend money. Catalog/agency slugs cannot be overwritten."
     ),
     "parameters": {
         "type": "object",
@@ -165,7 +166,7 @@ FARM_POST = {
             },
             "name": {
                 "type": "string",
-                "description": "Listing name (used to derive the slug).",
+                "description": "Listing name. Used to derive the slug on first publish.",
             },
             "title": {
                 "type": "string",
@@ -209,7 +210,49 @@ FARM_POST = {
                 "type": "boolean",
                 "description": "Validate and show a payload summary without POSTing. Redacts any key.",
             },
+            "slug": {
+                "type": "string",
+                "description": (
+                    "Existing stall slug to update in place. If omitted, derived from name. "
+                    "Same seller + same slug updates the pack (skills, soul/memory) and bumps packVersion."
+                ),
+            },
+            "packVersion": {
+                "type": "number",
+                "description": (
+                    "Optional content revision. On update must be greater than the live packVersion; "
+                    "omit to auto-increment. Distinct from GAF format version."
+                ),
+            },
         },
         "required": ["kind", "name", "title", "description", "category", "priceCents"],
+    },
+}
+
+FARM_UPDATE = {
+    "name": "farm_update",
+    "description": (
+        "Update a seller-owned stall in place (same slug). Same fields as farm_post plus required slug. "
+        "Replaces GAF pack JSON (skills, soul/memory) and bumps packVersion. Catalog slugs are reserved. "
+        "Does not attach Hermes tarballs."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            **FARM_POST["parameters"]["properties"],
+            "slug": {
+                "type": "string",
+                "description": "Existing stall slug to update.",
+            },
+        },
+        "required": [
+            "kind",
+            "name",
+            "title",
+            "description",
+            "category",
+            "priceCents",
+            "slug",
+        ],
     },
 }

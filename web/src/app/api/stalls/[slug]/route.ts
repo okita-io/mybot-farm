@@ -21,6 +21,7 @@ export async function GET(
     pack: {
       format: summary.format,
       version: summary.version,
+      packVersion: summary.packVersion,
       profile: pack.profile,
       runtime: summary.runtime,
       skillCount: summary.skillCount,

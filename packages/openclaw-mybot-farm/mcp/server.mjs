@@ -28,7 +28,7 @@ async function main() {
 
   const api = await import(pathToFileURL(path.join(root, "src/farm-api.mjs")).href);
   const { plantPack } = await import(pathToFileURL(path.join(root, "src/plant.mjs")).href);
-  const { postListing } = await import(pathToFileURL(path.join(root, "src/post.mjs")).href);
+  const { postListing, updateListing } = await import(pathToFileURL(path.join(root, "src/post.mjs")).href);
   const farm = api.resolveFarmConfig({});
 
   const server = new Server(
@@ -87,10 +87,35 @@ async function main() {
           priceCents: { type: "number" },
           pack: { type: "object" },
           packPath: { type: "string" },
+          slug: { type: "string" },
+          packVersion: { type: "number" },
           apiKey: { type: "string" },
           dryRun: { type: "boolean" },
         },
         required: ["kind", "name", "title", "description", "category", "priceCents"],
+      },
+    },
+    {
+      name: "farm_update",
+      description:
+        "Update a seller-owned stall in place (same slug). Same fields as farm_post plus required slug.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          kind: { type: "string" },
+          name: { type: "string" },
+          title: { type: "string" },
+          description: { type: "string" },
+          category: { type: "string" },
+          priceCents: { type: "number" },
+          pack: { type: "object" },
+          packPath: { type: "string" },
+          slug: { type: "string" },
+          packVersion: { type: "number" },
+          apiKey: { type: "string" },
+          dryRun: { type: "boolean" },
+        },
+        required: ["kind", "name", "title", "description", "category", "priceCents", "slug"],
       },
     },
   ];
@@ -122,6 +147,10 @@ async function main() {
     }
     if (name === "farm_post") {
       const result = await postListing({ args, pluginConfig: farm });
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    }
+    if (name === "farm_update") {
+      const result = await updateListing({ args, pluginConfig: farm });
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
     }
     throw new Error(`Unknown tool: ${name}`);

@@ -67,6 +67,8 @@ function postListingBody(args: Record<string, unknown>) {
     category: args.category,
     priceCents,
     pack: args.pack,
+    slug: args.slug,
+    packVersion: args.packVersion,
   };
 }
 
@@ -128,6 +130,16 @@ function inputSchemaFor(name: ToolName) {
           type: "string",
           description:
             "Seller API key (mbf_…). Sent as Authorization Bearer. Required for unattended/agent posts; omit when the seller is signed in in this browser.",
+        },
+        slug: {
+          type: "string",
+          description:
+            "Existing stall slug to update in place. If omitted, derived from name.",
+        },
+        packVersion: {
+          type: "integer",
+          description:
+            "Optional content revision. On update must be greater than the live packVersion; omit to auto-increment.",
         },
       },
       required: [

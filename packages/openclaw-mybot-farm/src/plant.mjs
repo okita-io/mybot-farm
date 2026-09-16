@@ -153,6 +153,7 @@ function buildFarmMd(pack, installedAt) {
     `Planted from [mybot.farm](https://mybot.farm) on ${installedAt}.`,
     "",
     `- **Slug:** ${pack.slug}`,
+    `- **Pack version:** ${pack.packVersion ?? 1}`,
     `- **Format:** ${pack.format ?? "mybot.farm/agent-pack"} ${pack.version ?? ""}`.trimEnd(),
     `- **Homepage:** ${m.homepage ?? `https://mybot.farm/agents/${pack.slug}`}`,
   ];

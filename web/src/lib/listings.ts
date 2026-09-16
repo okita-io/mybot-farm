@@ -2,8 +2,15 @@ import { and, desc, eq, isNull } from "drizzle-orm";
 import { getDb, hasDatabase } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
 import { isAgencyPackSlug } from "@/lib/agency-catalog";
-import { getStall, isStallKind, type StallKind } from "@/lib/packs";
+import { getStall, isStallKind, stallPagePath, type StallKind } from "@/lib/packs";
 import type { FarmPack } from "@/lib/pack-files";
+import {
+  applyPackVersion,
+  packVersionOf,
+  readOptionalPackVersion,
+  resolveCreatePackVersion,
+  resolveUpdatePackVersion,
+} from "@/lib/pack-version";
 import { categories } from "@/lib/site";
 
 const MAX_PACK_CHARS = 500_000;
@@ -21,6 +28,27 @@ export function slugifyName(name: string) {
     .slice(0, 48);
 
   return slug || "bot";
+}
+
+export function parseListingSlug(value: unknown): string | null {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const slug = value.trim().toLowerCase();
+  if (!slug || slug.length > 64) {
+    return null;
+  }
+
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    return null;
+  }
+
+  return slug;
+}
+
+export function isReservedCatalogSlug(slug: string) {
+  return Boolean(getStall(slug) || isAgencyPackSlug(slug));
 }
 
 export function parseListingKind(value: unknown): StallKind | null {
@@ -145,7 +173,7 @@ export async function getListingById(id: string) {
 }
 
 export async function isSlugTaken(slug: string) {
-  if (getStall(slug) || isAgencyPackSlug(slug)) {
+  if (isReservedCatalogSlug(slug)) {
     return true;
   }
 
@@ -176,6 +204,8 @@ export type ListingWriteInput = {
   category: string;
   priceCents: number;
   pack: FarmPack;
+  slug: string | null;
+  packVersion: number | null;
 };
 
 export function listingWriteFromBody(
@@ -229,6 +259,31 @@ export function listingWriteFromBody(
     },
   };
 
+  const slugField = (body as Record<string, unknown>).slug;
+  let slug: string | null = null;
+  if (slugField !== undefined && slugField !== null && slugField !== "") {
+    slug = parseListingSlug(slugField);
+    if (!slug) {
+      return {
+        ok: false,
+        error: "invalid_slug",
+        message: "slug must be lowercase letters, numbers, and hyphens.",
+        status: 400,
+      };
+    }
+  }
+
+  const versionField = (body as Record<string, unknown>).packVersion;
+  const requestedVersion = readOptionalPackVersion(versionField);
+  if (!requestedVersion.ok) {
+    return {
+      ok: false,
+      error: "invalid_pack_version",
+      message: "packVersion must be a positive integer.",
+      status: 400,
+    };
+  }
+
   return {
     ok: true,
     value: {
@@ -239,6 +294,8 @@ export function listingWriteFromBody(
       category: parsed.category,
       priceCents: parsed.priceCents,
       pack,
+      slug,
+      packVersion: requestedVersion.value,
     },
   };
 }
@@ -256,6 +313,52 @@ export function parseListingPayload(record: Record<string, unknown>) {
     category: readListingString(record.category),
     priceCents: parsePriceCents(record.priceCents),
     packResult: parsePackJson(record.pack),
+  };
+}
+
+export function listingWriteResponse(
+  listing: ListingRow,
+  extra: { created?: boolean; updated?: boolean; hasReadme?: boolean },
+) {
+  const pack = listing.pack as FarmPack;
+  return {
+    ok: true as const,
+    id: listing.id,
+    stallId: listing.id,
+    slug: listing.slug,
+    kind: listing.kind,
+    pagePath: stallPagePath({
+      kind: listing.kind === "team" ? "team" : "agent",
+      slug: listing.slug,
+    }),
+    packVersion: packVersionOf(pack),
+    created: Boolean(extra.created),
+    updated: Boolean(extra.updated),
+    hasReadme:
+      extra.hasReadme ?? Boolean(listing.readmeHtml ?? listing.readmeMarkdown),
+  };
+}
+
+export function packForListingWrite(
+  value: ListingWriteInput,
+  slug: string,
+  currentPackVersion: number | null,
+):
+  | { ok: true; pack: FarmPack; packVersion: number }
+  | { ok: false; error: "stale_version"; message: string; status: 409 } {
+  const next =
+    currentPackVersion == null
+      ? { ok: true as const, version: resolveCreatePackVersion(value.packVersion, value.pack) }
+      : resolveUpdatePackVersion(currentPackVersion, value.packVersion, value.pack);
+
+  if (!next.ok) {
+    return { ...next, status: 409 };
+  }
+
+  return {
+    ok: true,
+    pack: applyPackVersion(value.pack, slug, next.version),
+    packVersion: next.version,
   };
 }
 

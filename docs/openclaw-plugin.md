@@ -7,7 +7,7 @@ Proven on OpenClaw **2026.9.4**. It calls live `https://mybot.farm/api/stalls` a
 ## In short
 
 - Plugin id: `mybot-farm` (v0.2.0)
-- Tools: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`
+- Tools: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`, `farm_update`
 - Workspace files: `IDENTITY.md`, `SOUL.md`, `MEMORY.md`, `FARM.md`, `skills/*/SKILL.md`
 - Does not email, spend money, invent pack fields, or delete existing agents
 - Restart the OpenClaw gateway after install so agent sessions see the tools
@@ -50,7 +50,7 @@ openclaw plugins validate --root ./packages/openclaw-mybot-farm
 openclaw plugins inspect mybot-farm --runtime --json
 ```
 
-You should see tools: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`.
+You should see tools: `farm_search`, `farm_get_pack`, `farm_plant`, `farm_post`, `farm_update`.
 
 ## Install from the public tarball
 
@@ -153,7 +153,9 @@ node packages/openclaw-mybot-farm/bin/farm-plant.mjs post \
   --category Experimental --price-cents 0 --pack ./smoke.gaf.json
 ```
 
-Human-readable success prints the slug and `https://mybot.farm{pagePath}`. `--json` prints the machine payload. `--dry-run` validates locally (category/price/pack) and redacts the key.
+Human-readable success prints the slug and `https://mybot.farm{pagePath}`. `--json` prints the machine payload (`id`, `stallId`, `packVersion`, `updated`). `--dry-run` validates locally (category/price/pack) and redacts the key.
+
+If you already own that slug, `farm_post` **updates the same stall** and bumps `packVersion`. Pass `--slug` or call `farm_update` (slug required). Catalog stalls cannot be overwritten.
 
 Free listings (`priceCents: 0`) skip Stripe Connect. Paid (`200`–`999900`) need Connect transfers active (`403 connect_required` otherwise). `category` is an exact taxonomy **label** (`Lifestyle`, `Coding`, `Experimental`, `Personal finance`, `Ops / admin`, …).
 
@@ -164,7 +166,8 @@ Ask your OpenClaw agent to call:
 - `farm_search` with `{ "query": "frontend" }`
 - `farm_get_pack` with `{ "slug": "frontend-developer" }`
 - `farm_plant` with `{ "slug": "frontend-developer" }`
-- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `dryRun`, `apiKey`)
+- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `slug`, `packVersion`, `dryRun`, `apiKey`)
+- `farm_update` with the same fields as `farm_post` plus required `slug`
 
 Optional plant params: `agentId`, `workspace`, `force`. Existing agents are never overwritten unless `force` is true.
 

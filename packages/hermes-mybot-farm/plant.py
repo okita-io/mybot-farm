@@ -78,6 +78,8 @@ class PlantPlan:
     getting_started: str
     endpoint_note: str
     homepage: str
+    stall_id: str = ""
+    pack_version: int | str = 1
     reason: str = ""
 
 
@@ -260,6 +262,12 @@ def build_plant_plan(
     name_override: str | None = None,
 ) -> PlantPlan:
     slug = str(pack.get("slug") or stall.get("slug") or "")
+    stall_id = str(stall.get("stallId") or stall.get("listingId") or "")
+    pack_version = stall.get("packVersion")
+    if pack_version is None:
+        pack_version = pack.get("packVersion")
+    if pack_version is None:
+        pack_version = 1
     getting = _getting_started(pack)
     stall_members = _member_plans_from_stall(stall, base_url)
     pack_members = _member_plans_from_pack(pack, base_url)
@@ -287,6 +295,8 @@ def build_plant_plan(
                 f"{ENDPOINT_PLACEHOLDER} with your LLM endpoint. auth.json and .env never ship."
             ),
             homepage=str((pack.get("manifest") or {}).get("homepage") or stall.get("pageUrl") or ""),
+            stall_id=stall_id,
+            pack_version=pack_version,
         )
 
     if is_hermes_archive(download_href):
@@ -307,6 +317,8 @@ def build_plant_plan(
                 f"{ENDPOINT_PLACEHOLDER} with your LLM endpoint. auth.json and .env never ship."
             ),
             homepage=str((pack.get("manifest") or {}).get("homepage") or stall.get("pageUrl") or ""),
+            stall_id=stall_id,
+            pack_version=pack_version,
         )
 
     runtimes = pack.get("runtime") if isinstance(pack.get("runtime"), list) else []
@@ -329,6 +341,8 @@ def _write_farm_md(path: Path, plan: PlantPlan, planted_at: str) -> None:
         f"Planted from [mybot.farm](https://mybot.farm) on {planted_at}.",
         "",
         f"- **Slug:** {plan.slug}",
+        f"- **Stall id:** {plan.stall_id or '(none)'}",
+        f"- **Pack version:** {plan.pack_version}",
         f"- **Kind:** {plan.kind}",
         f"- **Homepage:** {plan.homepage or ('https://mybot.farm/teams/' if plan.kind == 'team' else 'https://mybot.farm/agents/') + plan.slug}",
         f"- **Profiles:** {', '.join(target_profile_names(plan))}",

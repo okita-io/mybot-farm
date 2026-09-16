@@ -84,6 +84,8 @@ export async function postListing({ args, pluginConfig } = { args: {} }) {
       category: args.category,
       priceCents: "priceCents" in args ? args.priceCents : args.price_cents,
       pack,
+      slug: args.slug,
+      packVersion: "packVersion" in args ? args.packVersion : args.pack_version,
     });
   } catch (err) {
     if (err instanceof FarmError) return errPayload(err.message, err.status != null ? { status: err.status } : {});
@@ -101,6 +103,8 @@ export async function postListing({ args, pluginConfig } = { args: {} }) {
       `title: ${payload.title}`,
       `category: ${payload.category}`,
       `priceCents: ${payload.priceCents}`,
+      `slug: ${payload.slug || "(from name)"}`,
+      `packVersion: ${payload.packVersion != null ? payload.packVersion : "(auto)"}`,
       `pack format: ${summary.pack?.format || "(none)"}`,
       `pack skills: ${summary.pack?.skillCount}`,
       `pack encoded chars: ${summary.pack?.encodedChars}`,
@@ -137,15 +141,34 @@ export async function postListing({ args, pluginConfig } = { args: {} }) {
   const kind = String(result.kind || payload.kind);
   const pagePath = String(result.pagePath || "");
   const pageUrl = pagePath ? listingPageUrl(baseUrl, pagePath) : `${baseUrl}/${kind}s/${slug}`;
-  const lines = [`Posted ${kind} \`${slug}\``, pageUrl];
+  const listingId = String(result.id || result.stallId || "").trim();
+  const packVersion = result.packVersion;
+  const updated = Boolean(result.updated);
+  const verb = updated ? "Updated" : "Posted";
+  const lines = [`${verb} ${kind} \`${slug}\``, pageUrl];
+  if (listingId) lines.push(`stall id: ${listingId}`);
+  if (packVersion != null) lines.push(`pack version: ${packVersion}`);
   if (result.hasReadme) lines.push("README extracted from pack.");
   return {
     ok: true,
     text: lines.join("\n"),
+    id: listingId || undefined,
+    stallId: listingId || undefined,
     slug,
     kind,
     pagePath,
     pageUrl,
+    packVersion,
+    created: Boolean(result.created ?? !updated),
+    updated,
     hasReadme: Boolean(result.hasReadme),
   };
+}
+
+export async function updateListing({ args, pluginConfig } = { args: {} }) {
+  const slug = typeof args.slug === "string" ? args.slug.trim() : "";
+  if (!slug) {
+    return errPayload("slug required");
+  }
+  return postListing({ args: { ...args, slug }, pluginConfig });
 }

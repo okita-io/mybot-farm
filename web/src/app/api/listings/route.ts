@@ -1,14 +1,34 @@
 import {
   createListing,
+  getListingBySlug,
+  isReservedCatalogSlug,
   listingWriteFromBody,
-  uniqueListingSlug,
+  listingWriteResponse,
+  packForListingWrite,
+  slugifyName,
+  updateListing,
 } from "@/lib/listings";
 import { noStoreJson, optionsResponse } from "@/lib/http";
+import { packVersionOf } from "@/lib/pack-version";
 import { extractPackReadme, parseStallReadme } from "@/lib/readme";
-import { stallPagePath } from "@/lib/packs";
 import { requireSeller } from "@/lib/seller-auth";
+import type { FarmPack } from "@/lib/pack-files";
 
 export const runtime = "nodejs";
+
+function packReadmeFields(pack: FarmPack) {
+  const packReadme = extractPackReadme(pack as Record<string, unknown>);
+  if (!packReadme) {
+    return { readmeMarkdown: null as string | null, readmeHtml: null as string | null };
+  }
+
+  const readme = parseStallReadme(packReadme);
+  if (!readme.ok) {
+    return { readmeMarkdown: null, readmeHtml: null };
+  }
+
+  return { readmeMarkdown: readme.markdown, readmeHtml: readme.html };
+}
 
 export async function POST(request: Request) {
   const user = await requireSeller(request);
@@ -39,37 +59,107 @@ export async function POST(request: Request) {
     );
   }
 
-  let readmeMarkdown: string | null = null;
-  let readmeHtml: string | null = null;
-  const packReadme = extractPackReadme(value.pack as Record<string, unknown>);
-  if (packReadme) {
-    const readme = parseStallReadme(packReadme);
-    if (readme.ok) {
-      readmeMarkdown = readme.markdown;
-      readmeHtml = readme.html;
-    }
+  const slug = value.slug ?? slugifyName(value.name);
+  if (isReservedCatalogSlug(slug)) {
+    return noStoreJson(
+      {
+        error: "catalog_reserved",
+        message:
+          "That slug is a farm catalog stall. Seller keys cannot overwrite it; ship catalog updates via git.",
+        slug,
+      },
+      { status: 409 },
+    );
   }
 
-  const slug = await uniqueListingSlug(value.name);
+  const existing = await getListingBySlug(slug);
+  if (existing?.deletedAt) {
+    return noStoreJson(
+      {
+        error: "slug_taken",
+        message: "That slug is not available.",
+        slug,
+      },
+      { status: 409 },
+    );
+  }
+
+  if (existing && existing.sellerUserId !== user.id) {
+    return noStoreJson(
+      {
+        error: "slug_taken",
+        message: "That slug already belongs to another seller.",
+        slug,
+      },
+      { status: 409 },
+    );
+  }
+
+  const { readmeMarkdown, readmeHtml } = packReadmeFields(value.pack);
+
+  if (existing) {
+    const finalized = packForListingWrite(
+      value,
+      existing.slug,
+      packVersionOf(existing.pack as FarmPack),
+    );
+    if (!finalized.ok) {
+      return noStoreJson(
+        { error: finalized.error, message: finalized.message },
+        { status: finalized.status },
+      );
+    }
+
+    const listing = await updateListing(existing.id, user.id, {
+      kind: value.kind,
+      name: value.name,
+      title: value.title,
+      description: value.description,
+      category: value.category,
+      priceCents: value.priceCents,
+      pack: finalized.pack,
+    });
+    if (!listing) {
+      return noStoreJson({ error: "not_found" }, { status: 404 });
+    }
+
+    return noStoreJson(
+      listingWriteResponse(listing, {
+        created: false,
+        updated: true,
+        hasReadme: Boolean(listing.readmeHtml),
+      }),
+    );
+  }
+
+  const finalized = packForListingWrite(value, slug, null);
+  if (!finalized.ok) {
+    return noStoreJson(
+      { error: finalized.error, message: finalized.message },
+      { status: finalized.status },
+    );
+  }
+
   const listing = await createListing({
     sellerUserId: user.id,
     slug,
-    ...value,
+    kind: value.kind,
+    name: value.name,
+    title: value.title,
+    description: value.description,
+    category: value.category,
+    priceCents: value.priceCents,
+    pack: finalized.pack,
     readmeMarkdown,
     readmeHtml,
   });
 
   return noStoreJson(
-    {
-      ok: true,
-      slug: listing.slug,
-      kind: listing.kind,
-      pagePath: stallPagePath({
-        kind: listing.kind === "team" ? "team" : "agent",
-        slug: listing.slug,
-      }),
+    listingWriteResponse(listing, {
+      created: true,
+      updated: false,
       hasReadme: Boolean(readmeHtml),
-    },
+    }),
     { status: 201 },
   );
 }

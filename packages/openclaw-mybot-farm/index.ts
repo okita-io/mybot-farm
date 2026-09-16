@@ -1,6 +1,6 @@
 /**
  * OpenClaw plugin: mybot-farm
- * Tools: farm_search, farm_get_pack, farm_plant, farm_post
+ * Tools: farm_search, farm_get_pack, farm_plant, farm_post, farm_update
  *
  * Uses defineToolPlugin (OpenClaw 2026.9 tool-plugin SDK; wraps definePluginEntry).
  */
@@ -16,7 +16,7 @@ import {
   stallSummary,
 } from "./src/farm-api.mjs";
 import { plantPack } from "./src/plant.mjs";
-import { postListing } from "./src/post.mjs";
+import { postListing, updateListing } from "./src/post.mjs";
 
 function textResult(text: string, details: unknown) {
   return {
@@ -163,15 +163,17 @@ export default defineToolPlugin({
       label: "Farm Post",
       description:
         "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. " +
+        "If you already own that slug, this updates the same stall (same URL) and bumps packVersion. " +
         "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. " +
         "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath " +
         "to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). " +
         "category is an exact farm label (Lifestyle, Coding, Experimental, …). " +
         "priceCents is 0 (free) or 200–999900. Paid listings need Stripe Connect on the seller " +
-        "(403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money.",
+        "(403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money. " +
+        "Catalog/agency slugs cannot be overwritten.",
       parameters: Type.Object({
         kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
-        name: Type.String({ description: "Listing name (used to derive the slug)." }),
+        name: Type.String({ description: "Listing name. Used to derive the slug on first publish." }),
         title: Type.String({ description: "Short stall title shown on the farm." }),
         description: Type.String({ description: "Stall description (non-empty)." }),
         category: Type.String({
@@ -205,9 +207,80 @@ export default defineToolPlugin({
             description: "Validate and show a payload summary without POSTing. Redacts any key.",
           }),
         ),
+        slug: Type.Optional(
+          Type.String({
+            description:
+              "Existing stall slug to update in place. If omitted, derived from name. Same seller + same slug replaces GAF (skills, soul/memory) and bumps packVersion.",
+          }),
+        ),
+        packVersion: Type.Optional(
+          Type.Number({
+            description:
+              "Optional content revision. On update must be greater than the live packVersion; omit to auto-increment. Distinct from GAF format version.",
+          }),
+        ),
       }),
       async execute(params, config) {
         const result = await postListing({
+          args: params as Record<string, unknown>,
+          pluginConfig: config as Record<string, unknown>,
+        });
+        if (!result.ok) {
+          throw new FarmError(result.error, result.status);
+        }
+        return textResult(result.text, result);
+      },
+    }),
+    tool({
+      name: "farm_update",
+      label: "Farm Update",
+      description:
+        "Update a seller-owned stall in place (same slug). Same fields as farm_post plus required slug. " +
+        "Replaces GAF pack JSON (skills, soul/memory) and bumps packVersion. Catalog slugs are reserved.",
+      parameters: Type.Object({
+        kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
+        name: Type.String({ description: "Listing name." }),
+        title: Type.String({ description: "Short stall title shown on the farm." }),
+        description: Type.String({ description: "Stall description (non-empty)." }),
+        category: Type.String({
+          description:
+            "Exact farm category label: Lifestyle, Productivity, Coding, Writing, " +
+            "Marketing, Sales, Research, Personal finance, Creative, Music, " +
+            "Education, Ops / admin, Experimental.",
+        }),
+        priceCents: Type.Number({
+          description: "0 for free, or integer cents in [200, 999900] ($2.00–$9,999.00).",
+        }),
+        slug: Type.String({ description: "Existing stall slug to update." }),
+        pack: Type.Optional(
+          Type.Unknown({
+            description: "GAF JSON object. OpenClaw plants GAF; this posts GAF.",
+          }),
+        ),
+        packPath: Type.Optional(
+          Type.String({
+            description: "Path to a .json GAF file. Use pack or packPath, not both.",
+          }),
+        ),
+        packVersion: Type.Optional(
+          Type.Number({
+            description: "Optional content revision; omit to auto-increment.",
+          }),
+        ),
+        apiKey: Type.Optional(
+          Type.String({
+            description:
+              "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin config apiKey.",
+          }),
+        ),
+        dryRun: Type.Optional(
+          Type.Boolean({
+            description: "Validate without POSTing. Redacts any key.",
+          }),
+        ),
+      }),
+      async execute(params, config) {
+        const result = await updateListing({
           args: params as Record<string, unknown>,
           pluginConfig: config as Record<string, unknown>,
         });

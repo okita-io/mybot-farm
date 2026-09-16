@@ -23,7 +23,7 @@ from farm_api import (  # noqa: E402
     create_listing,
     resolve_api_key,
 )
-from farm_tools import farm_post  # noqa: E402
+from farm_tools import farm_post, farm_update  # noqa: E402
 from cli import main  # noqa: E402
 
 SAMPLE_PACK = {
@@ -140,9 +140,14 @@ class PostTests(unittest.TestCase):
         body = json.dumps(
             {
                 "ok": True,
+                "id": "11111111-1111-4111-8111-111111111111",
+                "stallId": "11111111-1111-4111-8111-111111111111",
                 "slug": "smoke-bot",
                 "kind": "agent",
                 "pagePath": "/agents/smoke-bot",
+                "packVersion": 1,
+                "created": True,
+                "updated": False,
                 "hasReadme": False,
             }
         ).encode("utf-8")
@@ -161,6 +166,9 @@ class PostTests(unittest.TestCase):
 
         self.assertTrue(payload["ok"])
         self.assertEqual(payload["slug"], "smoke-bot")
+        self.assertEqual(payload["id"], "11111111-1111-4111-8111-111111111111")
+        self.assertEqual(payload["packVersion"], 1)
+        self.assertFalse(payload["updated"])
         self.assertIn("https://mybot.farm/agents/smoke-bot", payload["text"])
         self.assertEqual(payload["pageUrl"], "https://mybot.farm/agents/smoke-bot")
         self.assertEqual(captured["method"], "POST")
@@ -313,6 +321,46 @@ class PostTests(unittest.TestCase):
         self.assertTrue(data["ok"])
         self.assertTrue(data["dryRun"])
         self.assertEqual(data["payload"]["priceCents"], 0)
+
+    def test_farm_update_requires_slug(self) -> None:
+        payload = json.loads(farm_update(_listing_args(apiKey=TEST_KEY)))
+        self.assertFalse(payload["ok"])
+        self.assertIn("slug required", payload["error"])
+
+    def test_owned_slug_upsert_forwards_id_and_pack_version(self) -> None:
+        captured: dict[str, object] = {}
+        body = json.dumps(
+            {
+                "ok": True,
+                "id": "22222222-2222-4222-8222-222222222222",
+                "stallId": "22222222-2222-4222-8222-222222222222",
+                "slug": "smoke-bot",
+                "kind": "agent",
+                "pagePath": "/agents/smoke-bot",
+                "packVersion": 2,
+                "created": False,
+                "updated": True,
+                "hasReadme": False,
+            }
+        ).encode("utf-8")
+
+        def fake_urlopen(req: Request, timeout=None):
+            captured["posted"] = json.loads(req.data or b"{}")
+            return _FakeResponse(body, status=200)
+
+        os.environ["MYBOT_FARM_API_KEY"] = TEST_KEY
+        with patch("farm_api.urlopen", fake_urlopen):
+            payload = json.loads(
+                farm_update(_listing_args(slug="smoke-bot", packVersion=2))
+            )
+
+        self.assertTrue(payload["ok"])
+        self.assertTrue(payload["updated"])
+        self.assertEqual(payload["packVersion"], 2)
+        self.assertEqual(payload["id"], "22222222-2222-4222-8222-222222222222")
+        self.assertIn("Updated", payload["text"])
+        self.assertEqual(captured["posted"]["slug"], "smoke-bot")
+        self.assertEqual(captured["posted"]["packVersion"], 2)
 
 
 if __name__ == "__main__":

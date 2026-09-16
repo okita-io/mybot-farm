@@ -53,7 +53,7 @@ PyPI `hermes-agent` 0.19.0 has no `validate` subcommand. Use the unittest probe 
 python3 -m unittest discover -s /path/to/mybot-farm/packages/hermes-mybot-farm/tests -v
 ```
 
-You should see tools: `farm_search`, `farm_get_pack`, `farm_get_stall`, `farm_plant`, `farm_reinstall`, `farm_post`.
+You should see tools: `farm_search`, `farm_get_pack`, `farm_get_stall`, `farm_plant`, `farm_reinstall`, `farm_post`, `farm_update`.
 
 ## 3. Plant (CLI, no agent loop)
 
@@ -109,7 +109,8 @@ Ask Hermes to call:
 - `farm_get_pack` with `{ "slug": "workbench" }`
 - `farm_plant` with `{ "slug": "scholastic-research" }` or `{ "slug": "workbench" }`
 - `farm_reinstall` with `{ "slug": "workbench", "force": true }` when upgrading
-- `farm_post` with listing fields + `pack` or `packPath` (optional `dryRun`, `apiKey`)
+- `farm_post` with listing fields + `pack` or `packPath` (optional `slug`, `packVersion`, `dryRun`, `apiKey`)
+- `farm_update` with the same fields plus required `slug`
 
 Also: `hermes farm search workbench`, `/farm plant scholastic-research`, `/farm post --kind agent … --pack pack.json`.
 

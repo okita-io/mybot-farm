@@ -135,6 +135,8 @@ async function getPack(baseUrl, slug) {
 function stallSummary(stall) {
   return {
     slug: stall.slug,
+    stallId: stall.stallId ?? stall.listingId ?? "",
+    packVersion: stall.packVersion ?? null,
     name: stall.name ?? stall.slug,
     title: stall.title ?? "",
     pageUrl: stall.pageUrl ?? `https://mybot.farm/agents/${stall.slug}`,
@@ -150,6 +152,7 @@ function packSummary(pack) {
     slug: pack.slug,
     format: pack.format,
     version: pack.version,
+    packVersion: pack.packVersion,
     profile: pack.profile ?? {},
     skillNames: skills.map((s) => s.name).filter(Boolean),
     skillCount: skills.length,
@@ -199,7 +202,17 @@ function parsePackObject(value) {
   }
   return value;
 }
-function buildListingPayload({ kind, name, title, description, category, priceCents, pack }) {
+function buildListingPayload({
+  kind,
+  name,
+  title,
+  description,
+  category,
+  priceCents,
+  pack,
+  slug,
+  packVersion
+}) {
   const parsedKind = parseListingKind(kind);
   if (!parsedKind) {
     throw new FarmError('kind must be "agent" or "team"');
@@ -220,7 +233,7 @@ function buildListingPayload({ kind, name, title, description, category, priceCe
     throw new FarmError(PRICE_HINT);
   }
   const parsedPack = parsePackObject(pack);
-  return {
+  const payload = {
     kind: parsedKind,
     name: parsedName,
     title: parsedTitle,
@@ -229,6 +242,13 @@ function buildListingPayload({ kind, name, title, description, category, priceCe
     priceCents: parsedPrice,
     pack: parsedPack
   };
+  if (typeof slug === "string" && slug.trim()) {
+    payload.slug = slug.trim().toLowerCase();
+  }
+  if (packVersion != null && packVersion !== "") {
+    payload.packVersion = packVersion;
+  }
+  return payload;
 }
 function listingPayloadSummary(payload) {
   const pack = payload.pack && typeof payload.pack === "object" ? payload.pack : {};
@@ -240,9 +260,12 @@ function listingPayloadSummary(payload) {
     title: payload.title,
     category: payload.category,
     priceCents: payload.priceCents,
+    slug: payload.slug,
+    packVersion: payload.packVersion,
     pack: {
       format: pack.format,
       version: pack.version,
+      packVersion: pack.packVersion,
       runtime: pack.runtime || [],
       skillCount: skills.length,
       encodedChars: encoded.length
@@ -415,6 +438,7 @@ function buildFarmMd(pack, installedAt) {
     `Planted from [mybot.farm](https://mybot.farm) on ${installedAt}.`,
     "",
     `- **Slug:** ${pack.slug}`,
+    `- **Pack version:** ${pack.packVersion ?? 1}`,
     `- **Format:** ${pack.format ?? "mybot.farm/agent-pack"} ${pack.version ?? ""}`.trimEnd(),
     `- **Homepage:** ${m.homepage ?? `https://mybot.farm/agents/${pack.slug}`}`
   ];
@@ -563,7 +587,9 @@ async function postListing({ args, pluginConfig } = { args: {} }) {
       description: args.description,
       category: args.category,
       priceCents: "priceCents" in args ? args.priceCents : args.price_cents,
-      pack
+      pack,
+      slug: args.slug,
+      packVersion: "packVersion" in args ? args.packVersion : args.pack_version
     });
   } catch (err) {
     if (err instanceof FarmError) return errPayload(err.message, err.status != null ? { status: err.status } : {});
@@ -580,6 +606,8 @@ async function postListing({ args, pluginConfig } = { args: {} }) {
       `title: ${payload.title}`,
       `category: ${payload.category}`,
       `priceCents: ${payload.priceCents}`,
+      `slug: ${payload.slug || "(from name)"}`,
+      `packVersion: ${payload.packVersion != null ? payload.packVersion : "(auto)"}`,
       `pack format: ${summary.pack?.format || "(none)"}`,
       `pack skills: ${summary.pack?.skillCount}`,
       `pack encoded chars: ${summary.pack?.encodedChars}`,
@@ -613,17 +641,35 @@ async function postListing({ args, pluginConfig } = { args: {} }) {
   const kind = String(result.kind || payload.kind);
   const pagePath = String(result.pagePath || "");
   const pageUrl = pagePath ? listingPageUrl(baseUrl, pagePath) : `${baseUrl}/${kind}s/${slug}`;
-  const lines = [`Posted ${kind} \`${slug}\``, pageUrl];
+  const listingId = String(result.id || result.stallId || "").trim();
+  const packVersion = result.packVersion;
+  const updated = Boolean(result.updated);
+  const verb = updated ? "Updated" : "Posted";
+  const lines = [`${verb} ${kind} \`${slug}\``, pageUrl];
+  if (listingId) lines.push(`stall id: ${listingId}`);
+  if (packVersion != null) lines.push(`pack version: ${packVersion}`);
   if (result.hasReadme) lines.push("README extracted from pack.");
   return {
     ok: true,
     text: lines.join("\n"),
+    id: listingId || void 0,
+    stallId: listingId || void 0,
     slug,
     kind,
     pagePath,
     pageUrl,
+    packVersion,
+    created: Boolean(result.created ?? !updated),
+    updated,
     hasReadme: Boolean(result.hasReadme)
   };
+}
+async function updateListing({ args, pluginConfig } = { args: {} }) {
+  const slug = typeof args.slug === "string" ? args.slug.trim() : "";
+  if (!slug) {
+    return errPayload("slug required");
+  }
+  return postListing({ args: { ...args, slug }, pluginConfig });
 }
 
 // index.ts
@@ -765,10 +811,10 @@ var index_default = defineToolPlugin({
     tool({
       name: "farm_post",
       label: "Farm Post",
-      description: "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). category is an exact farm label (Lifestyle, Coding, Experimental, \u2026). priceCents is 0 (free) or 200\u2013999900. Paid listings need Stripe Connect on the seller (403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money.",
+      description: "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. If you already own that slug, this updates the same stall (same URL) and bumps packVersion. Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). category is an exact farm label (Lifestyle, Coding, Experimental, \u2026). priceCents is 0 (free) or 200\u2013999900. Paid listings need Stripe Connect on the seller (403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money. Catalog/agency slugs cannot be overwritten.",
       parameters: Type.Object({
         kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
-        name: Type.String({ description: "Listing name (used to derive the slug)." }),
+        name: Type.String({ description: "Listing name. Used to derive the slug on first publish." }),
         title: Type.String({ description: "Short stall title shown on the farm." }),
         description: Type.String({ description: "Stall description (non-empty)." }),
         category: Type.String({
@@ -796,10 +842,73 @@ var index_default = defineToolPlugin({
           Type.Boolean({
             description: "Validate and show a payload summary without POSTing. Redacts any key."
           })
+        ),
+        slug: Type.Optional(
+          Type.String({
+            description: "Existing stall slug to update in place. If omitted, derived from name. Same seller + same slug replaces GAF (skills, soul/memory) and bumps packVersion."
+          })
+        ),
+        packVersion: Type.Optional(
+          Type.Number({
+            description: "Optional content revision. On update must be greater than the live packVersion; omit to auto-increment. Distinct from GAF format version."
+          })
         )
       }),
       async execute(params, config) {
         const result = await postListing({
+          args: params,
+          pluginConfig: config
+        });
+        if (!result.ok) {
+          throw new FarmError(result.error, result.status);
+        }
+        return textResult(result.text, result);
+      }
+    }),
+    tool({
+      name: "farm_update",
+      label: "Farm Update",
+      description: "Update a seller-owned stall in place (same slug). Same fields as farm_post plus required slug. Replaces GAF pack JSON (skills, soul/memory) and bumps packVersion. Catalog slugs are reserved.",
+      parameters: Type.Object({
+        kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
+        name: Type.String({ description: "Listing name." }),
+        title: Type.String({ description: "Short stall title shown on the farm." }),
+        description: Type.String({ description: "Stall description (non-empty)." }),
+        category: Type.String({
+          description: "Exact farm category label: Lifestyle, Productivity, Coding, Writing, Marketing, Sales, Research, Personal finance, Creative, Music, Education, Ops / admin, Experimental."
+        }),
+        priceCents: Type.Number({
+          description: "0 for free, or integer cents in [200, 999900] ($2.00\u2013$9,999.00)."
+        }),
+        slug: Type.String({ description: "Existing stall slug to update." }),
+        pack: Type.Optional(
+          Type.Unknown({
+            description: "GAF JSON object. OpenClaw plants GAF; this posts GAF."
+          })
+        ),
+        packPath: Type.Optional(
+          Type.String({
+            description: "Path to a .json GAF file. Use pack or packPath, not both."
+          })
+        ),
+        packVersion: Type.Optional(
+          Type.Number({
+            description: "Optional content revision; omit to auto-increment."
+          })
+        ),
+        apiKey: Type.Optional(
+          Type.String({
+            description: "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin config apiKey."
+          })
+        ),
+        dryRun: Type.Optional(
+          Type.Boolean({
+            description: "Validate without POSTing. Redacts any key."
+          })
+        )
+      }),
+      async execute(params, config) {
+        const result = await updateListing({
           args: params,
           pluginConfig: config
         });

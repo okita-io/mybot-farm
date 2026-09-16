@@ -17,6 +17,8 @@ import {
   type Stall,
   type StallKind,
 } from "@/lib/packs";
+import { packVersionOf } from "@/lib/pack-version";
+import { catalogStallId } from "@/lib/stall-id";
 import { hasPaidPurchase } from "@/lib/purchases";
 import { withSeedReadme } from "@/lib/seed-readme";
 import {
@@ -41,6 +43,8 @@ export function listingToStall(
   return {
     kind: listing.kind === "team" ? "team" : "agent",
     slug: listing.slug,
+    stallId: listing.id,
+    packVersion: packVersionOf(pack),
     name: listing.name,
     title: listing.title,
     description: listing.description,
@@ -62,9 +66,12 @@ export function listingToStall(
 
 export function withSeedPrice(stall: Stall): Stall {
   const listedAt = stall.listedAt ?? FARM_SEED_LISTED_AT;
+  const pack = getCatalogSeedPack(stall.slug);
 
   return {
     ...stall,
+    stallId: stall.listingId ?? stall.stallId ?? catalogStallId(stall.kind, stall.slug),
+    packVersion: stall.packVersion ?? packVersionOf(pack),
     priceCents: stall.priceCents ?? 0,
     currency: stall.currency ?? "usd",
     author: stall.author ?? FARM_AUTHOR,

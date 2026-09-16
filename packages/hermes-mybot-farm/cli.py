@@ -18,6 +18,7 @@ from farm_tools import (
     farm_post,
     farm_reinstall,
     farm_search,
+    farm_update,
 )
 
 
@@ -41,7 +42,7 @@ def setup_farm_cli(subparser) -> None:
     subparser.add_argument(
         "farm_command",
         nargs="?",
-        choices=["search", "get", "stall", "plant", "reinstall", "post", "clear-tombstones"],
+        choices=["search", "get", "stall", "plant", "reinstall", "post", "update", "clear-tombstones"],
         help="farm subcommand",
     )
     subparser.add_argument("rest", nargs=argparse.REMAINDER, help="command arguments")
@@ -64,7 +65,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "command",
-        choices=["search", "get", "stall", "plant", "reinstall", "post", "clear-tombstones"],
+        choices=["search", "get", "stall", "plant", "reinstall", "post", "update", "clear-tombstones"],
         nargs="?",
     )
     parser.add_argument("rest", nargs=argparse.REMAINDER)
@@ -92,6 +93,9 @@ _VALUE_FLAGS = {
     "--pack-path": ("packPath", str),
     "--api-key": ("apiKey", str),
     "--apiKey": ("apiKey", str),
+    "--slug": ("slug", str),
+    "--pack-version": ("packVersion", int),
+    "--packVersion": ("packVersion", int),
 }
 
 
@@ -131,7 +135,10 @@ def usage() -> str:
   farm-plant reinstall <slug> [--force] [--clean] [--dry-run]
   farm-plant post --kind agent|team --name NAME --title TITLE --description DESC
                  --category LABEL --price-cents N --pack pack.json
-                 [--api-key KEY] [--dry-run] [--json]
+                 [--slug SLUG] [--pack-version N] [--api-key KEY] [--dry-run] [--json]
+  farm-plant update --slug SLUG --kind agent|team --name NAME --title TITLE --description DESC
+                 --category LABEL --price-cents N --pack pack.json
+                 [--pack-version N] [--api-key KEY] [--dry-run] [--json]
   farm-plant clear-tombstones [name ...]
 
 Env:
@@ -140,7 +147,9 @@ Env:
   HERMES_HOME         override Hermes home (default ~/.hermes)
   HERMES_BIN          override hermes executable
 
-Post publishes GAF JSON to the farm. Plant still imports Hermes tarballs.
+Post publishes GAF JSON to the farm. If you already own the slug, post updates
+that stall in place and bumps packVersion. Use update when you want to require
+the slug. Plant still imports Hermes tarballs.
 Category must be an exact farm label (Lifestyle, Coding, Experimental, …).
 price-cents is 0 (free) or 200–999900. Paid listings need Stripe Connect.
 """
@@ -198,7 +207,7 @@ def _dispatch(argv: list[str], *, as_text: bool) -> int:
         args = {"slug": rest[0], **{k: flags[k] for k in ("force", "clean", "dry_run", "name") if k in flags}}
         return printer(farm_reinstall(args))
 
-    if cmd == "post":
+    if cmd in {"post", "update"}:
         missing = [
             name
             for name in ("kind", "name", "title", "description", "category", "priceCents")
@@ -207,9 +216,12 @@ def _dispatch(argv: list[str], *, as_text: bool) -> int:
         pack_path = flags.get("packPath")
         if rest and not pack_path:
             pack_path = rest[0]
+        if cmd == "update" and "slug" not in flags:
+            print("update requires --slug", file=sys.stderr)
+            return 1
         if missing or not pack_path:
             print(
-                "post requires --kind --name --title --description --category "
+                f"{cmd} requires --kind --name --title --description --category "
                 "--price-cents and --pack <gaf.json>",
                 file=sys.stderr,
             )
@@ -227,9 +239,13 @@ def _dispatch(argv: list[str], *, as_text: bool) -> int:
             args["dryRun"] = True
         if flags.get("apiKey"):
             args["apiKey"] = flags["apiKey"]
-        # Human-readable by default; --json keeps machine output.
+        if flags.get("slug"):
+            args["slug"] = flags["slug"]
+        if "packVersion" in flags:
+            args["packVersion"] = flags["packVersion"]
         post_printer = _print_json if flags.get("json") else _print_text
-        return post_printer(farm_post(args))
+        handler = farm_update if cmd == "update" else farm_post
+        return post_printer(handler(args))
 
     if cmd in {"clear-tombstones", "clear_tombstones"}:
         payload = clear_named_tombstones(rest or None)
