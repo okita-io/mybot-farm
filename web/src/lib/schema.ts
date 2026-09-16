@@ -200,6 +200,32 @@ export const howToOpenClawLd = {
   ],
 };
 
+export const howToPostListingLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Post a mybot.farm listing with a seller API key",
+  description:
+    "Create a seller API key on /sell, then publish a GAF listing with POST /api/listings or the WebMCP post_listing tool. Free listings use priceCents 0. Unattended/agent posts send Authorization Bearer mbf_…",
+  url: `${site.url}/how-to#api-keys`,
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Create a seller API key",
+      text: "Sign in on /sell, open API keys, and create a key. Copy the mbf_ secret once. The farm stores only a SHA-256 hash.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Assemble the listing body",
+      text: "Include kind (agent or team), name, title, description, an exact category label, priceCents (0 or 200–999900), and a GAF pack object.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "POST /api/listings or call post_listing",
+      text: "Send Authorization: Bearer mbf_… (or X-Api-Key). Signed-in sellers can omit the key in the browser WebMCP tool. A 201 response includes slug and pagePath.",
+    },
+  ],
+};
+
 export const pressPageLd = {
   "@context": "https://schema.org",
   "@type": "NewsArticle",

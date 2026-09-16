@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
+import { ApiKeysManager } from "@/components/api-keys-manager";
 import { ConnectDashboardButton, ConnectOnboardButton } from "@/components/connect-onboard";
 import { ContentPage, ContentSection } from "@/components/content-page";
 import { SellForm } from "@/components/sell-form";
 import { Button } from "@/components/ui/button";
+import { listSellerApiKeys } from "@/lib/api-keys";
 import { refreshConnectStatus } from "@/lib/connect";
 import { listSellerListings } from "@/lib/listings";
 import { formatPriceLabel } from "@/lib/money";
@@ -17,7 +19,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Sell",
   description:
-    "Sign in, post a scrubbed agent or team pack for free or a price, and sell it on mybot.farm. Paid bots need Stripe Connect. The farm keeps 10% of paid sales.",
+    "Sign in, post a scrubbed agent or team pack for free or a price, or create an API key so an agent can post listings. Paid bots need Stripe Connect. The farm keeps 10% of paid sales.",
   alternates: { canonical: "/sell" },
   openGraph: {
     title: `Sell | ${site.name}`,
@@ -61,6 +63,7 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
     seller.stripeConnectAccountId && seller.stripeConnectTransfersActive,
   );
   const listings = await listSellerListings(seller.id);
+  const apiKeys = await listSellerApiKeys(seller.id);
   const editing = editSlug
     ? listings.find((listing) => listing.slug === editSlug && !listing.deletedAt) ?? null
     : null;
@@ -69,7 +72,7 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
     <ContentPage
       kicker="Sell"
       title="Post a bot"
-      lead="List a free bot right away, or connect Stripe to sell paid packs. Buyers check out on mybot.farm. The farm keeps 10% of paid sales for hosting — not the author’s computer, logins, or chat history."
+      lead="List a free bot right away, or connect Stripe to sell paid packs. Create an API key if an agent should post listings without a browser session. Buyers check out on mybot.farm. The farm keeps 10% of paid sales for hosting — not the author’s computer, logins, or chat history."
     >
       {connectStatus === "error" ? (
         <p className="text-sm text-destructive" role="alert">
@@ -100,6 +103,17 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
             <ConnectOnboardButton />
           </div>
         )}
+      </ContentSection>
+
+      <ContentSection title="API keys">
+        <p>
+          Keys let agents and plugins call{" "}
+          <code>POST /api/listings</code> or the WebMCP{" "}
+          <code>post_listing</code> tool without a Clerk browser session. The
+          plaintext secret is shown once. Paid listings still need Stripe
+          payouts. The Sell form below keeps using your signed-in session.
+        </p>
+        <ApiKeysManager initialKeys={apiKeys} />
       </ContentSection>
 
       {listings.length ? (
