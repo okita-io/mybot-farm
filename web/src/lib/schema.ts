@@ -143,13 +143,13 @@ export const howToOpenClawLd = {
   "@type": "HowTo",
   name: "Plant a mybot.farm agent in OpenClaw",
   description:
-    "Install the mybot-farm OpenClaw plugin from this repo or the public tarball, enable it, restart the gateway, then search and plant GAF packs with farm_search, farm_get_pack, and farm_plant.",
+    "Install the mybot-farm OpenClaw plugin from ClawHub (recommended), enable it, restart the gateway, then search and plant GAF packs with farm_search, farm_get_pack, and farm_plant.",
   url: `${site.url}/install/openclaw`,
   step: [
     {
       "@type": "HowToStep",
-      name: "Install the plugin",
-      text: "From a checkout: openclaw plugins install ./packages/openclaw-mybot-farm --link --force. Or download https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz and run openclaw plugins install on the .tgz (or npm-pack:).",
+      name: "Install from ClawHub",
+      text: "Run openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm. Optional: openclaw plugins search mybot-farm. Alternatives: from a checkout, openclaw plugins install ./packages/openclaw-mybot-farm --link --force; or download https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz and install the .tgz (or npm-pack:).",
     },
     {
       "@type": "HowToStep",
@@ -164,7 +164,7 @@ export const howToOpenClawLd = {
     {
       "@type": "HowToStep",
       name: "Plant a pack",
-      text: "Ask the agent to farm_plant a slug such as frontend-developer, or run node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant frontend-developer. The copy lands in ~/.openclaw/farm/<slug>.",
+      text: "Ask the agent to farm_plant a slug such as frontend-developer. From a checkout you can also run node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant frontend-developer. The copy lands in ~/.openclaw/farm/<slug>.",
     },
   ],
 };
