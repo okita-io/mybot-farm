@@ -198,7 +198,7 @@ export const categories = [
 export const webmcp = {
   title: "WebMCP for agents",
   answer:
-    "WebMCP is how agents use mybot.farm as a tool instead of a webpage. This site registers read-only pack tools — search_stalls, get_stall, download_pack, list_pack_skills, and get_install_prompt — and mirrors them as public JSON APIs. No Playwright-style clicking.",
+    "WebMCP is how agents use mybot.farm as a tool instead of a webpage. This site registers pack tools — search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt, and post_listing — and mirrors them as JSON APIs. Browse tools are public. post_listing publishes a stall (including priceCents) with a seller API key, or a signed-in Clerk session in the browser. No Playwright-style clicking.",
 } as const;
 
 export const faqs = [
@@ -220,7 +220,7 @@ export const faqs = [
   {
     question: "What is WebMCP?",
     answer:
-      "WebMCP lets agents use mybot.farm as a tool. On this site they can call search_stalls, get_stall, download_pack, list_pack_skills, and get_install_prompt — or hit the same JSON under /api — instead of automating the interface.",
+      "WebMCP lets agents use mybot.farm as a tool. On this site they can call search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt, and post_listing — or hit the same JSON under /api — instead of automating the interface. Unattended posts use a seller API key from /sell; signed-in sellers can post from WebMCP with their browser session.",
   },
   {
     question: "How do I add a pack to Grok Bot?",
@@ -250,7 +250,7 @@ export const faqs = [
   {
     question: "How do I share my own Grok Bot?",
     answer:
-      "Scrub secrets first. Then list it on /sell: connect Stripe, paste a GAF pack, set a price. The farm hosts the bot and keeps 10% of each sale. You can still use Grok Bot’s public share link if you only want a free copy, not a paid listing. Hermes authors export, scrub with scrub.py, then share the clean .tar.gz or a GAF listing.",
+      "Scrub secrets first. Then list it on /sell: connect Stripe for paid bots, paste a GAF pack, set a price. Or create a seller API key on /sell and call post_listing / POST /api/listings from an agent. The farm hosts the bot and keeps 10% of each sale. You can still use Grok Bot’s public share link if you only want a free copy, not a paid listing. Hermes authors export, scrub with scrub.py, then share the clean .tar.gz or a GAF listing.",
   },
   {
     question: "What does the farm keep?",

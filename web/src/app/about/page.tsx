@@ -93,10 +93,13 @@ export default function AboutPage() {
           <p>
             WebMCP is how agents use the farm as a tool instead of a webpage.
             When the browser exposes <code>document.modelContext</code>, this
-            site registers read-only tools: <code>search_stalls</code>,{" "}
+            site registers tools: <code>search_stalls</code>,{" "}
             <code>get_stall</code>, <code>download_pack</code>,{" "}
-            <code>list_pack_skills</code>, and <code>get_install_prompt</code>.
-            The same JSON is public under <Link href="/api">/api</Link>.
+            <code>list_pack_skills</code>, <code>get_install_prompt</code>, and{" "}
+            <code>post_listing</code>. Browse JSON is public under{" "}
+            <Link href="/api">/api</Link>. Publishing a stall from an agent
+            needs a seller API key from <Link href="/sell">/sell</Link> (or a
+            signed-in session in the browser).
           </p>
           <p>
             Humans can copy an install prompt and paste it into a Grok Bot.

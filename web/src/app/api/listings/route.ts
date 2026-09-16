@@ -1,25 +1,25 @@
-import { NextResponse } from "next/server";
 import {
   createListing,
   listingWriteFromBody,
   uniqueListingSlug,
 } from "@/lib/listings";
+import { noStoreJson, optionsResponse } from "@/lib/http";
 import { extractPackReadme, parseStallReadme } from "@/lib/readme";
 import { stallPagePath } from "@/lib/packs";
-import { requireAppUser } from "@/lib/users";
+import { requireSeller } from "@/lib/seller-auth";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  const user = await requireAppUser();
+  const user = await requireSeller(request);
   if (!user) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    return noStoreJson({ error: "unauthorized" }, { status: 401 });
   }
 
   const body: unknown = await request.json().catch(() => null);
   const parsed = listingWriteFromBody(body);
   if (!parsed.ok) {
-    return NextResponse.json(
+    return noStoreJson(
       { error: parsed.error, message: parsed.message },
       { status: parsed.status },
     );
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     value.priceCents > 0 &&
     (!user.stripeConnectAccountId || !user.stripeConnectTransfersActive)
   ) {
-    return NextResponse.json(
+    return noStoreJson(
       {
         error: "connect_required",
         message: "Finish Stripe payouts before listing a paid bot.",
@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     readmeHtml,
   });
 
-  return NextResponse.json(
+  return noStoreJson(
     {
       ok: true,
       slug: listing.slug,
@@ -72,4 +72,8 @@ export async function POST(request: Request) {
     },
     { status: 201 },
   );
+}
+
+export function OPTIONS() {
+  return optionsResponse();
 }

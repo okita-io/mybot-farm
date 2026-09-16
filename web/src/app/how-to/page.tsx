@@ -8,6 +8,7 @@ import {
   howToHermesShareLd,
   howToInstallLd,
   howToOpenClawLd,
+  howToPostListingLd,
 } from "@/lib/schema";
 import { hermesPlugin, openclawPlugin, site, siteOgImage } from "@/lib/site";
 
@@ -33,6 +34,7 @@ export default function HowToPage() {
       <JsonLd data={howToHermesPluginLd} />
       <JsonLd data={howToHermesShareLd} />
       <JsonLd data={howToOpenClawLd} />
+      <JsonLd data={howToPostListingLd} />
       <ContentPage
         kicker="How-To"
         title="Install a bot, or share your own"
@@ -69,8 +71,8 @@ export default function HowToPage() {
               </Link>
               . Agents can also call WebMCP tools{" "}
               <code>get_stall</code>, <code>download_pack</code>,{" "}
-              <code>list_pack_skills</code>, and{" "}
-              <code>get_install_prompt</code> — catalog at{" "}
+              <code>list_pack_skills</code>, <code>get_install_prompt</code>,
+              and <code>post_listing</code> — catalog at{" "}
               <Link href="/api">/api</Link>.
             </li>
             <li>
@@ -315,10 +317,15 @@ python3 -c "import json; r=json.load(open('/tmp/my-agent.scrub-report.json')); p
           </ol>
           <p>
             Listing on the farm: go to <Link href="/sell">Sell</Link>, connect
-            Stripe payouts, and post a <strong>scrubbed GAF pack</strong> with
-            a price. Buyers check out on the farm. You receive 90%; the farm
-            keeps 10% for hosting. Until you list, you can still use Grok Bot’s
-            public share link. Do not ship secrets in either channel.
+            Stripe payouts for paid bots, and post a{" "}
+            <strong>scrubbed GAF pack</strong> with a price — or create a
+            seller API key there and call <code>post_listing</code> /{" "}
+            <code>POST /api/listings</code>. Free listings use{" "}
+            <code>priceCents: 0</code> and do not need Connect. Buyers check
+            out on the farm. You receive 90%; the farm keeps 10% for hosting.
+            Until you list, you can still use Grok Bot’s public share link. Do
+            not ship secrets in either channel. Details:{" "}
+            <a href="#api-keys">seller API keys</a>.
           </p>
           <p>
             Official Grok Bot notes:{" "}
@@ -377,6 +384,77 @@ openclaw plugins install ./openclaw-mybot-farm-${openclawPlugin.version}.tgz --f
 openclaw plugins enable mybot-farm`}</pre>
         </ContentSection>
 
+        <ContentSection id="api-keys" title="Post a listing with an API key">
+          <p>
+            The Sell form still uses your Clerk session. Agents and plugins
+            that cannot open a browser session create a seller API key on{" "}
+            <Link href="/sell">/sell</Link>, then call{" "}
+            <code>POST /api/listings</code> or WebMCP <code>post_listing</code>.
+            The farm hashes the secret (SHA-256) and shows the plaintext once.
+            Full notes: the repo’s{" "}
+            <code>docs/api-keys.md</code>.
+          </p>
+          <ol>
+            <li>
+              Sign in on <Link href="/sell">Sell</Link>, open{" "}
+              <strong>API keys</strong>, and create a key. Copy{" "}
+              <code>mbf_…</code> immediately.
+            </li>
+            <li>
+              POST a JSON body with every required field:{" "}
+              <code>kind</code> (<code>agent</code> or <code>team</code>),{" "}
+              <code>name</code>, <code>title</code>, <code>description</code>,{" "}
+              <code>category</code> (exact label such as{" "}
+              <code>Lifestyle</code> or <code>Coding</code>),{" "}
+              <code>priceCents</code> (<code>0</code> for free, or 200–999900
+              cents), and <code>pack</code> (GAF object).
+            </li>
+            <li>
+              Send <code>Authorization: Bearer mbf_…</code>. Paid listings
+              still need Stripe Connect. Prefer a free smoke listing so Connect
+              is not required.
+            </li>
+          </ol>
+          <pre>{`# 1. Create a key while signed in (browser cookie / Clerk session)
+curl -sS -X POST https://mybot.farm/api/api-keys \\
+  -H "Content-Type: application/json" \\
+  -H "Cookie: __session=YOUR_SESSION_COOKIE" \\
+  -d '{"name":"agent poster"}'
+
+# 2. Post a free listing with the key shown once in that response
+curl -sS -X POST https://mybot.farm/api/listings \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer mbf_YOUR_KEY" \\
+  -d '{
+    "kind": "agent",
+    "name": "Smoke Bot",
+    "title": "API key smoke listing",
+    "description": "Minimal free GAF listing posted with a seller API key.",
+    "category": "Experimental",
+    "priceCents": 0,
+    "pack": {
+      "format": "mybot.farm/agent-pack",
+      "version": "0.1",
+      "runtime": ["grok-bot"],
+      "profile": {
+        "name": "Smoke Bot",
+        "title": "API key smoke listing",
+        "description": "Minimal free GAF listing posted with a seller API key."
+      },
+      "skills": [],
+      "memory": []
+    }
+  }'`}</pre>
+          <p>
+            A 201 body includes <code>ok</code>, <code>slug</code>,{" "}
+            <code>kind</code>, <code>pagePath</code>, and{" "}
+            <code>hasReadme</code>. Open <code>pagePath</code> to confirm the
+            stall. WebMCP <code>post_listing</code> takes the same fields plus
+            optional <code>apiKey</code> (omitted when you are already signed
+            in on the farm).
+          </p>
+        </ContentSection>
+
         <ContentSection title="More on the farm">
           <ul>
             <li>
@@ -404,6 +482,10 @@ openclaw plugins enable mybot-farm`}</pre>
             </li>
             <li>
               <Link href="/sell">Sell</Link> — list a priced agent or team
+            </li>
+            <li>
+              <Link href="/how-to#api-keys">Seller API keys</Link> — post a
+              listing from an agent
             </li>
             <li>
               <Link href="/catalog">Open bots</Link>

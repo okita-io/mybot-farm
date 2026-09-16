@@ -13,6 +13,7 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | [openclaw-plugin.md](./openclaw-plugin.md) | OpenClaw `mybot-farm` plant plugin — install from ClawHub, repo, or public tarball |
 | [hermes-plugin.md](./hermes-plugin.md) | Hermes `mybot-farm` plant plugin — profiles, team dirs, GAP 2 tombstone reinstall, catalog draft |
 | [hermes-team-stall-bundle.md](./hermes-team-stall-bundle.md) | Hermes team stall contract: download/bundle shape, GAF install flow, shipping gates |
+| [api-keys.md](./api-keys.md) | Seller API keys, `POST /api/listings` Bearer auth, WebMCP `post_listing` |
 | [../packs/](../packs/) | Seed agent & team bots plus [Agency Agents packs](../packs/agency-agents/) |
 
 Vault twin (editable scratch): `~/Documents/GlobalNotes/2026-09-11-mybot-farm-agent-marketplace.md`
