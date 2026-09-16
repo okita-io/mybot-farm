@@ -1,0 +1,15 @@
+name: mybot-farm
+version: 0.1.0
+description: Search mybot.farm stalls and plant Hermes packs (profiles, team dirs, kanban).
+author: mybot.farm
+homepage: https://mybot.farm/install/hermes
+provides_tools:
+  - farm_search
+  - farm_get_pack
+  - farm_get_stall
+  - farm_plant
+  - farm_reinstall
+config_schema:
+  baseUrl:
+    type: str
+    description: mybot.farm API origin (env MYBOT_FARM_URL overrides).

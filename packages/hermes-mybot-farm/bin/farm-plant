@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+"""CLI smoke-test wrapper for hermes-mybot-farm (no agent loop).
+
+  python3 bin/farm-plant search workbench
+  python3 bin/farm-plant get scholastic-research
+  python3 bin/farm-plant plant scholastic-research --dry-run
+  python3 bin/farm-plant reinstall workbench --force --clean
+  python3 bin/farm-plant clear-tombstones workbench-spec workbench-scaffold
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from cli import main  # noqa: E402
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -4,16 +4,17 @@ import { ContentPage, ContentSection } from "@/components/content-page";
 import { JsonLd } from "@/components/json-ld";
 import {
   howToHermesImportLd,
+  howToHermesPluginLd,
   howToHermesShareLd,
   howToInstallLd,
   howToOpenClawLd,
 } from "@/lib/schema";
-import { openclawPlugin, site, siteOgImage } from "@/lib/site";
+import { hermesPlugin, openclawPlugin, site, siteOgImage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "How-To",
   description:
-    "Install a mybot.farm agent in Grok Bot from GAF JSON, import a scrubbed Hermes profile, or plant a pack in OpenClaw with the mybot-farm plugin.",
+    "Install a mybot.farm agent in Grok Bot from GAF JSON, import a scrubbed Hermes profile (or plant with the mybot-farm plugin), or plant a pack in OpenClaw.",
   alternates: { canonical: "/how-to" },
   openGraph: {
     title: `How-To | ${site.name}`,
@@ -29,12 +30,13 @@ export default function HowToPage() {
     <>
       <JsonLd data={howToInstallLd} />
       <JsonLd data={howToHermesImportLd} />
+      <JsonLd data={howToHermesPluginLd} />
       <JsonLd data={howToHermesShareLd} />
       <JsonLd data={howToOpenClawLd} />
       <ContentPage
         kicker="How-To"
         title="Install a bot, or share your own"
-        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes installs from a scrubbed profile .tar.gz — including seed bots like Scholastic Research and Workbench. OpenClaw plants the same GAF packs with the mybot-farm plugin."
+        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes installs from a scrubbed profile .tar.gz — plant with the mybot-farm plugin, or import by hand. Seed bots include Scholastic Research and Workbench. OpenClaw plants the same GAF packs with its own mybot-farm plugin."
       >
         <ContentSection id="install" title="Install an agent in Grok Bot">
           <p>
@@ -105,10 +107,12 @@ export default function HowToPage() {
             <Link href="/agents/scholastic-research">Scholastic Research</Link>{" "}
             (one profile) and{" "}
             <Link href="/teams/workbench">Workbench</Link> (three team
-            members). Grok Bot packs still download as GAF JSON and will not
-            import. Use this path for those Hermes packs, a clean archive from
-            another farmer, or after you ran{" "}
-            <a href="#hermes-share">scrub.py</a> on your own export.
+            members). Prefer the{" "}
+            <Link href="/install/hermes">mybot-farm plugin</Link> when you want
+            search + plant + clean reinstall. Use this manual path for a single
+            archive from another farmer, or after you ran{" "}
+            <a href="#hermes-share">scrub.py</a> on your own export. Grok Bot
+            packs still download as GAF JSON and will not import.
           </p>
           <p>
             You need{" "}
@@ -148,6 +152,46 @@ export default function HowToPage() {
               Hermes profile commands
             </a>
             .
+          </p>
+        </ContentSection>
+
+        <ContentSection id="hermes-plugin" title="Plant a stall with the Hermes plugin">
+          <p>
+            The Hermes <strong>mybot-farm</strong> plugin (id{" "}
+            <code>{hermesPlugin.id}</code>) searches stalls and plants them into
+            Hermes profiles and team dirs. Tools: <code>farm_search</code>,{" "}
+            <code>farm_get_stall</code>, <code>farm_get_pack</code>,{" "}
+            <code>farm_plant</code>, <code>farm_reinstall</code>.{" "}
+            <code>farm_reinstall</code> clears{" "}
+            <code>~/.hermes/profiles/.deleted</code> tombstones so a same-name
+            re-import is actually spawnable (GAP 2). Full page:{" "}
+            <Link href="/install/hermes">Install in Hermes</Link>.
+          </p>
+          <p>
+            <code>hermes plugins install</code> does not take a local folder.
+            From a checkout:
+          </p>
+          <pre>{`mkdir -p ~/.hermes/plugins
+ln -sfn "$(pwd)/packages/hermes-mybot-farm" ~/.hermes/plugins/mybot-farm
+hermes plugins enable mybot-farm
+# git Hermes only — PyPI 0.19.0 has no validate subcommand
+hermes plugins validate ./packages/hermes-mybot-farm
+python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v`}</pre>
+          <p>GitHub (subdir required) or the public zip:</p>
+          <pre>{`hermes plugins install ${hermesPlugin.gitInstall} --enable
+
+curl -LO ${hermesPlugin.downloadUrl}
+mkdir -p ~/.hermes/plugins/mybot-farm
+unzip hermes-mybot-farm-0.1.0.zip -d ~/.hermes/plugins/mybot-farm
+hermes plugins enable mybot-farm`}</pre>
+          <p>
+            CLI smoke:{" "}
+            <code>
+              python3 packages/hermes-mybot-farm/bin/farm-plant plant
+              scholastic-research --dry-run
+            </code>
+            . Live plant of Scholastic Research is the small single-profile
+            smoke; Workbench is the team smoke.
           </p>
         </ContentSection>
 
@@ -345,6 +389,10 @@ openclaw plugins enable mybot-farm`}</pre>
             <li>
               <Link href="/install/openclaw">OpenClaw</Link> — plant a GAF pack
               with the mybot-farm plugin
+            </li>
+            <li>
+              <Link href="/install/hermes">Hermes</Link> — plant a scrubbed
+              profile with the mybot-farm plugin
             </li>
             <li>
               <Link href="/plant">Plant</Link> — paste a share URL and preview

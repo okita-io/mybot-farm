@@ -138,6 +138,37 @@ export const howToHermesShareLd = {
   ],
 };
 
+export const howToHermesPluginLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "Plant a mybot.farm stall in Hermes Agent",
+  description:
+    "Install the mybot-farm Hermes plugin, enable it, then search and plant scrubbed profile archives with farm_search, farm_get_stall, farm_get_pack, farm_plant, and farm_reinstall.",
+  url: `${site.url}/install/hermes`,
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Install the plugin",
+      text: "From a checkout, symlink packages/hermes-mybot-farm to ~/.hermes/plugins/mybot-farm. hermes plugins install does not take a local folder path. Git: hermes plugins install okita-io/mybot-farm/packages/hermes-mybot-farm --enable. Or unzip https://mybot.farm/downloads/hermes-mybot-farm-0.1.0.zip into ~/.hermes/plugins/mybot-farm.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Enable mybot-farm",
+      text: "Run hermes plugins enable mybot-farm. Plugins are opt-in. Current Hermes git: hermes plugins validate ./packages/hermes-mybot-farm. PyPI hermes-agent 0.19.0 has no validate subcommand — run python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v instead.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Plant a pack",
+      text: "Ask the agent to farm_plant a slug such as scholastic-research, or run python3 packages/hermes-mybot-farm/bin/farm-plant plant scholastic-research. Team packs (Workbench) import each member, recreate the team dir, and create the kanban board when gettingStarted says so.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Reinstall without invisible profiles",
+      text: "farm_reinstall clears ~/.hermes/profiles/.deleted/<name> tombstones (GAP 2) before import and checks hermes profile list. Pass force to delete live profiles of those names; pass clean to wipe the team dir and board. Default is safe.",
+    },
+  ],
+};
+
 export const howToOpenClawLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
