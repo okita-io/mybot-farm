@@ -90,6 +90,7 @@ Anything else: `host_not_allowed`. If the URL looks like a `.json` pack on a for
 | `/api/stalls/{slug}` | `{slug}` |
 | `/api/packs/{slug}` | `{slug}` |
 | `/api/packs/{slug}/skills` | `{slug}` |
+| `/api/packs/{slug}/grok-template` | `{slug}` — agent recipe projection; teams 400 |
 | `/api/install-prompt/{slug}` | `{slug}` — warning: this is a prompt URL, not the pack |
 | `/plant` | `?url=` (unwrap once) or `?slug=` |
 
@@ -159,6 +160,7 @@ Content-Type: application/json
       "get_stall": "/api/stalls/gift-day",
       "download_pack": "/api/packs/gift-day",
       "list_pack_skills": "/api/packs/gift-day/skills",
+      "get_grok_template": "/api/packs/gift-day/grok-template",
       "get_install_prompt": "/api/install-prompt/gift-day"
     }
   },
@@ -331,4 +333,4 @@ No buyer table, no Clerk SDK, no login modal, no Stripe, no listing API.
 - [positioning-farmers-market.md](./positioning-farmers-market.md) — copy on install; open bots
 - [teams.md](./teams.md) — team packs
 - [How-To](https://mybot.farm/how-to) — Grok Bot install + share
-- Read APIs: `/api`, `/api/stalls`, `/api/packs/{slug}`, `/api/install-prompt/{slug}`
+- Read APIs: `/api`, `/api/stalls`, `/api/packs/{slug}`, `/api/packs/{slug}/grok-template`, `/api/install-prompt/{slug}`

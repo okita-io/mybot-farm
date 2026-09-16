@@ -54,5 +54,15 @@
       "description": "Standard output format for each shortlisted venue.",
       "content": "# Venue card\n\nOne card per venue:\n\n```yaml\nvenue: <name>\nneighborhood: <area / city>\ncapacity: <estimate \u2014 mark 'verified' or 'estimate'>\nhouse_genre: <what they usually play>\nrecent_acts: <2-4 recent acts, or 'unknown'>\nbooks_bands: yes / no / unverified\nfit_notes: <why this venue fits THIS band, 1-2 sentences>\nsources: <public URLs>\n```\n\nKeep cards flat and copy-paste-able \u2014 Finders works from them without asking questions."
     }
-  ]
+  ],
+  "plugins": [],
+  "gettingStarted": { "skill": "venue-scan" },
+  "exports": {
+    "grokBotTemplate": {
+      "enabled": true,
+      "avatarFallbacks": {
+        "shape": { "circle": "pebble" }
+      }
+    }
+  }
 }

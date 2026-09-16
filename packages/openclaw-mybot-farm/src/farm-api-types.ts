@@ -52,6 +52,20 @@ export type FarmPack = {
   profile?: FarmPackProfile;
   memory?: FarmPackMemory[];
   skills?: FarmPackSkill[];
+  /** Intention prose only — never automation.json. OpenClaw plant does not yet write ROUTINES.md. */
+  routines?: Array<{
+    slug: string;
+    name?: string;
+    description?: string;
+    content?: string;
+  }>;
+  /** Marketplace plugin ids only — never url/command/custom MCP. */
+  plugins?: Array<{
+    pluginId: string;
+    name?: string;
+    description?: string;
+  }>;
+  gettingStarted?: { skill: string };
   manifest?: FarmPackManifest;
   [key: string]: unknown;
 };

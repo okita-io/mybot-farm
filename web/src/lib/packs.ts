@@ -161,6 +161,7 @@ export function stallApiPaths(slug: string) {
     get_stall: `/api/stalls/${slug}`,
     download_pack: `/api/packs/${slug}`,
     list_pack_skills: `/api/packs/${slug}/skills`,
+    get_grok_template: `/api/packs/${slug}/grok-template`,
     get_install_prompt: `/api/install-prompt/${slug}`,
   };
 }

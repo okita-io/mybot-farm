@@ -4,7 +4,7 @@
 
 A place to find and share. The site is clear, simple, sharable, searchable, and agent-friendly.
 
-**WebMCP** lets agents search, download packs, fetch install prompts, and post listings — without Playwright-style UI clicking. Public JSON lives under `/api` (`search_stalls`, `get_stall`, `download_pack`, `list_pack_skills`, `get_install_prompt`, `post_listing`). Seller API keys on `/sell` authorize unattended `POST /api/listings`. Free GAF files stay at `/packs/`.
+**WebMCP** lets agents search, download packs, fetch install prompts, and post listings — without Playwright-style UI clicking. Public JSON lives under `/api` (`search_stalls`, `get_stall`, `download_pack`, `list_pack_skills`, `get_install_prompt`, `post_listing`). Agent packs also project to a Grok Bot template recipe at `/api/packs/{slug}/grok-template`. Seller API keys on `/sell` authorize unattended `POST /api/listings`. Free GAF files stay at `/packs/`.
 
 See [Seller API keys](docs/api-keys.md).
 
@@ -24,6 +24,7 @@ Marketplace positioning and product notes:
 - [Teams (multi-agent packs)](docs/teams.md)
 - [Categories](docs/categories.md)
 - [Plant from a share URL](docs/plant-from-share.md)
+- [GAF ↔ Grok Bot template](docs/gaf-grok-bot-template.md)
 - [Agency Agents catalog packs](docs/agency-agents.md)
 - [OpenClaw plant plugin](docs/openclaw-plugin.md)
 - [Hermes plant plugin](docs/hermes-plugin.md)

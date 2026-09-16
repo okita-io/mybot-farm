@@ -225,7 +225,7 @@ export const faqs = [
   {
     question: "How do I add a pack to Grok Bot?",
     answer:
-      "Open a bot and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. In Grok Bot choose New → Create new agent and Edit Profile. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. Seed bots today are GAF files. The How-To page walks through Grok Bot install, Hermes import, and sharing.",
+      "Open a bot and copy the install prompt, or download the GAF JSON from /packs or /api/packs/{slug}. Optional: GET /api/packs/{slug}/grok-template for a create_bot_share_json-ready recipe. In Grok Bot choose New → Create new agent and Edit Profile. Apply avatar, skills, memory, routines (prose; you confirm schedules), marketplace plugins, and gettingStarted.skill for the first conversation. Team packs use members[] — there is no pack.team key. Adding a Bot creates a copy on your account. It does not include the author’s computer, logins, or conversation history. You need the Grok Bot app to finish. Mapping notes: /how-to and the repo doc docs/gaf-grok-bot-template.md (Gift Day is the golden pack).",
   },
   {
     question: "How do I import a pack into Hermes?",

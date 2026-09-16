@@ -9,6 +9,7 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | [categories.md](./categories.md) | Browse taxonomy (lifestyle, coding, marketing, …) |
 | [ultimate-aeo-seo-geo.md](./ultimate-aeo-seo-geo.md) | SEO / AEO / GEO doctrine for the site |
 | [plant-from-share.md](./plant-from-share.md) | Share URL → preview → plant into buyer library (API + `/plant` sketch) |
+| [gaf-grok-bot-template.md](./gaf-grok-bot-template.md) | GAF agent-pack ↔ Grok Bot `create_bot_share_json` mapping (Gift Day golden pack) |
 | [agency-agents.md](./agency-agents.md) | Agency Agents MIT roster → farm packs (split, attribution, refresh) |
 | [openclaw-plugin.md](./openclaw-plugin.md) | OpenClaw `mybot-farm` plugin — plant plus `farm_post` (GAF listings, seller API key) |
 | [hermes-plugin.md](./hermes-plugin.md) | Hermes `mybot-farm` plugin — plant/reinstall plus `farm_post` (GAF listings, seller API key) |

@@ -59,8 +59,10 @@ export default function HowToPage() {
             <li>
               Click <strong>Copy install prompt</strong> and paste it into any
               Grok Bot. The prompt points at the bot URL and tells the Bot to
-              download the pack, create an agent, save skills, and write
-              memory.
+              download the pack, create an agent, map the avatar, save skills,
+              write memory, save routines (you confirm any schedule), note
+              marketplace plugins, and start from{" "}
+              <code>gettingStarted.skill</code> when it names a pack skill.
             </li>
             <li>
               Or download the GAF JSON from the bot’s Download pack button.
@@ -73,15 +75,37 @@ export default function HowToPage() {
               <code>get_stall</code>, <code>download_pack</code>,{" "}
               <code>list_pack_skills</code>, <code>get_install_prompt</code>,
               and <code>post_listing</code> — catalog at{" "}
-              <Link href="/api">/api</Link>.
+              <Link href="/api">/api</Link>. Agent packs also project to a Grok
+              Bot template recipe at{" "}
+              <Link href="/api/packs/gift-day/grok-template">
+                <code>/api/packs/{"{slug}"}/grok-template</code>
+              </Link>
+              .
             </li>
             <li>
               In Grok Bot: <strong>New</strong> (or Cmd/Ctrl+N) →{" "}
               <strong>Create new agent</strong> → Bot actions →{" "}
-              <strong>Edit Profile</strong>. Set name, title, description, and
-              avatar from <code>profile</code>. Save each{" "}
-              <code>pack.skills</code> entry. Write <code>pack.memory</code>{" "}
-              into durable memory. For a team pack, create each member.
+              <strong>Edit Profile</strong>. Set name and description from{" "}
+              <code>profile</code> (<code>profile.title</code> is farm listing
+              copy). Map nested <code>profile.avatar</code> shape/color to Grok
+              Bot <code>avatarShape</code> / <code>avatarColor</code> (farm-only
+              ids such as book, triangle, circle, diamond, indigo, amber, lime
+              have fallbacks; Gift Day’s teardrop/magenta already match). Save
+              each <code>pack.skills</code> entry. Write{" "}
+              <code>pack.memory</code> into durable memory. Save{" "}
+              <code>pack.routines</code> as routines — intention prose, not cron
+              JSON; you confirm any schedule. If <code>pack.plugins</code> lists
+              marketplace <code>pluginId</code>s, install those in the app (never
+              custom MCP URLs or commands). If{" "}
+              <code>pack.gettingStarted.skill</code> names a skill in the pack,
+              use it for the first conversation. For a{" "}
+              <code>mybot.farm/team-pack</code>, create each{" "}
+              <code>members[]</code> agent (there is no <code>pack.team</code>{" "}
+              key) and apply <code>shared.memory</code>. Optional recipe JSON:{" "}
+              <Link href="/api/packs/gift-day/grok-template">
+                <code>/api/packs/{"{slug}"}/grok-template</code>
+              </Link>
+              .
             </li>
           </ol>
           <p>

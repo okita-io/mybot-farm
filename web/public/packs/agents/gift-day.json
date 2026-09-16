@@ -48,6 +48,25 @@
   ],
   "plugins": [],
   "gettingStarted": { "skill": "occasion-book" },
+  "visibility": "public",
+  "exports": {
+    "grokBotTemplate": {
+      "enabled": true,
+      "avatarFallbacks": {
+        "shape": {
+          "book": "tablet",
+          "triangle": "wedge",
+          "circle": "pebble",
+          "diamond": "gem"
+        },
+        "color": {
+          "indigo": "violet",
+          "amber": "yellow",
+          "lime": "green"
+        }
+      }
+    }
+  },
   "manifest": {
     "author": "mybot.farm seeds",
     "license": "MIT",
