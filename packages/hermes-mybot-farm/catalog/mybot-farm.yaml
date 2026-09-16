@@ -1,9 +1,14 @@
 # Ready-to-paste entry for NousResearch/hermes-agent `plugin-catalog/mybot-farm.yaml`.
 # Do not open that PR until:
 #   1. this farm PR is merged
-#   2. the commit is tagged `hermes-mybot-farm-v0.1.0`
-#   3. `sha` is replaced with the 40-hex of that tag
+#   2. GitHub Release / tag `hermes-mybot-farm-v0.1.0` exists
+#   3. `sha` is the 40-hex of that tag (git rev-parse hermes-mybot-farm-v0.1.0)
 #   4. https://github.com/okita-io/mybot-farm clones over https (catalog CI rejects private repos)
+#
+# Catalog key matches plugin.yaml `name` (not hermes-mybot-farm).
+# capabilities.provides_tools matches register(ctx) including farm_get_stall.
+# MYBOT_FARM_URL is optional — leave requires_env empty.
+# This plugin has no self-updating code.
 #
 # Schema: https://github.com/NousResearch/hermes-agent/blob/main/plugin-catalog/README.md
 
@@ -15,7 +20,7 @@ description: Search mybot.farm and plant/reinstall Hermes agent and team packs.
 maintainer: okita-io / Alex Okita
 tier: community
 category: tools
-requires_hermes: ">=0.19"
+requires_hermes: ">=0.21"
 docs_url: https://mybot.farm/install/hermes
 platforms: []
 capabilities:

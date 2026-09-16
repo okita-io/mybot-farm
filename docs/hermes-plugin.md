@@ -56,7 +56,7 @@ hermes plugins install mybot-farm
 hermes plugins enable mybot-farm
 ```
 
-That PR is **not** opened from this repo. Draft entry + release checklist: [`packages/hermes-mybot-farm/catalog/`](../packages/hermes-mybot-farm/catalog/). Gates: public `https://` clone, tag `hermes-mybot-farm-v0.1.0`, paste the 40-hex SHA, capabilities match `plugin.yaml`.
+That PR is **not** opened from this repo. Draft entry + GitHub Release checklist: [`packages/hermes-mybot-farm/catalog/`](../packages/hermes-mybot-farm/catalog/). Gates: public `https://` clone, tag/release `hermes-mybot-farm-v0.1.0`, paste the 40-hex SHA, `hermes plugins validate` clean, capabilities match `plugin.yaml`. Catalog `requires_hermes: ">=0.21"`.
 
 ## Install from the public zip
 
