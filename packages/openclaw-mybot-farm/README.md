@@ -93,7 +93,7 @@ Matches the road-crew scout plant style:
 - Entry: `openclaw.extensions: ["./index.ts"]` (OpenClaw loads TS via its plugin loader)
 - Declares `contracts.tools`: `farm_search`, `farm_get_pack`, `farm_plant`
 - Published on ClawHub as `@okita-io/openclaw-mybot-farm` (status published as of 2026-09-15)
-- MCP stdio bridge is optional (`mcp/server.mjs`) for mcporter users; native OpenClaw tools are the primary path for v0.1
+- MCP stdio bridge is optional (`mcp/server.mjs`) for mcporter users; native OpenClaw tools are the primary path for v0.1.1
 
 ## Requirements
 

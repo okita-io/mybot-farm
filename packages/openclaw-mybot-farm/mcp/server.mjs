@@ -31,7 +31,7 @@ async function main() {
   const farm = api.resolveFarmConfig({});
 
   const server = new Server(
-    { name: "mybot-farm", version: "0.1.0" },
+    { name: "mybot-farm", version: "0.1.1" },
     { capabilities: { tools: {} } },
   );
 

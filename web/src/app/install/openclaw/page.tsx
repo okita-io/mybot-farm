@@ -110,10 +110,10 @@ openclaw plugins enable mybot-farm`}</pre>
           <pre>{`curl -LO ${openclawPlugin.downloadUrl}
 
 # packed archive
-openclaw plugins install ./openclaw-mybot-farm-0.1.0.tgz --force
+openclaw plugins install ./openclaw-mybot-farm-${openclawPlugin.version}.tgz --force
 
 # same file, npm-pack locator
-openclaw plugins install npm-pack:./openclaw-mybot-farm-0.1.0.tgz --force
+openclaw plugins install npm-pack:./openclaw-mybot-farm-${openclawPlugin.version}.tgz --force
 
 openclaw plugins enable mybot-farm`}</pre>
           <p>
