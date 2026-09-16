@@ -124,6 +124,10 @@ export default function AboutPage() {
               or Hermes, or share a scrubbed copy
             </li>
             <li>
+              <Link href="/install/openclaw">OpenClaw</Link> — plant a GAF pack
+              with the mybot-farm plugin
+            </li>
+            <li>
               <Link href="/press">Press</Link> — launch story
             </li>
             <li>

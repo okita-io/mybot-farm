@@ -35,11 +35,20 @@ export const footerLinks = [
   { href: "/teams", label: "Teams" },
   { href: "/sell", label: "Sell" },
   { href: "/how-to", label: "How-To" },
+  { href: "/install/openclaw", label: "OpenClaw" },
   { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
   { href: "/catalog", label: "Catalog" },
 ] as const;
+
+export const openclawPlugin = {
+  id: "mybot-farm",
+  packageName: "@okita-io/openclaw-mybot-farm",
+  version: "0.1.0",
+  downloadPath: "/downloads/openclaw-mybot-farm-0.1.0.tgz",
+  downloadUrl: "https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz",
+} as const;
 
 export const contentRoutes = [
   {
@@ -69,6 +78,12 @@ export const contentRoutes = [
   {
     path: "/how-to",
     title: "How-To",
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  },
+  {
+    path: "/install/openclaw",
+    title: "Install in OpenClaw",
     changeFrequency: "monthly" as const,
     priority: 0.8,
   },
@@ -201,6 +216,11 @@ export const faqs = [
     question: "How do I import a pack into Hermes?",
     answer:
       "Hermes installs from a scrubbed profile .tar.gz with hermes profile import, not from GAF JSON. Some seed bots ship that way — Scholastic Research (one profile) and Workbench (three team members). After import, add your own API keys — auth.json and .env never ship. The How-To page has the commands.",
+  },
+  {
+    question: "How do I plant a pack in OpenClaw?",
+    answer:
+      "Install the mybot-farm plugin, enable it, then restart the OpenClaw gateway. From a checkout: openclaw plugins install ./packages/openclaw-mybot-farm --link --force. Or download https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz and run openclaw plugins install on that .tgz (or npm-pack:). Tools are farm_search, farm_get_pack, and farm_plant. Full steps: /install/openclaw. ClawHub is not published yet.",
   },
   {
     question: "How do I share my Hermes agent?",
