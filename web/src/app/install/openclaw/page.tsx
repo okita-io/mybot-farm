@@ -10,12 +10,12 @@ import { openclawPlugin, site, siteOgImage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Install in OpenClaw",
   description:
-    "Plant mybot.farm agents into OpenClaw with the mybot-farm plugin. Install from this repo or download the packed tarball, then farm_search / farm_get_pack / farm_plant.",
+    "Plant mybot.farm agents into OpenClaw with the mybot-farm plugin. Install from ClawHub (recommended), a repo checkout, or the packed tarball, then farm_search / farm_get_pack / farm_plant.",
   alternates: { canonical: "/install/openclaw" },
   openGraph: {
     title: `Install in OpenClaw | ${site.name}`,
     description:
-      "Native OpenClaw tools that search the farm and plant GAF packs into ~/.openclaw/farm/<slug>.",
+      "Install the mybot-farm plugin from ClawHub, then search and plant GAF packs into ~/.openclaw/farm/<slug>.",
     url: "/install/openclaw",
     images: [siteOgImage],
   },
@@ -76,6 +76,20 @@ export default function OpenClawInstallPage() {
         </ContentSection>
 
         <ContentSection id="install" title="Install the plugin">
+          <h3>ClawHub (recommended)</h3>
+          <p>
+            Package <code>{openclawPlugin.packageName}</code> is published on
+            ClawHub (status published as of 2026-09-15). Optional discover:{" "}
+            <code>openclaw plugins search mybot-farm</code>.
+          </p>
+          <pre>{`openclaw plugins install clawhub:${openclawPlugin.packageName}
+openclaw plugins enable mybot-farm
+openclaw gateway restart`}</pre>
+          <p>
+            The first ClawHub release may show scan status{" "}
+            <code>suspicious</code> until review; install via the{" "}
+            <code>clawhub:</code> locator still works.
+          </p>
           <h3>From a repo checkout</h3>
           <pre>{`openclaw plugins install ./packages/openclaw-mybot-farm --link --force
 openclaw plugins enable mybot-farm`}</pre>
@@ -124,22 +138,26 @@ openclaw plugins enable mybot-farm`}</pre>
         </ContentSection>
 
         <ContentSection id="plant" title="Plant an agent">
-          <p>CLI, no agent loop:</p>
+          <p>
+            After any install, ask your OpenClaw agent to call{" "}
+            <code>farm_search</code>, <code>farm_get_pack</code>, or{" "}
+            <code>farm_plant</code> with a slug such as{" "}
+            <code>frontend-developer</code>. Optional plant params:{" "}
+            <code>agentId</code>, <code>workspace</code>, <code>force</code>.
+            ClawHub installs may place the CLI under the OpenClaw extensions
+            path.
+          </p>
+          <p>From a checkout, CLI with no agent loop:</p>
           <pre>{`node packages/openclaw-mybot-farm/bin/farm-plant.mjs search frontend
 node packages/openclaw-mybot-farm/bin/farm-plant.mjs plant frontend-developer`}</pre>
-          <p>
-            Or ask your OpenClaw agent to call <code>farm_search</code>,{" "}
-            <code>farm_get_pack</code>, or <code>farm_plant</code> with a slug
-            such as <code>frontend-developer</code>. Optional plant params:{" "}
-            <code>agentId</code>, <code>workspace</code>, <code>force</code>.
-          </p>
         </ContentSection>
 
-        <ContentSection id="clawhub" title="ClawHub later">
+        <ContentSection id="clawhub" title="ClawHub">
           <p>
-            Not published yet. When it is, the locator will be{" "}
-            <code>openclaw plugins install clawhub:{openclawPlugin.packageName}</code>
-            . Do not treat that as live today.
+            Live on ClawHub as <code>{openclawPlugin.packageName}</code>{" "}
+            {openclawPlugin.version} (status published as of 2026-09-15). The
+            recommended locator is in{" "}
+            <a href="#install">Install the plugin</a> above.
           </p>
         </ContentSection>
 

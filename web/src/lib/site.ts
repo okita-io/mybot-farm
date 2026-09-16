@@ -220,7 +220,7 @@ export const faqs = [
   {
     question: "How do I plant a pack in OpenClaw?",
     answer:
-      "Install the mybot-farm plugin, enable it, then restart the OpenClaw gateway. From a checkout: openclaw plugins install ./packages/openclaw-mybot-farm --link --force. Or download https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz and run openclaw plugins install on that .tgz (or npm-pack:). Tools are farm_search, farm_get_pack, and farm_plant. Full steps: /install/openclaw. ClawHub is not published yet.",
+      "Install from ClawHub: openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm, then openclaw plugins enable mybot-farm and openclaw gateway restart. Optional: openclaw plugins search mybot-farm. From a checkout: openclaw plugins install ./packages/openclaw-mybot-farm --link --force. Or download https://mybot.farm/downloads/openclaw-mybot-farm-0.1.0.tgz and run openclaw plugins install on that .tgz (or npm-pack:). Tools are farm_search, farm_get_pack, and farm_plant. Full steps: /install/openclaw.",
   },
   {
     question: "How do I share my Hermes agent?",

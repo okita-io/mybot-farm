@@ -11,9 +11,23 @@ Proven on OpenClaw **2026.9.4**. It calls live `https://mybot.farm/api/stalls` a
 - Workspace files: `IDENTITY.md`, `SOUL.md`, `MEMORY.md`, `FARM.md`, `skills/*/SKILL.md`
 - Does not email, spend money, invent pack fields, or delete existing agents
 - Restart the OpenClaw gateway after install so agent sessions see the tools
-- ClawHub is **not published yet** — use the repo path or the public tarball below
+- ClawHub is **live**: `openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm`
 
 Install page: [https://mybot.farm/install/openclaw](https://mybot.farm/install/openclaw)
+
+## Install from ClawHub (recommended)
+
+Package `@okita-io/openclaw-mybot-farm` is published on ClawHub (status published as of 2026-09-15):
+
+```bash
+openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm
+openclaw plugins enable mybot-farm
+openclaw gateway restart
+```
+
+Optional discover: `openclaw plugins search mybot-farm`.
+
+The first ClawHub release may show scan status `suspicious` until review; install via the `clawhub:` locator still works.
 
 ## Install from this repo
 
@@ -125,17 +139,6 @@ Ask your OpenClaw agent to call:
 - `farm_plant` with `{ "slug": "frontend-developer" }`
 
 Optional plant params: `agentId`, `workspace`, `force`. Existing agents are never overwritten unless `force` is true.
-
-## ClawHub (later)
-
-Not published yet. When it is:
-
-```bash
-openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm
-# or: openclaw plugins search mybot-farm
-```
-
-Do not treat that locator as live today.
 
 ## Notes
 
