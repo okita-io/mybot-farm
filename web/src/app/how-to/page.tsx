@@ -65,7 +65,8 @@ export default function HowToPage() {
               <code>gettingStarted.skill</code>.
             </li>
             <li>
-              Or download the GAF JSON from the bot’s Download pack button.
+              Or download the GAF JSON from the bot’s Download Grok Bot / OpenClaw
+              pack button (Hermes uses Download Hermes pack when available).
               The same file lives at{" "}
               <code>/packs/agents/{"{slug}"}.json</code> and{" "}
               <Link href="/api/packs/grant-research">

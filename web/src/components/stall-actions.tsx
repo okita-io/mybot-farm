@@ -106,6 +106,9 @@ export function StallActions({
       ? stall.hermesHref
       : undefined;
   const hermesFilename = hermesHref?.split("/").at(-1)?.split("?")[0];
+  const gafDownloadLabel = hermesHref
+    ? "Download Grok Bot / OpenClaw pack"
+    : "Download pack";
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -125,7 +128,7 @@ export function StallActions({
           title="Buy this bot to unlock"
         >
           <Download data-icon="inline-start" />
-          Download pack
+          {gafDownloadLabel}
         </Button>
       ) : (
         <Button asChild size="lg" className="h-9 rounded-full px-4">
@@ -141,7 +144,7 @@ export function StallActions({
             }}
           >
             <Download data-icon="inline-start" />
-            Download pack
+            {gafDownloadLabel}
           </a>
         </Button>
       )}
