@@ -12,11 +12,13 @@ SHA="${CATALOG_GITHUB_SHA:-}"
 TOKEN="${CATALOG_GITHUB_TOKEN:-}"
 
 if [ -z "$TOKEN" ]; then
-  if [ "${VERCEL:-}" = "1" ] || [ "${CI:-}" = "true" ]; then
-    echo "error: CATALOG_GITHUB_TOKEN is required on Vercel/CI to pull ${OWNER}/${REPO}" >&2
+  # Production uses a Contents read/write PAT. Preview uses a separate
+  # read-only PAT. If Preview/local/CI omit the token, keep committed packs.
+  if [ "${VERCEL_ENV:-}" = "production" ]; then
+    echo "error: CATALOG_GITHUB_TOKEN is required on Vercel production to pull ${OWNER}/${REPO}" >&2
     exit 1
   fi
-  echo "pull-catalog: CATALOG_GITHUB_TOKEN unset — keeping committed ${DEST}"
+  echo "pull-catalog: CATALOG_GITHUB_TOKEN unset — keeping committed ${DEST} (env=${VERCEL_ENV:-local})"
   exit 0
 fi
 
