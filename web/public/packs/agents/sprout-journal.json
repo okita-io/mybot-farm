@@ -1,15 +1,26 @@
 {
   "format": "mybot.farm/agent-pack",
   "version": "0.1",
-  "runtime": ["grok-bot"],
+  "runtime": [
+    "grok-bot",
+    "hermes"
+  ],
   "slug": "sprout-journal",
   "category": "lifestyle",
-  "tags": ["plants", "habits", "journal"],
+  "tags": [
+    "plants",
+    "habits",
+    "journal"
+  ],
   "profile": {
     "name": "Sprout",
     "title": "Houseplant care journal",
     "description": "Keeps a private plant journal and watering reminders. Builds a simple care log you can page through — your plants stay on your copy of the agent.",
-    "avatar": { "kind": "geometric", "shape": "leaf", "color": "green" }
+    "avatar": {
+      "kind": "geometric",
+      "shape": "leaf",
+      "color": "green"
+    }
   },
   "memory": [
     {
@@ -38,12 +49,17 @@
     }
   ],
   "plugins": [],
-  "gettingStarted": { "skill": "plant-roster" },
+  "gettingStarted": {
+    "skill": "plant-roster"
+  },
   "manifest": {
     "author": "mybot.farm seeds",
     "license": "MIT",
     "homepage": "https://mybot.farm/agents/sprout-journal",
-    "tags": ["lifestyle", "plants"],
+    "tags": [
+      "lifestyle",
+      "plants"
+    ],
     "scrubbed": true
   }
 }

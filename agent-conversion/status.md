@@ -414,3 +414,170 @@ Wave 40 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (m
 - coach: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, web_competitor_intel/web_competitor_intel), 69.0 KB, import test passed, runtime +hermes, root JSON seeded
 
 Wave 41 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 42 (2026-09-16) — 5 agents
+
+- sales-data-extraction-agent: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, github/github-code-review), 16.3 KB, import test passed, runtime +hermes, root JSON seeded
+- engineer: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 21.9 KB, import test passed, runtime +hermes, root JSON seeded
+- sales-outreach: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, social-media/xurl), 69.8 KB, import test passed, runtime +hermes, root JSON seeded
+- salesforce-architect: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, software-development/plan), 16.6 KB, import test passed, runtime +hermes, root JSON seeded
+- scout: PASS — 2 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, research/rss-feeds, web/blocked-page-recovery), 18.7 KB, import test passed, runtime +hermes
+
+Wave 42 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 43 (2026-09-16) — 5 agents
+
+- search-query-analyst: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, web_competitor_intel/web_competitor_intel), 15.1 KB, import test passed, runtime +hermes, root JSON seeded
+- search-relevance-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 21.1 KB, import test passed, runtime +hermes, root JSON seeded
+- secrets-credential-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, github/github-code-review, devops/docker-stack-hardening), 20.0 KB, import test passed, runtime +hermes, root JSON seeded
+- section-508-specialist: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, github/github-code-review, software-development/plan), 24.1 KB, import test passed, runtime +hermes, root JSON seeded
+- architect: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, devops/docker-stack-hardening, github/github-code-review), 22.3 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 43 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 44 (2026-09-16) — 5 agents
+
+- senior-developer: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, github/github-code-review, software-development/plan), 18.9 KB, import test passed, runtime +hermes, root JSON seeded
+- project-manager-senior: PASS — 3 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, autonomous-ai-agents/hermes-kanban-orchestration, autonomous-ai-agents/hermes-cron-authoring), 19.1 KB, import test passed, runtime +hermes, root JSON seeded
+- senior-secops: PASS — 8 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, devops/docker-stack-hardening, github/github-code-review), 25.5 KB, import test passed, runtime +hermes, root JSON seeded
+- seo-specialist: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, web_competitor_intel/web_competitor_intel), 68.1 KB, import test passed, runtime +hermes, root JSON seeded
+- short-video-editing-coach: PASS — 3 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, creative/touchdesigner-mcp), 150.4 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 44 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 45 (2026-09-16) — 5 agents
+
+- social-media-strategist: PASS — 8 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, social-media/xurl), 67.1 KB, import test passed, runtime +hermes, root JSON seeded
+- software-architect: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 19.0 KB, import test passed, runtime +hermes, root JSON seeded
+- solidity-smart-contract-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, github/github-code-review, software-development/plan), 21.0 KB, import test passed, runtime +hermes, root JSON seeded
+- solution-engineer: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, research/research-paper-writing, software-development/plan), 780.0 KB, import test passed, runtime +hermes, root JSON seeded
+- sovereign-health-systems-agent: PASS — 9 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, research/research-paper-writing, data-science/jupyter-live-kernel), 781.7 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 45 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 46 (2026-09-16) — 5 agents
+
+- spatial-data-engineer: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, research/research-paper-writing), 777.6 KB, import test passed, runtime +hermes, root JSON seeded
+- spatial-data-scientist: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, research/research-paper-writing), 777.9 KB, import test passed, runtime +hermes, root JSON seeded
+- sprint-prioritizer: PASS — 8 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, autonomous-ai-agents/hermes-kanban-orchestration, software-development/plan), 21.1 KB, import test passed, runtime +hermes, root JSON seeded
+- sprout-journal: PASS — 2 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, note-taking/obsidian, productivity/session-librarian), 10.9 KB, import test passed, runtime +hermes
+- sre: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, devops/docker-stack-hardening, autonomous-ai-agents/hermes-cron-authoring), 15.6 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 46 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 47 (2026-09-16) — 5 agents
+
+- statistician: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, research/research-paper-writing), 779.3 KB, import test passed, runtime +hermes, root JSON seeded
+- strategy-duel-agent: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, data-science/jupyter-live-kernel), 15.1 KB, import test passed, runtime +hermes, root JSON seeded
+- studio-operations: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, autonomous-ai-agents/hermes-kanban-orchestration, autonomous-ai-agents/hermes-cron-authoring), 20.8 KB, import test passed, runtime +hermes, root JSON seeded
+- studio-producer: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, autonomous-ai-agents/hermes-kanban-orchestration, marketing-agi/marketing-agi), 68.4 KB, import test passed, runtime +hermes, root JSON seeded
+- study-abroad-advisor: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, research/research-paper-writing, productivity/ocr-and-documents), 784.1 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 47 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 48 (2026-09-16) — 5 agents
+
+- supply-chain-strategist: PASS — 12 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, web_competitor_intel/web_competitor_intel), 23.9 KB, import test passed, runtime +hermes, root JSON seeded
+- support-responder: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, productivity/session-librarian, autonomous-ai-agents/hermes-kanban-orchestration), 20.6 KB, import test passed, runtime +hermes, root JSON seeded
+- tax-strategist: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, productivity/ocr-and-documents), 17.9 KB, import test passed, runtime +hermes, root JSON seeded
+- technical-artist: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/comfyui, creative/excalidraw), 96.6 KB, import test passed, runtime +hermes, root JSON seeded
+- technical-consultant: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, research/research-paper-writing, software-development/plan), 779.9 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 48 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 49 (2026-09-16) — 5 agents
+
+- technical-writer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, productivity/ocr-and-documents, software-development/plan), 19.6 KB, import test passed, runtime +hermes, root JSON seeded
+- terminal-integration-specialist: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 17.9 KB, import test passed, runtime +hermes, root JSON seeded
+- test-automation-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 21.1 KB, import test passed, runtime +hermes, root JSON seeded
+- test-results-analyzer: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, github/github-code-review), 18.9 KB, import test passed, runtime +hermes, root JSON seeded
+- threat-detection-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, devops/docker-stack-hardening, autonomous-ai-agents/hermes-cron-authoring), 19.2 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 49 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 50 (2026-09-16) — 5 agents
+
+- threat-intelligence-analyst: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, research/rss-feeds, web_competitor_intel/web_competitor_intel), 22.3 KB, import test passed, runtime +hermes, root JSON seeded
+- tiktok-strategist: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, social-media/xurl), 67.1 KB, import test passed, runtime +hermes, root JSON seeded
+- tool-evaluator: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, autonomous-ai-agents/third-party-skill-vetting, software-development/plan), 17.5 KB, import test passed, runtime +hermes, root JSON seeded
+- tracking-specialist: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, marketing-agi/marketing-agi), 62.3 KB, import test passed, runtime +hermes, root JSON seeded
+- trend-researcher: PASS — 9 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, research/rss-feeds, web_competitor_intel/web_competitor_intel), 21.5 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 50 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 51 (2026-09-16) — 5 agents
+
+- twitter-engager: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, social-media/xurl), 66.9 KB, import test passed, runtime +hermes, root JSON seeded
+- ui-designer: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/sketch, creative/excalidraw), 23.2 KB, import test passed, runtime +hermes, root JSON seeded
+- ui-finish-gate-reviewer: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, github/github-code-review, creative/sketch), 20.4 KB, import test passed, runtime +hermes, root JSON seeded
+- unity-architect: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 20.7 KB, import test passed, runtime +hermes, root JSON seeded
+- unity-editor-tool-developer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-pr-workflow), 22.7 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 51 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 52 (2026-09-16) — 5 agents
+
+- unity-multiplayer-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 20.9 KB, import test passed, runtime +hermes, root JSON seeded
+- unity-shader-graph-artist: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/sketch, creative/comfyui), 93.0 KB, import test passed, runtime +hermes, root JSON seeded
+- universal-document-compiler: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, productivity/ocr-and-documents, productivity/nano-pdf), 17.9 KB, import test passed, runtime +hermes, root JSON seeded
+- unreal-multiplayer-architect: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 20.9 KB, import test passed, runtime +hermes, root JSON seeded
+- unreal-systems-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-pr-workflow), 23.5 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 52 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 53 (2026-09-16) — 5 agents
+
+- unreal-technical-artist: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/sketch, creative/comfyui), 93.0 KB, import test passed, runtime +hermes, root JSON seeded
+- unreal-world-builder: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/sketch, software-development/plan), 19.9 KB, import test passed, runtime +hermes, root JSON seeded
+- uswds-developer: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 23.4 KB, import test passed, runtime +hermes, root JSON seeded
+- ux-architect: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/excalidraw, creative/sketch), 24.4 KB, import test passed, runtime +hermes, root JSON seeded
+- ux-researcher: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, research/research-paper-writing, data-science/jupyter-live-kernel), 779.6 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 53 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 54 (2026-09-16) — 5 agents
+
+- video-optimization-specialist: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, data-science/jupyter-live-kernel), 62.8 KB, import test passed, runtime +hermes, root JSON seeded
+- video-streaming-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, devops/docker-stack-hardening), 18.4 KB, import test passed, runtime +hermes, root JSON seeded
+- visionos-spatial-engineer: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 17.3 KB, import test passed, runtime +hermes, root JSON seeded
+- visual-storyteller: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/excalidraw, creative/sketch), 22.1 KB, import test passed, runtime +hermes, root JSON seeded
+- voice-ai-integration-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, mlops/models/audiocraft, software-development/plan), 29.0 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 54 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 55 (2026-09-16) — 5 agents
+
+- web-gis-developer: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, data-science/jupyter-live-kernel, software-development/plan), 15.2 KB, import test passed, runtime +hermes, root JSON seeded
+- webassembly-engineer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 21.1 KB, import test passed, runtime +hermes, root JSON seeded
+- wechat-mini-program-developer: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-pr-workflow), 22.7 KB, import test passed, runtime +hermes, root JSON seeded
+- wechat-official-account: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, research/rss-feeds), 67.2 KB, import test passed, runtime +hermes, root JSON seeded
+- weibo-strategist: PASS — 4 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, web_competitor_intel/web_competitor_intel), 67.3 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 55 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 56 (2026-09-16) — 5 agents
+
+- whimsy-injector: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/sketch, creative/excalidraw), 23.7 KB, import test passed, runtime +hermes, root JSON seeded
+- wordpress-performance: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, devops/docker-stack-hardening), 20.7 KB, import test passed, runtime +hermes, root JSON seeded
+- wordpress-shopping-cart: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 23.4 KB, import test passed, runtime +hermes, root JSON seeded
+- workflow-architect: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, autonomous-ai-agents/hermes-kanban-orchestration, software-development/plan), 24.5 KB, import test passed, runtime +hermes, root JSON seeded
+- workflow-optimizer: PASS — 6 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, autonomous-ai-agents/hermes-cron-authoring, software-development/plan), 18.5 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 56 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 57 (2026-09-16) — 5 agents
+
+- x-twitter-intelligence-analyst: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, social-media/xurl, web_competitor_intel/web_competitor_intel), 20.8 KB, import test passed, runtime +hermes, root JSON seeded
+- xiaohongshu-specialist: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, web_competitor_intel/web_competitor_intel), 65.7 KB, import test passed, runtime +hermes, root JSON seeded
+- xr-cockpit-interaction-specialist: PASS — 2 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/excalidraw, software-development/plan), 19.6 KB, import test passed, runtime +hermes, root JSON seeded
+- xr-immersive-developer: PASS — 2 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, software-development/plan, github/github-code-review), 16.8 KB, import test passed, runtime +hermes, root JSON seeded
+- xr-interface-architect: PASS — 2 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, creative/sketch, software-development/plan), 15.3 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 57 summary: 5/5 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.
+
+## Wave 58 (FINAL) (2026-09-16) — 2 agents
+
+- zhihu-strategist: PASS — 5 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, marketing-agi/marketing-agi, web_competitor_intel/web_competitor_intel), 66.3 KB, import test passed, runtime +hermes, root JSON seeded
+- zk-steward: PASS — 7 GAF skills, +3 hermes skills (autonomous-ai-agents/hermes-agent, note-taking/obsidian, productivity/session-librarian), 15.5 KB, import test passed, runtime +hermes, root JSON seeded
+
+Wave 58 (FINAL) summary: 2/2 passed import test. Tarballs in web/public/packs/agents/ (mirrored in packs/agents/). GAF runtime arrays updated with 'hermes'.

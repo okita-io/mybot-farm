@@ -9,13 +9,134 @@ Every farm agent stall gets a Hermes-native pack: a scrubbed
 install it) plus `"hermes"` in the GAF `runtime` array, plus matched built-in
 Hermes skills added to the profile ("Hermes-like" layer).
 
-## Status (wave 42 in flight of ~287)
+## Status (COMPLETE — 287/287 converted, all waves verified)
 
 **Queue:** 288 agents on the live farm; 287 missing a hermes tarball
-(only `scholastic-research` had one). 205/287 converted so far
-(waves 1–41 verified, 0 failures) — 71% of the queue done. Wave 42 in
-flight. See `agent-conversion/missing-hermes-tarballs.md` (full list) and
-`agent-conversion/queue.json`.
+(only `scholastic-research` had one). **287/287 converted** (waves
+1–58 verified, 0 failures). Full-queue audit CLEAN at 287. 288 hermes
+tarballs now on disk in `web/public/packs/agents/` (287 converted +
+pre-existing scholastic-research), each with a byte-identical mirror in
+`packs/agents/`, and `hermes` in the `runtime` array of both GAF JSON
+copies. See `agent-conversion/missing-hermes-tarballs.md` (full list)
+and `agent-conversion/queue.json`.
+
+**NEXT:** ship via git → deploy (Cursor), then resume the posting step
+(`farm_post` listings / static catalog) now that every agent is
+convertible. The clobber hazard (concurrent catalog-regenerator)
+applies until the static catalog is deployed — see "Known issues &
+fixes" (HAZARD note).
+
+**Wave 58 (FINAL) — DONE & independently verified (2026-09-16):**
+zhihu-strategist, zk-steward — both PASS import test, leak-scanned
+clean, mirrors byte-identical, GAF runtime + hermes in both JSON
+copies. Full-queue audit CLEAN at 287 = **PIPELINE COMPLETE**. Note:
+zk-steward is a Zettelkasten knowledge-base steward (subagent read the
+actual GAF and substituted knowledge-management skills — obsidian +
+session-librarian — instead of crypto-adjacent hints). A catalog-
+regenerator clobber hit both web tarballs mid-run; restored from root,
+re-audited to stable CLEAN.
+
+**Wave 57 — DONE & independently verified (2026-09-16):**
+x-twitter-intelligence-analyst, xiaohongshu-specialist,
+xr-cockpit-interaction-specialist, xr-immersive-developer,
+xr-interface-architect — all PASS import test, leak-scanned clean,
+mirrors byte-identical, GAF runtime + hermes in both JSON copies.
+Full-queue audit CLEAN at 285.
+
+**Wave 56 — DONE & independently verified (2026-09-16):**
+whimsy-injector, wordpress-performance, wordpress-shopping-cart,
+workflow-architect, workflow-optimizer — all PASS import test,
+leak-scanned clean, mirrors byte-identical, GAF runtime + hermes in both
+JSON copies. Full-queue audit CLEAN at 280.
+
+**Wave 55 — DONE & independently verified (2026-09-16):**
+web-gis-developer, webassembly-engineer, wechat-mini-program-developer,
+wechat-official-account, weibo-strategist — all PASS import test,
+leak-scanned clean, mirrors byte-identical, GAF runtime + hermes in both
+JSON copies. Full-queue audit CLEAN at 275.
+
+**Wave 54 — DONE & independently verified (2026-09-16):**
+video-optimization-specialist, video-streaming-engineer,
+visionos-spatial-engineer, visual-storyteller, voice-ai-integration-
+engineer — all PASS import test, leak-scanned clean, mirrors
+byte-identical, GAF runtime + hermes in both JSON copies. Full-queue
+audit CLEAN at 270.
+
+**Wave 53 — DONE & independently verified (2026-09-16):**
+unreal-technical-artist, unreal-world-builder, uswds-developer,
+ux-architect, ux-researcher — all PASS import test, leak-scanned clean,
+mirrors byte-identical, GAF runtime + hermes in both JSON copies. Full-
+queue audit CLEAN at 265.
+
+**Wave 52 — DONE & independently verified (2026-09-16):**
+unity-multiplayer-engineer, unity-shader-graph-artist, universal-
+document-compiler, unreal-multiplayer-architect, unreal-systems-engineer
+— all PASS import test, leak-scanned clean, mirrors byte-identical, GAF
+runtime + hermes in both JSON copies. Full-queue audit CLEAN at 260.
+
+**Wave 51 — DONE & independently verified (2026-09-16):**
+twitter-engager, ui-designer, ui-finish-gate-reviewer, unity-architect,
+unity-editor-tool-developer — all PASS import test, leak-scanned clean,
+mirrors byte-identical, GAF runtime + hermes in both JSON copies. Full-
+queue audit CLEAN at 255 agents.
+
+**Wave 50 — DONE & independently verified (2026-09-16, AFTER clobber
+recovery):** threat-intelligence-analyst, tiktok-strategist, tool-
+evaluator, tracking-specialist, trend-researcher — all PASS import test,
+leak-scanned clean, mirrors byte-identical, GAF runtime + hermes in both
+JSON copies. A concurrent catalog-regenerator clobbered web/ copies
+mid-wave; the wave subagent restored from root and repaired 38 other
+clobbered web JSONs. Post-wave FULL-QUEUE AUDIT (all 250 done agents:
+tarballs present, mirrors identical, runtimes ok) passed with 0 problems.
+See "Known issues & fixes" (HAZARD note).
+
+**Wave 49 — DONE & independently verified (2026-09-16):**
+technical-writer, terminal-integration-specialist, test-automation-
+engineer, test-results-analyzer, threat-detection-engineer — all PASS
+import test, leak-scanned clean, mirrors byte-identical, GAF runtime +
+hermes in both JSON copies. All 5 root JSONs auto-seeded.
+
+**Wave 48 — DONE & independently verified (2026-09-16):**
+supply-chain-strategist, support-responder, tax-strategist,
+technical-artist, technical-consultant — all PASS import test,
+leak-scanned clean, mirrors byte-identical, GAF runtime + hermes in both
+JSON copies. All 5 root JSONs auto-seeded.
+
+**Wave 47 — DONE & independently verified (2026-09-16):**
+statistician, strategy-duel-agent, studio-operations, studio-producer,
+study-abroad-advisor — all PASS import test, leak-scanned clean, mirrors
+byte-identical, GAF runtime + hermes in both JSON copies. All 5 root
+JSONs auto-seeded.
+
+**Wave 46 — DONE & independently verified (2026-09-16):**
+spatial-data-engineer, spatial-data-scientist, sprint-prioritizer,
+sprout-journal, sre — all PASS import test, leak-scanned clean, mirrors
+byte-identical, GAF runtime + hermes in both JSON copies. All 5 root
+JSONs auto-seeded.
+
+**Wave 45 — DONE & independently verified (2026-09-16):**
+social-media-strategist, software-architect, solidity-smart-contract-
+engineer, solution-engineer, sovereign-health-systems-agent — all PASS
+import test, leak-scanned clean, mirrors byte-identical, GAF runtime +
+hermes in both JSON copies. All 5 root JSONs auto-seeded.
+
+**Wave 44 — DONE & independently verified (2026-09-16):**
+senior-developer, project-manager-senior, senior-secops, seo-specialist,
+short-video-editing-coach — all PASS import test, leak-scanned clean,
+mirrors byte-identical, GAF runtime + hermes in both JSON copies. All 5
+root JSONs auto-seeded.
+
+**Wave 43 — DONE & independently verified (2026-09-16):**
+search-query-analyst, search-relevance-engineer, secrets-credential-
+engineer, section-508-specialist, architect — all PASS import test,
+leak-scanned clean, mirrors byte-identical, GAF runtime + hermes in both
+JSON copies. All 5 root JSONs auto-seeded by the fixed `update_gaf`.
+
+**Wave 42 — DONE & independently verified (2026-09-16):**
+sales-data-extraction-agent, engineer, sales-outreach, salesforce-
+architect, scout — all PASS import test, leak-scanned clean, mirrors
+byte-identical, GAF runtime + hermes in both JSON copies. 4 of 5 root
+JSONs auto-seeded by the fixed `update_gaf`.
 
 **Wave 41 — DONE & independently verified (2026-09-16):**
 roblox-avatar-creator, roblox-experience-designer, roblox-systems-
@@ -322,6 +443,19 @@ updating both, preserving the byte-identical-mirror invariant that
 `['grok-bot','openclaw','hermes']`, copies identical. The wave-36 re-run is
 safe — the update is idempotent ('hermes' appended only if absent), so the
 partially-updated web copy cannot double-append.
+
+**HAZARD (encountered wave 50, 2026-09-16): a concurrent catalog-
+regenerator (upstream `scripts/import-agency-agents` tooling, run by a
+Cursor-agent worker ~20:20) regenerated `web/public/packs/agents/` mid-
+wave: it stripped `hermes` from web-copy GAF JSONs and deleted the 5
+wave-50 web tarballs; root `packs/agents/` copies stayed intact. The
+wave subagent restored all 5 from root and repaired 38 other clobbered
+web JSONs; a full audit of all 250 done agents after that (tarballs
+present + mirrors byte-identical + `hermes` in runtime in both JSON
+copies) passed with 0 problems. **For future waves: a concurrent
+catalog-regen can silently clobber web/ copies at any time — treat the
+post-wave FULL-QUEUE AUDIT as a required final check (not just the
+per-wave verify), and prefer root copies as restore source.**
 
 ## Findings for the site (mybot.farm)
 

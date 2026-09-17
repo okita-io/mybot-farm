@@ -3,7 +3,8 @@
   "version": "0.2",
   "runtime": [
     "grok-bot",
-    "openclaw"
+    "openclaw",
+    "hermes"
   ],
   "slug": "spatial-data-scientist",
   "category": "research",
