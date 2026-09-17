@@ -225,6 +225,7 @@ export const stalls: Stall[] = [
     category: "Lifestyle",
     tone: "find",
     downloadHref: "/packs/agents/gift-day.json",
+    hermesHref: "/packs/agents/gift-day.hermes.tar.gz",
   },
   {
     kind: "agent",
@@ -251,6 +252,7 @@ export const stalls: Stall[] = [
     category: "Coding",
     tone: "share",
     downloadHref: "/packs/agents/patch.json",
+    hermesHref: "/packs/agents/patch.hermes.tar.gz",
   },
   {
     kind: "agent",
@@ -264,6 +266,7 @@ export const stalls: Stall[] = [
     category: "Coding",
     tone: "share",
     downloadHref: "/packs/agents/probe.json",
+    hermesHref: "/packs/agents/probe.hermes.tar.gz",
   },
   {
     kind: "agent",
@@ -278,6 +281,7 @@ export const stalls: Stall[] = [
     category: "Education",
     tone: "find",
     downloadHref: "/packs/agents/grant-research.json",
+    hermesHref: "/packs/agents/grant-research.hermes.tar.gz",
   },
   {
     kind: "agent",
@@ -366,6 +370,7 @@ export const stalls: Stall[] = [
     category: "Music",
     tone: "find",
     downloadHref: "/packs/agents/finders.json",
+    hermesHref: "/packs/agents/finders.hermes.tar.gz",
     priceCents: 0,
     listedAt: "2026-09-15T00:00:00.000Z",
   },
@@ -381,6 +386,7 @@ export const stalls: Stall[] = [
     category: "Music",
     tone: "share",
     downloadHref: "/packs/agents/pitch.json",
+    hermesHref: "/packs/agents/pitch.hermes.tar.gz",
     priceCents: 0,
     listedAt: "2026-09-15T00:00:00.000Z",
   },
