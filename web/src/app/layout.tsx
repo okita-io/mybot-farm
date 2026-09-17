@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { JsonLd } from "@/components/json-ld";
+import { MobileSponsors, SponsorRail } from "@/components/sponsor-rails";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -73,7 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         "h-full antialiased",
       )}
     >
-      <body className="flex min-h-full flex-col bg-background text-foreground">
+      <body className="min-h-full bg-background text-foreground max-[89.99rem]:pb-28">
         <ClerkProvider appearance={{ theme: shadcn }}>
           <ThemeProvider>
             <JsonLd data={websiteLd} />
@@ -84,13 +85,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             >
               Skip to content
             </a>
-            <SiteHeader />
-            <UserSync />
-            <WebmcpTools />
-            <main id="content" className="flex flex-1 flex-col">
-              {children}
-            </main>
-            <SiteFooter />
+            <div className="mx-auto grid min-h-dvh w-full max-w-5xl grid-cols-1 min-[90rem]:max-w-[88rem] min-[90rem]:grid-cols-[11rem_minmax(0,64rem)_11rem] min-[90rem]:gap-4">
+              <SponsorRail side="left" />
+              <div className="flex min-h-dvh min-w-0 flex-col">
+                <SiteHeader />
+                <UserSync />
+                <WebmcpTools />
+                <main id="content" className="flex flex-1 flex-col">
+                  {children}
+                </main>
+                <SiteFooter />
+              </div>
+              <SponsorRail side="right" />
+            </div>
+            <MobileSponsors />
             <Analytics />
           </ThemeProvider>
         </ClerkProvider>

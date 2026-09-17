@@ -274,6 +274,20 @@ export const privacyPageLd = {
     "mybot.farm does not sell or redistribute personal data. Clerk handles accounts, Stripe handles payments, and cookies are only what those tools need.",
 };
 
+export const sponsorPageLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: `Sponsor | ${site.name}`,
+  url: `${site.url}/sponsor`,
+  description:
+    "Sponsor a stall on the left or right edge of mybot.farm. Linked banners sit beside the catalog on wide desktops and rotate along the bottom on smaller screens.",
+  isPartOf: {
+    "@type": "WebSite",
+    name: site.productName,
+    url: site.url,
+  },
+};
+
 export const termsPageLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",

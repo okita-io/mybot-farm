@@ -157,6 +157,12 @@
     @apply bg-background font-sans text-foreground scroll-smooth;
   }
 
+  @media (max-width: 89.99rem) {
+    html {
+      scroll-padding-bottom: calc(7rem + env(safe-area-inset-bottom, 0px));
+    }
+  }
+
   body {
     @apply min-h-dvh overflow-x-clip bg-background text-foreground antialiased;
   }

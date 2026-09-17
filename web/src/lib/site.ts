@@ -34,6 +34,7 @@ export const footerLinks = [
   { href: "/press", label: "Press" },
   { href: "/teams", label: "Teams" },
   { href: "/sell", label: "Sell" },
+  { href: "/sponsor", label: "Sponsor" },
   { href: "/how-to", label: "How-To" },
   { href: "/install/openclaw", label: "OpenClaw" },
   { href: "/install/hermes", label: "Hermes" },
@@ -113,6 +114,12 @@ export const contentRoutes = [
     title: "Sell",
     changeFrequency: "monthly" as const,
     priority: 0.7,
+  },
+  {
+    path: "/sponsor",
+    title: "Sponsor",
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
   },
   {
     path: "/privacy",

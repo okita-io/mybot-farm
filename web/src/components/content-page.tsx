@@ -59,7 +59,7 @@ export function ContentSection({
   children: ReactNode;
 }) {
   return (
-    <article id={id}>
+    <article id={id} className={id ? "scroll-mt-24" : undefined}>
       <h2 className="text-2xl font-semibold tracking-tight text-foreground">
         {title}
       </h2>
