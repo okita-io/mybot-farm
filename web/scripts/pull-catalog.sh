@@ -50,9 +50,12 @@ if [ -n "$SHA" ]; then
 fi
 
 RESOLVED="$(git rev-parse HEAD)"
-mkdir -p "$DEST/agents" "$DEST/teams"
-rsync -a --delete --exclude '.DS_Store' "$WORKDIR/repo/agents/" "$DEST/agents/"
-rsync -a --delete --exclude '.DS_Store' "$WORKDIR/repo/teams/" "$DEST/teams/"
+mkdir -p "$DEST"
+# Vercel build images do not ship rsync — replace trees with cp.
+rm -rf "$DEST/agents" "$DEST/teams"
+cp -R "$WORKDIR/repo/agents" "$DEST/agents"
+cp -R "$WORKDIR/repo/teams" "$DEST/teams"
+find "$DEST/agents" "$DEST/teams" -name '.DS_Store' -delete 2>/dev/null || true
 
 printf '%s\n' "$RESOLVED" > "$DEST/.catalog-sha"
 AGENTS_JSON="$(find "$DEST/agents" -maxdepth 1 -name '*.json' | wc -l | tr -d ' ')"
