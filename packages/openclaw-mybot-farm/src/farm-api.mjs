@@ -27,6 +27,9 @@ export const CATEGORY_LABELS = Object.freeze([
 const CATEGORY_SET = new Set(CATEGORY_LABELS);
 export const LISTING_KINDS = Object.freeze(["agent", "team"]);
 const LISTING_KIND_SET = new Set(LISTING_KINDS);
+export const AGENT_PACK_FORMAT = "mybot.farm/agent-pack";
+export const TEAM_PACK_FORMAT = "mybot.farm/team-pack";
+export const MIN_TEAM_MEMBERS = 2;
 export const MIN_PAID_PRICE_CENTS = 200;
 export const MAX_PRICE_CENTS = 999_900;
 export const MAX_PACK_CHARS = 500_000;
@@ -236,6 +239,67 @@ export function parsePackObject(value) {
   return value;
 }
 
+function memberPackError(index, pack) {
+  if (typeof pack === "string") {
+    return pack.trim()
+      ? null
+      : `members[${index}].pack must be a catalog path, slug, tarball URL, or nested agent-pack object`;
+  }
+  if (!pack || typeof pack !== "object" || Array.isArray(pack)) {
+    return `members[${index}].pack must be a catalog path, slug, tarball URL, or nested agent-pack object`;
+  }
+  if (pack.format === TEAM_PACK_FORMAT) {
+    return `members[${index}].pack nested object cannot be a team-pack`;
+  }
+  return null;
+}
+
+/** Match web/src/lib/gaf-pack.ts validateListingPack for farm_post dry-run. */
+export function validateListingPack(kind, pack) {
+  const fmt = typeof pack?.format === "string" ? pack.format.trim() : "";
+  if (kind === "team") {
+    if (fmt !== TEAM_PACK_FORMAT) {
+      throw new FarmError(`kind "team" requires pack.format "${TEAM_PACK_FORMAT}"`);
+    }
+    const members = pack.members;
+    if (!Array.isArray(members) || members.length < MIN_TEAM_MEMBERS) {
+      throw new FarmError(
+        `kind "team" requires members[] with at least ${MIN_TEAM_MEMBERS} agents`,
+      );
+    }
+    for (let i = 0; i < members.length; i += 1) {
+      const member = members[i];
+      if (!member || typeof member !== "object" || Array.isArray(member)) {
+        throw new FarmError(`members[${i}] must be an object with role, summary, and pack`);
+      }
+      const role = typeof member.role === "string" ? member.role.trim() : "";
+      const summary = typeof member.summary === "string" ? member.summary.trim() : "";
+      if (!role) throw new FarmError(`members[${i}].role is required`);
+      if (!summary) throw new FarmError(`members[${i}].summary is required`);
+      const packError = memberPackError(i, member.pack);
+      if (packError) throw new FarmError(packError);
+    }
+    if (pack.shared !== undefined) {
+      if (!pack.shared || typeof pack.shared !== "object" || Array.isArray(pack.shared)) {
+        throw new FarmError("shared must be an object.");
+      }
+      if (
+        pack.shared.gettingStarted !== undefined &&
+        typeof pack.shared.gettingStarted !== "string"
+      ) {
+        throw new FarmError("shared.gettingStarted must be a string (Hermes install steps).");
+      }
+    }
+    return;
+  }
+  if (fmt === TEAM_PACK_FORMAT) {
+    throw new FarmError(`kind "agent" cannot use pack.format "${TEAM_PACK_FORMAT}"`);
+  }
+  if (Array.isArray(pack.members) && pack.members.length > 0) {
+    throw new FarmError('kind "agent" listings cannot include members[] — use kind "team"');
+  }
+}
+
 export function buildListingPayload({
   kind,
   name,
@@ -271,6 +335,7 @@ export function buildListingPayload({
   }
 
   const parsedPack = parsePackObject(pack);
+  validateListingPack(parsedKind, parsedPack);
   const payload = {
     kind: parsedKind,
     name: parsedName,
@@ -292,7 +357,11 @@ export function buildListingPayload({
 export function listingPayloadSummary(payload) {
   const pack = payload.pack && typeof payload.pack === "object" ? payload.pack : {};
   const skills = Array.isArray(pack.skills) ? pack.skills : [];
+  const members = Array.isArray(pack.members) ? pack.members : [];
   const encoded = JSON.stringify(pack);
+  const memberRoles = members
+    .filter((m) => m && typeof m === "object" && typeof m.role === "string" && m.role.trim())
+    .map((m) => m.role.trim());
   return {
     kind: payload.kind,
     name: payload.name,
@@ -307,6 +376,8 @@ export function listingPayloadSummary(payload) {
       packVersion: pack.packVersion,
       runtime: pack.runtime || [],
       skillCount: skills.length,
+      memberCount: members.length,
+      memberRoles,
       encodedChars: encoded.length,
     },
   };

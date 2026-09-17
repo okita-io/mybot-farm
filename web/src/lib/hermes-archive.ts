@@ -27,6 +27,47 @@ export function existingHermesArchiveHref(
   return undefined;
 }
 
+function packPathStem(packPath: string): string {
+  const filename = packPath.split("/").pop()?.split("?")[0] ?? packPath;
+  return filename
+    .replace(/\.hermes\.tar\.gz$/i, "")
+    .replace(/\.tar\.gz$/i, "")
+    .replace(/\.json$/i, "");
+}
+
+/** Public href for a team member pack ref. Prefers a Hermes tarball when one exists. */
+export function listingMemberHref(packRef: unknown): string | undefined {
+  if (typeof packRef !== "string" || !packRef.trim()) {
+    return undefined;
+  }
+
+  const raw = packRef.trim();
+  if (/^https?:\/\//i.test(raw)) {
+    return raw;
+  }
+
+  if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(raw)) {
+    return existingHermesArchiveHref("agent", raw) ?? `/packs/agents/${raw}.json`;
+  }
+
+  const href = raw.startsWith("/")
+    ? raw
+    : `/packs/${raw.replace(/^\/?packs\//, "")}`;
+
+  if (/\.tar\.gz$/i.test(href)) {
+    return href;
+  }
+
+  if (href.includes("/agents/")) {
+    const archive = existingHermesArchiveHref("agent", packPathStem(href));
+    if (archive) {
+      return archive;
+    }
+  }
+
+  return href;
+}
+
 export function withHermesRuntime<T extends { runtime?: string[] }>(
   pack: T,
   kind: StallKind,

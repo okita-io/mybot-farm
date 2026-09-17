@@ -23,6 +23,32 @@ const SAMPLE_PACK = {
   memory: [],
 };
 
+const SAMPLE_TEAM_PACK = {
+  format: "mybot.farm/team-pack",
+  version: "0.1",
+  runtime: ["hermes"],
+  profile: {
+    name: "Smoke Crew",
+    title: "Two-agent smoke team",
+    description: "Minimal free team listing posted with a seller API key.",
+  },
+  members: [
+    {
+      role: "programmer",
+      summary: "Implements small diffs.",
+      pack: "agents/patch.json",
+    },
+    {
+      role: "debugger",
+      summary: "Reproduces and verifies.",
+      pack: "agents/probe.json",
+    },
+  ],
+  shared: {
+    gettingStarted: "Install Patch and Probe, then follow the handoffs.",
+  },
+};
+
 const LISTING_FIELDS = {
   kind: "agent",
   name: "Smoke Bot",
@@ -367,4 +393,42 @@ test("owned slug upsert forwards id and pack version", async () => {
   } finally {
     globalThis.fetch = prev;
   }
+});
+
+test("team pack dry-run", async () => {
+  let called = 0;
+  const prev = globalThis.fetch;
+  globalThis.fetch = async () => {
+    called += 1;
+    throw new Error("dry-run must not POST");
+  };
+  try {
+    const payload = await postListing({
+      args: listingArgs({
+        kind: "team",
+        name: "Smoke Crew",
+        title: "Two-agent smoke team",
+        description: "Minimal free team listing posted with a seller API key.",
+        pack: { ...SAMPLE_TEAM_PACK },
+        apiKey: TEST_KEY,
+        dryRun: true,
+      }),
+    });
+    assert.equal(payload.ok, true);
+    assert.equal(payload.dryRun, true);
+    assert.equal(payload.payload.kind, "team");
+    assert.equal(payload.payload.pack.format, "mybot.farm/team-pack");
+    assert.equal(payload.payload.pack.memberCount, 2);
+    assert.equal(called, 0);
+  } finally {
+    globalThis.fetch = prev;
+  }
+});
+
+test("kind team rejects agent-pack", async () => {
+  const payload = await postListing({
+    args: listingArgs({ kind: "team", apiKey: TEST_KEY, dryRun: true }),
+  });
+  assert.equal(payload.ok, false);
+  assert.match(payload.error, /team-pack/);
 });

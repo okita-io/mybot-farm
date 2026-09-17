@@ -20,6 +20,42 @@ const SAMPLE_PACK = `{
   "memory": []
 }`;
 
+const SAMPLE_TEAM_PACK = `{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": ["hermes"],
+  "profile": {
+    "name": "",
+    "title": "",
+    "description": ""
+  },
+  "members": [
+    {
+      "role": "lead",
+      "summary": "What this member does.",
+      "pack": "agents/member-one.json"
+    },
+    {
+      "role": "reviewer",
+      "summary": "What this member does.",
+      "pack": "agents/member-two.json"
+    }
+  ],
+  "topology": {
+    "kind": "pair",
+    "handoffs": ["Lead drafts → reviewer checks → done"]
+  },
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "One-line team invariant. Neither member spends money without the user."
+      }
+    ],
+    "gettingStarted": "Install each member (farm_plant the member slugs, or hermes profile import each tarball), then follow the handoffs."
+  }
+}`;
+
 const PRICE_SUGGESTIONS = ["2.00", "5.00", "8.00", "10.00"] as const;
 
 export type EditableListing = {
@@ -163,7 +199,19 @@ export function SellForm({
           <select
             className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             value={kind}
-            onChange={(event) => setKind(event.target.value as "agent" | "team")}
+            onChange={(event) => {
+              const next = event.target.value as "agent" | "team";
+              setKind(next);
+              setPackText((current) => {
+                if (current.trim() === SAMPLE_PACK.trim() && next === "team") {
+                  return SAMPLE_TEAM_PACK;
+                }
+                if (current.trim() === SAMPLE_TEAM_PACK.trim() && next === "agent") {
+                  return SAMPLE_PACK;
+                }
+                return current;
+              });
+            }}
           >
             <option value="agent">Agent</option>
             <option value="team">Team</option>
@@ -288,6 +336,11 @@ export function SellForm({
           className="mt-2 w-full rounded-3xl border border-border bg-background px-4 py-3 font-mono text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         />
       </label>
+      <p className="text-sm font-normal text-muted-foreground">
+        {kind === "team"
+          ? "Teams use format mybot.farm/team-pack with at least two members[]. Each member needs role, summary, and pack (a catalog path like agents/patch.json, a slug, a .hermes.tar.gz, or a nested agent-pack). farm_post does not upload tarballs."
+          : "Agents use format mybot.farm/agent-pack. Switch Kind to Team for a crew of agents."}
+      </p>
       {error ? (
         <p className="text-sm text-destructive" role="alert">
           {error}

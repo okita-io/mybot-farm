@@ -219,18 +219,46 @@ def _member_plans_from_stall(stall: dict[str, Any], base_url: str) -> list[Membe
         if not isinstance(member, dict):
             continue
         href = member.get("href") or ""
-        if not is_hermes_archive(href):
+        archive = member_archive_href(href, base_url)
+        if not archive:
             continue
-        name = pack_dir_stem(href)
+        name = pack_dir_stem(archive)
         plans.append(
             MemberPlan(
                 name=name,
-                href=absolute_url(base_url, href),
+                href=archive,
                 role=str(member.get("name") or member.get("role") or name),
                 summary="",
             )
         )
     return plans
+
+
+def member_archive_href(pack_ref: Any, base_url: str) -> str:
+    """Resolve a members[].pack / stall member href to a Hermes tarball URL."""
+    if isinstance(pack_ref, dict):
+        return ""
+    if not isinstance(pack_ref, str):
+        return ""
+    rel = pack_ref.strip()
+    if not rel:
+        return ""
+    if is_hermes_archive(rel):
+        if rel.startswith("http://") or rel.startswith("https://") or rel.startswith("/"):
+            return absolute_url(base_url, rel)
+        return absolute_url(base_url, f"/packs/{rel.lstrip('/')}")
+    if re.fullmatch(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*", rel):
+        return absolute_url(base_url, f"/packs/agents/{rel}.hermes.tar.gz")
+    if rel.lower().endswith(".json"):
+        tarball = re.sub(r"\.json$", ".hermes.tar.gz", rel, flags=re.I)
+        if (
+            tarball.startswith("http://")
+            or tarball.startswith("https://")
+            or tarball.startswith("/")
+        ):
+            return absolute_url(base_url, tarball)
+        return absolute_url(base_url, f"/packs/{tarball.lstrip('/')}")
+    return ""
 
 
 def _member_plans_from_pack(pack: dict[str, Any], base_url: str) -> list[MemberPlan]:
@@ -239,15 +267,14 @@ def _member_plans_from_pack(pack: dict[str, Any], base_url: str) -> list[MemberP
     for member in members:
         if not isinstance(member, dict):
             continue
-        rel = member.get("pack") or ""
-        if not is_hermes_archive(rel):
+        archive = member_archive_href(member.get("pack"), base_url)
+        if not archive:
             continue
-        href = rel if rel.startswith("http") else f"{base_url}/packs/{rel.lstrip('/')}"
-        name = str(member.get("slug") or pack_dir_stem(rel))
+        name = str(member.get("slug") or pack_dir_stem(archive))
         plans.append(
             MemberPlan(
                 name=name,
-                href=href,
+                href=archive,
                 role=str(member.get("role") or name),
                 summary=str(member.get("summary") or ""),
             )
@@ -299,6 +326,13 @@ def build_plant_plan(
             homepage=str((pack.get("manifest") or {}).get("homepage") or stall.get("pageUrl") or ""),
             stall_id=stall_id,
             pack_version=pack_version,
+        )
+
+    if is_team:
+        raise PlantError(
+            f"Team '{slug}' has no Hermes member archives. members[].pack must be a "
+            ".hermes.tar.gz path/URL, or a catalog agent slug/JSON whose stall has a tarball "
+            "(e.g. agents/patch.json). farm_post does not upload tarballs."
         )
 
     if is_hermes_archive(archive_href):

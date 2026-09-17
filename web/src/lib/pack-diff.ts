@@ -8,7 +8,10 @@ function skillNames(pack: FarmPack | null | undefined): string[] {
 
 function memberRoles(pack: FarmPack | null | undefined): string[] {
   return (pack?.members ?? [])
-    .map((member) => (member.role ?? member.pack ?? "").trim())
+    .map((member) => {
+      const packRef = typeof member.pack === "string" ? member.pack : "";
+      return (member.role ?? packRef).trim();
+    })
     .filter(Boolean);
 }
 

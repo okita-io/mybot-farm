@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
-import { validateGafPack } from "./gaf-pack.ts";
+import { validateGafPack, validateListingPack } from "./gaf-pack.ts";
 
 const fixtures = join(dirname(fileURLToPath(import.meta.url)), "../../public/packs/agents");
 const giftDay = JSON.parse(readFileSync(join(fixtures, "gift-day.json"), "utf8"));
@@ -24,6 +24,14 @@ describe("validateGafPack", () => {
         const pack = JSON.parse(readFileSync(join(dir, name), "utf8"));
         const result = validateGafPack(pack);
         assert.equal(result.ok, true, `${kind}/${name}: ${result.ok ? "" : result.error}`);
+        if (kind === "teams") {
+          const listing = validateListingPack("team", pack);
+          assert.equal(
+            listing.ok,
+            true,
+            `${kind}/${name} listing: ${listing.ok ? "" : listing.error}`,
+          );
+        }
       }
     }
   });
@@ -88,5 +96,86 @@ describe("validateGafPack", () => {
   it("rejects invalid visibility", () => {
     const result = validateGafPack({ visibility: "private" });
     assert.equal(result.ok, false);
+  });
+});
+
+const TEAM_PACK = {
+  format: "mybot.farm/team-pack",
+  version: "0.1",
+  runtime: ["hermes"],
+  members: [
+    {
+      role: "programmer",
+      summary: "Implements small diffs.",
+      pack: "agents/patch.json",
+    },
+    {
+      role: "debugger",
+      summary: "Reproduces and verifies.",
+      pack: "agents/probe.json",
+    },
+  ],
+  shared: {
+    gettingStarted: "Install Patch and Probe.",
+  },
+};
+
+describe("validateListingPack", () => {
+  it("accepts a two-member team-pack", () => {
+    assert.deepEqual(validateListingPack("team", TEAM_PACK), { ok: true });
+  });
+
+  it("accepts nested agent-pack members", () => {
+    const nested = {
+      ...TEAM_PACK,
+      members: [
+        {
+          role: "programmer",
+          summary: "Implements.",
+          pack: { format: "mybot.farm/agent-pack", profile: { name: "A" } },
+        },
+        {
+          role: "debugger",
+          summary: "Verifies.",
+          pack: { format: "mybot.farm/agent-pack", profile: { name: "B" } },
+        },
+      ],
+    };
+    assert.deepEqual(validateListingPack("team", nested), { ok: true });
+  });
+
+  it("rejects a team without team-pack format", () => {
+    const result = validateListingPack("team", { format: "mybot.farm/agent-pack" });
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /team-pack/);
+    }
+  });
+
+  it("rejects a team with one member", () => {
+    const result = validateListingPack("team", {
+      format: "mybot.farm/team-pack",
+      members: [{ role: "solo", summary: "Alone", pack: "agents/patch.json" }],
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /at least 2/);
+    }
+  });
+
+  it("rejects an agent listing that uses team-pack", () => {
+    const result = validateListingPack("agent", TEAM_PACK);
+    assert.equal(result.ok, false);
+  });
+
+  it("rejects an agent listing with members[]", () => {
+    const result = validateListingPack("agent", {
+      format: "mybot.farm/agent-pack",
+      members: TEAM_PACK.members,
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /kind "team"/);
+    }
   });
 });

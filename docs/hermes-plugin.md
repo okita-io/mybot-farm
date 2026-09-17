@@ -122,12 +122,18 @@ python3 packages/hermes-mybot-farm/bin/farm-plant post \
   --description "Minimal free GAF listing posted with a seller API key." \
   --category Experimental --price-cents 0 --pack ./smoke.gaf.json --dry-run
 python3 packages/hermes-mybot-farm/bin/farm-plant post \
+  --kind team --name "Smoke Crew" --title "Two-agent smoke team" \
+  --description "Minimal free team listing posted with a seller API key." \
+  --category Experimental --price-cents 0 --pack ./smoke-crew.gaf.json --dry-run
+python3 packages/hermes-mybot-farm/bin/farm-plant post \
   --kind agent --name "Smoke Bot" --title "API key smoke listing" \
   --description "Minimal free GAF listing posted with a seller API key." \
   --category Experimental --price-cents 0 --pack ./smoke.gaf.json
 ```
 
-Human-readable success prints the slug and `https://mybot.farm{pagePath}`. `--json` prints the machine payload (`id`, `stallId`, `packVersion`, `updated`). `--dry-run` validates locally (category/price/pack) and redacts the key.
+Human-readable success prints the slug and `https://mybot.farm{pagePath}` (`/agents/…` or `/teams/…`). `--json` prints the machine payload (`id`, `stallId`, `packVersion`, `updated`). `--dry-run` validates locally (category/price/pack, including team `members[]`) and redacts the key.
+
+`kind: "team"` requires `format: "mybot.farm/team-pack"` and at least two `members[]`. Each member needs `role`, `summary`, and `pack` (catalog path such as `agents/patch.json`, a slug, a `.hermes.tar.gz` URL, or a nested agent-pack). Hermes plant of a posted team works when those member refs resolve to existing catalog tarballs. The plugin does not upload binaries.
 
 If you already own that slug, `farm_post` **updates the same stall** (skills, soul/memory, other GAF fields) and bumps `packVersion`. Omit `packVersion` to auto-increment. The farm commits the pack to `okita-io/mybot-farm-catalog` and appends a revision (`GET /api/stalls/{slug}/revisions`). Pass `--slug` / `slug` to target it, or `farm_update` which requires the slug. Catalog stalls cannot be overwritten (`409 catalog_reserved`).
 
@@ -158,6 +164,9 @@ python3 packages/hermes-mybot-farm/bin/farm-plant plant workbench --dry-run
 python3 packages/hermes-mybot-farm/bin/farm-plant post --kind agent --name "Smoke Bot" \
   --title "API key smoke listing" --description "Minimal free GAF listing." \
   --category Experimental --price-cents 0 --pack ./smoke.gaf.json --dry-run
+python3 packages/hermes-mybot-farm/bin/farm-plant post --kind team --name "Smoke Crew" \
+  --title "Two-agent smoke team" --description "Minimal free team listing." \
+  --category Experimental --price-cents 0 --pack ./smoke-crew.gaf.json --dry-run
 ```
 
 A live plant of Scholastic Research is the small single-profile smoke (`hermes` on PATH). Workbench is the team smoke — three tarball imports + workspace + kanban. Prefer dry-run unless you mean to import.

@@ -107,6 +107,7 @@ export async function postListing({ args, pluginConfig } = { args: {} }) {
       `packVersion: ${payload.packVersion != null ? payload.packVersion : "(auto)"}`,
       `pack format: ${summary.pack?.format || "(none)"}`,
       `pack skills: ${summary.pack?.skillCount}`,
+      `pack members: ${summary.pack?.memberCount || 0}`,
       `pack encoded chars: ${summary.pack?.encodedChars}`,
       `POST ${baseUrl}/api/listings`,
       `apiKey: ${keyNote}`,

@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   existingHermesArchiveHref,
   hermesArchivePublicHref,
+  listingMemberHref,
   withHermesRuntime,
 } from "./hermes-archive.ts";
 
@@ -46,5 +47,30 @@ describe("hermes archive", () => {
       "definitely-not-a-stall",
     );
     assert.deepEqual(without.runtime, ["grok-bot"]);
+  });
+
+  it("prefers a Hermes tarball for catalog agent member refs", () => {
+    assert.equal(
+      listingMemberHref("agents/patch.json"),
+      "/packs/agents/patch.hermes.tar.gz",
+    );
+    assert.equal(
+      listingMemberHref("scholastic-research"),
+      "/packs/agents/scholastic-research.hermes.tar.gz",
+    );
+  });
+
+  it("keeps workbench member tarball paths", () => {
+    assert.equal(
+      listingMemberHref("teams/workbench/workbench-spec.hermes.tar.gz"),
+      "/packs/teams/workbench/workbench-spec.hermes.tar.gz",
+    );
+  });
+
+  it("falls back to GAF JSON when no tarball exists", () => {
+    assert.equal(
+      listingMemberHref("agents/definitely-not-a-stall.json"),
+      "/packs/agents/definitely-not-a-stall.json",
+    );
   });
 });

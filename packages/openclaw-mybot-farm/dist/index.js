@@ -24,6 +24,8 @@ var CATEGORY_LABELS = Object.freeze([
 var CATEGORY_SET = new Set(CATEGORY_LABELS);
 var LISTING_KINDS = Object.freeze(["agent", "team"]);
 var LISTING_KIND_SET = new Set(LISTING_KINDS);
+var TEAM_PACK_FORMAT = "mybot.farm/team-pack";
+var MIN_TEAM_MEMBERS = 2;
 var MIN_PAID_PRICE_CENTS = 200;
 var MAX_PRICE_CENTS = 999900;
 var MAX_PACK_CHARS = 5e5;
@@ -203,6 +205,59 @@ function parsePackObject(value) {
   }
   return value;
 }
+function memberPackError(index, pack) {
+  if (typeof pack === "string") {
+    return pack.trim() ? null : `members[${index}].pack must be a catalog path, slug, tarball URL, or nested agent-pack object`;
+  }
+  if (!pack || typeof pack !== "object" || Array.isArray(pack)) {
+    return `members[${index}].pack must be a catalog path, slug, tarball URL, or nested agent-pack object`;
+  }
+  if (pack.format === TEAM_PACK_FORMAT) {
+    return `members[${index}].pack nested object cannot be a team-pack`;
+  }
+  return null;
+}
+function validateListingPack(kind, pack) {
+  const fmt = typeof pack?.format === "string" ? pack.format.trim() : "";
+  if (kind === "team") {
+    if (fmt !== TEAM_PACK_FORMAT) {
+      throw new FarmError(`kind "team" requires pack.format "${TEAM_PACK_FORMAT}"`);
+    }
+    const members = pack.members;
+    if (!Array.isArray(members) || members.length < MIN_TEAM_MEMBERS) {
+      throw new FarmError(
+        `kind "team" requires members[] with at least ${MIN_TEAM_MEMBERS} agents`
+      );
+    }
+    for (let i = 0; i < members.length; i += 1) {
+      const member = members[i];
+      if (!member || typeof member !== "object" || Array.isArray(member)) {
+        throw new FarmError(`members[${i}] must be an object with role, summary, and pack`);
+      }
+      const role = typeof member.role === "string" ? member.role.trim() : "";
+      const summary = typeof member.summary === "string" ? member.summary.trim() : "";
+      if (!role) throw new FarmError(`members[${i}].role is required`);
+      if (!summary) throw new FarmError(`members[${i}].summary is required`);
+      const packError = memberPackError(i, member.pack);
+      if (packError) throw new FarmError(packError);
+    }
+    if (pack.shared !== void 0) {
+      if (!pack.shared || typeof pack.shared !== "object" || Array.isArray(pack.shared)) {
+        throw new FarmError("shared must be an object.");
+      }
+      if (pack.shared.gettingStarted !== void 0 && typeof pack.shared.gettingStarted !== "string") {
+        throw new FarmError("shared.gettingStarted must be a string (Hermes install steps).");
+      }
+    }
+    return;
+  }
+  if (fmt === TEAM_PACK_FORMAT) {
+    throw new FarmError(`kind "agent" cannot use pack.format "${TEAM_PACK_FORMAT}"`);
+  }
+  if (Array.isArray(pack.members) && pack.members.length > 0) {
+    throw new FarmError('kind "agent" listings cannot include members[] \u2014 use kind "team"');
+  }
+}
 function buildListingPayload({
   kind,
   name,
@@ -234,6 +289,7 @@ function buildListingPayload({
     throw new FarmError(PRICE_HINT);
   }
   const parsedPack = parsePackObject(pack);
+  validateListingPack(parsedKind, parsedPack);
   const payload = {
     kind: parsedKind,
     name: parsedName,
@@ -254,7 +310,9 @@ function buildListingPayload({
 function listingPayloadSummary(payload) {
   const pack = payload.pack && typeof payload.pack === "object" ? payload.pack : {};
   const skills = Array.isArray(pack.skills) ? pack.skills : [];
+  const members = Array.isArray(pack.members) ? pack.members : [];
   const encoded = JSON.stringify(pack);
+  const memberRoles = members.filter((m) => m && typeof m === "object" && typeof m.role === "string" && m.role.trim()).map((m) => m.role.trim());
   return {
     kind: payload.kind,
     name: payload.name,
@@ -269,6 +327,8 @@ function listingPayloadSummary(payload) {
       packVersion: pack.packVersion,
       runtime: pack.runtime || [],
       skillCount: skills.length,
+      memberCount: members.length,
+      memberRoles,
       encodedChars: encoded.length
     }
   };
@@ -664,6 +724,7 @@ async function postListing({ args, pluginConfig } = { args: {} }) {
       `packVersion: ${payload.packVersion != null ? payload.packVersion : "(auto)"}`,
       `pack format: ${summary.pack?.format || "(none)"}`,
       `pack skills: ${summary.pack?.skillCount}`,
+      `pack members: ${summary.pack?.memberCount || 0}`,
       `pack encoded chars: ${summary.pack?.encodedChars}`,
       `POST ${baseUrl}/api/listings`,
       `apiKey: ${keyNote}`
@@ -865,9 +926,11 @@ var index_default = defineToolPlugin({
     tool({
       name: "farm_post",
       label: "Farm Post",
-      description: "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. If you already own that slug, this updates the same stall (same URL) and bumps packVersion. Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). category is an exact farm label (Lifestyle, Coding, Experimental, \u2026). priceCents is 0 (free) or 200\u2013999900. Paid listings need Stripe Connect on the seller (403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money. Catalog/agency slugs cannot be overwritten.",
+      description: 'Publish a listing to mybot.farm (POST /api/listings) with a seller API key. If you already own that slug, this updates the same stall (same URL) and bumps packVersion. Omit packVersion to auto-increment; history appears on the stall and GET /api/stalls/{slug}/revisions. Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). kind "team" requires format mybot.farm/team-pack and members[] (at least two): each member needs role, summary, and pack (catalog path, slug, tarball URL, or nested agent-pack). kind "agent" uses mybot.farm/agent-pack and cannot include members[]. category is an exact farm label (Lifestyle, Coding, Experimental, \u2026). priceCents is 0 (free) or 200\u2013999900. Paid listings need Stripe Connect on the seller (403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money. Catalog/agency slugs cannot be overwritten.',
       parameters: Type.Object({
-        kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
+        kind: Type.String({
+          description: 'Listing kind: "agent" or "team". Teams land on /teams/{slug} and need a team-pack with members[].'
+        }),
         name: Type.String({ description: "Listing name. Used to derive the slug on first publish." }),
         title: Type.String({ description: "Short stall title shown on the farm." }),
         description: Type.String({ description: "Stall description (non-empty)." }),
@@ -879,7 +942,7 @@ var index_default = defineToolPlugin({
         }),
         pack: Type.Optional(
           Type.Unknown({
-            description: "GAF JSON object (mybot.farm/agent-pack or team-pack). OpenClaw plants GAF; this posts GAF."
+            description: "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack). OpenClaw plants GAF; this posts GAF."
           })
         ),
         packPath: Type.Optional(
@@ -922,9 +985,11 @@ var index_default = defineToolPlugin({
     tool({
       name: "farm_update",
       label: "Farm Update",
-      description: "Update a seller-owned stall in place (same slug). Same fields as farm_post plus required slug. Replaces GAF pack JSON (skills, soul/memory) and bumps packVersion. Catalog slugs are reserved.",
+      description: "Update a seller-owned stall in place (same slug). Same fields as farm_post plus required slug. Replaces GAF pack JSON (skills, soul/memory) and bumps packVersion (omit packVersion to auto-increment). The farm publishes the pack to the catalog repo. Catalog slugs are reserved.",
       parameters: Type.Object({
-        kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
+        kind: Type.String({
+          description: 'Listing kind: "agent" or "team". Teams land on /teams/{slug} and need a team-pack with members[].'
+        }),
         name: Type.String({ description: "Listing name." }),
         title: Type.String({ description: "Short stall title shown on the farm." }),
         description: Type.String({ description: "Stall description (non-empty)." }),
@@ -937,7 +1002,7 @@ var index_default = defineToolPlugin({
         slug: Type.String({ description: "Existing stall slug to update." }),
         pack: Type.Optional(
           Type.Unknown({
-            description: "GAF JSON object. OpenClaw plants GAF; this posts GAF."
+            description: "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack). OpenClaw plants GAF; this posts GAF."
           })
         ),
         packPath: Type.Optional(

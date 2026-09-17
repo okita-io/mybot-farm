@@ -124,7 +124,8 @@ function inputSchemaFor(name: ToolName) {
         },
         pack: {
           type: "object",
-          description: "GAF JSON object (max ~500KB encoded)",
+          description:
+            "GAF JSON object (max ~500KB encoded). Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack).",
         },
         apiKey: {
           type: "string",

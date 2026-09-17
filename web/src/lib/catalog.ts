@@ -1,6 +1,13 @@
 import { getAgencyPack, getAgencyStalls } from "@/lib/agency-catalog";
-import type { FarmPack } from "@/lib/pack-files";
-import { getPack, packCardStats, packSkillList, packSummaryFields } from "@/lib/pack-files";
+import {
+  getPack,
+  listingMemberHref,
+  memberPackPath,
+  packCardStats,
+  packSkillList,
+  packSummaryFields,
+  type FarmPack,
+} from "@/lib/pack-files";
 import { getStallStatsBySlugs } from "@/lib/engagement";
 import {
   getListingBySlug,
@@ -39,10 +46,18 @@ export function listingToStall(
   author?: Stall["author"],
 ): Stall {
   const pack = listing.pack as FarmPack;
-  const members = (pack.members ?? []).map((member) => ({
-    name: member.role ?? member.pack ?? "Member",
-    href: member.pack ?? `/api/packs/${listing.slug}`,
-  }));
+  const members = (pack.members ?? [])
+    .map((member) => {
+      const href = listingMemberHref(member.pack);
+      if (!href) {
+        return null;
+      }
+      return {
+        name: member.role ?? memberPackPath(member.pack) ?? "Member",
+        href,
+      };
+    })
+    .filter((member): member is { name: string; href: string } => Boolean(member));
 
   return {
     kind: listing.kind === "team" ? "team" : "agent",
@@ -204,14 +219,17 @@ export async function catalogPackSkillList(slug: string) {
     skills: pack.skills ?? [],
     memory: pack.memory ?? [],
     sharedMemory: pack.shared?.memory ?? [],
-    members: (pack.members ?? []).map((member) => ({
-      role: member.role,
-      summary: member.summary,
-      pack: member.pack,
-      slug: member.pack ? packPathStem(member.pack) : undefined,
-      name: undefined,
-      skills: [] as FarmPack["skills"],
-    })),
+    members: (pack.members ?? []).map((member) => {
+      const path = memberPackPath(member.pack);
+      return {
+        role: member.role,
+        summary: member.summary,
+        pack: member.pack,
+        slug: path ? packPathStem(path) : undefined,
+        name: undefined,
+        skills: [] as FarmPack["skills"],
+      };
+    }),
   };
 }
 

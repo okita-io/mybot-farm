@@ -12,6 +12,7 @@ from plant import (
     PlantError,
     build_plant_plan,
     expand_braces,
+    member_archive_href,
     parse_kanban,
     parse_team_dirs,
     parse_team_files,
@@ -166,6 +167,59 @@ class PlanTests(unittest.TestCase):
 
         self.assertTrue(callable(plant_mod.list_boards))
         self.assertTrue(callable(plant_mod.create_board))
+
+    def test_member_json_resolves_to_sibling_tarball(self) -> None:
+        href = member_archive_href("agents/patch.json", "https://mybot.farm")
+        self.assertTrue(href.endswith("/packs/agents/patch.hermes.tar.gz"))
+        slug_href = member_archive_href("patch", "https://mybot.farm")
+        self.assertTrue(slug_href.endswith("/packs/agents/patch.hermes.tar.gz"))
+
+    def test_posted_team_of_catalog_agents_plans_member_tarballs(self) -> None:
+        stall = {
+            "kind": "team",
+            "slug": "smoke-crew",
+            "pageUrl": "https://mybot.farm/teams/smoke-crew",
+            "members": [
+                {"name": "programmer", "href": "/packs/agents/patch.hermes.tar.gz"},
+                {"name": "debugger", "href": "/packs/agents/probe.hermes.tar.gz"},
+            ],
+        }
+        pack = {
+            "format": "mybot.farm/team-pack",
+            "slug": "smoke-crew",
+            "runtime": ["hermes"],
+            "members": [
+                {"role": "programmer", "summary": "Implements.", "pack": "agents/patch.json"},
+                {"role": "debugger", "summary": "Verifies.", "pack": "agents/probe.json"},
+            ],
+            "shared": {"gettingStarted": "Install Patch and Probe."},
+        }
+        plan = build_plant_plan(stall, pack, "https://mybot.farm")
+        self.assertEqual(plan.kind, "team")
+        self.assertEqual(target_profile_names(plan), ["patch", "probe"])
+
+    def test_team_without_archives_explains_gap(self) -> None:
+        stall = {"kind": "team", "slug": "paper-crew", "downloadHref": "/api/packs/paper-crew"}
+        pack = {
+            "format": "mybot.farm/team-pack",
+            "slug": "paper-crew",
+            "members": [
+                {
+                    "role": "a",
+                    "summary": "A",
+                    "pack": {"format": "mybot.farm/agent-pack", "profile": {"name": "A"}},
+                },
+                {
+                    "role": "b",
+                    "summary": "B",
+                    "pack": {"format": "mybot.farm/agent-pack", "profile": {"name": "B"}},
+                },
+            ],
+        }
+        with self.assertRaises(PlantError) as ctx:
+            build_plant_plan(stall, pack, "https://mybot.farm")
+        self.assertIn("no Hermes member archives", str(ctx.exception))
+        self.assertIn("farm_post does not upload tarballs", str(ctx.exception))
 
 
 if __name__ == "__main__":

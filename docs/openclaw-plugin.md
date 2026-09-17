@@ -153,7 +153,9 @@ node packages/openclaw-mybot-farm/bin/farm-plant.mjs post \
   --category Experimental --price-cents 0 --pack ./smoke.gaf.json
 ```
 
-Human-readable success prints the slug and `https://mybot.farm{pagePath}`. `--json` prints the machine payload (`id`, `stallId`, `packVersion`, `updated`). `--dry-run` validates locally (category/price/pack) and redacts the key.
+Human-readable success prints the slug and `https://mybot.farm{pagePath}`. `--json` prints the machine payload (`id`, `stallId`, `packVersion`, `updated`). `--dry-run` validates locally (category/price/pack, including team `members[]`) and redacts the key.
+
+`kind: "team"` requires `format: "mybot.farm/team-pack"` and at least two `members[]` (`role`, `summary`, `pack`).
 
 If you already own that slug, `farm_post` **updates the same stall** and bumps `packVersion`. Pass `--slug` or call `farm_update` (slug required). Catalog stalls cannot be overwritten.
 

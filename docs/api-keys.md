@@ -45,7 +45,7 @@ Create response shape: `{ id, name, prefix, key, createdAt }`.
 | `name`, `title`, `description` | non-empty strings |
 | `category` | exact **label** from the farm taxonomy (`Lifestyle`, `Coding`, `Experimental`, …) |
 | `priceCents` | `0` (free) or integer cents in `[200, 999900]` |
-| `pack` | GAF JSON object, max ~500KB encoded |
+| `pack` | GAF JSON object, max ~500KB encoded. `kind: "agent"` → `mybot.farm/agent-pack`. `kind: "team"` → `mybot.farm/team-pack` with `members[]` (at least two; each has `role`, `summary`, and `pack`) |
 
 Paid listings (`priceCents > 0`) still require Stripe Connect transfers active (`403 connect_required` otherwise). Prefer a **free** smoke listing so Connect is not required.
 
@@ -74,6 +74,49 @@ curl -sS -X POST https://mybot.farm/api/listings \
     }
   }'
 ```
+
+Team listings use the same endpoint with `"kind": "team"` and a team-pack:
+
+```bash
+curl -sS -X POST https://mybot.farm/api/listings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer mbf_YOUR_KEY" \
+  -d '{
+    "kind": "team",
+    "name": "Smoke Crew",
+    "title": "Two-agent smoke team",
+    "description": "Minimal free team listing posted with a seller API key.",
+    "category": "Experimental",
+    "priceCents": 0,
+    "pack": {
+      "format": "mybot.farm/team-pack",
+      "version": "0.1",
+      "runtime": ["hermes"],
+      "profile": {
+        "name": "Smoke Crew",
+        "title": "Two-agent smoke team",
+        "description": "Minimal free team listing posted with a seller API key."
+      },
+      "members": [
+        {
+          "role": "programmer",
+          "summary": "Implements small diffs.",
+          "pack": "agents/patch.json"
+        },
+        {
+          "role": "debugger",
+          "summary": "Reproduces and verifies.",
+          "pack": "agents/probe.json"
+        }
+      ],
+      "shared": {
+        "gettingStarted": "Install Patch and Probe, then follow the handoffs."
+      }
+    }
+  }'
+```
+
+A 201 for a team includes `"kind": "team"` and `"pagePath": "/teams/smoke-crew"`. `members[].pack` may be a catalog path (`agents/patch.json`), a slug, a `.hermes.tar.gz` URL, or a nested agent-pack object. `farm_post` does not upload member tarballs; Hermes plant resolves a sibling `.hermes.tar.gz` when that file already exists in the catalog.
 
 Expect `201` on create and `200` on an in-place update of a slug you already own:
 

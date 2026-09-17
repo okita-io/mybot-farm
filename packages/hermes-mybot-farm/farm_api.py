@@ -32,6 +32,9 @@ CATEGORY_LABELS = frozenset(
     }
 )
 LISTING_KINDS = frozenset({"agent", "team"})
+AGENT_PACK_FORMAT = "mybot.farm/agent-pack"
+TEAM_PACK_FORMAT = "mybot.farm/team-pack"
+MIN_TEAM_MEMBERS = 2
 MIN_PAID_PRICE_CENTS = 200
 MAX_PRICE_CENTS = 999_900
 MAX_PACK_CHARS = 500_000
@@ -319,6 +322,72 @@ def parse_pack_object(value: Any) -> dict[str, Any]:
     return value
 
 
+def _member_pack_error(index: int, pack: Any) -> str | None:
+    if isinstance(pack, str):
+        return (
+            None
+            if pack.strip()
+            else (
+                f"members[{index}].pack must be a catalog path, slug, tarball URL, "
+                "or nested agent-pack object"
+            )
+        )
+    if not isinstance(pack, dict) or isinstance(pack, list):
+        return (
+            f"members[{index}].pack must be a catalog path, slug, tarball URL, "
+            "or nested agent-pack object"
+        )
+    if pack.get("format") == TEAM_PACK_FORMAT:
+        return f"members[{index}].pack nested object cannot be a team-pack"
+    return None
+
+
+def validate_listing_pack(kind: str, pack: dict[str, Any]) -> None:
+    """Match web/src/lib/gaf-pack.ts validateListingPack for farm_post dry-run."""
+    fmt = pack.get("format").strip() if isinstance(pack.get("format"), str) else ""
+    if kind == "team":
+        if fmt != TEAM_PACK_FORMAT:
+            raise FarmError(f'kind "team" requires pack.format "{TEAM_PACK_FORMAT}"')
+        members = pack.get("members")
+        if not isinstance(members, list) or len(members) < MIN_TEAM_MEMBERS:
+            raise FarmError(
+                f'kind "team" requires members[] with at least {MIN_TEAM_MEMBERS} agents'
+            )
+        for i, member in enumerate(members):
+            if not isinstance(member, dict) or isinstance(member, list):
+                raise FarmError(
+                    f"members[{i}] must be an object with role, summary, and pack"
+                )
+            role = member.get("role").strip() if isinstance(member.get("role"), str) else ""
+            summary = (
+                member.get("summary").strip()
+                if isinstance(member.get("summary"), str)
+                else ""
+            )
+            if not role:
+                raise FarmError(f"members[{i}].role is required")
+            if not summary:
+                raise FarmError(f"members[{i}].summary is required")
+            pack_error = _member_pack_error(i, member.get("pack"))
+            if pack_error:
+                raise FarmError(pack_error)
+        shared = pack.get("shared")
+        if shared is not None:
+            if not isinstance(shared, dict) or isinstance(shared, list):
+                raise FarmError("shared must be an object.")
+            getting = shared.get("gettingStarted")
+            if getting is not None and not isinstance(getting, str):
+                raise FarmError(
+                    "shared.gettingStarted must be a string (Hermes install steps)."
+                )
+        return
+    if fmt == TEAM_PACK_FORMAT:
+        raise FarmError(f'kind "agent" cannot use pack.format "{TEAM_PACK_FORMAT}"')
+    members = pack.get("members")
+    if isinstance(members, list) and members:
+        raise FarmError('kind "agent" listings cannot include members[] — use kind "team"')
+
+
 def build_listing_payload(
     *,
     kind: Any,
@@ -351,6 +420,7 @@ def build_listing_payload(
         raise FarmError(PRICE_HINT)
 
     parsed_pack = parse_pack_object(pack)
+    validate_listing_pack(parsed_kind, parsed_pack)
     payload: dict[str, Any] = {
         "kind": parsed_kind,
         "name": parsed_name,
@@ -370,7 +440,13 @@ def build_listing_payload(
 def listing_payload_summary(payload: dict[str, Any]) -> dict[str, Any]:
     pack = payload.get("pack") if isinstance(payload.get("pack"), dict) else {}
     skills = pack.get("skills") if isinstance(pack.get("skills"), list) else []
+    members = pack.get("members") if isinstance(pack.get("members"), list) else []
     encoded = json.dumps(pack, ensure_ascii=False, separators=(",", ":"))
+    roles = [
+        str(m.get("role")).strip()
+        for m in members
+        if isinstance(m, dict) and isinstance(m.get("role"), str) and str(m.get("role")).strip()
+    ]
     return {
         "kind": payload.get("kind"),
         "name": payload.get("name"),
@@ -385,6 +461,8 @@ def listing_payload_summary(payload: dict[str, Any]) -> dict[str, Any]:
             "packVersion": pack.get("packVersion"),
             "runtime": pack.get("runtime") or [],
             "skillCount": len(skills),
+            "memberCount": len(members),
+            "memberRoles": roles,
             "encodedChars": len(encoded),
         },
     }

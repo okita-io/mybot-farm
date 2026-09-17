@@ -1,5 +1,6 @@
 import { jsonResponse, notFoundResponse, optionsResponse } from "@/lib/http";
 import { catalogPackSummary, findStall, getCatalogPack } from "@/lib/catalog";
+import { memberPackPath } from "@/lib/pack-files";
 import { packPathStem, stallRecord } from "@/lib/packs";
 
 export async function GET(
@@ -32,7 +33,8 @@ export async function GET(
       scrubbed: summary.scrubbed,
       homepage: summary.homepage,
       members: (pack.members ?? []).map((member) => {
-        const memberSlug = member.pack ? packPathStem(member.pack) : undefined;
+        const path = memberPackPath(member.pack);
+        const memberSlug = path ? packPathStem(path) : undefined;
 
         return {
           role: member.role,

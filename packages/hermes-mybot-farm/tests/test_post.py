@@ -39,6 +39,32 @@ SAMPLE_PACK = {
     "memory": [],
 }
 
+SAMPLE_TEAM_PACK = {
+    "format": "mybot.farm/team-pack",
+    "version": "0.1",
+    "runtime": ["hermes"],
+    "profile": {
+        "name": "Smoke Crew",
+        "title": "Two-agent smoke team",
+        "description": "Minimal free team listing posted with a seller API key.",
+    },
+    "members": [
+        {
+            "role": "programmer",
+            "summary": "Implements small diffs.",
+            "pack": "agents/patch.json",
+        },
+        {
+            "role": "debugger",
+            "summary": "Reproduces and verifies.",
+            "pack": "agents/probe.json",
+        },
+    ],
+    "shared": {
+        "gettingStarted": "Install Patch and Probe, then follow the handoffs.",
+    },
+}
+
 LISTING_FIELDS = {
     "kind": "agent",
     "name": "Smoke Bot",
@@ -361,6 +387,101 @@ class PostTests(unittest.TestCase):
         self.assertIn("Updated", payload["text"])
         self.assertEqual(captured["posted"]["slug"], "smoke-bot")
         self.assertEqual(captured["posted"]["packVersion"], 2)
+
+    def test_team_pack_dry_run(self) -> None:
+        called = {"n": 0}
+
+        def boom(*_a, **_k):
+            called["n"] += 1
+            raise AssertionError("dry-run must not POST")
+
+        with patch("farm_api.urlopen", boom):
+            payload = json.loads(
+                farm_post(
+                    _listing_args(
+                        kind="team",
+                        name="Smoke Crew",
+                        title="Two-agent smoke team",
+                        description="Minimal free team listing posted with a seller API key.",
+                        pack=dict(SAMPLE_TEAM_PACK),
+                        apiKey=TEST_KEY,
+                        dryRun=True,
+                    )
+                )
+            )
+        self.assertTrue(payload["ok"])
+        self.assertTrue(payload["dryRun"])
+        self.assertEqual(payload["payload"]["kind"], "team")
+        self.assertEqual(payload["payload"]["pack"]["format"], "mybot.farm/team-pack")
+        self.assertEqual(payload["payload"]["pack"]["memberCount"], 2)
+        self.assertIn("programmer", payload["payload"]["pack"]["memberRoles"])
+        self.assertIn("pack members: 2", payload["text"])
+        self.assertEqual(called["n"], 0)
+
+    def test_team_listing_201_uses_teams_page(self) -> None:
+        captured: dict[str, object] = {}
+        body = json.dumps(
+            {
+                "ok": True,
+                "id": "33333333-3333-4333-8333-333333333333",
+                "stallId": "33333333-3333-4333-8333-333333333333",
+                "slug": "smoke-crew",
+                "kind": "team",
+                "pagePath": "/teams/smoke-crew",
+                "packVersion": 1,
+                "created": True,
+                "updated": False,
+                "hasReadme": False,
+            }
+        ).encode("utf-8")
+
+        def fake_urlopen(req: Request, timeout=None):
+            captured["posted"] = json.loads(req.data or b"{}")
+            return _FakeResponse(body)
+
+        os.environ["MYBOT_FARM_API_KEY"] = TEST_KEY
+        with patch("farm_api.urlopen", fake_urlopen):
+            payload = json.loads(
+                farm_post(
+                    _listing_args(
+                        kind="team",
+                        name="Smoke Crew",
+                        title="Two-agent smoke team",
+                        description="Minimal free team listing posted with a seller API key.",
+                        pack=dict(SAMPLE_TEAM_PACK),
+                    )
+                )
+            )
+
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["kind"], "team")
+        self.assertEqual(payload["slug"], "smoke-crew")
+        self.assertIn("https://mybot.farm/teams/smoke-crew", payload["text"])
+        self.assertEqual(payload["pageUrl"], "https://mybot.farm/teams/smoke-crew")
+        posted = captured.get("posted") or {}
+        self.assertEqual(posted.get("kind"), "team")
+        self.assertEqual(posted.get("pack", {}).get("format"), "mybot.farm/team-pack")
+        self.assertEqual(len(posted.get("pack", {}).get("members") or []), 2)
+
+    def test_kind_team_rejects_agent_pack(self) -> None:
+        payload = json.loads(
+            farm_post(_listing_args(kind="team", apiKey=TEST_KEY, dryRun=True))
+        )
+        self.assertFalse(payload["ok"])
+        self.assertIn("team-pack", payload["error"])
+
+    def test_kind_agent_rejects_members(self) -> None:
+        payload = json.loads(
+            farm_post(
+                _listing_args(
+                    pack={**SAMPLE_PACK, "members": SAMPLE_TEAM_PACK["members"]},
+                    apiKey=TEST_KEY,
+                    dryRun=True,
+                )
+            )
+        )
+        self.assertFalse(payload["ok"])
+        self.assertIn("kind \"team\"", payload["error"])
 
 
 if __name__ == "__main__":

@@ -168,12 +168,18 @@ export default defineToolPlugin({
         "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. " +
         "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath " +
         "to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). " +
+        'kind "team" requires format mybot.farm/team-pack and members[] (at least two): each member ' +
+        "needs role, summary, and pack (catalog path, slug, tarball URL, or nested agent-pack). " +
+        'kind "agent" uses mybot.farm/agent-pack and cannot include members[]. ' +
         "category is an exact farm label (Lifestyle, Coding, Experimental, …). " +
         "priceCents is 0 (free) or 200–999900. Paid listings need Stripe Connect on the seller " +
         "(403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money. " +
         "Catalog/agency slugs cannot be overwritten.",
       parameters: Type.Object({
-        kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
+        kind: Type.String({
+          description:
+            'Listing kind: "agent" or "team". Teams land on /teams/{slug} and need a team-pack with members[].',
+        }),
         name: Type.String({ description: "Listing name. Used to derive the slug on first publish." }),
         title: Type.String({ description: "Short stall title shown on the farm." }),
         description: Type.String({ description: "Stall description (non-empty)." }),
@@ -189,7 +195,7 @@ export default defineToolPlugin({
         pack: Type.Optional(
           Type.Unknown({
             description:
-              "GAF JSON object (mybot.farm/agent-pack or team-pack). OpenClaw plants GAF; this posts GAF.",
+              "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack). OpenClaw plants GAF; this posts GAF.",
           }),
         ),
         packPath: Type.Optional(
@@ -240,7 +246,10 @@ export default defineToolPlugin({
         "Replaces GAF pack JSON (skills, soul/memory) and bumps packVersion (omit packVersion to auto-increment). " +
         "The farm publishes the pack to the catalog repo. Catalog slugs are reserved.",
       parameters: Type.Object({
-        kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
+        kind: Type.String({
+          description:
+            'Listing kind: "agent" or "team". Teams land on /teams/{slug} and need a team-pack with members[].',
+        }),
         name: Type.String({ description: "Listing name." }),
         title: Type.String({ description: "Short stall title shown on the farm." }),
         description: Type.String({ description: "Stall description (non-empty)." }),
@@ -256,7 +265,8 @@ export default defineToolPlugin({
         slug: Type.String({ description: "Existing stall slug to update." }),
         pack: Type.Optional(
           Type.Unknown({
-            description: "GAF JSON object. OpenClaw plants GAF; this posts GAF.",
+            description:
+              "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack). OpenClaw plants GAF; this posts GAF.",
           }),
         ),
         packPath: Type.Optional(

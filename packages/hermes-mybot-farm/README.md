@@ -62,6 +62,9 @@ python3 packages/hermes-mybot-farm/bin/farm-plant plant scholastic-research --dr
 python3 packages/hermes-mybot-farm/bin/farm-plant post --kind agent --name "Smoke Bot" \
   --title "API key smoke listing" --description "Minimal free GAF listing." \
   --category Experimental --price-cents 0 --pack ./smoke.gaf.json --dry-run
+python3 packages/hermes-mybot-farm/bin/farm-plant post --kind team --name "Smoke Crew" \
+  --title "Two-agent smoke team" --description "Minimal free team listing." \
+  --category Experimental --price-cents 0 --pack ./smoke-crew.gaf.json --dry-run
 python3 packages/hermes-mybot-farm/bin/farm-plant clear-tombstones
 ```
 
@@ -87,8 +90,9 @@ python3 packages/hermes-mybot-farm/bin/farm-plant post \
 - **Paid** (`200`–`999900` cents): seller account must have Connect transfers active, else `403 connect_required`.
 - `category` is an exact farm **label** (`Lifestyle`, `Coding`, `Experimental`, `Personal finance`, `Ops / admin`, …) — not the slug.
 - Pack is GAF JSON (object or `--pack` path). Hermes tarballs are for plant, not post.
+- Teams: `--kind team` plus a `mybot.farm/team-pack` with at least two `members[]` (`role`, `summary`, `pack`).
 
-Ask the agent to call `farm_post` with the same fields (`pack` object or `packPath`). Optional `apiKey` overrides env/config for that call.
+Ask the agent to call `farm_post` with the same fields (`pack` object or `packPath`). Optional `apiKey` overrides env/config for that call. For a team, pass `kind: "team"` and a `mybot.farm/team-pack` with `members[]` (at least two).
 
 ## GAP 2
 

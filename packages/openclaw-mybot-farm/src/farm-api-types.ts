@@ -116,6 +116,8 @@ export type ListingPayloadSummary = {
     version?: unknown;
     runtime: unknown;
     skillCount: number;
+    memberCount?: number;
+    memberRoles?: string[];
     encodedChars: number;
   };
 };

@@ -155,7 +155,11 @@ FARM_POST = {
         "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. "
         "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath "
         "to a .json file) — not a Hermes tarball. Plant still imports Hermes .tar.gz; posting "
-        "publishes GAF. category is an exact farm label (Lifestyle, Coding, Experimental, …). "
+        "publishes GAF. kind \"team\" requires format mybot.farm/team-pack and members[] "
+        "(at least two): each member needs role, summary, and pack (catalog path like "
+        "agents/patch.json, a slug, a .hermes.tar.gz URL, or a nested agent-pack). "
+        "kind \"agent\" uses mybot.farm/agent-pack and cannot include members[]. "
+        "category is an exact farm label (Lifestyle, Coding, Experimental, …). "
         "priceCents is 0 (free) or 200–999900. Paid listings need Stripe Connect on the seller "
         "(403 connect_required). Prefer dryRun to validate without posting. "
         "Does not email or spend money. Catalog/agency slugs cannot be overwritten."
@@ -165,7 +169,10 @@ FARM_POST = {
         "properties": {
             "kind": {
                 "type": "string",
-                "description": 'Listing kind: "agent" or "team".',
+                "description": (
+                    'Listing kind: "agent" or "team". Teams land on /teams/{slug} and '
+                    "need a team-pack with members[]."
+                ),
             },
             "name": {
                 "type": "string",
@@ -194,8 +201,11 @@ FARM_POST = {
             "pack": {
                 "type": "object",
                 "description": (
-                    "GAF JSON object (mybot.farm/agent-pack or team-pack). "
-                    "Export/convert elsewhere; this tool does not translate Hermes tarballs."
+                    "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: "
+                    "mybot.farm/team-pack with members[] (role, summary, pack). "
+                    "Member pack may be agents/<slug>.json, a slug, a tarball path, "
+                    "or a nested agent-pack. Export/convert elsewhere; this tool does "
+                    "not translate Hermes tarballs."
                 ),
             },
             "packPath": {

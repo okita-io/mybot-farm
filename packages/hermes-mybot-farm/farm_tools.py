@@ -227,6 +227,7 @@ def farm_post(args: dict, **kwargs) -> str:
             f"packVersion: {payload.get('packVersion') if payload.get('packVersion') is not None else '(auto)'}",
             f"pack format: {(summary.get('pack') or {}).get('format') or '(none)'}",
             f"pack skills: {(summary.get('pack') or {}).get('skillCount')}",
+            f"pack members: {(summary.get('pack') or {}).get('memberCount') or 0}",
             f"pack encoded chars: {(summary.get('pack') or {}).get('encodedChars')}",
             f"POST {base}/api/listings",
             f"apiKey: {key_note}",

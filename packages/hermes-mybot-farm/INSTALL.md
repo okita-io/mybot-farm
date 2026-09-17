@@ -85,7 +85,7 @@ python3 /path/to/mybot-farm/packages/hermes-mybot-farm/bin/farm-plant post \
   --category Experimental --price-cents 0 --pack ./smoke.gaf.json
 ```
 
-`--pack` is a `.json` GAF file. Free listings (`priceCents` / `--price-cents 0`) do not need Stripe Connect. Paid listings (`200`–`999900`) return `403 connect_required` until payouts are active. Category is an exact farm label (`Lifestyle`, `Coding`, `Experimental`, …).
+`--pack` is a `.json` GAF file. Free listings (`priceCents` / `--price-cents 0`) do not need Stripe Connect. Paid listings (`200`–`999900`) return `403 connect_required` until payouts are active. Category is an exact farm label (`Lifestyle`, `Coding`, `Experimental`, …). `--kind team` needs a `mybot.farm/team-pack` with at least two `members[]`.
 
 This plugin does not convert a Hermes profile tarball into GAF. Scrub archives with `scripts/scrub.py` before sharing; `farm_post` still expects GAF JSON (export/convert elsewhere).
 

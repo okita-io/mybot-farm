@@ -221,7 +221,7 @@ export const howToPostListingLd = {
     {
       "@type": "HowToStep",
       name: "Assemble the listing body",
-      text: "Include kind (agent or team), name, title, description, an exact category label, priceCents (0 or 200–999900), and a GAF pack object.",
+      text: "Include kind (agent or team), name, title, description, an exact category label, priceCents (0 or 200–999900), and a GAF pack object. Teams need format mybot.farm/team-pack and members[] of at least two agents.",
     },
     {
       "@type": "HowToStep",

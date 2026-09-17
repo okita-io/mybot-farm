@@ -41,6 +41,10 @@ export type GrokBotMarkColor = (typeof GROK_BOT_MARK_COLORS)[number];
 export const GROK_BOT_MARK_SHAPE_SET = new Set<string>(GROK_BOT_MARK_SHAPES);
 export const GROK_BOT_MARK_COLOR_SET = new Set<string>(GROK_BOT_MARK_COLORS);
 
+export const AGENT_PACK_FORMAT = "mybot.farm/agent-pack";
+export const TEAM_PACK_FORMAT = "mybot.farm/team-pack";
+export const MIN_TEAM_MEMBERS = 2;
+
 /** Farm-only geometric shapes → nearest Grok mark enum. */
 export const DEFAULT_AVATAR_SHAPE_FALLBACKS: Record<string, GrokBotMarkShape> = {
   book: "tablet",
@@ -283,6 +287,108 @@ export function validateGafPack(pack: unknown): { ok: true } | { ok: false; erro
         return { ok: false, error: `routines[${i}].slug is required.` };
       }
     }
+  }
+
+  return { ok: true };
+}
+
+function memberPackError(index: number, pack: unknown): string | null {
+  if (typeof pack === "string") {
+    return pack.trim()
+      ? null
+      : `members[${index}].pack must be a catalog path, slug, tarball URL, or nested agent-pack object`;
+  }
+  if (!isPlainObject(pack)) {
+    return `members[${index}].pack must be a catalog path, slug, tarball URL, or nested agent-pack object`;
+  }
+  if (pack.format === TEAM_PACK_FORMAT) {
+    return `members[${index}].pack nested object cannot be a team-pack`;
+  }
+  return null;
+}
+
+/**
+ * Kind-aware checks for POST /api/listings (and plugin farm_post dry-run).
+ * Additive on top of validateGafPack. Seed catalog files are not required to
+ * pass this — only seller writes.
+ */
+export function validateListingPack(
+  kind: string,
+  pack: unknown,
+): { ok: true } | { ok: false; error: string } {
+  if (!isPlainObject(pack)) {
+    return { ok: false, error: "Pack JSON must be an object." };
+  }
+
+  const format = typeof pack.format === "string" ? pack.format.trim() : "";
+
+  if (kind === "team") {
+    if (format !== TEAM_PACK_FORMAT) {
+      return {
+        ok: false,
+        error: `kind "team" requires pack.format "${TEAM_PACK_FORMAT}"`,
+      };
+    }
+
+    if (!Array.isArray(pack.members) || pack.members.length < MIN_TEAM_MEMBERS) {
+      return {
+        ok: false,
+        error: `kind "team" requires members[] with at least ${MIN_TEAM_MEMBERS} agents`,
+      };
+    }
+
+    for (let i = 0; i < pack.members.length; i += 1) {
+      const member = pack.members[i];
+      if (!isPlainObject(member)) {
+        return {
+          ok: false,
+          error: `members[${i}] must be an object with role, summary, and pack`,
+        };
+      }
+      const role = typeof member.role === "string" ? member.role.trim() : "";
+      const summary = typeof member.summary === "string" ? member.summary.trim() : "";
+      if (!role) {
+        return { ok: false, error: `members[${i}].role is required` };
+      }
+      if (!summary) {
+        return { ok: false, error: `members[${i}].summary is required` };
+      }
+      const packError = memberPackError(i, member.pack);
+      if (packError) {
+        return { ok: false, error: packError };
+      }
+    }
+
+    if (pack.shared !== undefined) {
+      if (!isPlainObject(pack.shared)) {
+        return { ok: false, error: "shared must be an object." };
+      }
+      if (
+        pack.shared.gettingStarted !== undefined &&
+        typeof pack.shared.gettingStarted !== "string"
+      ) {
+        return {
+          ok: false,
+          error: "shared.gettingStarted must be a string (Hermes install steps).",
+        };
+      }
+    }
+
+    return { ok: true };
+  }
+
+  if (format === TEAM_PACK_FORMAT) {
+    return {
+      ok: false,
+      error: `kind "agent" cannot use pack.format "${TEAM_PACK_FORMAT}"`,
+    };
+  }
+
+  if (Array.isArray(pack.members) && pack.members.length > 0) {
+    return {
+      ok: false,
+      error: 'kind "agent" listings cannot include members[] — use kind "team"',
+    };
   }
 
   return { ok: true };

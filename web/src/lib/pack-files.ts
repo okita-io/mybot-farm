@@ -72,8 +72,15 @@ export type PackExports = {
 export type PackMemberRef = {
   role?: string;
   summary?: string;
-  pack?: string;
+  /** Catalog path (`agents/patch.json`), slug, tarball URL, or nested agent-pack. */
+  pack?: string | Record<string, unknown>;
 };
+
+export function memberPackPath(pack: PackMemberRef["pack"]): string | undefined {
+  return typeof pack === "string" && pack.trim() ? pack.trim() : undefined;
+}
+
+export { listingMemberHref } from "@/lib/hermes-archive";
 
 export type FarmPack = {
   format?: string;
@@ -163,7 +170,8 @@ export function soulOneLiner(text: string | undefined | null): string | null {
 export function packCardStats(pack: FarmPack): StallCardStats {
   const memberPacks = (pack.members ?? [])
     .map((member) => {
-      const slug = member.pack ? memberSlugFromPackPath(member.pack) : undefined;
+      const path = memberPackPath(member.pack);
+      const slug = path ? memberSlugFromPackPath(path) : undefined;
       return slug ? getPack(slug) : undefined;
     })
     .filter((memberPack): memberPack is FarmPack => Boolean(memberPack));
@@ -261,7 +269,8 @@ export function packSkillList(slug: string) {
 
   const { stall, pack } = loaded;
   const members = (pack.members ?? []).map((member) => {
-    const memberSlug = member.pack ? memberSlugFromPackPath(member.pack) : undefined;
+    const path = memberPackPath(member.pack);
+    const memberSlug = path ? memberSlugFromPackPath(path) : undefined;
     const memberPack = memberSlug ? getPack(memberSlug) : undefined;
 
     return {

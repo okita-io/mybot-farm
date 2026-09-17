@@ -3,7 +3,7 @@ import { getDb, hasDatabase } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
 import { isAgencyPackSlug } from "@/lib/agency-catalog";
 import { getStall, isStallKind, stallPagePath, type StallKind } from "@/lib/packs";
-import { validateGafPack } from "@/lib/gaf-pack";
+import { validateGafPack, validateListingPack } from "@/lib/gaf-pack";
 import type { FarmPack } from "@/lib/pack-files";
 import {
   applyPackVersion,
@@ -250,6 +250,16 @@ export function listingWriteFromBody(
       ok: false,
       error: "invalid_pack",
       message: parsed.packResult.error,
+      status: 400,
+    };
+  }
+
+  const listingPack = validateListingPack(parsed.kind, parsed.packResult.pack);
+  if (!listingPack.ok) {
+    return {
+      ok: false,
+      error: "invalid_pack",
+      message: listingPack.error,
       status: 400,
     };
   }
