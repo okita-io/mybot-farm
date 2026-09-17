@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, type DragEvent } from "react";
-import { AlertTriangle, CircleX, FilePlus2, Trash2, Upload } from "lucide-react";
+import { useLayoutEffect, useRef, useState, type DragEvent } from "react";
+import { AlertTriangle, ChevronDown, ChevronUp, CircleX, FilePlus2, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { ReadmeIssue } from "@/lib/readme";
@@ -71,6 +71,9 @@ export function StallReadmeCard({
   const [fail, setFail] = useState<FailState | null>(null);
   const [busy, setBusy] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [readmeExpanded, setReadmeExpanded] = useState(false);
+  const [readmeOverflows, setReadmeOverflows] = useState(false);
+  const readmeRef = useRef<HTMLDivElement>(null);
 
   const canEdit = Boolean(isOwner && listingId);
   const empty = !html;
@@ -141,6 +144,7 @@ export function StallReadmeCard({
       setHtml(data.html ?? null);
       setWarnings(data.warnings ?? []);
       setFail(null);
+      setReadmeExpanded(false);
     } catch {
       setFail({
         message: "Please fix the formatting.",
@@ -190,10 +194,32 @@ export function StallReadmeCard({
       setHtml(null);
       setWarnings([]);
       setFail(null);
+      setReadmeExpanded(false);
+      setReadmeOverflows(false);
     } finally {
       setBusy(false);
     }
   }
+
+  useLayoutEffect(() => {
+    const el = readmeRef.current;
+    if (!el || !html) {
+      setReadmeOverflows(false);
+      return;
+    }
+
+    function measure() {
+      if (!el || readmeExpanded) {
+        return;
+      }
+      setReadmeOverflows(el.scrollHeight > el.clientHeight + 1);
+    }
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [html, readmeExpanded]);
 
   function onDrop(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
@@ -311,10 +337,39 @@ export function StallReadmeCard({
       ) : null}
 
       {html ? (
-        <div
-          className="stall-readme mt-4 text-base leading-relaxed text-foreground/90"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <div className="relative mt-4">
+          <div
+            ref={readmeRef}
+            className={cn(
+              "stall-readme text-base leading-relaxed text-foreground/90",
+              !readmeExpanded && "line-clamp-5",
+              !readmeExpanded && readmeOverflows && "pr-28",
+            )}
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+          {readmeOverflows && !readmeExpanded ? (
+            <button
+              type="button"
+              className="absolute right-0 bottom-0 inline-flex h-[1.625em] items-center gap-0.5 rounded-full bg-background/90 px-2 text-sm font-medium text-foreground ring-1 ring-foreground/10 backdrop-blur-sm"
+              aria-expanded={false}
+              onClick={() => setReadmeExpanded(true)}
+            >
+              <ChevronDown className="size-4" aria-hidden />
+              Read more
+            </button>
+          ) : null}
+          {readmeOverflows && readmeExpanded ? (
+            <button
+              type="button"
+              className="mt-3 inline-flex items-center gap-0.5 text-sm font-medium text-foreground underline-offset-4 hover:underline"
+              aria-expanded={true}
+              onClick={() => setReadmeExpanded(false)}
+            >
+              <ChevronUp className="size-4" aria-hidden />
+              Read less
+            </button>
+          ) : null}
+        </div>
       ) : (
         <div className="mt-4 rounded-2xl bg-card/40 px-5 py-8 text-center ring-1 ring-foreground/5">
           {canEdit ? (

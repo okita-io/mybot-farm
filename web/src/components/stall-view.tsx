@@ -4,6 +4,7 @@ import { StallAdminRemove } from "@/components/stall-admin-remove";
 import { StallActions, StallMembers } from "@/components/stall-actions";
 import { StallEngagement } from "@/components/stall-engagement";
 import { StallDates, StallHeaderMeta, StallPackStats, StallRevisionHistory } from "@/components/stall-meta";
+import { StallComments } from "@/components/stall-comments";
 import { StallReadmeCard } from "@/components/stall-readme-card";
 import { StallSlugMeta } from "@/components/stall-slug-meta";
 import { Container } from "@/components/container";
@@ -23,6 +24,7 @@ import {
   stallToneClasses,
   type Stall,
 } from "@/lib/packs";
+import { listStallComments } from "@/lib/comments";
 import { withSeedReadme } from "@/lib/seed-readme";
 import { isAdminEmail } from "@/lib/admin";
 import { getCachedViewer } from "@/lib/users";
@@ -65,11 +67,12 @@ export async function StallView({
   const api = stallApiPaths(stall.slug);
   const viewer = await getCachedViewer();
   const stallWithReadme = await withSeedReadme(stall);
-  const [stats, engagement, flagged, revisions] = await Promise.all([
+  const [stats, engagement, flagged, revisions, comments] = await Promise.all([
     catalogStallCardStats(stall.slug),
     getStallEngagement(stall.slug, viewer?.id),
     viewer ? hasUserFlaggedStall(stall.slug, viewer.id) : Promise.resolve(false),
     listStallRevisions(stall.slug),
+    listStallComments(stall.slug, viewer?.id),
   ]);
   const paid = (stall.priceCents ?? 0) > 0;
   const isOwner = Boolean(viewer && stall.sellerUserId === viewer.id);
@@ -189,6 +192,14 @@ export async function StallView({
           isOwner={isOwner}
           toneCardClassName={tone.card}
           initialHtml={stallWithReadme.readmeHtml}
+        />
+
+        <StallComments
+          slug={stall.slug}
+          signedIn={signedIn}
+          isAdmin={isAdmin}
+          toneCardClassName={tone.card}
+          initialComments={comments}
         />
 
         <article className="mt-12">
