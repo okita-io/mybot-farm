@@ -229,6 +229,15 @@ export function WebmcpTools() {
         const path = `/api/install-prompt/${encodeURIComponent(slug)}`;
         return fetchJson(args.short === true ? `${path}?short=1` : path);
       },
+      list_stall_revisions: (args) => {
+        const slug = slugFromArgs(args);
+        if (!slug) {
+          return Promise.resolve(toolResult({ error: "slug_required" }));
+        }
+        return fetchJson(
+          `/api/stalls/${encodeURIComponent(slug)}/revisions`,
+        );
+      },
       post_listing: (args) => {
         const apiKey = readString(args.apiKey);
         const headers: Record<string, string> = {
