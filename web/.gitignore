@@ -37,6 +37,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# catalog pull stamp (written by scripts/pull-catalog.sh)
+/public/packs/.catalog-sha
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -12,7 +12,7 @@ export const packTools = [
     name: "get_stall",
     title: "Get bot",
     description:
-      "Get one mybot.farm bot by slug. Returns metadata, pack URLs, hermesHref when a .hermes.tar.gz exists, plus download_pack and install-prompt API paths. Read-only.",
+      "Get one mybot.farm bot by slug. Returns metadata, pack URLs, hermesHref when a .hermes.tar.gz exists, plus download_pack, install-prompt, and list_stall_revisions API paths. Read-only.",
     method: "GET",
     path: "/api/stalls/{slug}",
     query: [],
@@ -45,10 +45,19 @@ export const packTools = [
     query: ["short"],
   },
   {
+    name: "list_stall_revisions",
+    title: "List stall revisions",
+    description:
+      "List packVersion history for a stall (summary, timestamp, catalog commit). Seller updates via farm_post/farm_update append a revision. Read-only.",
+    method: "GET",
+    path: "/api/stalls/{slug}/revisions",
+    query: [],
+  },
+  {
     name: "post_listing",
     title: "Post listing",
     description:
-      "Publish or update a seller listing via POST /api/listings. Required JSON fields: kind (\"agent\" or \"team\"); name, title, description (non-empty strings); category (exact label: Lifestyle, Productivity, Coding, Writing, Marketing, Sales, Research, Personal finance, Creative, Music, Education, Ops / admin, Experimental); priceCents (0 for free, or integer cents from 200 to 999900 for $2–$9999); pack (GAF JSON object, max ~500KB encoded). Optional slug: update that stall in place if you own it (same URL, bumps packVersion). Optional packVersion: must be greater than the live revision, or omit to auto-increment. Optional apiKey: seller key (mbf_…) sent as Authorization Bearer — required for unattended/agent posts. Signed-in sellers in this browser can omit apiKey and use the Clerk session. Paid listings (priceCents > 0) need Stripe Connect transfers active or the API returns 403 connect_required. Catalog/agency slugs cannot be overwritten. Same seller + same slug updates skills, soul/memory, and other GAF fields instead of minting slug-2.",
+      "Publish or update a seller listing via POST /api/listings. Required JSON fields: kind (\"agent\" or \"team\"); name, title, description (non-empty strings); category (exact label: Lifestyle, Productivity, Coding, Writing, Marketing, Sales, Research, Personal finance, Creative, Music, Education, Ops / admin, Experimental); priceCents (0 for free, or integer cents from 200 to 999900 for $2–$9999); pack (GAF JSON object, max ~500KB encoded). Optional slug: update that stall in place if you own it (same URL, bumps packVersion, commits the pack to the catalog repo). Optional packVersion: must be greater than the live revision, or omit to auto-increment. Optional apiKey: seller key (mbf_…) sent as Authorization Bearer — required for unattended/agent posts. Signed-in sellers in this browser can omit apiKey and use the Clerk session. Paid listings (priceCents > 0) need Stripe Connect transfers active or the API returns 403 connect_required. Catalog/agency slugs cannot be overwritten. Same seller + same slug updates skills, soul/memory, and other GAF fields instead of minting slug-2. History is at GET /api/stalls/{slug}/revisions.",
     method: "POST",
     path: "/api/listings",
     query: [],

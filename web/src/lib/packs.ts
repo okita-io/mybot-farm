@@ -180,6 +180,7 @@ export function stallApiPaths(slug: string) {
     list_pack_skills: `/api/packs/${slug}/skills`,
     get_install_prompt: `/api/install-prompt/${slug}`,
     get_grok_template: `/api/packs/${slug}/grok-template`,
+    list_stall_revisions: `/api/stalls/${slug}/revisions`,
   };
 }
 

@@ -13,8 +13,8 @@ Install page: [https://mybot.farm/install/hermes](https://mybot.farm/install/her
 | `farm_get_stall` | `GET /api/stalls/{slug}` — stall metadata **including member tarball hrefs** |
 | `farm_plant` | Download + `hermes profile import`. Teams: member tarballs, `~/.hermes/teams/<slug>`, TEAM.md/WORK.md/cron, kanban board if gettingStarted says so |
 | `farm_reinstall` | GAP 2 clean path: clear `~/.hermes/profiles/.deleted/<name>` tombstones, optionally wipe old profiles/team/board, then plant again and verify `hermes profile list` |
-| `farm_post` | `POST /api/listings` — publish or update a GAF stall (seller API key). Same slug owned by you bumps `packVersion`. Not a Hermes tarball. |
-| `farm_update` | Same as `farm_post` with required `slug` — in-place GAF update (skills, soul/memory). |
+| `farm_post` | `POST /api/listings` — publish or update a GAF stall (seller API key). Same slug owned by you bumps `packVersion` and records revision history. Not a Hermes tarball. |
+| `farm_update` | Same as `farm_post` with required `slug` — in-place GAF update (skills, soul/memory). Omit packVersion to auto-increment. |
 
 Default plant is **safe**. Live profiles are never deleted unless `force` is true. Team dir and kanban board are never wiped unless `clean` is true. Tombstones (leftover delete markers, not live agents) are always cleared before import.
 

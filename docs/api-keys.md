@@ -92,7 +92,7 @@ Expect `201` on create and `200` on an in-place update of a slug you already own
 }
 ```
 
-Same seller + same slug replaces the GAF pack (skills, soul/memory) and bumps `packVersion`. Optional body fields: `slug` (target stall), `packVersion` (must be greater than the live revision, or omit to auto-increment). Catalog/agency slugs return `409 catalog_reserved`. Another seller's slug returns `409 slug_taken` (no `slug-2`). `PATCH /api/listings/{id}` uses the same auth and also bumps `packVersion`.
+Same seller + same slug replaces the GAF pack (skills, soul/memory) and bumps `packVersion`. Optional body fields: `slug` (target stall), `packVersion` (must be greater than the live revision, or omit to auto-increment). Catalog/agency slugs return `409 catalog_reserved`. Another seller's slug returns `409 slug_taken` (no `slug-2`). `PATCH /api/listings/{id}` uses the same auth and also bumps `packVersion`. Successful writes commit `agents/<slug>.json` (or `teams/<slug>.json`) to `okita-io/mybot-farm-catalog` and append a row to stall revision history (`GET /api/stalls/{slug}/revisions`). GitHub publish failures return `502 catalog_publish_*` and do not change the listing.
 
 ## WebMCP `post_listing`
 
@@ -112,4 +112,6 @@ Listing writes send `Access-Control-Allow-Origin: *` and allow headers `Authoriz
 
 ## Migration
 
-Apply `web/drizzle/0006_api_keys.sql` with the rest of the Drizzle/Neon migrations (`npm run db:migrate` from `web/` when `DATABASE_URL_UNPOOLED` or `DATABASE_URL` is set).
+Apply `web/drizzle/0007_stall_revisions.sql` with the rest of the Drizzle/Neon migrations (`npm run db:migrate` from `web/` when `DATABASE_URL_UNPOOLED` or `DATABASE_URL` is set). Set `CATALOG_GITHUB_TOKEN` (fine-grained PAT, Contents read/write on `okita-io/mybot-farm-catalog` only) in Vercel Production and `web/.env.local`.
+
+Production builds run `web/scripts/pull-catalog.sh` via `prebuild` to sync `public/packs` from that repo (optional pin: `CATALOG_GITHUB_SHA`). Local `npm run build` without the token keeps committed packs.

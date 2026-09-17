@@ -164,6 +164,7 @@ export default defineToolPlugin({
       description:
         "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. " +
         "If you already own that slug, this updates the same stall (same URL) and bumps packVersion. " +
+        "Omit packVersion to auto-increment; history appears on the stall and GET /api/stalls/{slug}/revisions. " +
         "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. " +
         "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath " +
         "to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). " +
@@ -236,7 +237,8 @@ export default defineToolPlugin({
       label: "Farm Update",
       description:
         "Update a seller-owned stall in place (same slug). Same fields as farm_post plus required slug. " +
-        "Replaces GAF pack JSON (skills, soul/memory) and bumps packVersion. Catalog slugs are reserved.",
+        "Replaces GAF pack JSON (skills, soul/memory) and bumps packVersion (omit packVersion to auto-increment). " +
+        "The farm publishes the pack to the catalog repo. Catalog slugs are reserved.",
       parameters: Type.Object({
         kind: Type.String({ description: 'Listing kind: "agent" or "team".' }),
         name: Type.String({ description: "Listing name." }),

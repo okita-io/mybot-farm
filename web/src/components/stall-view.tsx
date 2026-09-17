@@ -3,7 +3,7 @@ import { Pencil } from "lucide-react";
 import { StallAdminRemove } from "@/components/stall-admin-remove";
 import { StallActions, StallMembers } from "@/components/stall-actions";
 import { StallEngagement } from "@/components/stall-engagement";
-import { StallDates, StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
+import { StallDates, StallHeaderMeta, StallPackStats, StallRevisionHistory } from "@/components/stall-meta";
 import { StallReadmeCard } from "@/components/stall-readme-card";
 import { StallSlugMeta } from "@/components/stall-slug-meta";
 import { Container } from "@/components/container";
@@ -13,6 +13,7 @@ import { installPrompt, shortInstallPrompt } from "@/lib/install-prompt";
 import { catalogStallCardStats } from "@/lib/catalog";
 import { getStallEngagement } from "@/lib/engagement";
 import { hasUserFlaggedStall } from "@/lib/moderation";
+import { listStallRevisions } from "@/lib/stall-revisions";
 import { formatPriceLabel, formatUsd } from "@/lib/money";
 import {
   hermesPackUrl,
@@ -64,10 +65,11 @@ export async function StallView({
   const api = stallApiPaths(stall.slug);
   const viewer = await getCachedViewer();
   const stallWithReadme = await withSeedReadme(stall);
-  const [stats, engagement, flagged] = await Promise.all([
+  const [stats, engagement, flagged, revisions] = await Promise.all([
     catalogStallCardStats(stall.slug),
     getStallEngagement(stall.slug, viewer?.id),
     viewer ? hasUserFlaggedStall(stall.slug, viewer.id) : Promise.resolve(false),
+    listStallRevisions(stall.slug),
   ]);
   const paid = (stall.priceCents ?? 0) > 0;
   const isOwner = Boolean(viewer && stall.sellerUserId === viewer.id);
@@ -146,6 +148,7 @@ export async function StallView({
           ) : null}
           <div className="mt-4 space-y-3">
             <StallDates listedAt={stall.listedAt} updatedAt={stall.updatedAt} />
+            <StallRevisionHistory revisions={revisions} />
             <StallEngagement
               slug={stall.slug}
               downloadCount={engagement.downloadCount}

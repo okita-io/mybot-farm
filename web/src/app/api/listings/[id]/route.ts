@@ -4,8 +4,10 @@ import {
   listingWriteResponse,
   packForListingWrite,
   setListingPublished,
-  updateListing,
 } from "@/lib/listings";
+import { readApiKeyFromRequest } from "@/lib/api-key-crypto";
+import { CatalogGithubError } from "@/lib/catalog-github";
+import { publishListingPack, updatePublishedListing } from "@/lib/listing-publish";
 import { noStoreJson, optionsResponse } from "@/lib/http";
 import { packVersionOf } from "@/lib/pack-version";
 import { requireSeller } from "@/lib/seller-auth";
@@ -99,7 +101,28 @@ export async function PATCH(
     );
   }
 
-  const listing = await updateListing(id, user.id, {
+  let published;
+  try {
+    published = await publishListingPack({
+      kind: value.kind,
+      slug: existing.slug,
+      previousPack: existing.pack as FarmPack,
+      pack: finalized.pack,
+      created: false,
+    });
+  } catch (error) {
+    if (error instanceof CatalogGithubError) {
+      return noStoreJson(
+        { error: error.code, message: error.message },
+        { status: error.status === 409 ? 409 : error.status },
+      );
+    }
+    throw error;
+  }
+
+  const listing = await updatePublishedListing({
+    listingId: id,
+    sellerUserId: user.id,
     kind: value.kind,
     name: value.name,
     title: value.title,
@@ -107,6 +130,10 @@ export async function PATCH(
     category: value.category,
     priceCents: value.priceCents,
     pack: finalized.pack,
+    source: readApiKeyFromRequest(request) ? "api_key" : "session",
+    summary: published.summary,
+    commitSha: published.commitSha,
+    githubPath: published.githubPath,
   });
   if (!listing) {
     return noStoreJson({ error: "not_found" }, { status: 404 });
@@ -117,6 +144,9 @@ export async function PATCH(
       created: false,
       updated: true,
       hasReadme: Boolean(listing.readmeHtml),
+      summary: published.summary,
+      commitSha: published.commitSha,
+      githubPath: published.githubPath,
     }),
   );
 }

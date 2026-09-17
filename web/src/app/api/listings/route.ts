@@ -1,18 +1,24 @@
+import { readApiKeyFromRequest } from "@/lib/api-key-crypto";
 import {
-  createListing,
   getListingBySlug,
   isReservedCatalogSlug,
   listingWriteFromBody,
   listingWriteResponse,
   packForListingWrite,
   slugifyName,
-  updateListing,
 } from "@/lib/listings";
+import { CatalogGithubError } from "@/lib/catalog-github";
+import {
+  createPublishedListing,
+  publishListingPack,
+  updatePublishedListing,
+} from "@/lib/listing-publish";
 import { noStoreJson, optionsResponse } from "@/lib/http";
 import { packVersionOf } from "@/lib/pack-version";
 import { extractPackReadme, parseStallReadme } from "@/lib/readme";
 import { requireSeller } from "@/lib/seller-auth";
 import type { FarmPack } from "@/lib/pack-files";
+import type { StallRevisionSource } from "@/lib/stall-revisions";
 
 export const runtime = "nodejs";
 
@@ -28,6 +34,20 @@ function packReadmeFields(pack: FarmPack) {
   }
 
   return { readmeMarkdown: readme.markdown, readmeHtml: readme.html };
+}
+
+function writeSource(request: Request): StallRevisionSource {
+  return readApiKeyFromRequest(request) ? "api_key" : "session";
+}
+
+function publishErrorResponse(error: unknown) {
+  if (error instanceof CatalogGithubError) {
+    return noStoreJson(
+      { error: error.code, message: error.message },
+      { status: error.status === 409 ? 409 : error.status },
+    );
+  }
+  throw error;
 }
 
 export async function POST(request: Request) {
@@ -96,6 +116,7 @@ export async function POST(request: Request) {
   }
 
   const { readmeMarkdown, readmeHtml } = packReadmeFields(value.pack);
+  const source = writeSource(request);
 
   if (existing) {
     const finalized = packForListingWrite(
@@ -110,7 +131,22 @@ export async function POST(request: Request) {
       );
     }
 
-    const listing = await updateListing(existing.id, user.id, {
+    let published;
+    try {
+      published = await publishListingPack({
+        kind: value.kind,
+        slug: existing.slug,
+        previousPack: existing.pack as FarmPack,
+        pack: finalized.pack,
+        created: false,
+      });
+    } catch (error) {
+      return publishErrorResponse(error);
+    }
+
+    const listing = await updatePublishedListing({
+      listingId: existing.id,
+      sellerUserId: user.id,
       kind: value.kind,
       name: value.name,
       title: value.title,
@@ -118,6 +154,10 @@ export async function POST(request: Request) {
       category: value.category,
       priceCents: value.priceCents,
       pack: finalized.pack,
+      source,
+      summary: published.summary,
+      commitSha: published.commitSha,
+      githubPath: published.githubPath,
     });
     if (!listing) {
       return noStoreJson({ error: "not_found" }, { status: 404 });
@@ -128,6 +168,9 @@ export async function POST(request: Request) {
         created: false,
         updated: true,
         hasReadme: Boolean(listing.readmeHtml),
+        summary: published.summary,
+        commitSha: published.commitSha,
+        githubPath: published.githubPath,
       }),
     );
   }
@@ -140,7 +183,20 @@ export async function POST(request: Request) {
     );
   }
 
-  const listing = await createListing({
+  let published;
+  try {
+    published = await publishListingPack({
+      kind: value.kind,
+      slug,
+      previousPack: null,
+      pack: finalized.pack,
+      created: true,
+    });
+  } catch (error) {
+    return publishErrorResponse(error);
+  }
+
+  const listing = await createPublishedListing({
     sellerUserId: user.id,
     slug,
     kind: value.kind,
@@ -152,6 +208,10 @@ export async function POST(request: Request) {
     pack: finalized.pack,
     readmeMarkdown,
     readmeHtml,
+    source,
+    summary: published.summary,
+    commitSha: published.commitSha,
+    githubPath: published.githubPath,
   });
 
   return noStoreJson(
@@ -159,6 +219,9 @@ export async function POST(request: Request) {
       created: true,
       updated: false,
       hasReadme: Boolean(readmeHtml),
+      summary: published.summary,
+      commitSha: published.commitSha,
+      githubPath: published.githubPath,
     }),
     { status: 201 },
   );
