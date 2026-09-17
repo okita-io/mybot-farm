@@ -198,6 +198,83 @@ export const apiKeys = pgTable(
   ],
 );
 
+export const stallComments = pgTable(
+  "stall_comments",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    slug: text("slug").notNull(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id),
+    body: text("body").notNull(),
+    upCount: integer("up_count").notNull().default(0),
+    downCount: integer("down_count").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    deletedByUserId: uuid("deleted_by_user_id").references(() => users.id),
+  },
+  (table) => [
+    index("stall_comments_slug_created_idx").on(table.slug, table.createdAt),
+    index("stall_comments_user_created_idx").on(table.userId, table.createdAt),
+    index("stall_comments_deleted_idx").on(table.deletedAt),
+  ],
+);
+
+export const stallCommentVotes = pgTable(
+  "stall_comment_votes",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    commentId: uuid("comment_id")
+      .notNull()
+      .references(() => stallComments.id),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id),
+    value: integer("value").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex("stall_comment_votes_user_comment_idx").on(
+      table.userId,
+      table.commentId,
+    ),
+    index("stall_comment_votes_comment_idx").on(table.commentId),
+  ],
+);
+
+export const stallCommentFlags = pgTable(
+  "stall_comment_flags",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    commentId: uuid("comment_id")
+      .notNull()
+      .references(() => stallComments.id),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id),
+    reason: text("reason").notNull(),
+    details: text("details"),
+    status: text("status").notNull().default("open"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+    resolvedByUserId: uuid("resolved_by_user_id").references(() => users.id),
+  },
+  (table) => [
+    uniqueIndex("stall_comment_flags_user_comment_idx").on(
+      table.userId,
+      table.commentId,
+    ),
+    index("stall_comment_flags_comment_idx").on(table.commentId),
+    index("stall_comment_flags_status_idx").on(table.status),
+  ],
+);
+
 export const stallRevisions = pgTable(
   "stall_revisions",
   {

@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import { SignInButton } from "@clerk/nextjs";
+import { AdminCommentQueue } from "@/components/admin-comment-queue";
 import { AdminFlagQueue } from "@/components/admin-flag-queue";
 import { ContentPage, ContentSection } from "@/components/content-page";
 import { Button } from "@/components/ui/button";
 import { requireAdmin } from "@/lib/admin";
+import { listOpenCommentFlagGroups, listRecentPrunedComments } from "@/lib/comments";
 import { listOpenFlagGroups, listRecentTakedowns } from "@/lib/moderation";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Admin",
-  description: "Review flagged bots on mybot.farm.",
+  description: "Review flagged bots and comments on mybot.farm.",
   robots: { index: false, follow: false },
 };
 
@@ -32,7 +34,7 @@ export default async function AdminPage() {
       <ContentPage
         kicker="Admin"
         title="Review reports"
-        lead="Sign in with an admin account to review flagged bots and remove bad listings."
+        lead="Sign in with an admin account to review flagged bots and comments."
       >
         <SignInButton mode="modal" forceRedirectUrl="/admin" fallbackRedirectUrl="/admin">
           <Button type="button" size="lg" className="h-11 rounded-full px-5">
@@ -55,19 +57,24 @@ export default async function AdminPage() {
     );
   }
 
-  const [groups, takedowns] = await Promise.all([
+  const [groups, takedowns, commentGroups, prunedComments] = await Promise.all([
     listOpenFlagGroups(),
     listRecentTakedowns(),
+    listOpenCommentFlagGroups(),
+    listRecentPrunedComments(),
   ]);
 
   return (
     <ContentPage
       kicker="Admin"
-      title="Flagged bots"
-      lead="Reports from signed-in users land here. Remove a bot to take it off the catalog and stop downloads. Dismiss reports if the listing is fine."
+      title="Moderation"
+      lead="Reports from signed-in users land here. Remove a bot or prune a comment. Dismiss reports if the listing or comment is fine."
     >
-      <ContentSection title="Open reports">
+      <ContentSection title="Open bot reports">
         <AdminFlagQueue groups={groups} />
+      </ContentSection>
+      <ContentSection title="Open comment reports">
+        <AdminCommentQueue groups={commentGroups} />
       </ContentSection>
       {takedowns.length ? (
         <ContentSection title="Recently removed">
@@ -77,6 +84,19 @@ export default async function AdminPage() {
                 {item.name} ({item.slug}) — {formatWhen(item.createdAt)}
                 {item.adminUsername ? ` by ${item.adminUsername}` : null}
                 {item.note ? ` · ${item.note}` : null}
+              </li>
+            ))}
+          </ul>
+        </ContentSection>
+      ) : null}
+      {prunedComments.length ? (
+        <ContentSection title="Recently pruned comments">
+          <ul>
+            {prunedComments.map((item) => (
+              <li key={item.id}>
+                {item.name} ({item.slug})
+                {item.authorUsername ? ` · ${item.authorUsername}` : ""}
+                {item.deletedAt ? ` — ${formatWhen(item.deletedAt)}` : ""}
               </li>
             ))}
           </ul>
