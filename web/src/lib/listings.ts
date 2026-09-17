@@ -325,7 +325,14 @@ export function parseListingPayload(record: Record<string, unknown>) {
 
 export function listingWriteResponse(
   listing: ListingRow,
-  extra: { created?: boolean; updated?: boolean; hasReadme?: boolean },
+  extra: {
+    created?: boolean;
+    updated?: boolean;
+    hasReadme?: boolean;
+    summary?: string;
+    commitSha?: string;
+    githubPath?: string;
+  },
 ) {
   const pack = listing.pack as FarmPack;
   return {
@@ -343,6 +350,9 @@ export function listingWriteResponse(
     updated: Boolean(extra.updated),
     hasReadme:
       extra.hasReadme ?? Boolean(listing.readmeHtml ?? listing.readmeMarkdown),
+    summary: extra.summary,
+    commitSha: extra.commitSha,
+    githubPath: extra.githubPath,
   };
 }
 

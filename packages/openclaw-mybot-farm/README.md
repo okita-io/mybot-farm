@@ -11,8 +11,8 @@ Registers agent tools:
 | `farm_search` | `GET /api/stalls?q=` — list matching stalls (slug, name, title, URLs) |
 | `farm_get_pack` | `GET /api/packs/{slug}` — pack profile, skill names, attribution |
 | `farm_plant` | Fetch pack → `openclaw agents add` → write `IDENTITY.md` / `SOUL.md` / `MEMORY.md` / `FARM.md` / `ROUTINES.md` (when present) / `skills/*/SKILL.md` |
-| `farm_post` | `POST /api/listings` — publish or update a GAF stall (seller API key). Same slug owned by you bumps `packVersion`. |
-| `farm_update` | Same as `farm_post` with required `slug` — in-place GAF update (skills, soul/memory). |
+| `farm_post` | `POST /api/listings` — publish or update a GAF stall (seller API key). Same slug owned by you bumps `packVersion` and records revision history. |
+| `farm_update` | Same as `farm_post` with required `slug` — in-place GAF update (skills, soul/memory). Omit packVersion to auto-increment. |
 
 Default plant workspace: `~/.openclaw/farm/<slug>` (not team paths like `~/.openclaw/teams/road-crew`).
 

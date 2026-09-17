@@ -197,3 +197,32 @@ export const apiKeys = pgTable(
     index("api_keys_user_idx").on(table.userId),
   ],
 );
+
+export const stallRevisions = pgTable(
+  "stall_revisions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    listingId: uuid("listing_id")
+      .notNull()
+      .references(() => listings.id),
+    slug: text("slug").notNull(),
+    packVersion: integer("pack_version").notNull(),
+    source: text("source").notNull(),
+    summary: text("summary").notNull(),
+    commitSha: text("commit_sha"),
+    githubPath: text("github_path"),
+    actorUserId: uuid("actor_user_id").references(() => users.id),
+    pack: jsonb("pack").$type<Record<string, unknown>>().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex("stall_revisions_listing_version_idx").on(
+      table.listingId,
+      table.packVersion,
+    ),
+    index("stall_revisions_slug_idx").on(table.slug),
+    index("stall_revisions_listing_idx").on(table.listingId),
+  ],
+);

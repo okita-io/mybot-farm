@@ -158,3 +158,38 @@ export function StallDates({
     </p>
   );
 }
+
+export function StallRevisionHistory({
+  revisions,
+}: {
+  revisions: {
+    packVersion: number;
+    summary: string;
+    createdAt: string;
+  }[];
+}) {
+  if (!revisions.length) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-1.5">
+      <p className="text-sm font-medium text-foreground/80">Revision history</p>
+      <ul className="space-y-1">
+        {revisions.map((revision) => (
+          <li
+            key={`${revision.packVersion}-${revision.createdAt}`}
+            className="text-sm text-foreground/70"
+          >
+            v{revision.packVersion}
+            {" · "}
+            {revision.summary}
+            {formatStallDate(revision.createdAt)
+              ? ` · ${formatStallDate(revision.createdAt)}`
+              : null}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

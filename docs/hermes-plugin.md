@@ -129,7 +129,7 @@ python3 packages/hermes-mybot-farm/bin/farm-plant post \
 
 Human-readable success prints the slug and `https://mybot.farm{pagePath}`. `--json` prints the machine payload (`id`, `stallId`, `packVersion`, `updated`). `--dry-run` validates locally (category/price/pack) and redacts the key.
 
-If you already own that slug, `farm_post` **updates the same stall** (skills, soul/memory, other GAF fields) and bumps `packVersion`. Pass `--slug` / `slug` to target it, or `farm_update` which requires the slug. Catalog stalls cannot be overwritten (`409 catalog_reserved`).
+If you already own that slug, `farm_post` **updates the same stall** (skills, soul/memory, other GAF fields) and bumps `packVersion`. Omit `packVersion` to auto-increment. The farm commits the pack to `okita-io/mybot-farm-catalog` and appends a revision (`GET /api/stalls/{slug}/revisions`). Pass `--slug` / `slug` to target it, or `farm_update` which requires the slug. Catalog stalls cannot be overwritten (`409 catalog_reserved`).
 
 Free listings (`priceCents: 0`) skip Stripe Connect. Paid (`200`–`999900`) need Connect transfers active (`403 connect_required` otherwise). `category` is an exact taxonomy **label** (`Lifestyle`, `Coding`, `Experimental`, `Personal finance`, `Ops / admin`, …).
 
