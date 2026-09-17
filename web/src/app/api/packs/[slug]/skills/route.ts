@@ -1,9 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
-import { jsonResponse, notFoundResponse, optionsResponse, paymentRequiredResponse } from "@/lib/http";
+import { jsonResponse, notFoundResponse, optionsResponse } from "@/lib/http";
 import { catalogPackSkillList, resolvePackAccess } from "@/lib/catalog";
+import { withPaidStallPayment } from "@/lib/mpp-pack";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   context: RouteContext<"/api/packs/[slug]/skills">,
 ) {
   const { slug } = await context.params;
@@ -15,7 +16,16 @@ export async function GET(
   }
 
   if (!access.ok) {
-    return paymentRequiredResponse(slug, access.stall.priceCents ?? 0);
+    return withPaidStallPayment(request, access.stall, async () => {
+      const skills = await catalogPackSkillList(slug);
+      if (!skills) {
+        return notFoundResponse(slug);
+      }
+      return jsonResponse({
+        tool: "list_pack_skills",
+        ...skills,
+      });
+    });
   }
 
   const skills = await catalogPackSkillList(slug);

@@ -27,12 +27,28 @@ const nextConfig: NextConfig = {
     const cors = [
       { key: "Access-Control-Allow-Origin", value: "*" },
       { key: "Access-Control-Allow-Methods", value: "GET, POST, OPTIONS" },
-      { key: "Access-Control-Allow-Headers", value: "Content-Type" },
+      {
+        key: "Access-Control-Allow-Headers",
+        value:
+          "Authorization, Payment-Authorization, Content-Type, X-Api-Key, Accept",
+      },
+      {
+        key: "Access-Control-Expose-Headers",
+        value: "WWW-Authenticate, Payment-Receipt",
+      },
     ];
 
     return [
       {
         source: "/api/:path*",
+        headers: cors,
+      },
+      {
+        source: "/paid",
+        headers: cors,
+      },
+      {
+        source: "/openapi.json",
         headers: cors,
       },
       {

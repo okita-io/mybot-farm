@@ -21,7 +21,7 @@ export const packTools = [
     name: "download_pack",
     title: "Download pack",
     description:
-      "Download the Generic Agent Format (GAF) JSON pack for a bot slug. Free seed packs are public. Paid listings return 402 until the signed-in buyer has purchased. Read-only.",
+      "Download the Generic Agent Format (GAF) JSON pack for a bot slug. Catalog browsing and free packs are public. Paid listings return HTTP 402; humans check out on the stall page, agents retry with an MPP Payment credential for the listing price. Read-only.",
     method: "GET",
     path: "/api/packs/{slug}",
     query: ["download"],
@@ -30,7 +30,7 @@ export const packTools = [
     name: "list_pack_skills",
     title: "List pack skills",
     description:
-      "List skills (name, description, content) in a bot GAF pack. Team packs include each member's skills. Read-only.",
+      "List skills (name, description, content) in a bot GAF pack. Team packs include each member's skills. Paid listings require a purchase or MPP payment, same as download_pack. Read-only.",
     method: "GET",
     path: "/api/packs/{slug}/skills",
     query: [],
@@ -39,7 +39,7 @@ export const packTools = [
     name: "get_install_prompt",
     title: "Get install prompt",
     description:
-      "Return the ready-to-paste Grok Bot install prompt for a bot slug, including the canonical bot URL, plus a short variant. Read-only.",
+      "Return the ready-to-paste Grok Bot install prompt for a bot slug, including the canonical bot URL, plus a short variant. Paid listings require a purchase or MPP payment, same as download_pack. Read-only.",
     method: "GET",
     path: "/api/install-prompt/{slug}",
     query: ["short"],

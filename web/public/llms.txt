@@ -68,4 +68,13 @@ Tools: farm_search, farm_get_pack, farm_plant, farm_post (GAF listings with MYBO
 - resolve_share: https://mybot.farm/api/resolve-share?url=
 - plant_into_library (auth stub): https://mybot.farm/api/library/plant
 
+## Machine payments (MPP)
+
+Catalog search, stall metadata, seller uploads, and free pack downloads are free. When a listing has a price, `GET /api/packs/{slug}` (and skills / grok-template / install-prompt) return HTTP 402 until the caller pays.
+
+- Humans: buy on the stall page with Stripe Checkout
+- Agents: retry the download with an MPP Payment credential for the stall price
+- Discovery: GET https://mybot.farm/openapi.json
+- Local fixture (paid stall protocol check): POST http://localhost:4242/paid
+
 WebMCP tools on every page (when document.modelContext is available): search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt.

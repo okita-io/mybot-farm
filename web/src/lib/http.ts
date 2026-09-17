@@ -1,7 +1,9 @@
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Authorization, Content-Type, X-Api-Key",
+  "Access-Control-Allow-Headers":
+    "Authorization, Payment-Authorization, Content-Type, X-Api-Key, Accept",
+  "Access-Control-Expose-Headers": "WWW-Authenticate, Payment-Receipt",
   "Access-Control-Max-Age": "86400",
 } as const;
 
@@ -31,6 +33,7 @@ export function paymentRequiredResponse(slug: string, priceCents: number) {
       error: "purchase_required",
       slug,
       priceCents,
+      hint: "Humans buy on the stall page. Agents retry the download with an MPP Payment credential.",
     },
     { status: 402, headers: { "Cache-Control": "no-store" } },
   );

@@ -1,26 +1,22 @@
 import { auth } from "@clerk/nextjs/server";
-import { corsHeaders, jsonResponse, notFoundResponse, optionsResponse, paymentRequiredResponse } from "@/lib/http";
+import { corsHeaders, jsonResponse, notFoundResponse, optionsResponse } from "@/lib/http";
+import { getCatalogPack, resolvePackAccess } from "@/lib/catalog";
 import { recordStallDownload } from "@/lib/engagement";
-import { packFilename } from "@/lib/packs";
-import { resolvePackAccess } from "@/lib/catalog";
+import { withPaidStallPayment } from "@/lib/mpp-pack";
+import { packFilename, type Stall } from "@/lib/packs";
+import type { FarmPack } from "@/lib/pack-files";
 
-export async function GET(
+async function packDownloadResponse(
   request: Request,
-  context: RouteContext<"/api/packs/[slug]">,
+  slug: string,
+  stall: Stall,
+  pack?: FarmPack,
 ) {
-  const { slug } = await context.params;
-  const { userId } = await auth();
-  const access = await resolvePackAccess(slug, userId);
-
-  if (!access.ok && access.reason === "not_found") {
+  const resolved = pack ?? (await getCatalogPack(slug));
+  if (!resolved) {
     return notFoundResponse(slug);
   }
 
-  if (!access.ok) {
-    return paymentRequiredResponse(slug, access.stall.priceCents ?? 0);
-  }
-
-  const { stall, pack } = access;
   const url = new URL(request.url);
   const asDownload = url.searchParams.get("download") === "1";
   const headers = new Headers(corsHeaders);
@@ -39,7 +35,28 @@ export async function GET(
     );
   }
 
-  return jsonResponse(pack, { headers });
+  return jsonResponse(resolved, { headers });
+}
+
+export async function GET(
+  request: Request,
+  context: RouteContext<"/api/packs/[slug]">,
+) {
+  const { slug } = await context.params;
+  const { userId } = await auth();
+  const access = await resolvePackAccess(slug, userId);
+
+  if (!access.ok && access.reason === "not_found") {
+    return notFoundResponse(slug);
+  }
+
+  if (!access.ok) {
+    return withPaidStallPayment(request, access.stall, () =>
+      packDownloadResponse(request, slug, access.stall),
+    );
+  }
+
+  return packDownloadResponse(request, slug, access.stall, access.pack);
 }
 
 export function OPTIONS() {
