@@ -1,0 +1,2476 @@
+[
+  {
+    "slug": "operations-manager",
+    "tarball": "web/public/packs/agents/operations-manager.hermes.tar.gz",
+    "kb": 19.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 10
+  },
+  {
+    "slug": "3d-scene-developer",
+    "tarball": "web/public/packs/agents/3d-scene-developer.hermes.tar.gz",
+    "kb": 782.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/rss-feeds",
+      "research/research-paper-writing"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "accessibility-auditor",
+    "tarball": "web/public/packs/agents/accessibility-auditor.hermes.tar.gz",
+    "kb": 45.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/github",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "account-strategist",
+    "tarball": "web/public/packs/agents/account-strategist.hermes.tar.gz",
+    "kb": 36.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "productivity/box"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "accounts-payable-agent",
+    "tarball": "web/public/packs/agents/accounts-payable-agent.hermes.tar.gz",
+    "kb": 13.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "creative-strategist",
+    "tarball": "web/public/packs/agents/creative-strategist.hermes.tar.gz",
+    "kb": 63.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "aeo-foundations",
+    "tarball": "web/public/packs/agents/aeo-foundations.hermes.tar.gz",
+    "kb": 21.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "agentic-identity-trust",
+    "tarball": "web/public/packs/agents/agentic-identity-trust.hermes.tar.gz",
+    "kb": 14.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "agentic-search-optimizer",
+    "tarball": "web/public/packs/agents/agentic-search-optimizer.hermes.tar.gz",
+    "kb": 18.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 12
+  },
+  {
+    "slug": "agents-orchestrator",
+    "tarball": "web/public/packs/agents/agents-orchestrator.hermes.tar.gz",
+    "kb": 19.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-multi-agent-teams"
+    ],
+    "gaf_skills": 8
+  },
+  {
+    "slug": "healthcare-aging-parent-care-companion",
+    "tarball": "web/public/packs/agents/healthcare-aging-parent-care-companion.hermes.tar.gz",
+    "kb": 19.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "ai-citation-strategist",
+    "tarball": "web/public/packs/agents/ai-citation-strategist.hermes.tar.gz",
+    "kb": 20.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 9
+  },
+  {
+    "slug": "ai-data-remediation-engineer",
+    "tarball": "web/public/packs/agents/ai-data-remediation-engineer.hermes.tar.gz",
+    "kb": 16.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "software-development/plan"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "ai-engineer",
+    "tarball": "web/public/packs/agents/ai-engineer.hermes.tar.gz",
+    "kb": 30.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "mlops/inference/serving-llms-vllm",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "ai-generated-code-auditor",
+    "tarball": "web/public/packs/agents/ai-generated-code-auditor.hermes.tar.gz",
+    "kb": 21.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-code-review",
+      "autonomous-ai-agents/third-party-skill-vetting"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "analytics-reporter",
+    "tarball": "web/public/packs/agents/analytics-reporter.hermes.tar.gz",
+    "kb": 18.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "anthropologist",
+    "tarball": "web/public/packs/agents/anthropologist.hermes.tar.gz",
+    "kb": 781.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "api-platform-engineer",
+    "tarball": "web/public/packs/agents/api-platform-engineer.hermes.tar.gz",
+    "kb": 22.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "api-tester",
+    "tarball": "web/public/packs/agents/api-tester.hermes.tar.gz",
+    "kb": 19.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "app-store-optimizer",
+    "tarball": "web/public/packs/agents/app-store-optimizer.hermes.tar.gz",
+    "kb": 66.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "marketing-agi/marketing-agi"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "appsec-engineer",
+    "tarball": "web/public/packs/agents/appsec-engineer.hermes.tar.gz",
+    "kb": 21.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "ats-validator-architect",
+    "tarball": "web/public/packs/agents/ats-validator-architect.hermes.tar.gz",
+    "kb": 28.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 11
+  },
+  {
+    "slug": "automation-governance-architect",
+    "tarball": "web/public/packs/agents/automation-governance-architect.hermes.tar.gz",
+    "kb": 21.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-cron-authoring",
+      "autonomous-ai-agents/hermes-kanban-orchestration"
+    ],
+    "gaf_skills": 13
+  },
+  {
+    "slug": "autonomous-optimization-architect",
+    "tarball": "web/public/packs/agents/autonomous-optimization-architect.hermes.tar.gz",
+    "kb": 17.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-code-review",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "backend-architect",
+    "tarball": "web/public/packs/agents/backend-architect.hermes.tar.gz",
+    "kb": 26.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "baidu-seo-specialist",
+    "tarball": "web/public/packs/agents/baidu-seo-specialist.hermes.tar.gz",
+    "kb": 21.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "behavioral-nudge-engine",
+    "tarball": "web/public/packs/agents/behavioral-nudge-engine.hermes.tar.gz",
+    "kb": 13.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "bilibili-content-strategist",
+    "tarball": "web/public/packs/agents/bilibili-content-strategist.hermes.tar.gz",
+    "kb": 68.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "bim-specialist",
+    "tarball": "web/public/packs/agents/bim-specialist.hermes.tar.gz",
+    "kb": 17.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "blender-addon-engineer",
+    "tarball": "web/public/packs/agents/blender-addon-engineer.hermes.tar.gz",
+    "kb": 20.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "blockchain-security-auditor",
+    "tarball": "web/public/packs/agents/blockchain-security-auditor.hermes.tar.gz",
+    "kb": 21.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "book-co-author",
+    "tarball": "web/public/packs/agents/book-co-author.hermes.tar.gz",
+    "kb": 60.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "bookkeeper-controller",
+    "tarball": "web/public/packs/agents/bookkeeper-controller.hermes.tar.gz",
+    "kb": 13.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "brand-guardian",
+    "tarball": "web/public/packs/agents/brand-guardian.hermes.tar.gz",
+    "kb": 65.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "creative/sketch"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "business-strategist",
+    "tarball": "web/public/packs/agents/business-strategist.hermes.tar.gz",
+    "kb": 24.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-kanban-orchestration",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "carousel-growth-engine",
+    "tarball": "web/public/packs/agents/carousel-growth-engine.hermes.tar.gz",
+    "kb": 67.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 7
+  },
+  {
+    "slug": "cartography-designer",
+    "tarball": "web/public/packs/agents/cartography-designer.hermes.tar.gz",
+    "kb": 19.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/rss-feeds",
+      "creative/sketch"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "change-management-consultant",
+    "tarball": "web/public/packs/agents/change-management-consultant.hermes.tar.gz",
+    "kb": 16.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "chief-financial-officer",
+    "tarball": "web/public/packs/agents/chief-financial-officer.hermes.tar.gz",
+    "kb": 17.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 10
+  },
+  {
+    "slug": "chief-of-staff",
+    "tarball": "web/public/packs/agents/chief-of-staff.hermes.tar.gz",
+    "kb": 21.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-kanban-orchestration",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "china-ecommerce-operator",
+    "tarball": "web/public/packs/agents/china-ecommerce-operator.hermes.tar.gz",
+    "kb": 67.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "china-market-localization-strategist",
+    "tarball": "web/public/packs/agents/china-market-localization-strategist.hermes.tar.gz",
+    "kb": 24.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web/blocked-page-recovery",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "china-network-engineer",
+    "tarball": "web/public/packs/agents/china-network-engineer.hermes.tar.gz",
+    "kb": 19.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 2
+  },
+  {
+    "slug": "civil-engineer",
+    "tarball": "web/public/packs/agents/civil-engineer.hermes.tar.gz",
+    "kb": 15.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "clinical-evidence-agent",
+    "tarball": "web/public/packs/agents/clinical-evidence-agent.hermes.tar.gz",
+    "kb": 783.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 8
+  },
+  {
+    "slug": "cloud-security-architect",
+    "tarball": "web/public/packs/agents/cloud-security-architect.hermes.tar.gz",
+    "kb": 21.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "cms-developer",
+    "tarball": "web/public/packs/agents/cms-developer.hermes.tar.gz",
+    "kb": 23.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "code-reviewer",
+    "tarball": "web/public/packs/agents/code-reviewer.hermes.tar.gz",
+    "kb": 17.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-code-review",
+      "autonomous-ai-agents/merge-reconciler"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "codebase-archaeologist",
+    "tarball": "web/public/packs/agents/codebase-archaeologist.hermes.tar.gz",
+    "kb": 22.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "codebase-onboarding-engineer",
+    "tarball": "web/public/packs/agents/codebase-onboarding-engineer.hermes.tar.gz",
+    "kb": 19.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-repo-management"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "compliance-auditor",
+    "tarball": "web/public/packs/agents/compliance-auditor.hermes.tar.gz",
+    "kb": 17.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "content-creator",
+    "tarball": "web/public/packs/agents/content-creator.hermes.tar.gz",
+    "kb": 64.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 3
+  },
+  {
+    "slug": "corporate-training-designer",
+    "tarball": "web/public/packs/agents/corporate-training-designer.hermes.tar.gz",
+    "kb": 13.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 3
+  },
+  {
+    "slug": "cross-border-ecommerce",
+    "tarball": "web/public/packs/agents/cross-border-ecommerce.hermes.tar.gz",
+    "kb": 22.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "cultural-intelligence-strategist",
+    "tarball": "web/public/packs/agents/cultural-intelligence-strategist.hermes.tar.gz",
+    "kb": 15.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "customer-service",
+    "tarball": "web/public/packs/agents/customer-service.hermes.tar.gz",
+    "kb": 15.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "customer-success-manager",
+    "tarball": "web/public/packs/agents/customer-success-manager.hermes.tar.gz",
+    "kb": 15.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "data-consolidation-agent",
+    "tarball": "web/public/packs/agents/data-consolidation-agent.hermes.tar.gz",
+    "kb": 10.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "data-engineer",
+    "tarball": "web/public/packs/agents/data-engineer.hermes.tar.gz",
+    "kb": 17.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "software-development/plan"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "data-privacy-officer",
+    "tarball": "web/public/packs/agents/data-privacy-officer.hermes.tar.gz",
+    "kb": 23.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 11
+  },
+  {
+    "slug": "data-visualization-engineer",
+    "tarball": "web/public/packs/agents/data-visualization-engineer.hermes.tar.gz",
+    "kb": 18.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "creative/sketch"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "database-optimizer",
+    "tarball": "web/public/packs/agents/database-optimizer.hermes.tar.gz",
+    "kb": 14.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "software-development/plan"
+    ],
+    "gaf_skills": 2
+  },
+  {
+    "slug": "database-reliability-engineer",
+    "tarball": "web/public/packs/agents/database-reliability-engineer.hermes.tar.gz",
+    "kb": 18.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "deal-strategist",
+    "tarball": "web/public/packs/agents/deal-strategist.hermes.tar.gz",
+    "kb": 37.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "productivity/box"
+    ],
+    "gaf_skills": 7
+  },
+  {
+    "slug": "desktop-app-engineer",
+    "tarball": "web/public/packs/agents/desktop-app-engineer.hermes.tar.gz",
+    "kb": 23.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "developer-advocate",
+    "tarball": "web/public/packs/agents/developer-advocate.hermes.tar.gz",
+    "kb": 22.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web/blocked-page-recovery",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "developer-tooling-engineer",
+    "tarball": "web/public/packs/agents/developer-tooling-engineer.hermes.tar.gz",
+    "kb": 22.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "devops-automator",
+    "tarball": "web/public/packs/agents/devops-automator.hermes.tar.gz",
+    "kb": 17.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-cron-authoring",
+      "devops/docker-stack-hardening"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "discovery-coach",
+    "tarball": "web/public/packs/agents/discovery-coach.hermes.tar.gz",
+    "kb": 18.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "document-generator",
+    "tarball": "web/public/packs/agents/document-generator.hermes.tar.gz",
+    "kb": 12.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/ocr-and-documents",
+      "productivity/nano-pdf"
+    ],
+    "gaf_skills": 2
+  },
+  {
+    "slug": "douyin-strategist",
+    "tarball": "web/public/packs/agents/douyin-strategist.hermes.tar.gz",
+    "kb": 66.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "drone-reality-mapping",
+    "tarball": "web/public/packs/agents/drone-reality-mapping.hermes.tar.gz",
+    "kb": 17.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "drupal-performance",
+    "tarball": "web/public/packs/agents/drupal-performance.hermes.tar.gz",
+    "kb": 25.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "drupal-shopping-cart",
+    "tarball": "web/public/packs/agents/drupal-shopping-cart.hermes.tar.gz",
+    "kb": 23.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "economy-designer",
+    "tarball": "web/public/packs/agents/economy-designer.hermes.tar.gz",
+    "kb": 12.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "email-intelligence-engineer",
+    "tarball": "web/public/packs/agents/email-intelligence-engineer.hermes.tar.gz",
+    "kb": 21.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "email-strategist",
+    "tarball": "web/public/packs/agents/email-strategist.hermes.tar.gz",
+    "kb": 69.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "embedded-firmware-engineer",
+    "tarball": "web/public/packs/agents/embedded-firmware-engineer.hermes.tar.gz",
+    "kb": 21.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "esg-sustainability-officer",
+    "tarball": "web/public/packs/agents/esg-sustainability-officer.hermes.tar.gz",
+    "kb": 24.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 13
+  },
+  {
+    "slug": "evidence-collector",
+    "tarball": "web/public/packs/agents/evidence-collector.hermes.tar.gz",
+    "kb": 782.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "executive-summary-generator",
+    "tarball": "web/public/packs/agents/executive-summary-generator.hermes.tar.gz",
+    "kb": 14.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/ocr-and-documents",
+      "productivity/nano-pdf"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "experiment-tracker",
+    "tarball": "web/public/packs/agents/experiment-tracker.hermes.tar.gz",
+    "kb": 12.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "fedramp-rmf-compliance",
+    "tarball": "web/public/packs/agents/fedramp-rmf-compliance.hermes.tar.gz",
+    "kb": 22.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "feedback-synthesizer",
+    "tarball": "web/public/packs/agents/feedback-synthesizer.hermes.tar.gz",
+    "kb": 12.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 7
+  },
+  {
+    "slug": "feishu-integration-developer",
+    "tarball": "web/public/packs/agents/feishu-integration-developer.hermes.tar.gz",
+    "kb": 22.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "filament-optimization-specialist",
+    "tarball": "web/public/packs/agents/filament-optimization-specialist.hermes.tar.gz",
+    "kb": 17.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "software-development/plan"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "finance-tracker",
+    "tarball": "web/public/packs/agents/finance-tracker.hermes.tar.gz",
+    "kb": 17.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "financial-analyst",
+    "tarball": "web/public/packs/agents/financial-analyst.hermes.tar.gz",
+    "kb": 17.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "finders",
+    "tarball": "web/public/packs/agents/finders.hermes.tar.gz",
+    "kb": 13.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 2
+  },
+  {
+    "slug": "finops-engineer",
+    "tarball": "web/public/packs/agents/finops-engineer.hermes.tar.gz",
+    "kb": 17.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "fpa-analyst",
+    "tarball": "web/public/packs/agents/fpa-analyst.hermes.tar.gz",
+    "kb": 18.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "french-consulting-market",
+    "tarball": "web/public/packs/agents/french-consulting-market.hermes.tar.gz",
+    "kb": 21.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "frontend-developer",
+    "tarball": "web/public/packs/agents/frontend-developer.hermes.tar.gz",
+    "kb": 19.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "game-audio-engineer",
+    "tarball": "web/public/packs/agents/game-audio-engineer.hermes.tar.gz",
+    "kb": 24.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "mlops/models/audiocraft"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "focus-music-architect",
+    "tarball": "web/public/packs/agents/focus-music-architect.hermes.tar.gz",
+    "kb": 23.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "mlops/models/audiocraft"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "game-designer",
+    "tarball": "web/public/packs/agents/game-designer.hermes.tar.gz",
+    "kb": 12.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "gaussdb-expert",
+    "tarball": "web/public/packs/agents/gaussdb-expert.hermes.tar.gz",
+    "kb": 17.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "software-development/plan"
+    ],
+    "gaf_skills": 3
+  },
+  {
+    "slug": "geoai-ml-engineer",
+    "tarball": "web/public/packs/agents/geoai-ml-engineer.hermes.tar.gz",
+    "kb": 777.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "research/research-paper-writing"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "geographer",
+    "tarball": "web/public/packs/agents/geographer.hermes.tar.gz",
+    "kb": 15.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "geoprocessing-specialist",
+    "tarball": "web/public/packs/agents/geoprocessing-specialist.hermes.tar.gz",
+    "kb": 16.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "gift-day",
+    "tarball": "web/public/packs/agents/gift-day.hermes.tar.gz",
+    "kb": 11.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 2
+  },
+  {
+    "slug": "analyst",
+    "tarball": "web/public/packs/agents/analyst.hermes.tar.gz",
+    "kb": 16.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "qa-engineer",
+    "tarball": "web/public/packs/agents/qa-engineer.hermes.tar.gz",
+    "kb": 17.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "git-workflow-master",
+    "tarball": "web/public/packs/agents/git-workflow-master.hermes.tar.gz",
+    "kb": 20.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-pr-workflow",
+      "github/github-repo-management"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "global-podcast-strategist",
+    "tarball": "web/public/packs/agents/global-podcast-strategist.hermes.tar.gz",
+    "kb": 70.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "godot-gameplay-scripter",
+    "tarball": "web/public/packs/agents/godot-gameplay-scripter.hermes.tar.gz",
+    "kb": 21.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "godot-multiplayer-engineer",
+    "tarball": "web/public/packs/agents/godot-multiplayer-engineer.hermes.tar.gz",
+    "kb": 18.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "devops/docker-stack-hardening"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "godot-shader-developer",
+    "tarball": "web/public/packs/agents/godot-shader-developer.hermes.tar.gz",
+    "kb": 15.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "creative/sketch"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "government-digital-presales-consultant",
+    "tarball": "web/public/packs/agents/government-digital-presales-consultant.hermes.tar.gz",
+    "kb": 22.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "grant-research",
+    "tarball": "web/public/packs/agents/grant-research.hermes.tar.gz",
+    "kb": 792.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 11
+  },
+  {
+    "slug": "grant-writer",
+    "tarball": "web/public/packs/agents/grant-writer.hermes.tar.gz",
+    "kb": 785.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "growth-hacker",
+    "tarball": "web/public/packs/agents/growth-hacker.hermes.tar.gz",
+    "kb": 63.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 3
+  },
+  {
+    "slug": "healthcare-customer-service",
+    "tarball": "web/public/packs/agents/healthcare-customer-service.hermes.tar.gz",
+    "kb": 15.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "innovation-strategist",
+    "tarball": "web/public/packs/agents/innovation-strategist.hermes.tar.gz",
+    "kb": 25.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/rss-feeds",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 10
+  },
+  {
+    "slug": "healthcare-marketing-compliance",
+    "tarball": "web/public/packs/agents/healthcare-marketing-compliance.hermes.tar.gz",
+    "kb": 20.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "historian",
+    "tarball": "web/public/packs/agents/historian.hermes.tar.gz",
+    "kb": 781.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "hospitality-guest-services",
+    "tarball": "web/public/packs/agents/hospitality-guest-services.hermes.tar.gz",
+    "kb": 15.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "hr-onboarding",
+    "tarball": "web/public/packs/agents/hr-onboarding.hermes.tar.gz",
+    "kb": 20.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/ocr-and-documents",
+      "autonomous-ai-agents/third-party-skill-vetting"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "identity-access-engineer",
+    "tarball": "web/public/packs/agents/identity-access-engineer.hermes.tar.gz",
+    "kb": 21.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "identity-graph-operator",
+    "tarball": "web/public/packs/agents/identity-graph-operator.hermes.tar.gz",
+    "kb": 17.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "software-development/plan"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "image-prompt-engineer",
+    "tarball": "web/public/packs/agents/image-prompt-engineer.hermes.tar.gz",
+    "kb": 88.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "creative/comfyui"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "incident-responder",
+    "tarball": "web/public/packs/agents/incident-responder.hermes.tar.gz",
+    "kb": 22.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "incident-response-commander",
+    "tarball": "web/public/packs/agents/incident-response-commander.hermes.tar.gz",
+    "kb": 22.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-kanban-orchestration",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "inclusive-visuals-specialist",
+    "tarball": "web/public/packs/agents/inclusive-visuals-specialist.hermes.tar.gz",
+    "kb": 14.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "creative/sketch"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "infrastructure-maintainer",
+    "tarball": "web/public/packs/agents/infrastructure-maintainer.hermes.tar.gz",
+    "kb": 18.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "devops/docker-stack-hardening",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "instagram-curator",
+    "tarball": "web/public/packs/agents/instagram-curator.hermes.tar.gz",
+    "kb": 64.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "i18n-engineer",
+    "tarball": "web/public/packs/agents/i18n-engineer.hermes.tar.gz",
+    "kb": 23.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "investment-researcher",
+    "tarball": "web/public/packs/agents/investment-researcher.hermes.tar.gz",
+    "kb": 19.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/rss-feeds",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "iot-fleet-engineer",
+    "tarball": "web/public/packs/agents/iot-fleet-engineer.hermes.tar.gz",
+    "kb": 18.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "devops/docker-stack-hardening"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "it-service-manager",
+    "tarball": "web/public/packs/agents/it-service-manager.hermes.tar.gz",
+    "kb": 20.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-cron-authoring",
+      "autonomous-ai-agents/third-party-skill-vetting"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "jira-workflow-steward",
+    "tarball": "web/public/packs/agents/jira-workflow-steward.hermes.tar.gz",
+    "kb": 22.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-kanban-orchestration",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "knowledge-graph-engineer",
+    "tarball": "web/public/packs/agents/knowledge-graph-engineer.hermes.tar.gz",
+    "kb": 20.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "software-development/plan"
+    ],
+    "gaf_skills": 10
+  },
+  {
+    "slug": "korean-business-navigator",
+    "tarball": "web/public/packs/agents/korean-business-navigator.hermes.tar.gz",
+    "kb": 21.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web_competitor_intel/web_competitor_intel",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "kuaishou-strategist",
+    "tarball": "web/public/packs/agents/kuaishou-strategist.hermes.tar.gz",
+    "kb": 69.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "language-translator",
+    "tarball": "web/public/packs/agents/language-translator.hermes.tar.gz",
+    "kb": 18.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "legal-billing-time-tracking",
+    "tarball": "web/public/packs/agents/legal-billing-time-tracking.hermes.tar.gz",
+    "kb": 19.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "legal-client-intake",
+    "tarball": "web/public/packs/agents/legal-client-intake.hermes.tar.gz",
+    "kb": 15.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "legal-compliance-checker",
+    "tarball": "web/public/packs/agents/legal-compliance-checker.hermes.tar.gz",
+    "kb": 19.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "legal-document-review",
+    "tarball": "web/public/packs/agents/legal-document-review.hermes.tar.gz",
+    "kb": 23.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-code-review",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "level-designer",
+    "tarball": "web/public/packs/agents/level-designer.hermes.tar.gz",
+    "kb": 15.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "creative/sketch"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "linkedin-content-creator",
+    "tarball": "web/public/packs/agents/linkedin-content-creator.hermes.tar.gz",
+    "kb": 67.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "livestream-commerce-coach",
+    "tarball": "web/public/packs/agents/livestream-commerce-coach.hermes.tar.gz",
+    "kb": 69.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web/blocked-page-recovery"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "llm-post-training-engineer",
+    "tarball": "web/public/packs/agents/llm-post-training-engineer.hermes.tar.gz",
+    "kb": 40.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "mlops/evaluation/evaluating-llms-harness",
+      "mlops/inference/serving-llms-vllm"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "loan-officer-assistant",
+    "tarball": "web/public/packs/agents/loan-officer-assistant.hermes.tar.gz",
+    "kb": 18.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "lsp-index-engineer",
+    "tarball": "web/public/packs/agents/lsp-index-engineer.hermes.tar.gz",
+    "kb": 20.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "ma-integration-manager",
+    "tarball": "web/public/packs/agents/ma-integration-manager.hermes.tar.gz",
+    "kb": 26.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-kanban-orchestration",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 11
+  },
+  {
+    "slug": "macos-spatial-metal-engineer",
+    "tarball": "web/public/packs/agents/macos-spatial-metal-engineer.hermes.tar.gz",
+    "kb": 21.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "master-plan-architect",
+    "tarball": "web/public/packs/agents/master-plan-architect.hermes.tar.gz",
+    "kb": 17.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "creative/sketch"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "mcp-builder",
+    "tarball": "web/public/packs/agents/mcp-builder.hermes.tar.gz",
+    "kb": 20.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "medical-billing-coding-specialist",
+    "tarball": "web/public/packs/agents/medical-billing-coding-specialist.hermes.tar.gz",
+    "kb": 20.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/ocr-and-documents",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "meeting-notes-specialist",
+    "tarball": "web/public/packs/agents/meeting-notes-specialist.hermes.tar.gz",
+    "kb": 12.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "note-taking/obsidian",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "minimal-change-engineer",
+    "tarball": "web/public/packs/agents/minimal-change-engineer.hermes.tar.gz",
+    "kb": 20.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-code-review",
+      "software-development/plan"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "mobile-app-builder",
+    "tarball": "web/public/packs/agents/mobile-app-builder.hermes.tar.gz",
+    "kb": 22.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "mobile-release-engineer",
+    "tarball": "web/public/packs/agents/mobile-release-engineer.hermes.tar.gz",
+    "kb": 22.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-pr-workflow",
+      "devops/docker-stack-hardening"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "model-qa",
+    "tarball": "web/public/packs/agents/model-qa.hermes.tar.gz",
+    "kb": 33.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "mlops/evaluation/evaluating-llms-harness",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "multi-agent-systems-architect",
+    "tarball": "web/public/packs/agents/multi-agent-systems-architect.hermes.tar.gz",
+    "kb": 31.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-multi-agent-teams",
+      "autonomous-ai-agents/hermes-kanban-orchestration"
+    ],
+    "gaf_skills": 12
+  },
+  {
+    "slug": "multi-platform-publisher",
+    "tarball": "web/public/packs/agents/multi-platform-publisher.hermes.tar.gz",
+    "kb": 68.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "social-media/xurl"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "narrative-designer",
+    "tarball": "web/public/packs/agents/narrative-designer.hermes.tar.gz",
+    "kb": 20.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "creative/excalidraw"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "narratologist",
+    "tarball": "web/public/packs/agents/narratologist.hermes.tar.gz",
+    "kb": 781.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "network-engineer",
+    "tarball": "web/public/packs/agents/network-engineer.hermes.tar.gz",
+    "kb": 17.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "devops/docker-stack-hardening",
+      "software-development/plan"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "offer-lead-gen-strategist",
+    "tarball": "web/public/packs/agents/offer-lead-gen-strategist.hermes.tar.gz",
+    "kb": 67.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "organizational-psychologist",
+    "tarball": "web/public/packs/agents/organizational-psychologist.hermes.tar.gz",
+    "kb": 789.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 10
+  },
+  {
+    "slug": "orgscript-engineer",
+    "tarball": "web/public/packs/agents/orgscript-engineer.hermes.tar.gz",
+    "kb": 19.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "outbound-strategist",
+    "tarball": "web/public/packs/agents/outbound-strategist.hermes.tar.gz",
+    "kb": 68.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "social-media/xurl"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "auditor",
+    "tarball": "web/public/packs/agents/auditor.hermes.tar.gz",
+    "kb": 15.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "paid-social-strategist",
+    "tarball": "web/public/packs/agents/paid-social-strategist.hermes.tar.gz",
+    "kb": 62.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "patch",
+    "tarball": "web/public/packs/agents/patch.hermes.tar.gz",
+    "kb": 16.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-code-review",
+      "software-development/plan"
+    ],
+    "gaf_skills": 2
+  },
+  {
+    "slug": "payments-billing-engineer",
+    "tarball": "web/public/packs/agents/payments-billing-engineer.hermes.tar.gz",
+    "kb": 24.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-pr-workflow",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "pdf-engine-architect",
+    "tarball": "web/public/packs/agents/pdf-engine-architect.hermes.tar.gz",
+    "kb": 22.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "penetration-tester",
+    "tarball": "web/public/packs/agents/penetration-tester.hermes.tar.gz",
+    "kb": 19.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "software-development/plan"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "performance-benchmarker",
+    "tarball": "web/public/packs/agents/performance-benchmarker.hermes.tar.gz",
+    "kb": 16.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "software-development/plan"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "persona-walkthrough",
+    "tarball": "web/public/packs/agents/persona-walkthrough.hermes.tar.gz",
+    "kb": 17.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "creative/sketch"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "personal-growth-mentor",
+    "tarball": "web/public/packs/agents/personal-growth-mentor.hermes.tar.gz",
+    "kb": 12.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "pipeline-analyst",
+    "tarball": "web/public/packs/agents/pipeline-analyst.hermes.tar.gz",
+    "kb": 18.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "pitch",
+    "tarball": "web/public/packs/agents/pitch.hermes.tar.gz",
+    "kb": 20.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "mlops/models/audiocraft"
+    ],
+    "gaf_skills": 3
+  },
+  {
+    "slug": "platform-engineer",
+    "tarball": "web/public/packs/agents/platform-engineer.hermes.tar.gz",
+    "kb": 18.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "devops/docker-stack-hardening",
+      "software-development/plan"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "podcast-strategist",
+    "tarball": "web/public/packs/agents/podcast-strategist.hermes.tar.gz",
+    "kb": 68.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "ppc-strategist",
+    "tarball": "web/public/packs/agents/ppc-strategist.hermes.tar.gz",
+    "kb": 62.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 4
+  },
+  {
+    "slug": "pr-communications-manager",
+    "tarball": "web/public/packs/agents/pr-communications-manager.hermes.tar.gz",
+    "kb": 68.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 6
+  },
+  {
+    "slug": "pricing-analyst",
+    "tarball": "web/public/packs/agents/pricing-analyst.hermes.tar.gz",
+    "kb": 17.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 5
+  },
+  {
+    "slug": "privacy-engineer",
+    "tarball": "web/public/packs/agents/privacy-engineer.hermes.tar.gz",
+    "kb": 18.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/third-party-skill-vetting",
+      "software-development/plan"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "private-domain-operator",
+    "tarball": "web/public/packs/agents/private-domain-operator.hermes.tar.gz",
+    "kb": 68.1,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 4,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "probe",
+    "tarball": "web/public/packs/agents/probe.hermes.tar.gz",
+    "kb": 16.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "web/blocked-page-recovery",
+      "software-development/plan"
+    ],
+    "gaf_skills": 2,
+    "root_json_seeded": false,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "manager",
+    "tarball": "web/public/packs/agents/manager.hermes.tar.gz",
+    "kb": 22.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-kanban-orchestration",
+      "software-development/plan"
+    ],
+    "gaf_skills": 4,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "programmatic-buyer",
+    "tarball": "web/public/packs/agents/programmatic-buyer.hermes.tar.gz",
+    "kb": 62.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 4,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "project-shepherd",
+    "tarball": "web/public/packs/agents/project-shepherd.hermes.tar.gz",
+    "kb": 20.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "autonomous-ai-agents/hermes-kanban-orchestration",
+      "autonomous-ai-agents/hermes-cron-authoring"
+    ],
+    "gaf_skills": 6,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "prompt-engineer",
+    "tarball": "web/public/packs/agents/prompt-engineer.hermes.tar.gz",
+    "kb": 30.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "mlops/evaluation/evaluating-llms-harness",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "proposal-strategist",
+    "tarball": "web/public/packs/agents/proposal-strategist.hermes.tar.gz",
+    "kb": 20.3,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/ocr-and-documents",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "psychologist",
+    "tarball": "web/public/packs/agents/psychologist.hermes.tar.gz",
+    "kb": 781.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "rag-pipeline-engineer",
+    "tarball": "web/public/packs/agents/rag-pipeline-engineer.hermes.tar.gz",
+    "kb": 27.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "mlops/inference/serving-llms-vllm",
+      "software-development/plan"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "rapid-prototyper",
+    "tarball": "web/public/packs/agents/rapid-prototyper.hermes.tar.gz",
+    "kb": 22.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-pr-workflow"
+    ],
+    "gaf_skills": 6,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "real-estate-buyer-seller",
+    "tarball": "web/public/packs/agents/real-estate-buyer-seller.hermes.tar.gz",
+    "kb": 23.2,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/rss-feeds",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 6,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "reality-checker",
+    "tarball": "web/public/packs/agents/reality-checker.hermes.tar.gz",
+    "kb": 19.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 6,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "realtime-collaboration-engineer",
+    "tarball": "web/public/packs/agents/realtime-collaboration-engineer.hermes.tar.gz",
+    "kb": 18.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "devops/docker-stack-hardening"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "recruitment-specialist",
+    "tarball": "web/public/packs/agents/recruitment-specialist.hermes.tar.gz",
+    "kb": 24.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/ocr-and-documents",
+      "data-science/jupyter-live-kernel"
+    ],
+    "gaf_skills": 11,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "reddit-community-builder",
+    "tarball": "web/public/packs/agents/reddit-community-builder.hermes.tar.gz",
+    "kb": 67.8,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "social-media/reddit-reading",
+      "marketing-agi/marketing-agi"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "report-distribution-agent",
+    "tarball": "web/public/packs/agents/report-distribution-agent.hermes.tar.gz",
+    "kb": 17.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/rss-feeds",
+      "productivity/ocr-and-documents"
+    ],
+    "gaf_skills": 4,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "synthesist",
+    "tarball": "web/public/packs/agents/synthesist.hermes.tar.gz",
+    "kb": 782.5,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "research/research-paper-writing",
+      "research/rss-feeds"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "resume-tailor",
+    "tarball": "web/public/packs/agents/resume-tailor.hermes.tar.gz",
+    "kb": 17.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "productivity/ocr-and-documents",
+      "productivity/session-librarian"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "retail-customer-returns",
+    "tarball": "web/public/packs/agents/retail-customer-returns.hermes.tar.gz",
+    "kb": 66.4,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "data-science/jupyter-live-kernel",
+      "marketing-agi/marketing-agi"
+    ],
+    "gaf_skills": 6,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "roblox-avatar-creator",
+    "tarball": "web/public/packs/agents/roblox-avatar-creator.hermes.tar.gz",
+    "kb": 92.9,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "creative/comfyui",
+      "creative/sketch"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "roblox-experience-designer",
+    "tarball": "web/public/packs/agents/roblox-experience-designer.hermes.tar.gz",
+    "kb": 24.7,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "creative/excalidraw",
+      "creative/sketch"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "roblox-systems-scripter",
+    "tarball": "web/public/packs/agents/roblox-systems-scripter.hermes.tar.gz",
+    "kb": 21.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "software-development/plan",
+      "github/github-code-review"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "rust-refactoring-specialist",
+    "tarball": "web/public/packs/agents/rust-refactoring-specialist.hermes.tar.gz",
+    "kb": 21.6,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "github/github-code-review",
+      "software-development/plan"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  },
+  {
+    "slug": "coach",
+    "tarball": "web/public/packs/agents/coach.hermes.tar.gz",
+    "kb": 69.0,
+    "import_test": "pass",
+    "hermes_additions": [
+      "autonomous-ai-agents/hermes-agent",
+      "marketing-agi/marketing-agi",
+      "web_competitor_intel/web_competitor_intel"
+    ],
+    "gaf_skills": 5,
+    "root_json_seeded": true,
+    "gaf_runtime_updated": true
+  }
+]

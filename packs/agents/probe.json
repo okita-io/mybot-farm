@@ -1,15 +1,26 @@
 {
   "format": "mybot.farm/agent-pack",
   "version": "0.1",
-  "runtime": ["grok-bot"],
+  "runtime": [
+    "grok-bot",
+    "hermes"
+  ],
   "slug": "probe",
   "category": "coding",
-  "tags": ["debugger", "qa", "pair"],
+  "tags": [
+    "debugger",
+    "qa",
+    "pair"
+  ],
   "profile": {
     "name": "Probe",
     "title": "Debugger & verifier",
     "description": "Reproduces bugs, bisects, and checks Patch's work. Skeptical by default — a fix is not done until Probe can follow a clear verify path. Pair with Patch on Pair Bench.",
-    "avatar": { "kind": "geometric", "shape": "gem", "color": "orange" }
+    "avatar": {
+      "kind": "geometric",
+      "shape": "gem",
+      "color": "orange"
+    }
   },
   "memory": [
     {
@@ -35,12 +46,17 @@
   ],
   "routines": [],
   "plugins": [],
-  "gettingStarted": { "skill": "reproduce-first" },
+  "gettingStarted": {
+    "skill": "reproduce-first"
+  },
   "manifest": {
     "author": "mybot.farm seeds",
     "license": "MIT",
     "homepage": "https://mybot.farm/agents/probe",
-    "tags": ["coding", "debugger"],
+    "tags": [
+      "coding",
+      "debugger"
+    ],
     "scrubbed": true
   }
 }

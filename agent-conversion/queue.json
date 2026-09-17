@@ -1,0 +1,1724 @@
+[
+  {
+    "slug": "3d-scene-developer",
+    "name": "3D & Scene Developer",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/3d-scene-developer"
+  },
+  {
+    "slug": "accessibility-auditor",
+    "name": "Accessibility Auditor",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/accessibility-auditor"
+  },
+  {
+    "slug": "account-strategist",
+    "name": "Account Strategist",
+    "category": "Sales",
+    "pageUrl": "https://mybot.farm/agents/account-strategist"
+  },
+  {
+    "slug": "accounts-payable-agent",
+    "name": "Accounts Payable Agent",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/accounts-payable-agent"
+  },
+  {
+    "slug": "creative-strategist",
+    "name": "Ad Creative Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/creative-strategist"
+  },
+  {
+    "slug": "aeo-foundations",
+    "name": "AEO Foundations Architect",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/aeo-foundations"
+  },
+  {
+    "slug": "agentic-identity-trust",
+    "name": "Agentic Identity & Trust Architect",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/agentic-identity-trust"
+  },
+  {
+    "slug": "agentic-search-optimizer",
+    "name": "Agentic Search Optimizer",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/agentic-search-optimizer"
+  },
+  {
+    "slug": "agents-orchestrator",
+    "name": "Agents Orchestrator",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/agents-orchestrator"
+  },
+  {
+    "slug": "healthcare-aging-parent-care-companion",
+    "name": "Aging Parent Care Companion",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/healthcare-aging-parent-care-companion"
+  },
+  {
+    "slug": "ai-citation-strategist",
+    "name": "AI Citation Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/ai-citation-strategist"
+  },
+  {
+    "slug": "ai-data-remediation-engineer",
+    "name": "AI Data Remediation Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/ai-data-remediation-engineer"
+  },
+  {
+    "slug": "ai-engineer",
+    "name": "AI Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/ai-engineer"
+  },
+  {
+    "slug": "ai-generated-code-auditor",
+    "name": "AI-Generated Code Security Auditor",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/ai-generated-code-auditor"
+  },
+  {
+    "slug": "analytics-reporter",
+    "name": "Analytics Reporter",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/analytics-reporter"
+  },
+  {
+    "slug": "anthropologist",
+    "name": "Anthropologist",
+    "category": "Education",
+    "pageUrl": "https://mybot.farm/agents/anthropologist"
+  },
+  {
+    "slug": "api-platform-engineer",
+    "name": "API Platform Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/api-platform-engineer"
+  },
+  {
+    "slug": "api-tester",
+    "name": "API Tester",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/api-tester"
+  },
+  {
+    "slug": "app-store-optimizer",
+    "name": "App Store Optimizer",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/app-store-optimizer"
+  },
+  {
+    "slug": "appsec-engineer",
+    "name": "Application Security Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/appsec-engineer"
+  },
+  {
+    "slug": "ats-validator-architect",
+    "name": "ATS Validator Architect",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/ats-validator-architect"
+  },
+  {
+    "slug": "automation-governance-architect",
+    "name": "Automation Governance Architect",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/automation-governance-architect"
+  },
+  {
+    "slug": "autonomous-optimization-architect",
+    "name": "Autonomous Optimization Architect",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/autonomous-optimization-architect"
+  },
+  {
+    "slug": "backend-architect",
+    "name": "Backend Architect",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/backend-architect"
+  },
+  {
+    "slug": "baidu-seo-specialist",
+    "name": "Baidu SEO Specialist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/baidu-seo-specialist"
+  },
+  {
+    "slug": "behavioral-nudge-engine",
+    "name": "Behavioral Nudge Engine",
+    "category": "Productivity",
+    "pageUrl": "https://mybot.farm/agents/behavioral-nudge-engine"
+  },
+  {
+    "slug": "bilibili-content-strategist",
+    "name": "Bilibili Content Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/bilibili-content-strategist"
+  },
+  {
+    "slug": "bim-specialist",
+    "name": "BIM/GIS Specialist",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/bim-specialist"
+  },
+  {
+    "slug": "blender-addon-engineer",
+    "name": "Blender Add-on Engineer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/blender-addon-engineer"
+  },
+  {
+    "slug": "blockchain-security-auditor",
+    "name": "Blockchain Security Auditor",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/blockchain-security-auditor"
+  },
+  {
+    "slug": "book-co-author",
+    "name": "Book Co-Author",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/book-co-author"
+  },
+  {
+    "slug": "bookkeeper-controller",
+    "name": "Bookkeeper & Controller",
+    "category": "Personal finance",
+    "pageUrl": "https://mybot.farm/agents/bookkeeper-controller"
+  },
+  {
+    "slug": "brand-guardian",
+    "name": "Brand Guardian",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/brand-guardian"
+  },
+  {
+    "slug": "business-strategist",
+    "name": "Business Strategist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/business-strategist"
+  },
+  {
+    "slug": "carousel-growth-engine",
+    "name": "Carousel Growth Engine",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/carousel-growth-engine"
+  },
+  {
+    "slug": "cartography-designer",
+    "name": "Cartography Designer",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/cartography-designer"
+  },
+  {
+    "slug": "change-management-consultant",
+    "name": "Change Management Consultant",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/change-management-consultant"
+  },
+  {
+    "slug": "chief-financial-officer",
+    "name": "Chief Financial Officer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/chief-financial-officer"
+  },
+  {
+    "slug": "chief-of-staff",
+    "name": "Chief of Staff",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/chief-of-staff"
+  },
+  {
+    "slug": "china-ecommerce-operator",
+    "name": "China E-Commerce Operator",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/china-ecommerce-operator"
+  },
+  {
+    "slug": "china-market-localization-strategist",
+    "name": "China Market Localization Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/china-market-localization-strategist"
+  },
+  {
+    "slug": "china-network-engineer",
+    "name": "China Network Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/china-network-engineer"
+  },
+  {
+    "slug": "civil-engineer",
+    "name": "Civil Engineer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/civil-engineer"
+  },
+  {
+    "slug": "clinical-evidence-agent",
+    "name": "Clinical Evidence Agent",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/clinical-evidence-agent"
+  },
+  {
+    "slug": "cloud-security-architect",
+    "name": "Cloud Security Architect",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/cloud-security-architect"
+  },
+  {
+    "slug": "cms-developer",
+    "name": "CMS Developer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/cms-developer"
+  },
+  {
+    "slug": "code-reviewer",
+    "name": "Code Reviewer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/code-reviewer"
+  },
+  {
+    "slug": "codebase-archaeologist",
+    "name": "Codebase Archaeologist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/codebase-archaeologist"
+  },
+  {
+    "slug": "codebase-onboarding-engineer",
+    "name": "Codebase Onboarding Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/codebase-onboarding-engineer"
+  },
+  {
+    "slug": "compliance-auditor",
+    "name": "Compliance Auditor",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/compliance-auditor"
+  },
+  {
+    "slug": "content-creator",
+    "name": "Content Creator",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/content-creator"
+  },
+  {
+    "slug": "corporate-training-designer",
+    "name": "Corporate Training Designer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/corporate-training-designer"
+  },
+  {
+    "slug": "cross-border-ecommerce",
+    "name": "Cross-Border E-Commerce Specialist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/cross-border-ecommerce"
+  },
+  {
+    "slug": "cultural-intelligence-strategist",
+    "name": "Cultural Intelligence Strategist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/cultural-intelligence-strategist"
+  },
+  {
+    "slug": "customer-service",
+    "name": "Customer Service",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/customer-service"
+  },
+  {
+    "slug": "customer-success-manager",
+    "name": "Customer Success Manager",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/customer-success-manager"
+  },
+  {
+    "slug": "data-consolidation-agent",
+    "name": "Data Consolidation Agent",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/data-consolidation-agent"
+  },
+  {
+    "slug": "data-engineer",
+    "name": "Data Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/data-engineer"
+  },
+  {
+    "slug": "data-privacy-officer",
+    "name": "Data Privacy Officer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/data-privacy-officer"
+  },
+  {
+    "slug": "data-visualization-engineer",
+    "name": "Data Visualization Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/data-visualization-engineer"
+  },
+  {
+    "slug": "database-optimizer",
+    "name": "Database Optimizer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/database-optimizer"
+  },
+  {
+    "slug": "database-reliability-engineer",
+    "name": "Database Reliability Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/database-reliability-engineer"
+  },
+  {
+    "slug": "deal-strategist",
+    "name": "Deal Strategist",
+    "category": "Sales",
+    "pageUrl": "https://mybot.farm/agents/deal-strategist"
+  },
+  {
+    "slug": "desktop-app-engineer",
+    "name": "Desktop App Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/desktop-app-engineer"
+  },
+  {
+    "slug": "developer-advocate",
+    "name": "Developer Advocate",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/developer-advocate"
+  },
+  {
+    "slug": "developer-tooling-engineer",
+    "name": "Developer Tooling Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/developer-tooling-engineer"
+  },
+  {
+    "slug": "devops-automator",
+    "name": "DevOps Automator",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/devops-automator"
+  },
+  {
+    "slug": "discovery-coach",
+    "name": "Discovery Coach",
+    "category": "Sales",
+    "pageUrl": "https://mybot.farm/agents/discovery-coach"
+  },
+  {
+    "slug": "document-generator",
+    "name": "Document Generator",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/document-generator"
+  },
+  {
+    "slug": "douyin-strategist",
+    "name": "Douyin Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/douyin-strategist"
+  },
+  {
+    "slug": "drone-reality-mapping",
+    "name": "Drone/Reality Mapping Specialist",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/drone-reality-mapping"
+  },
+  {
+    "slug": "drupal-performance",
+    "name": "Drupal Performance Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/drupal-performance"
+  },
+  {
+    "slug": "drupal-shopping-cart",
+    "name": "Drupal Shopping Cart Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/drupal-shopping-cart"
+  },
+  {
+    "slug": "economy-designer",
+    "name": "Economy Designer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/economy-designer"
+  },
+  {
+    "slug": "email-intelligence-engineer",
+    "name": "Email Intelligence Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/email-intelligence-engineer"
+  },
+  {
+    "slug": "email-strategist",
+    "name": "Email Marketing Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/email-strategist"
+  },
+  {
+    "slug": "embedded-firmware-engineer",
+    "name": "Embedded Firmware Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/embedded-firmware-engineer"
+  },
+  {
+    "slug": "esg-sustainability-officer",
+    "name": "ESG & Sustainability Officer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/esg-sustainability-officer"
+  },
+  {
+    "slug": "evidence-collector",
+    "name": "Evidence Collector",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/evidence-collector"
+  },
+  {
+    "slug": "executive-summary-generator",
+    "name": "Executive Summary Generator",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/executive-summary-generator"
+  },
+  {
+    "slug": "experiment-tracker",
+    "name": "Experiment Tracker",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/experiment-tracker"
+  },
+  {
+    "slug": "fedramp-rmf-compliance",
+    "name": "FedRAMP & RMF Compliance Engineer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/fedramp-rmf-compliance"
+  },
+  {
+    "slug": "feedback-synthesizer",
+    "name": "Feedback Synthesizer",
+    "category": "Productivity",
+    "pageUrl": "https://mybot.farm/agents/feedback-synthesizer"
+  },
+  {
+    "slug": "feishu-integration-developer",
+    "name": "Feishu Integration Developer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/feishu-integration-developer"
+  },
+  {
+    "slug": "filament-optimization-specialist",
+    "name": "Filament Optimization Specialist",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/filament-optimization-specialist"
+  },
+  {
+    "slug": "finance-tracker",
+    "name": "Finance Tracker",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/finance-tracker"
+  },
+  {
+    "slug": "financial-analyst",
+    "name": "Financial Analyst",
+    "category": "Personal finance",
+    "pageUrl": "https://mybot.farm/agents/financial-analyst"
+  },
+  {
+    "slug": "finders",
+    "name": "Finders",
+    "category": "Music",
+    "pageUrl": "https://mybot.farm/agents/finders"
+  },
+  {
+    "slug": "finops-engineer",
+    "name": "FinOps Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/finops-engineer"
+  },
+  {
+    "slug": "focus-music-architect",
+    "name": "Focus Music Architect",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/focus-music-architect"
+  },
+  {
+    "slug": "fpa-analyst",
+    "name": "FP&A Analyst",
+    "category": "Personal finance",
+    "pageUrl": "https://mybot.farm/agents/fpa-analyst"
+  },
+  {
+    "slug": "french-consulting-market",
+    "name": "French Consulting Market Navigator",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/french-consulting-market"
+  },
+  {
+    "slug": "frontend-developer",
+    "name": "Frontend Developer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/frontend-developer"
+  },
+  {
+    "slug": "game-audio-engineer",
+    "name": "Game Audio Engineer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/game-audio-engineer"
+  },
+  {
+    "slug": "game-designer",
+    "name": "Game Designer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/game-designer"
+  },
+  {
+    "slug": "gaussdb-expert",
+    "name": "GaussDB Expert Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/gaussdb-expert"
+  },
+  {
+    "slug": "geoai-ml-engineer",
+    "name": "GeoAI/ML Engineer",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/geoai-ml-engineer"
+  },
+  {
+    "slug": "geographer",
+    "name": "Geographer",
+    "category": "Education",
+    "pageUrl": "https://mybot.farm/agents/geographer"
+  },
+  {
+    "slug": "geoprocessing-specialist",
+    "name": "Geoprocessing Specialist",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/geoprocessing-specialist"
+  },
+  {
+    "slug": "gift-day",
+    "name": "Gift Day",
+    "category": "Lifestyle",
+    "pageUrl": "https://mybot.farm/agents/gift-day"
+  },
+  {
+    "slug": "analyst",
+    "name": "GIS Analyst",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/analyst"
+  },
+  {
+    "slug": "qa-engineer",
+    "name": "GIS QA Engineer",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/qa-engineer"
+  },
+  {
+    "slug": "git-workflow-master",
+    "name": "Git Workflow Master",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/git-workflow-master"
+  },
+  {
+    "slug": "global-podcast-strategist",
+    "name": "Global Podcast Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/global-podcast-strategist"
+  },
+  {
+    "slug": "godot-gameplay-scripter",
+    "name": "Godot Gameplay Scripter",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/godot-gameplay-scripter"
+  },
+  {
+    "slug": "godot-multiplayer-engineer",
+    "name": "Godot Multiplayer Engineer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/godot-multiplayer-engineer"
+  },
+  {
+    "slug": "godot-shader-developer",
+    "name": "Godot Shader Developer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/godot-shader-developer"
+  },
+  {
+    "slug": "government-digital-presales-consultant",
+    "name": "Government Digital Presales Consultant",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/government-digital-presales-consultant"
+  },
+  {
+    "slug": "grant-research",
+    "name": "Grant Research",
+    "category": "Education",
+    "pageUrl": "https://mybot.farm/agents/grant-research"
+  },
+  {
+    "slug": "grant-writer",
+    "name": "Grant Writer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/grant-writer"
+  },
+  {
+    "slug": "growth-hacker",
+    "name": "Growth Hacker",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/growth-hacker"
+  },
+  {
+    "slug": "healthcare-customer-service",
+    "name": "Healthcare Customer Service",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/healthcare-customer-service"
+  },
+  {
+    "slug": "innovation-strategist",
+    "name": "Healthcare Innovation Strategist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/innovation-strategist"
+  },
+  {
+    "slug": "healthcare-marketing-compliance",
+    "name": "Healthcare Marketing Compliance Specialist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/healthcare-marketing-compliance"
+  },
+  {
+    "slug": "historian",
+    "name": "Historian",
+    "category": "Education",
+    "pageUrl": "https://mybot.farm/agents/historian"
+  },
+  {
+    "slug": "hospitality-guest-services",
+    "name": "Hospitality Guest Services",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/hospitality-guest-services"
+  },
+  {
+    "slug": "hr-onboarding",
+    "name": "HR Onboarding",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/hr-onboarding"
+  },
+  {
+    "slug": "identity-access-engineer",
+    "name": "Identity & Access Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/identity-access-engineer"
+  },
+  {
+    "slug": "identity-graph-operator",
+    "name": "Identity Graph Operator",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/identity-graph-operator"
+  },
+  {
+    "slug": "image-prompt-engineer",
+    "name": "Image Prompt Engineer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/image-prompt-engineer"
+  },
+  {
+    "slug": "incident-responder",
+    "name": "Incident Responder",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/incident-responder"
+  },
+  {
+    "slug": "incident-response-commander",
+    "name": "Incident Response Commander",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/incident-response-commander"
+  },
+  {
+    "slug": "inclusive-visuals-specialist",
+    "name": "Inclusive Visuals Specialist",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/inclusive-visuals-specialist"
+  },
+  {
+    "slug": "infrastructure-maintainer",
+    "name": "Infrastructure Maintainer",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/infrastructure-maintainer"
+  },
+  {
+    "slug": "instagram-curator",
+    "name": "Instagram Curator",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/instagram-curator"
+  },
+  {
+    "slug": "i18n-engineer",
+    "name": "Internationalization Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/i18n-engineer"
+  },
+  {
+    "slug": "investment-researcher",
+    "name": "Investment Researcher",
+    "category": "Personal finance",
+    "pageUrl": "https://mybot.farm/agents/investment-researcher"
+  },
+  {
+    "slug": "iot-fleet-engineer",
+    "name": "IoT Fleet Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/iot-fleet-engineer"
+  },
+  {
+    "slug": "it-service-manager",
+    "name": "IT Service Manager",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/it-service-manager"
+  },
+  {
+    "slug": "jira-workflow-steward",
+    "name": "Jira Workflow Steward",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/jira-workflow-steward"
+  },
+  {
+    "slug": "knowledge-graph-engineer",
+    "name": "Knowledge Graph Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/knowledge-graph-engineer"
+  },
+  {
+    "slug": "korean-business-navigator",
+    "name": "Korean Business Navigator",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/korean-business-navigator"
+  },
+  {
+    "slug": "kuaishou-strategist",
+    "name": "Kuaishou Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/kuaishou-strategist"
+  },
+  {
+    "slug": "language-translator",
+    "name": "Language Translator",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/language-translator"
+  },
+  {
+    "slug": "legal-billing-time-tracking",
+    "name": "Legal Billing & Time Tracking",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/legal-billing-time-tracking"
+  },
+  {
+    "slug": "legal-client-intake",
+    "name": "Legal Client Intake",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/legal-client-intake"
+  },
+  {
+    "slug": "legal-compliance-checker",
+    "name": "Legal Compliance Checker",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/legal-compliance-checker"
+  },
+  {
+    "slug": "legal-document-review",
+    "name": "Legal Document Review",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/legal-document-review"
+  },
+  {
+    "slug": "level-designer",
+    "name": "Level Designer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/level-designer"
+  },
+  {
+    "slug": "linkedin-content-creator",
+    "name": "LinkedIn Content Creator",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/linkedin-content-creator"
+  },
+  {
+    "slug": "livestream-commerce-coach",
+    "name": "Livestream Commerce Coach",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/livestream-commerce-coach"
+  },
+  {
+    "slug": "llm-post-training-engineer",
+    "name": "LLM Post-Training Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/llm-post-training-engineer"
+  },
+  {
+    "slug": "loan-officer-assistant",
+    "name": "Loan Officer Assistant",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/loan-officer-assistant"
+  },
+  {
+    "slug": "lsp-index-engineer",
+    "name": "LSP/Index Engineer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/lsp-index-engineer"
+  },
+  {
+    "slug": "ma-integration-manager",
+    "name": "M&A Integration Manager",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/ma-integration-manager"
+  },
+  {
+    "slug": "macos-spatial-metal-engineer",
+    "name": "macOS Spatial/Metal Engineer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/macos-spatial-metal-engineer"
+  },
+  {
+    "slug": "master-plan-architect",
+    "name": "Master Plan Architect",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/master-plan-architect"
+  },
+  {
+    "slug": "mcp-builder",
+    "name": "MCP Builder",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/mcp-builder"
+  },
+  {
+    "slug": "medical-billing-coding-specialist",
+    "name": "Medical Billing & Coding Specialist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/medical-billing-coding-specialist"
+  },
+  {
+    "slug": "meeting-notes-specialist",
+    "name": "Meeting Notes Specialist",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/meeting-notes-specialist"
+  },
+  {
+    "slug": "minimal-change-engineer",
+    "name": "Minimal Change Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/minimal-change-engineer"
+  },
+  {
+    "slug": "mobile-app-builder",
+    "name": "Mobile App Builder",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/mobile-app-builder"
+  },
+  {
+    "slug": "mobile-release-engineer",
+    "name": "Mobile Release Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/mobile-release-engineer"
+  },
+  {
+    "slug": "model-qa",
+    "name": "Model QA Specialist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/model-qa"
+  },
+  {
+    "slug": "multi-agent-systems-architect",
+    "name": "Multi-Agent Systems Architect",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/multi-agent-systems-architect"
+  },
+  {
+    "slug": "multi-platform-publisher",
+    "name": "Multi-Platform Publisher",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/multi-platform-publisher"
+  },
+  {
+    "slug": "narrative-designer",
+    "name": "Narrative Designer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/narrative-designer"
+  },
+  {
+    "slug": "narratologist",
+    "name": "Narratologist",
+    "category": "Education",
+    "pageUrl": "https://mybot.farm/agents/narratologist"
+  },
+  {
+    "slug": "network-engineer",
+    "name": "Network Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/network-engineer"
+  },
+  {
+    "slug": "offer-lead-gen-strategist",
+    "name": "Offer & Lead Gen Strategist",
+    "category": "Sales",
+    "pageUrl": "https://mybot.farm/agents/offer-lead-gen-strategist"
+  },
+  {
+    "slug": "operations-manager",
+    "name": "Operations Manager",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/operations-manager"
+  },
+  {
+    "slug": "organizational-psychologist",
+    "name": "Organizational Psychologist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/organizational-psychologist"
+  },
+  {
+    "slug": "orgscript-engineer",
+    "name": "OrgScript Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/orgscript-engineer"
+  },
+  {
+    "slug": "outbound-strategist",
+    "name": "Outbound Strategist",
+    "category": "Sales",
+    "pageUrl": "https://mybot.farm/agents/outbound-strategist"
+  },
+  {
+    "slug": "auditor",
+    "name": "Paid Media Auditor",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/auditor"
+  },
+  {
+    "slug": "paid-social-strategist",
+    "name": "Paid Social Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/paid-social-strategist"
+  },
+  {
+    "slug": "patch",
+    "name": "Patch",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/patch"
+  },
+  {
+    "slug": "payments-billing-engineer",
+    "name": "Payments & Billing Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/payments-billing-engineer"
+  },
+  {
+    "slug": "pdf-engine-architect",
+    "name": "PDF Engine Architect",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/pdf-engine-architect"
+  },
+  {
+    "slug": "penetration-tester",
+    "name": "Penetration Tester",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/penetration-tester"
+  },
+  {
+    "slug": "performance-benchmarker",
+    "name": "Performance Benchmarker",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/performance-benchmarker"
+  },
+  {
+    "slug": "persona-walkthrough",
+    "name": "Persona Walkthrough Specialist",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/persona-walkthrough"
+  },
+  {
+    "slug": "personal-growth-mentor",
+    "name": "Personal Growth Mentor",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/personal-growth-mentor"
+  },
+  {
+    "slug": "pipeline-analyst",
+    "name": "Pipeline Analyst",
+    "category": "Sales",
+    "pageUrl": "https://mybot.farm/agents/pipeline-analyst"
+  },
+  {
+    "slug": "pitch",
+    "name": "Pitch",
+    "category": "Music",
+    "pageUrl": "https://mybot.farm/agents/pitch"
+  },
+  {
+    "slug": "platform-engineer",
+    "name": "Platform Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/platform-engineer"
+  },
+  {
+    "slug": "podcast-strategist",
+    "name": "Podcast Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/podcast-strategist"
+  },
+  {
+    "slug": "ppc-strategist",
+    "name": "PPC Campaign Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/ppc-strategist"
+  },
+  {
+    "slug": "pr-communications-manager",
+    "name": "PR & Communications Manager",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/pr-communications-manager"
+  },
+  {
+    "slug": "pricing-analyst",
+    "name": "Pricing Analyst",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/pricing-analyst"
+  },
+  {
+    "slug": "privacy-engineer",
+    "name": "Privacy Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/privacy-engineer"
+  },
+  {
+    "slug": "private-domain-operator",
+    "name": "Private Domain Operator",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/private-domain-operator"
+  },
+  {
+    "slug": "probe",
+    "name": "Probe",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/probe"
+  },
+  {
+    "slug": "manager",
+    "name": "Product Manager",
+    "category": "Productivity",
+    "pageUrl": "https://mybot.farm/agents/manager"
+  },
+  {
+    "slug": "programmatic-buyer",
+    "name": "Programmatic & Display Buyer",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/programmatic-buyer"
+  },
+  {
+    "slug": "project-shepherd",
+    "name": "Project Shepherd",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/project-shepherd"
+  },
+  {
+    "slug": "prompt-engineer",
+    "name": "Prompt Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/prompt-engineer"
+  },
+  {
+    "slug": "proposal-strategist",
+    "name": "Proposal Strategist",
+    "category": "Sales",
+    "pageUrl": "https://mybot.farm/agents/proposal-strategist"
+  },
+  {
+    "slug": "psychologist",
+    "name": "Psychologist",
+    "category": "Education",
+    "pageUrl": "https://mybot.farm/agents/psychologist"
+  },
+  {
+    "slug": "rag-pipeline-engineer",
+    "name": "RAG Pipeline Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/rag-pipeline-engineer"
+  },
+  {
+    "slug": "rapid-prototyper",
+    "name": "Rapid Prototyper",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/rapid-prototyper"
+  },
+  {
+    "slug": "real-estate-buyer-seller",
+    "name": "Real Estate Buyer & Seller",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/real-estate-buyer-seller"
+  },
+  {
+    "slug": "reality-checker",
+    "name": "Reality Checker",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/reality-checker"
+  },
+  {
+    "slug": "realtime-collaboration-engineer",
+    "name": "Realtime Collaboration Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/realtime-collaboration-engineer"
+  },
+  {
+    "slug": "recruitment-specialist",
+    "name": "Recruitment Specialist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/recruitment-specialist"
+  },
+  {
+    "slug": "reddit-community-builder",
+    "name": "Reddit Community Builder",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/reddit-community-builder"
+  },
+  {
+    "slug": "report-distribution-agent",
+    "name": "Report Distribution Agent",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/report-distribution-agent"
+  },
+  {
+    "slug": "synthesist",
+    "name": "Research Synthesist",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/synthesist"
+  },
+  {
+    "slug": "resume-tailor",
+    "name": "Resume Tailor",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/resume-tailor"
+  },
+  {
+    "slug": "retail-customer-returns",
+    "name": "Retail Customer Returns",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/retail-customer-returns"
+  },
+  {
+    "slug": "roblox-avatar-creator",
+    "name": "Roblox Avatar Creator",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/roblox-avatar-creator"
+  },
+  {
+    "slug": "roblox-experience-designer",
+    "name": "Roblox Experience Designer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/roblox-experience-designer"
+  },
+  {
+    "slug": "roblox-systems-scripter",
+    "name": "Roblox Systems Scripter",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/roblox-systems-scripter"
+  },
+  {
+    "slug": "rust-refactoring-specialist",
+    "name": "Rust Refactoring Specialist",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/rust-refactoring-specialist"
+  },
+  {
+    "slug": "coach",
+    "name": "Sales Coach",
+    "category": "Sales",
+    "pageUrl": "https://mybot.farm/agents/coach"
+  },
+  {
+    "slug": "sales-data-extraction-agent",
+    "name": "Sales Data Extraction Agent",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/sales-data-extraction-agent"
+  },
+  {
+    "slug": "engineer",
+    "name": "Sales Engineer",
+    "category": "Sales",
+    "pageUrl": "https://mybot.farm/agents/engineer"
+  },
+  {
+    "slug": "sales-outreach",
+    "name": "Sales Outreach",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/sales-outreach"
+  },
+  {
+    "slug": "salesforce-architect",
+    "name": "Salesforce Architect",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/salesforce-architect"
+  },
+  {
+    "slug": "scout",
+    "name": "Scout",
+    "category": "Music",
+    "pageUrl": "https://mybot.farm/agents/scout"
+  },
+  {
+    "slug": "search-query-analyst",
+    "name": "Search Query Analyst",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/search-query-analyst"
+  },
+  {
+    "slug": "search-relevance-engineer",
+    "name": "Search Relevance Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/search-relevance-engineer"
+  },
+  {
+    "slug": "secrets-credential-engineer",
+    "name": "Secrets & Credential Hygiene Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/secrets-credential-engineer"
+  },
+  {
+    "slug": "section-508-specialist",
+    "name": "Section 508 Accessibility Specialist",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/section-508-specialist"
+  },
+  {
+    "slug": "architect",
+    "name": "Security Architect",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/architect"
+  },
+  {
+    "slug": "senior-developer",
+    "name": "Senior Developer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/senior-developer"
+  },
+  {
+    "slug": "project-manager-senior",
+    "name": "Senior Project Manager",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/project-manager-senior"
+  },
+  {
+    "slug": "senior-secops",
+    "name": "Senior SecOps Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/senior-secops"
+  },
+  {
+    "slug": "seo-specialist",
+    "name": "SEO Specialist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/seo-specialist"
+  },
+  {
+    "slug": "short-video-editing-coach",
+    "name": "Short-Video Editing Coach",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/short-video-editing-coach"
+  },
+  {
+    "slug": "social-media-strategist",
+    "name": "Social Media Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/social-media-strategist"
+  },
+  {
+    "slug": "software-architect",
+    "name": "Software Architect",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/software-architect"
+  },
+  {
+    "slug": "solidity-smart-contract-engineer",
+    "name": "Solidity Smart Contract Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/solidity-smart-contract-engineer"
+  },
+  {
+    "slug": "solution-engineer",
+    "name": "Solution Engineer",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/solution-engineer"
+  },
+  {
+    "slug": "sovereign-health-systems-agent",
+    "name": "Sovereign Health Systems Agent",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/sovereign-health-systems-agent"
+  },
+  {
+    "slug": "spatial-data-engineer",
+    "name": "Spatial Data Engineer",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/spatial-data-engineer"
+  },
+  {
+    "slug": "spatial-data-scientist",
+    "name": "Spatial Data Scientist",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/spatial-data-scientist"
+  },
+  {
+    "slug": "sprint-prioritizer",
+    "name": "Sprint Prioritizer",
+    "category": "Productivity",
+    "pageUrl": "https://mybot.farm/agents/sprint-prioritizer"
+  },
+  {
+    "slug": "sprout-journal",
+    "name": "Sprout",
+    "category": "Lifestyle",
+    "pageUrl": "https://mybot.farm/agents/sprout-journal"
+  },
+  {
+    "slug": "sre",
+    "name": "SRE (Site Reliability Engineer)",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/sre"
+  },
+  {
+    "slug": "statistician",
+    "name": "Statistician",
+    "category": "Education",
+    "pageUrl": "https://mybot.farm/agents/statistician"
+  },
+  {
+    "slug": "strategy-duel-agent",
+    "name": "Strategy Duel Agent",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/strategy-duel-agent"
+  },
+  {
+    "slug": "studio-operations",
+    "name": "Studio Operations",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/studio-operations"
+  },
+  {
+    "slug": "studio-producer",
+    "name": "Studio Producer",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/studio-producer"
+  },
+  {
+    "slug": "study-abroad-advisor",
+    "name": "Study Abroad Advisor",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/study-abroad-advisor"
+  },
+  {
+    "slug": "supply-chain-strategist",
+    "name": "Supply Chain Strategist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/supply-chain-strategist"
+  },
+  {
+    "slug": "support-responder",
+    "name": "Support Responder",
+    "category": "Ops / admin",
+    "pageUrl": "https://mybot.farm/agents/support-responder"
+  },
+  {
+    "slug": "tax-strategist",
+    "name": "Tax Strategist",
+    "category": "Personal finance",
+    "pageUrl": "https://mybot.farm/agents/tax-strategist"
+  },
+  {
+    "slug": "technical-artist",
+    "name": "Technical Artist",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/technical-artist"
+  },
+  {
+    "slug": "technical-consultant",
+    "name": "Technical Consultant",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/technical-consultant"
+  },
+  {
+    "slug": "technical-writer",
+    "name": "Technical Writer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/technical-writer"
+  },
+  {
+    "slug": "terminal-integration-specialist",
+    "name": "Terminal Integration Specialist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/terminal-integration-specialist"
+  },
+  {
+    "slug": "test-automation-engineer",
+    "name": "Test Automation Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/test-automation-engineer"
+  },
+  {
+    "slug": "test-results-analyzer",
+    "name": "Test Results Analyzer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/test-results-analyzer"
+  },
+  {
+    "slug": "threat-detection-engineer",
+    "name": "Threat Detection Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/threat-detection-engineer"
+  },
+  {
+    "slug": "threat-intelligence-analyst",
+    "name": "Threat Intelligence Analyst",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/threat-intelligence-analyst"
+  },
+  {
+    "slug": "tiktok-strategist",
+    "name": "TikTok Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/tiktok-strategist"
+  },
+  {
+    "slug": "tool-evaluator",
+    "name": "Tool Evaluator",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/tool-evaluator"
+  },
+  {
+    "slug": "tracking-specialist",
+    "name": "Tracking & Measurement Specialist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/tracking-specialist"
+  },
+  {
+    "slug": "trend-researcher",
+    "name": "Trend Researcher",
+    "category": "Productivity",
+    "pageUrl": "https://mybot.farm/agents/trend-researcher"
+  },
+  {
+    "slug": "twitter-engager",
+    "name": "Twitter Engager",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/twitter-engager"
+  },
+  {
+    "slug": "ui-designer",
+    "name": "UI Designer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/ui-designer"
+  },
+  {
+    "slug": "ui-finish-gate-reviewer",
+    "name": "UI Finish-Gate Reviewer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/ui-finish-gate-reviewer"
+  },
+  {
+    "slug": "unity-architect",
+    "name": "Unity Architect",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/unity-architect"
+  },
+  {
+    "slug": "unity-editor-tool-developer",
+    "name": "Unity Editor Tool Developer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/unity-editor-tool-developer"
+  },
+  {
+    "slug": "unity-multiplayer-engineer",
+    "name": "Unity Multiplayer Engineer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/unity-multiplayer-engineer"
+  },
+  {
+    "slug": "unity-shader-graph-artist",
+    "name": "Unity Shader Graph Artist",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/unity-shader-graph-artist"
+  },
+  {
+    "slug": "universal-document-compiler",
+    "name": "Universal Document Compiler",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/universal-document-compiler"
+  },
+  {
+    "slug": "unreal-multiplayer-architect",
+    "name": "Unreal Multiplayer Architect",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/unreal-multiplayer-architect"
+  },
+  {
+    "slug": "unreal-systems-engineer",
+    "name": "Unreal Systems Engineer",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/unreal-systems-engineer"
+  },
+  {
+    "slug": "unreal-technical-artist",
+    "name": "Unreal Technical Artist",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/unreal-technical-artist"
+  },
+  {
+    "slug": "unreal-world-builder",
+    "name": "Unreal World Builder",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/unreal-world-builder"
+  },
+  {
+    "slug": "uswds-developer",
+    "name": "USWDS Developer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/uswds-developer"
+  },
+  {
+    "slug": "ux-architect",
+    "name": "UX Architect",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/ux-architect"
+  },
+  {
+    "slug": "ux-researcher",
+    "name": "UX Researcher",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/ux-researcher"
+  },
+  {
+    "slug": "video-optimization-specialist",
+    "name": "Video Optimization Specialist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/video-optimization-specialist"
+  },
+  {
+    "slug": "video-streaming-engineer",
+    "name": "Video Streaming Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/video-streaming-engineer"
+  },
+  {
+    "slug": "visionos-spatial-engineer",
+    "name": "visionOS Spatial Engineer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/visionos-spatial-engineer"
+  },
+  {
+    "slug": "visual-storyteller",
+    "name": "Visual Storyteller",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/visual-storyteller"
+  },
+  {
+    "slug": "voice-ai-integration-engineer",
+    "name": "Voice AI Integration Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/voice-ai-integration-engineer"
+  },
+  {
+    "slug": "web-gis-developer",
+    "name": "Web GIS Developer",
+    "category": "Research",
+    "pageUrl": "https://mybot.farm/agents/web-gis-developer"
+  },
+  {
+    "slug": "webassembly-engineer",
+    "name": "WebAssembly Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/webassembly-engineer"
+  },
+  {
+    "slug": "wechat-mini-program-developer",
+    "name": "WeChat Mini Program Developer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/wechat-mini-program-developer"
+  },
+  {
+    "slug": "wechat-official-account",
+    "name": "WeChat Official Account Manager",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/wechat-official-account"
+  },
+  {
+    "slug": "weibo-strategist",
+    "name": "Weibo Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/weibo-strategist"
+  },
+  {
+    "slug": "whimsy-injector",
+    "name": "Whimsy Injector",
+    "category": "Creative",
+    "pageUrl": "https://mybot.farm/agents/whimsy-injector"
+  },
+  {
+    "slug": "wordpress-performance",
+    "name": "WordPress Performance Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/wordpress-performance"
+  },
+  {
+    "slug": "wordpress-shopping-cart",
+    "name": "WordPress Shopping Cart Engineer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/wordpress-shopping-cart"
+  },
+  {
+    "slug": "workflow-architect",
+    "name": "Workflow Architect",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/workflow-architect"
+  },
+  {
+    "slug": "workflow-optimizer",
+    "name": "Workflow Optimizer",
+    "category": "Coding",
+    "pageUrl": "https://mybot.farm/agents/workflow-optimizer"
+  },
+  {
+    "slug": "x-twitter-intelligence-analyst",
+    "name": "X/Twitter Intelligence Analyst",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/x-twitter-intelligence-analyst"
+  },
+  {
+    "slug": "xiaohongshu-specialist",
+    "name": "Xiaohongshu Specialist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/xiaohongshu-specialist"
+  },
+  {
+    "slug": "xr-cockpit-interaction-specialist",
+    "name": "XR Cockpit Interaction Specialist",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/xr-cockpit-interaction-specialist"
+  },
+  {
+    "slug": "xr-immersive-developer",
+    "name": "XR Immersive Developer",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/xr-immersive-developer"
+  },
+  {
+    "slug": "xr-interface-architect",
+    "name": "XR Interface Architect",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/xr-interface-architect"
+  },
+  {
+    "slug": "zhihu-strategist",
+    "name": "Zhihu Strategist",
+    "category": "Marketing",
+    "pageUrl": "https://mybot.farm/agents/zhihu-strategist"
+  },
+  {
+    "slug": "zk-steward",
+    "name": "ZK Steward",
+    "category": "Experimental",
+    "pageUrl": "https://mybot.farm/agents/zk-steward"
+  }
+]
