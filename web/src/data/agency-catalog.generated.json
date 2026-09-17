@@ -377,6 +377,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/architect.json",
+      "hermesHref": "/packs/agents/architect.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -1474,6 +1475,7 @@
       "category": "Sales",
       "tone": "agent",
       "downloadHref": "/packs/agents/engineer.json",
+      "hermesHref": "/packs/agents/engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3291,6 +3293,7 @@
       "category": "Ops / admin",
       "tone": "share",
       "downloadHref": "/packs/agents/project-manager-senior.json",
+      "hermesHref": "/packs/agents/project-manager-senior.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3650,6 +3653,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/sales-data-extraction-agent.json",
+      "hermesHref": "/packs/agents/sales-data-extraction-agent.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3667,6 +3671,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/sales-outreach.json",
+      "hermesHref": "/packs/agents/sales-outreach.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3684,6 +3689,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/salesforce-architect.json",
+      "hermesHref": "/packs/agents/salesforce-architect.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3701,6 +3707,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/search-query-analyst.json",
+      "hermesHref": "/packs/agents/search-query-analyst.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3718,6 +3725,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/search-relevance-engineer.json",
+      "hermesHref": "/packs/agents/search-relevance-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3735,6 +3743,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/secrets-credential-engineer.json",
+      "hermesHref": "/packs/agents/secrets-credential-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3752,6 +3761,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/section-508-specialist.json",
+      "hermesHref": "/packs/agents/section-508-specialist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3769,6 +3779,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/senior-developer.json",
+      "hermesHref": "/packs/agents/senior-developer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3786,6 +3797,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/senior-secops.json",
+      "hermesHref": "/packs/agents/senior-secops.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3803,6 +3815,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/seo-specialist.json",
+      "hermesHref": "/packs/agents/seo-specialist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3820,6 +3833,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/short-video-editing-coach.json",
+      "hermesHref": "/packs/agents/short-video-editing-coach.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3837,6 +3851,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/social-media-strategist.json",
+      "hermesHref": "/packs/agents/social-media-strategist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3854,6 +3869,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/software-architect.json",
+      "hermesHref": "/packs/agents/software-architect.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3871,6 +3887,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/solidity-smart-contract-engineer.json",
+      "hermesHref": "/packs/agents/solidity-smart-contract-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3888,6 +3905,7 @@
       "category": "Research",
       "tone": "share",
       "downloadHref": "/packs/agents/solution-engineer.json",
+      "hermesHref": "/packs/agents/solution-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3905,6 +3923,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/sovereign-health-systems-agent.json",
+      "hermesHref": "/packs/agents/sovereign-health-systems-agent.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3922,6 +3941,7 @@
       "category": "Research",
       "tone": "share",
       "downloadHref": "/packs/agents/spatial-data-engineer.json",
+      "hermesHref": "/packs/agents/spatial-data-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3939,6 +3959,7 @@
       "category": "Research",
       "tone": "share",
       "downloadHref": "/packs/agents/spatial-data-scientist.json",
+      "hermesHref": "/packs/agents/spatial-data-scientist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3956,6 +3977,7 @@
       "category": "Productivity",
       "tone": "share",
       "downloadHref": "/packs/agents/sprint-prioritizer.json",
+      "hermesHref": "/packs/agents/sprint-prioritizer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3973,6 +3995,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/sre.json",
+      "hermesHref": "/packs/agents/sre.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -3990,6 +4013,7 @@
       "category": "Education",
       "tone": "find",
       "downloadHref": "/packs/agents/statistician.json",
+      "hermesHref": "/packs/agents/statistician.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4007,6 +4031,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/strategy-duel-agent.json",
+      "hermesHref": "/packs/agents/strategy-duel-agent.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4024,6 +4049,7 @@
       "category": "Ops / admin",
       "tone": "share",
       "downloadHref": "/packs/agents/studio-operations.json",
+      "hermesHref": "/packs/agents/studio-operations.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4041,6 +4067,7 @@
       "category": "Ops / admin",
       "tone": "share",
       "downloadHref": "/packs/agents/studio-producer.json",
+      "hermesHref": "/packs/agents/studio-producer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4058,6 +4085,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/study-abroad-advisor.json",
+      "hermesHref": "/packs/agents/study-abroad-advisor.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4075,6 +4103,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/supply-chain-strategist.json",
+      "hermesHref": "/packs/agents/supply-chain-strategist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4092,6 +4121,7 @@
       "category": "Ops / admin",
       "tone": "share",
       "downloadHref": "/packs/agents/support-responder.json",
+      "hermesHref": "/packs/agents/support-responder.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4127,6 +4157,7 @@
       "category": "Personal finance",
       "tone": "find",
       "downloadHref": "/packs/agents/tax-strategist.json",
+      "hermesHref": "/packs/agents/tax-strategist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4144,6 +4175,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/technical-artist.json",
+      "hermesHref": "/packs/agents/technical-artist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4161,6 +4193,7 @@
       "category": "Research",
       "tone": "share",
       "downloadHref": "/packs/agents/technical-consultant.json",
+      "hermesHref": "/packs/agents/technical-consultant.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4178,6 +4211,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/technical-writer.json",
+      "hermesHref": "/packs/agents/technical-writer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4195,6 +4229,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/terminal-integration-specialist.json",
+      "hermesHref": "/packs/agents/terminal-integration-specialist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4212,6 +4247,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/test-automation-engineer.json",
+      "hermesHref": "/packs/agents/test-automation-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4229,6 +4265,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/test-results-analyzer.json",
+      "hermesHref": "/packs/agents/test-results-analyzer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4246,6 +4283,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/threat-detection-engineer.json",
+      "hermesHref": "/packs/agents/threat-detection-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4263,6 +4301,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/threat-intelligence-analyst.json",
+      "hermesHref": "/packs/agents/threat-intelligence-analyst.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4280,6 +4319,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/tiktok-strategist.json",
+      "hermesHref": "/packs/agents/tiktok-strategist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4297,6 +4337,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/tool-evaluator.json",
+      "hermesHref": "/packs/agents/tool-evaluator.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4314,6 +4355,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/tracking-specialist.json",
+      "hermesHref": "/packs/agents/tracking-specialist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4331,6 +4373,7 @@
       "category": "Productivity",
       "tone": "share",
       "downloadHref": "/packs/agents/trend-researcher.json",
+      "hermesHref": "/packs/agents/trend-researcher.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4348,6 +4391,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/twitter-engager.json",
+      "hermesHref": "/packs/agents/twitter-engager.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4365,6 +4409,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/ui-designer.json",
+      "hermesHref": "/packs/agents/ui-designer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4382,6 +4427,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/ui-finish-gate-reviewer.json",
+      "hermesHref": "/packs/agents/ui-finish-gate-reviewer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4399,6 +4445,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/unity-architect.json",
+      "hermesHref": "/packs/agents/unity-architect.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4416,6 +4463,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/unity-editor-tool-developer.json",
+      "hermesHref": "/packs/agents/unity-editor-tool-developer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4433,6 +4481,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/unity-multiplayer-engineer.json",
+      "hermesHref": "/packs/agents/unity-multiplayer-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4450,6 +4499,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/unity-shader-graph-artist.json",
+      "hermesHref": "/packs/agents/unity-shader-graph-artist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4467,6 +4517,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/universal-document-compiler.json",
+      "hermesHref": "/packs/agents/universal-document-compiler.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4484,6 +4535,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/unreal-multiplayer-architect.json",
+      "hermesHref": "/packs/agents/unreal-multiplayer-architect.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4501,6 +4553,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/unreal-systems-engineer.json",
+      "hermesHref": "/packs/agents/unreal-systems-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4518,6 +4571,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/unreal-technical-artist.json",
+      "hermesHref": "/packs/agents/unreal-technical-artist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4535,6 +4589,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/unreal-world-builder.json",
+      "hermesHref": "/packs/agents/unreal-world-builder.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4552,6 +4607,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/uswds-developer.json",
+      "hermesHref": "/packs/agents/uswds-developer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4569,6 +4625,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/ux-architect.json",
+      "hermesHref": "/packs/agents/ux-architect.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4586,6 +4643,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/ux-researcher.json",
+      "hermesHref": "/packs/agents/ux-researcher.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4603,6 +4661,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/video-optimization-specialist.json",
+      "hermesHref": "/packs/agents/video-optimization-specialist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4620,6 +4679,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/video-streaming-engineer.json",
+      "hermesHref": "/packs/agents/video-streaming-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4637,6 +4697,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/visionos-spatial-engineer.json",
+      "hermesHref": "/packs/agents/visionos-spatial-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4654,6 +4715,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/visual-storyteller.json",
+      "hermesHref": "/packs/agents/visual-storyteller.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4671,6 +4733,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/voice-ai-integration-engineer.json",
+      "hermesHref": "/packs/agents/voice-ai-integration-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4688,6 +4751,7 @@
       "category": "Research",
       "tone": "share",
       "downloadHref": "/packs/agents/web-gis-developer.json",
+      "hermesHref": "/packs/agents/web-gis-developer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4705,6 +4769,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/webassembly-engineer.json",
+      "hermesHref": "/packs/agents/webassembly-engineer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4722,6 +4787,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/wechat-mini-program-developer.json",
+      "hermesHref": "/packs/agents/wechat-mini-program-developer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4739,6 +4805,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/wechat-official-account.json",
+      "hermesHref": "/packs/agents/wechat-official-account.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4756,6 +4823,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/weibo-strategist.json",
+      "hermesHref": "/packs/agents/weibo-strategist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4773,6 +4841,7 @@
       "category": "Creative",
       "tone": "find",
       "downloadHref": "/packs/agents/whimsy-injector.json",
+      "hermesHref": "/packs/agents/whimsy-injector.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4790,6 +4859,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/wordpress-performance.json",
+      "hermesHref": "/packs/agents/wordpress-performance.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4807,6 +4877,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/wordpress-shopping-cart.json",
+      "hermesHref": "/packs/agents/wordpress-shopping-cart.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4824,6 +4895,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/workflow-architect.json",
+      "hermesHref": "/packs/agents/workflow-architect.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4841,6 +4913,7 @@
       "category": "Coding",
       "tone": "share",
       "downloadHref": "/packs/agents/workflow-optimizer.json",
+      "hermesHref": "/packs/agents/workflow-optimizer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4858,6 +4931,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/x-twitter-intelligence-analyst.json",
+      "hermesHref": "/packs/agents/x-twitter-intelligence-analyst.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4875,6 +4949,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/xiaohongshu-specialist.json",
+      "hermesHref": "/packs/agents/xiaohongshu-specialist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4892,6 +4967,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/xr-cockpit-interaction-specialist.json",
+      "hermesHref": "/packs/agents/xr-cockpit-interaction-specialist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4909,6 +4985,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/xr-immersive-developer.json",
+      "hermesHref": "/packs/agents/xr-immersive-developer.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4926,6 +5003,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/xr-interface-architect.json",
+      "hermesHref": "/packs/agents/xr-interface-architect.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4943,6 +5021,7 @@
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/zhihu-strategist.json",
+      "hermesHref": "/packs/agents/zhihu-strategist.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -4960,6 +5039,7 @@
       "category": "Experimental",
       "tone": "agent",
       "downloadHref": "/packs/agents/zk-steward.json",
+      "hermesHref": "/packs/agents/zk-steward.hermes.tar.gz",
       "priceCents": 0,
       "listedAt": "2026-09-14T00:00:00.000Z",
       "author": {
@@ -5449,7 +5529,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "statistician",
       "category": "education",
@@ -5952,7 +6033,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "ui-designer",
       "category": "creative",
@@ -6051,7 +6133,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "ui-finish-gate-reviewer",
       "category": "creative",
@@ -6144,7 +6227,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "ux-architect",
       "category": "creative",
@@ -6243,7 +6327,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "ux-researcher",
       "category": "creative",
@@ -6342,7 +6427,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "visual-storyteller",
       "category": "creative",
@@ -6438,7 +6524,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "whimsy-injector",
       "category": "creative",
@@ -11396,7 +11483,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "search-relevance-engineer",
       "category": "coding",
@@ -11494,7 +11582,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "section-508-specialist",
       "category": "coding",
@@ -11597,7 +11686,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "senior-developer",
       "category": "coding",
@@ -11694,7 +11784,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "software-architect",
       "category": "coding",
@@ -11781,7 +11872,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "solidity-smart-contract-engineer",
       "category": "coding",
@@ -11881,7 +11973,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "sre",
       "category": "coding",
@@ -11977,7 +12070,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "technical-writer",
       "category": "coding",
@@ -12073,7 +12167,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "universal-document-compiler",
       "category": "coding",
@@ -12171,7 +12266,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "uswds-developer",
       "category": "coding",
@@ -12272,7 +12368,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "video-streaming-engineer",
       "category": "coding",
@@ -12370,7 +12467,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "voice-ai-integration-engineer",
       "category": "coding",
@@ -12468,7 +12566,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "webassembly-engineer",
       "category": "coding",
@@ -12564,7 +12663,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "wechat-mini-program-developer",
       "category": "coding",
@@ -12664,7 +12764,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "wordpress-performance",
       "category": "coding",
@@ -12767,7 +12868,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "wordpress-shopping-cart",
       "category": "coding",
@@ -13274,7 +13376,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "tax-strategist",
       "category": "finance-personal",
@@ -14578,7 +14681,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "technical-artist",
       "category": "creative",
@@ -14676,7 +14780,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "unity-architect",
       "category": "creative",
@@ -14774,7 +14879,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "unity-editor-tool-developer",
       "category": "creative",
@@ -14876,7 +14982,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "unity-multiplayer-engineer",
       "category": "creative",
@@ -14976,7 +15083,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "unity-shader-graph-artist",
       "category": "creative",
@@ -15078,7 +15186,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "unreal-multiplayer-architect",
       "category": "creative",
@@ -15178,7 +15287,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "unreal-systems-engineer",
       "category": "creative",
@@ -15278,7 +15388,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "unreal-technical-artist",
       "category": "creative",
@@ -15378,7 +15489,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "unreal-world-builder",
       "category": "creative",
@@ -16192,7 +16304,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "solution-engineer",
       "category": "research",
@@ -16279,7 +16392,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "spatial-data-engineer",
       "category": "research",
@@ -16368,7 +16482,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "spatial-data-scientist",
       "category": "research",
@@ -16457,7 +16572,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "technical-consultant",
       "category": "research",
@@ -16544,7 +16660,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "web-gis-developer",
       "category": "research",
@@ -16875,7 +16992,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "sovereign-health-systems-agent",
       "category": "experimental",
@@ -19471,7 +19589,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "seo-specialist",
       "category": "marketing",
@@ -19567,7 +19686,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "short-video-editing-coach",
       "category": "marketing",
@@ -19657,7 +19777,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "social-media-strategist",
       "category": "marketing",
@@ -19770,7 +19891,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "tiktok-strategist",
       "category": "marketing",
@@ -19866,7 +19988,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "twitter-engager",
       "category": "marketing",
@@ -19962,7 +20085,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "video-optimization-specialist",
       "category": "marketing",
@@ -20055,7 +20179,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "wechat-official-account",
       "category": "marketing",
@@ -20155,7 +20280,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "weibo-strategist",
       "category": "marketing",
@@ -20246,7 +20372,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "x-twitter-intelligence-analyst",
       "category": "marketing",
@@ -20344,7 +20471,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "xiaohongshu-specialist",
       "category": "marketing",
@@ -20440,7 +20568,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "zhihu-strategist",
       "category": "marketing",
@@ -20994,7 +21123,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "search-query-analyst",
       "category": "marketing",
@@ -21085,7 +21215,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "tracking-specialist",
       "category": "marketing",
@@ -21468,7 +21599,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "sprint-prioritizer",
       "category": "productivity",
@@ -21579,7 +21711,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "trend-researcher",
       "category": "productivity",
@@ -22096,7 +22229,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "studio-operations",
       "category": "ops",
@@ -22199,7 +22333,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "studio-producer",
       "category": "ops",
@@ -22302,7 +22437,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "project-manager-senior",
       "category": "ops",
@@ -22879,7 +23015,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "engineer",
       "category": "sales",
@@ -23570,7 +23707,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "architect",
       "category": "coding",
@@ -24156,7 +24294,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "secrets-credential-engineer",
       "category": "coding",
@@ -24260,7 +24399,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "senior-secops",
       "category": "coding",
@@ -24377,7 +24517,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "threat-detection-engineer",
       "category": "coding",
@@ -24479,7 +24620,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "threat-intelligence-analyst",
       "category": "coding",
@@ -24684,7 +24826,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "terminal-integration-specialist",
       "category": "experimental",
@@ -24781,7 +24924,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "visionos-spatial-engineer",
       "category": "experimental",
@@ -24868,7 +25012,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "xr-cockpit-interaction-specialist",
       "category": "experimental",
@@ -24945,7 +25090,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "xr-immersive-developer",
       "category": "experimental",
@@ -25020,7 +25166,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "xr-interface-architect",
       "category": "experimental",
@@ -29052,7 +29199,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "sales-data-extraction-agent",
       "category": "experimental",
@@ -29143,7 +29291,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "sales-outreach",
       "category": "experimental",
@@ -30615,7 +30764,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "salesforce-architect",
       "category": "experimental",
@@ -30711,7 +30861,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "strategy-duel-agent",
       "category": "experimental",
@@ -30809,7 +30960,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "workflow-architect",
       "category": "experimental",
@@ -30905,7 +31057,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "study-abroad-advisor",
       "category": "experimental",
@@ -30998,7 +31151,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "supply-chain-strategist",
       "category": "experimental",
@@ -31131,7 +31285,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "zk-steward",
       "category": "experimental",
@@ -31744,7 +31899,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "support-responder",
       "category": "ops",
@@ -32343,7 +32499,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "test-automation-engineer",
       "category": "coding",
@@ -32441,7 +32598,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "test-results-analyzer",
       "category": "coding",
@@ -32544,7 +32702,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "tool-evaluator",
       "category": "coding",
@@ -32645,7 +32804,8 @@
       "version": "0.2",
       "runtime": [
         "grok-bot",
-        "openclaw"
+        "openclaw",
+        "hermes"
       ],
       "slug": "workflow-optimizer",
       "category": "coding",
