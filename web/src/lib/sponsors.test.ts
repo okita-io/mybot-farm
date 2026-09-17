@@ -54,11 +54,13 @@ describe("sponsorRails", () => {
     const { left, right } = sponsorRails();
     assert.equal(left.length, 5);
     assert.equal(right.length, 5);
-    assert.equal(left[0]?.creatives[0]?.kind, "house");
-    assert.equal(left[3]?.creatives[0]?.id, "sponsor-applied-ai");
-    assert.equal(left[3]?.creatives[0]?.href, "https://appliedai.solutions/");
-    assert.equal(right[0]?.creatives[0]?.kind, "house");
-    assert.equal(openSlotCount(), 3);
+    assert.equal(left[0]?.creatives[0]?.id, "sponsor-applied-ai");
+    assert.equal(left[0]?.creatives[0]?.href, "https://appliedai.solutions/");
+    assert.equal(left[1]?.creatives[0]?.kind, "house");
+    assert.equal(right[0]?.creatives[0]?.id, "sponsor-aicookd");
+    assert.equal(right[0]?.creatives[0]?.href, "https://aicookd.com/");
+    assert.equal(right[1]?.creatives[0]?.kind, "house");
+    assert.equal(openSlotCount(), 2);
   });
 });
 
@@ -75,5 +77,8 @@ describe("mobileSponsorCreatives", () => {
     assert.ok(
       creatives.some((creative) => creative.id === "sponsor-applied-ai"),
     );
+    assert.ok(creatives.some((creative) => creative.id === "sponsor-aicookd"));
+    assert.equal(creatives[0]?.id, "sponsor-applied-ai");
+    assert.equal(creatives[1]?.id, "sponsor-aicookd");
   });
 });

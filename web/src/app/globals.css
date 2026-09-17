@@ -159,7 +159,7 @@
 
   @media (max-width: 89.99rem) {
     html {
-      scroll-padding-bottom: calc(7rem + env(safe-area-inset-bottom, 0px));
+      scroll-padding-top: calc(7.5rem + env(safe-area-inset-top, 0px));
     }
   }
 

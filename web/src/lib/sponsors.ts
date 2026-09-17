@@ -112,6 +112,20 @@ const HOUSE_RIGHT: SponsorCreative[] = [
   },
 ];
 
+const SPONSORED_RIGHT: SponsorCreative[] = [
+  {
+    id: "sponsor-aicookd",
+    name: "aicookd",
+    blurb: "The freshest AI\ngames and creations.",
+    href: "https://aicookd.com/",
+    hrefLabel: "aicookd.com",
+    icon: "a",
+    tone: "share",
+    kind: "sponsor",
+    external: true,
+  },
+];
+
 export function openSponsorCreative(
   side: SponsorSide,
   index: number,
@@ -148,13 +162,13 @@ export function fillSponsorSlots(
 export function sponsorRails() {
   return {
     left: fillSponsorSlots("left", [
-      ...HOUSE_LEFT.map((creative) => [creative]),
       ...SPONSORED_LEFT.map((creative) => [creative]),
+      ...HOUSE_LEFT.map((creative) => [creative]),
     ]),
-    right: fillSponsorSlots(
-      "right",
-      HOUSE_RIGHT.map((creative) => [creative]),
-    ),
+    right: fillSponsorSlots("right", [
+      ...SPONSORED_RIGHT.map((creative) => [creative]),
+      ...HOUSE_RIGHT.map((creative) => [creative]),
+    ]),
   };
 }
 
@@ -170,8 +184,10 @@ export function mobileSponsorCreatives() {
     }
   }
   const featured = creatives.filter((creative) => creative.kind !== "open");
+  const offsite = featured.filter((creative) => creative.kind === "sponsor");
+  const house = featured.filter((creative) => creative.kind === "house");
   const open = creatives.find((creative) => creative.kind === "open");
-  return open ? [...featured, open] : featured;
+  return open ? [...offsite, ...house, open] : [...offsite, ...house];
 }
 
 export function openSlotCount() {

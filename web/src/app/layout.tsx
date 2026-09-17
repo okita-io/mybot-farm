@@ -74,7 +74,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         "h-full antialiased",
       )}
     >
-      <body className="min-h-full bg-background text-foreground max-[89.99rem]:pb-28">
+      <body className="min-h-full bg-background text-foreground">
         <ClerkProvider appearance={{ theme: shadcn }}>
           <ThemeProvider>
             <JsonLd data={websiteLd} />
@@ -91,7 +91,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 <SiteHeader />
                 <UserSync />
                 <WebmcpTools />
-                <main id="content" className="flex flex-1 flex-col">
+                <main id="content" className="flex flex-1 flex-col max-[89.99rem]:pt-24">
                   {children}
                 </main>
                 <SiteFooter />
