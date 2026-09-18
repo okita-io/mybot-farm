@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Emit packs/teams/<slug>/TEAM.md (and the web/public mirror) from GAF team-packs."""
+"""Emit packs/teams/<slug>/TEAM.md (and the web/public mirror) from GAF team-packs.
+
+Production serves /packs from okita-io/mybot-farm-catalog (see
+web/scripts/pull-catalog.sh), not from this tree. After generating, copy
+teams/<slug>/TEAM.md into that catalog or the live URLs will 404.
+"""
 
 from __future__ import annotations
 

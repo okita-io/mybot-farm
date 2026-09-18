@@ -5,6 +5,40 @@ and shipped `TEAM.md` for all 39 seeds (C.1). Plant marks members as Bots, write
 team orientation + team-rules, fetches or generates TEAM.md, and creates a group
 chat when `HERMES_GATEWAY_RPC_URL` is set; otherwise it prints the Desktop step.
 
+**Independent verification receipts (2026-09-18, post-`5906279`):**
+- Plugin suite: 43/43 green.
+- Scratch-home ejection test (fresh `HERMES_HOME`, live farm downloads):
+  `plant("godot-studio")` → ok; 5/5 profiles imported; Bot marker
+  `ui_meta.hermes-bots.groups: godot-studio` on 5/5; team orientation in 5/5
+  `memories/MEMORY.md`; `godot-studio-team-rules` installed on 5/5; TEAM.md +
+  FARM.md in `~/.hermes/teams/godot-studio/`; warm-bot note (≥5) emitted;
+  graceful Desktop fallback note when no gateway RPC URL is set. Idempotent
+  re-run: 1 begin / 1 end marker, no duplicated blocks.
+- Live farm: `/api/packs/<slug>` 200 for all 39; 39/39 team stalls listed on
+  `/api/stalls?kind=team`; all 139 unique member `.hermes.tar.gz` → 200.
+- Hand-made teams: workbench (3 members + protocol skill), road-crew (rules
+  skill installed at plant), pair-bench (no rules skill → no-op, correct).
+
+**Live TEAM.md (Cursor merge/sync, 2026-09-18):** production already built
+`5906279`; the 0/39 404s were catalog lag, not farm-commit lag.
+`web/scripts/pull-catalog.sh` replaces `public/packs` from
+`okita-io/mybot-farm-catalog` at Vercel build time, and that repo had the 39
+JSON packs plus workbench `TEAM.md` only. Pushed `teams/<slug>/TEAM.md` for all
+39 generated packs (`b0759e7`), rebuilt production
+(`dpl_BT7URHh7c9Sb9Y7PAVC5PHC8PQnr`), then re-swept
+`https://mybot.farm/packs/teams/<slug>/TEAM.md` → **39/39 HTTP 200**.
+
+**Still open (no repo-side code changes):**
+1. **Room automation is env-gated, not auto-detected:** `groups.create`/`groups.send`
+   fire only when `HERMES_GATEWAY_RPC_URL` is set (HTTP JSON-RPC). Hermes serves
+   room RPCs on the WebSocket/TUI backend, not a documented plain-HTTP endpoint,
+   so there is no zero-config plugin path to them. The `ui_meta.hermes-bots.groups`
+   seating + printed Desktop fallback step is the working default; document
+   `HERMES_GATEWAY_RPC_URL` in the plugin README if a plain-HTTP gateway surface
+   ever lands.
+2. **GAP 2 (upstream Hermes):** `hermes profile import` still doesn't clear
+   `.deleted/` tombstones; the plugin's clear-before-import workaround covers it.
+
 Written 2026-09-17 against the live Hermes source at
 `~/.hermes/hermes-agent` and the current farm tree. Companion to
 `docs/hermes-team-stall-bundle.md` (the Workbench v1.1 ejection-test reference).
