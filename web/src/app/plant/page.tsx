@@ -54,8 +54,8 @@ export default async function PlantPage({ searchParams }: PageProps<"/plant">) {
           Hermes plant
         </Link>
         ,{" "}
-        <Link href="/teams" className="font-medium text-foreground underline-offset-4 hover:underline">
-          Agent Teams
+        <Link href="/about#teams" className="font-medium text-foreground underline-offset-4 hover:underline">
+          Why plant a team
         </Link>
         , and WebMCP (agent tools). Preview is anonymous. Starting a plot (and
         persisting a library) comes later.

@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { isAdminEmail } from "@/lib/admin";
 import { getCachedViewer } from "@/lib/users";
 import { navLinks, site } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 export function SiteMark() {
   return (
@@ -44,7 +45,12 @@ export async function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="shrink-0 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+              className={cn(
+                "shrink-0 text-sm underline-offset-4 hover:underline",
+                "emphasis" in link && link.emphasis
+                  ? "font-semibold text-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
             >
               {link.label}
             </Link>

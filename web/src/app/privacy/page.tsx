@@ -201,7 +201,7 @@ export default function PrivacyPage() {
               <Link href="/press">Press</Link>
             </li>
             <li>
-              <Link href="/teams">Agent Teams</Link>
+              <Link href="/about#teams">Why plant a team</Link>
             </li>
             <li>
               <Link href="/how-to">How to install or share</Link>

@@ -30,6 +30,12 @@ export function HomeHero() {
             </p>
             <p className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm">
               <Link
+                href="/catalog"
+                className="font-semibold text-foreground underline-offset-4 hover:underline"
+              >
+                Catalog
+              </Link>
+              <Link
                 href="/about"
                 className="font-medium text-foreground underline-offset-4 hover:underline"
               >
@@ -42,22 +48,10 @@ export function HomeHero() {
                 How-To
               </Link>
               <Link
-                href="/teams"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
-              >
-                Teams
-              </Link>
-              <Link
                 href="/sell"
                 className="font-medium text-foreground underline-offset-4 hover:underline"
               >
                 Sell
-              </Link>
-              <Link
-                href="/catalog"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
-              >
-                Open bots
               </Link>
             </p>
           </div>

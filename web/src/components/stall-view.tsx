@@ -89,8 +89,11 @@ export async function StallView({
           {stall.kind === "team" ? (
             <>
               {" · "}
-              <Link href="/teams" className="underline-offset-4 hover:underline">
-                Agent Teams
+              <Link
+                href="/catalog?kind=team"
+                className="underline-offset-4 hover:underline"
+              >
+                Teams
               </Link>
             </>
           ) : null}

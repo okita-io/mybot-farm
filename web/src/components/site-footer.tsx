@@ -13,7 +13,11 @@ export function SiteFooter() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                className={
+                  link.href === "/catalog"
+                    ? "text-sm font-semibold text-foreground underline-offset-4 hover:underline"
+                    : "text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                }
               >
                 {link.label}
               </Link>

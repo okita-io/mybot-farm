@@ -13,8 +13,7 @@ export const site = {
 } as const;
 
 export const navLinks = [
-  { href: "/catalog", label: "Catalog" },
-  { href: "/teams", label: "Teams" },
+  { href: "/catalog", label: "Catalog", emphasis: true },
   { href: "/sell", label: "Sell" },
   { href: "/about", label: "About" },
   { href: "/press", label: "Press" },
@@ -30,9 +29,9 @@ export const siteOgImage = {
 } as const;
 
 export const footerLinks = [
+  { href: "/catalog", label: "Catalog" },
   { href: "/about", label: "About" },
   { href: "/press", label: "Press" },
-  { href: "/teams", label: "Teams" },
   { href: "/sell", label: "Sell" },
   { href: "/sponsor", label: "Sponsor" },
   { href: "/how-to", label: "How-To" },
@@ -41,7 +40,6 @@ export const footerLinks = [
   { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
-  { href: "/catalog", label: "Catalog" },
 ] as const;
 
 export const hermesPlugin = {
@@ -78,12 +76,6 @@ export const contentRoutes = [
     title: "Press",
     changeFrequency: "monthly" as const,
     priority: 0.6,
-  },
-  {
-    path: "/teams",
-    title: "Agent Teams",
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
   },
   {
     path: "/how-to",

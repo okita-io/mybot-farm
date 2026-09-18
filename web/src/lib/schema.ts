@@ -37,7 +37,7 @@ export const aboutPageLd = {
   name: `About ${site.productName}`,
   url: `${site.url}/about`,
   description:
-    "mybot.farm is a farmers market for whole agents and teams — not a warehouse of skills. Browse open bots, install GAF packs, and use WebMCP.",
+    "mybot.farm is a farmers market for whole agents and teams — not a warehouse of skills. Browse the catalog to plant packs; this page explains what you’re planting.",
   isPartOf: {
     "@type": "WebSite",
     name: site.productName,
@@ -295,18 +295,4 @@ export const termsPageLd = {
   url: `${site.url}/terms`,
   description:
     "Creators own the agents and teams they list. mybot.farm hosts the bot and keeps 10% of each sale. The farm is not responsible for how a pack behaves after someone installs it.",
-};
-
-export const teamsPageLd = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  name: `Agent Teams | ${site.name}`,
-  url: `${site.url}/teams`,
-  description:
-    "Import a pre-coordinated team of agents instead of wiring them one-by-one. Solo agents are fine; many workflows are pairs or crews with roles and handoffs.",
-  isPartOf: {
-    "@type": "WebSite",
-    name: site.productName,
-    url: site.url,
-  },
 };

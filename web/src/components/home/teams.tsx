@@ -19,7 +19,14 @@ export function HomeTeams() {
         </p>
         <p className="mt-4 text-sm">
           <Link
-            href="/teams"
+            href="/catalog?kind=team"
+            className="font-semibold text-foreground underline-offset-4 hover:underline"
+          >
+            Browse teams
+          </Link>
+          <span className="text-muted-foreground"> · </span>
+          <Link
+            href="/about#teams"
             className="font-medium text-foreground underline-offset-4 hover:underline"
           >
             Why plant a team

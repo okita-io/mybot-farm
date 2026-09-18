@@ -487,8 +487,9 @@ curl -sS -X POST https://mybot.farm/api/listings \\
               <Link href="/press">Press</Link> — launch release
             </li>
             <li>
-              <Link href="/teams">Agent Teams</Link> — pair, hub, and pipeline
-              packs
+              <Link href="/about#teams">Why plant a team</Link> — pair, hub, and
+              pipeline crews; plant them from the{" "}
+              <Link href="/catalog?kind=team">catalog</Link>
             </li>
             <li>
               <Link href="/install/openclaw">OpenClaw</Link> — plant a GAF pack
