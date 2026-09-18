@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "ai-app-crew",
+  "category": "coding",
+  "tags": [
+    "coding",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "AI App Engineering Crew",
+    "title": "Ship AI-native products: LLM features, voice interfaces, multi-agent orchestration.",
+    "description": "A 4-agent Hermes team (hub-and-spoke): AI Engineer Voice AI Integration Engineer Multi Agent Systems Architect Prompt Engineer. Ship AI-native products: LLM features, voice interfaces, multi-agent orchestration.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "square",
+      "color": "cyan"
+    }
+  },
+  "members": [
+    {
+      "role": "llm-features",
+      "summary": "AI Engineer \u2014 llm-features.",
+      "pack": "agents/ai-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "voice",
+      "summary": "Voice AI Integration Engineer \u2014 voice.",
+      "pack": "agents/voice-ai-integration-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "orchestration",
+      "summary": "Multi Agent Systems Architect \u2014 orchestration.",
+      "pack": "agents/multi-agent-systems-architect.hermes.tar.gz"
+    },
+    {
+      "role": "prompts",
+      "summary": "Prompt Engineer \u2014 prompts.",
+      "pack": "agents/prompt-engineer.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 llm-features (AI Engineer) decomposes it into lane assignments \u2192 each spoke (voice (Voice AI Integration Engineer) ; orchestration (Multi Agent Systems Architect) ; prompts (Prompt Engineer)) produces its deliverable \u2192 llm-features integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "ai-app-crew-team-rules",
+      "description": "Standing rules for the AI App Engineering Crew crew.",
+      "content": "AI App Engineering Crew standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: AI Engineer Voice AI Integration Engineer Multi Agent Systems Architect Prompt Engineer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Add a voice assistant that books appointments end-to-end into our product.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "AI App Engineering Crew: AI Engineer Voice AI Integration Engineer Multi Agent Systems Architect Prompt Engineer work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/ai-engineer.hermes.tar.gz --name ai-engineer, hermes profile import agents/voice-ai-integration-engineer.hermes.tar.gz --name voice-ai-integration-engineer, hermes profile import agents/multi-agent-systems-architect.hermes.tar.gz --name multi-agent-systems-architect, hermes profile import agents/prompt-engineer.hermes.tar.gz --name prompt-engineer. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: AI Engineer, Voice AI Integration Engineer, Multi Agent Systems Architect, Prompt Engineer).\n3. Seed it with a request in this shape: \u201cAdd a voice assistant that books appointments end-to-end into our product.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Prompt Engineer) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/ai-app-crew",
+    "tags": [
+      "coding",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

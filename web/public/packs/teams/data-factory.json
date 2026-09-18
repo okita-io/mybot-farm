@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "data-factory",
+  "category": "coding",
+  "tags": [
+    "coding",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Data Pipeline Factory",
+    "title": "End-to-end data engineering: pipeline, healthy warehouse, clean AI-ready data, dashboards.",
+    "description": "A 4-agent Hermes team (pipeline): Data Engineer Database Optimizer AI Data Remediation Engineer Data Visualization Engineer. End-to-end data engineering: pipeline, healthy warehouse, clean AI-ready data, dashboards.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "pentagon",
+      "color": "yellow"
+    }
+  },
+  "members": [
+    {
+      "role": "pipelines",
+      "summary": "Data Engineer \u2014 pipelines.",
+      "pack": "agents/data-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "db-health",
+      "summary": "Database Optimizer \u2014 db-health.",
+      "pack": "agents/database-optimizer.hermes.tar.gz"
+    },
+    {
+      "role": "data-quality",
+      "summary": "AI Data Remediation Engineer \u2014 data-quality.",
+      "pack": "agents/ai-data-remediation-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "dashboards",
+      "summary": "Data Visualization Engineer \u2014 dashboards.",
+      "pack": "agents/data-visualization-engineer.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 pipelines (Data Engineer) \u2192 db-health (Database Optimizer) \u2192 data-quality (AI Data Remediation Engineer) \u2192 dashboards (Data Visualization Engineer) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the dashboards output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside pipelines's lane \u2192 pipelines says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "data-factory-team-rules",
+      "description": "Standing rules for the Data Pipeline Factory crew.",
+      "content": "Data Pipeline Factory standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Data Engineer Database Optimizer AI Data Remediation Engineer Data Visualization Engineer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Stand up a nightly pipeline from Postgres to a dashboard with quality alerts.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Data Pipeline Factory: Data Engineer Database Optimizer AI Data Remediation Engineer Data Visualization Engineer work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/data-engineer.hermes.tar.gz --name data-engineer, hermes profile import agents/database-optimizer.hermes.tar.gz --name database-optimizer, hermes profile import agents/ai-data-remediation-engineer.hermes.tar.gz --name ai-data-remediation-engineer, hermes profile import agents/data-visualization-engineer.hermes.tar.gz --name data-visualization-engineer. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Data Engineer, Database Optimizer, AI Data Remediation Engineer, Data Visualization Engineer).\n3. Seed it with a request in this shape: \u201cStand up a nightly pipeline from Postgres to a dashboard with quality alerts.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Data Visualization Engineer) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/data-factory",
+    "tags": [
+      "coding",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

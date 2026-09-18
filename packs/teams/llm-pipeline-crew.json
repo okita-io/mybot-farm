@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "llm-pipeline-crew",
+  "category": "coding",
+  "tags": [
+    "coding",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "LLM Pipeline Crew",
+    "title": "Production RAG/LLM systems: retrieval pipeline, model QA, knowledge-graph grounding.",
+    "description": "A 4-agent Hermes team (pipeline): Rag Pipeline Engineer LLM Post Training Engineer Model Qa Knowledge Graph Engineer. Production RAG/LLM systems: retrieval pipeline, model QA, knowledge-graph grounding.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "capsule",
+      "color": "purple"
+    }
+  },
+  "members": [
+    {
+      "role": "retrieval",
+      "summary": "Rag Pipeline Engineer \u2014 retrieval.",
+      "pack": "agents/rag-pipeline-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "model-tuning",
+      "summary": "LLM Post Training Engineer \u2014 model-tuning.",
+      "pack": "agents/llm-post-training-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "evals",
+      "summary": "Model Qa \u2014 evals.",
+      "pack": "agents/model-qa.hermes.tar.gz"
+    },
+    {
+      "role": "grounding",
+      "summary": "Knowledge Graph Engineer \u2014 grounding.",
+      "pack": "agents/knowledge-graph-engineer.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 retrieval (Rag Pipeline Engineer) \u2192 model-tuning (LLM Post Training Engineer) \u2192 evals (Model Qa) \u2192 grounding (Knowledge Graph Engineer) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the grounding output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside retrieval's lane \u2192 retrieval says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "llm-pipeline-crew-team-rules",
+      "description": "Standing rules for the LLM Pipeline Crew crew.",
+      "content": "LLM Pipeline Crew standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Rag Pipeline Engineer LLM Post Training Engineer Model Qa Knowledge Graph Engineer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Build a RAG answer service over our help-center docs with evals and a QA gate.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "LLM Pipeline Crew: Rag Pipeline Engineer LLM Post Training Engineer Model Qa Knowledge Graph Engineer work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/rag-pipeline-engineer.hermes.tar.gz --name rag-pipeline-engineer, hermes profile import agents/llm-post-training-engineer.hermes.tar.gz --name llm-post-training-engineer, hermes profile import agents/model-qa.hermes.tar.gz --name model-qa, hermes profile import agents/knowledge-graph-engineer.hermes.tar.gz --name knowledge-graph-engineer. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Rag Pipeline Engineer, LLM Post Training Engineer, Model Qa, Knowledge Graph Engineer).\n3. Seed it with a request in this shape: \u201cBuild a RAG answer service over our help-center docs with evals and a QA gate.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Knowledge Graph Engineer) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/llm-pipeline-crew",
+    "tags": [
+      "coding",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

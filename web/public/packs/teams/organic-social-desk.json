@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "organic-social-desk",
+  "category": "marketing",
+  "tags": [
+    "marketing",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Organic Social & Community Desk",
+    "title": "Own the unpaid channels: cross-platform posting, LinkedIn, communities, repurposing.",
+    "description": "A 4-agent Hermes team (hub-and-spoke): Social Media Strategist Multi Platform Publisher Linkedin Content Creator Reddit Community Builder. Own the unpaid channels: cross-platform posting, LinkedIn, communities, repurposing.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "hexagon",
+      "color": "yellow"
+    }
+  },
+  "members": [
+    {
+      "role": "strategy",
+      "summary": "Social Media Strategist \u2014 strategy.",
+      "pack": "agents/social-media-strategist.hermes.tar.gz"
+    },
+    {
+      "role": "distribution",
+      "summary": "Multi Platform Publisher \u2014 distribution.",
+      "pack": "agents/multi-platform-publisher.hermes.tar.gz"
+    },
+    {
+      "role": "b2b-content",
+      "summary": "Linkedin Content Creator \u2014 b2b-content.",
+      "pack": "agents/linkedin-content-creator.hermes.tar.gz"
+    },
+    {
+      "role": "community",
+      "summary": "Reddit Community Builder \u2014 community.",
+      "pack": "agents/reddit-community-builder.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 strategy (Social Media Strategist) decomposes it into lane assignments \u2192 each spoke (distribution (Multi Platform Publisher) ; b2b-content (Linkedin Content Creator) ; community (Reddit Community Builder)) produces its deliverable \u2192 strategy integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "organic-social-desk-team-rules",
+      "description": "Standing rules for the Organic Social & Community Desk crew.",
+      "content": "Organic Social & Community Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Social Media Strategist Multi Platform Publisher Linkedin Content Creator Reddit Community Builder each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Grow our B2B SaaS from 5k to 25k followers in 90 days with weekly cadence and community presence.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Organic Social & Community Desk: Social Media Strategist Multi Platform Publisher Linkedin Content Creator Reddit Community Builder work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/social-media-strategist.hermes.tar.gz --name social-media-strategist, hermes profile import agents/multi-platform-publisher.hermes.tar.gz --name multi-platform-publisher, hermes profile import agents/linkedin-content-creator.hermes.tar.gz --name linkedin-content-creator, hermes profile import agents/reddit-community-builder.hermes.tar.gz --name reddit-community-builder. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Social Media Strategist, Multi Platform Publisher, Linkedin Content Creator, Reddit Community Builder).\n3. Seed it with a request in this shape: \u201cGrow our B2B SaaS from 5k to 25k followers in 90 days with weekly cadence and community presence.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Reddit Community Builder) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/organic-social-desk",
+    "tags": [
+      "marketing",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

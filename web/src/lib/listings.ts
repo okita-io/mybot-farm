@@ -2,6 +2,7 @@ import { and, desc, eq, isNull } from "drizzle-orm";
 import { getDb, hasDatabase } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
 import { isAgencyPackSlug } from "@/lib/agency-catalog";
+import { isTeamPackSlug } from "@/lib/team-catalog";
 import { getStall, isStallKind, stallPagePath, type StallKind } from "@/lib/packs";
 import { validateGafPack, validateListingPack } from "@/lib/gaf-pack";
 import type { FarmPack } from "@/lib/pack-files";
@@ -49,7 +50,7 @@ export function parseListingSlug(value: unknown): string | null {
 }
 
 export function isReservedCatalogSlug(slug: string) {
-  return Boolean(getStall(slug) || isAgencyPackSlug(slug));
+  return Boolean(getStall(slug) || isAgencyPackSlug(slug) || isTeamPackSlug(slug));
 }
 
 export function parseListingKind(value: unknown): StallKind | null {

@@ -1,0 +1,1028 @@
+{
+  "_meta": {
+    "version": "0.1",
+    "date": "2026-09-17",
+    "note": "Hermes team catalog: teams are downloadable GAF team-pack seeds (mybot.farm/team-pack + hermes runtime); members point at agents/<slug>.json hermes tarballs already on the farm. 3-5 members each. sample_request = the human request pattern the team's group chat is built to answer. Team slugs must not collide with existing stalls: road-crew, workbench, pair-bench.",
+    "demand_notes": "Grounded via SearXNG 2026-09-17: agentic coding teams trending (Anthropic 2026 Agentic Coding Trends; GDC 2026 State of the Industry), Godot 2026 growth (110K stars, 'free vs $2310/yr' comparisons), short-form video reshaping creator marketing (Opus 2026 trends)."
+  },
+  "teams": [
+    {
+      "slug": "indie-sprint",
+      "title": "Indie Web App Sprint",
+      "category": "Coding",
+      "purpose": "Greenfield web app from idea to reviewable PR: rapid MVP, clean review, tested API.",
+      "members": [
+        {
+          "slug": "rapid-prototyper",
+          "role": "lead-builder"
+        },
+        {
+          "slug": "frontend-developer",
+          "role": "ui"
+        },
+        {
+          "slug": "backend-architect",
+          "role": "api-architecture"
+        },
+        {
+          "slug": "api-tester",
+          "role": "api-qa"
+        },
+        {
+          "slug": "code-reviewer",
+          "role": "quality-gate"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Build a landing page + signup flow for a coffee subscription app this week."
+    },
+    {
+      "slug": "feature-copilot",
+      "title": "Feature Copilot",
+      "category": "Coding",
+      "purpose": "Add a feature to an existing codebase without regressions: understand, minimal diff, tested.",
+      "members": [
+        {
+          "slug": "codebase-onboarding-engineer",
+          "role": "context"
+        },
+        {
+          "slug": "minimal-change-engineer",
+          "role": "implementation"
+        },
+        {
+          "slug": "test-automation-engineer",
+          "role": "tests"
+        },
+        {
+          "slug": "code-reviewer",
+          "role": "review"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Add a CSV export to our reports page with tests, no breaking changes."
+    },
+    {
+      "slug": "godot-studio",
+      "title": "Godot Game Studio",
+      "category": "Coding",
+      "purpose": "Ship a playable Godot title: design, level, gameplay script, shaders, multiplayer.",
+      "members": [
+        {
+          "slug": "game-designer",
+          "role": "design-lead"
+        },
+        {
+          "slug": "godot-gameplay-scripter",
+          "role": "gameplay"
+        },
+        {
+          "slug": "godot-shader-developer",
+          "role": "visuals"
+        },
+        {
+          "slug": "godot-multiplayer-engineer",
+          "role": "netcode"
+        },
+        {
+          "slug": "level-designer",
+          "role": "levels"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Design and build a 5-room 2D roguelike prototype in Godot with one multiplayer co-op mode."
+    },
+    {
+      "slug": "unreal-studio",
+      "title": "Unreal Engine Studio",
+      "category": "Coding",
+      "purpose": "High-fidelity Unreal title: world building, systems, tech art, multiplayer architecture.",
+      "members": [
+        {
+          "slug": "unreal-multiplayer-architect",
+          "role": "architecture"
+        },
+        {
+          "slug": "unreal-systems-engineer",
+          "role": "systems"
+        },
+        {
+          "slug": "unreal-world-builder",
+          "role": "world"
+        },
+        {
+          "slug": "unreal-technical-artist",
+          "role": "tech-art"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Build a streaming-enabled open-world level with one combat system in Unreal."
+    },
+    {
+      "slug": "unity-studio",
+      "title": "Unity Game Studio",
+      "category": "Coding",
+      "purpose": "Unity title from architecture to shipped build: editor tooling, shaders, multiplayer.",
+      "members": [
+        {
+          "slug": "unity-architect",
+          "role": "architecture"
+        },
+        {
+          "slug": "unity-multiplayer-engineer",
+          "role": "netcode"
+        },
+        {
+          "slug": "unity-shader-graph-artist",
+          "role": "visuals"
+        },
+        {
+          "slug": "unity-editor-tool-developer",
+          "role": "tooling"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Ship a 2D party game for 4 local players in Unity with editor tooling for content teams."
+    },
+    {
+      "slug": "roblox-craft",
+      "title": "Roblox Experience Craft",
+      "category": "Coding",
+      "purpose": "Build a Roblox experience that retains: avatars, experiences, systems that don't cheat.",
+      "members": [
+        {
+          "slug": "roblox-experience-designer",
+          "role": "design"
+        },
+        {
+          "slug": "roblox-avatar-creator",
+          "role": "avatars"
+        },
+        {
+          "slug": "roblox-systems-scripter",
+          "role": "systems"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Design and script a Roblox tycoon experience with one progression loop and avatar shop."
+    },
+    {
+      "slug": "webgl-experience",
+      "title": "3D Web Experience Crew",
+      "category": "Coding",
+      "purpose": "Browser-based 3D/immersive experiences (three.js-style): scene, WASM perf, browser QA.",
+      "members": [
+        {
+          "slug": "3d-scene-developer",
+          "role": "scene"
+        },
+        {
+          "slug": "webassembly-engineer",
+          "role": "wasm-performance"
+        },
+        {
+          "slug": "frontend-developer",
+          "role": "integration"
+        },
+        {
+          "slug": "performance-benchmarker",
+          "role": "perf-gate"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Put a real-time 3D product configurator on our marketing site, 60fps on mid-tier laptops."
+    },
+    {
+      "slug": "data-factory",
+      "title": "Data Pipeline Factory",
+      "category": "Coding",
+      "purpose": "End-to-end data engineering: pipeline, healthy warehouse, clean AI-ready data, dashboards.",
+      "members": [
+        {
+          "slug": "data-engineer",
+          "role": "pipelines"
+        },
+        {
+          "slug": "database-optimizer",
+          "role": "db-health"
+        },
+        {
+          "slug": "ai-data-remediation-engineer",
+          "role": "data-quality"
+        },
+        {
+          "slug": "data-visualization-engineer",
+          "role": "dashboards"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Stand up a nightly pipeline from Postgres to a dashboard with quality alerts."
+    },
+    {
+      "slug": "llm-pipeline-crew",
+      "title": "LLM Pipeline Crew",
+      "category": "Coding",
+      "purpose": "Production RAG/LLM systems: retrieval pipeline, model QA, knowledge-graph grounding.",
+      "members": [
+        {
+          "slug": "rag-pipeline-engineer",
+          "role": "retrieval"
+        },
+        {
+          "slug": "llm-post-training-engineer",
+          "role": "model-tuning"
+        },
+        {
+          "slug": "model-qa",
+          "role": "evals"
+        },
+        {
+          "slug": "knowledge-graph-engineer",
+          "role": "grounding"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Build a RAG answer service over our help-center docs with evals and a QA gate."
+    },
+    {
+      "slug": "mobile-forge",
+      "title": "Mobile App Forge",
+      "category": "Coding",
+      "purpose": "Ship mobile apps through store review: build, release, test automation, review.",
+      "members": [
+        {
+          "slug": "mobile-app-builder",
+          "role": "build"
+        },
+        {
+          "slug": "mobile-release-engineer",
+          "role": "store-release"
+        },
+        {
+          "slug": "test-automation-engineer",
+          "role": "tests"
+        },
+        {
+          "slug": "code-reviewer",
+          "role": "review"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Take our iOS app to the App Store: release notes, screenshots pipeline, store-ready build."
+    },
+    {
+      "slug": "redteam-sre",
+      "title": "Red Team & SRE",
+      "category": "Coding",
+      "purpose": "Keep systems up and unbreakable: incident response, threat detection, pen tests, secrets hygiene.",
+      "members": [
+        {
+          "slug": "sre",
+          "role": "reliability"
+        },
+        {
+          "slug": "incident-responder",
+          "role": "incidents"
+        },
+        {
+          "slug": "threat-detection-engineer",
+          "role": "detection"
+        },
+        {
+          "slug": "penetration-tester",
+          "role": "offense"
+        },
+        {
+          "slug": "secrets-credential-engineer",
+          "role": "credential-hygiene"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Run a full reliability review of our API: pen test, secrets audit, and an on-call playbook."
+    },
+    {
+      "slug": "platform-finops",
+      "title": "Platform & FinOps",
+      "category": "Coding",
+      "purpose": "Run the platform cheaply: infra, automation, cost control, perf budgeting.",
+      "members": [
+        {
+          "slug": "sre",
+          "role": "platform"
+        },
+        {
+          "slug": "devops-automator",
+          "role": "automation"
+        },
+        {
+          "slug": "infrastructure-maintainer",
+          "role": "infra"
+        },
+        {
+          "slug": "finops-engineer",
+          "role": "cost"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Cut our cloud bill 20% without degrading p95 latency this quarter."
+    },
+    {
+      "slug": "ai-app-crew",
+      "title": "AI App Engineering Crew",
+      "category": "Coding",
+      "purpose": "Ship AI-native products: LLM features, voice interfaces, multi-agent orchestration.",
+      "members": [
+        {
+          "slug": "ai-engineer",
+          "role": "llm-features"
+        },
+        {
+          "slug": "voice-ai-integration-engineer",
+          "role": "voice"
+        },
+        {
+          "slug": "multi-agent-systems-architect",
+          "role": "orchestration"
+        },
+        {
+          "slug": "prompt-engineer",
+          "role": "prompts"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Add a voice assistant that books appointments end-to-end into our product."
+    },
+    {
+      "slug": "shopify-crew",
+      "title": "E-Commerce Build Crew",
+      "category": "Coding",
+      "purpose": "Run web stores profitably: Shopify/Drupal builds, performance, payments, checkout.",
+      "members": [
+        {
+          "slug": "drupal-shopping-cart",
+          "role": "storefront"
+        },
+        {
+          "slug": "wordpress-shopping-cart",
+          "role": "ecom"
+        },
+        {
+          "slug": "payments-billing-engineer",
+          "role": "payments"
+        },
+        {
+          "slug": "wordpress-performance",
+          "role": "performance"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Launch our second storefront on a different platform with shared billing and performance budget."
+    },
+    {
+      "slug": "cms-craft",
+      "title": "CMS & Web Content Crew",
+      "category": "Coding",
+      "purpose": "Own the website layer: CMS builds, accessibility, i18n, performance.",
+      "members": [
+        {
+          "slug": "cms-developer",
+          "role": "cms"
+        },
+        {
+          "slug": "accessibility-auditor",
+          "role": "a11y"
+        },
+        {
+          "slug": "section-508-specialist",
+          "role": "508"
+        },
+        {
+          "slug": "i18n-engineer",
+          "role": "i18n"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Rebuild our marketing site with WCAG 2.2 AA and a 3-language rollout plan."
+    },
+    {
+      "slug": "shortform-video-squad",
+      "title": "Short-Form Video Squad",
+      "category": "Marketing",
+      "purpose": "Always-on TikTok/Shorts/Reels: strategy, edit coaching, hooks, platform-native creative.",
+      "members": [
+        {
+          "slug": "tiktok-strategist",
+          "role": "platform-strategy"
+        },
+        {
+          "slug": "short-video-editing-coach",
+          "role": "edit-director"
+        },
+        {
+          "slug": "social-media-strategist",
+          "role": "strategy"
+        },
+        {
+          "slug": "image-prompt-engineer",
+          "role": "ai-visuals"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Launch a weekly 3-video Shorts pipeline for our supplement brand that hooks in the first 2 seconds."
+    },
+    {
+      "slug": "growth-paid-media",
+      "title": "Growth & Paid Media Desk",
+      "category": "Marketing",
+      "purpose": "Scale paid acquisition profitably: experiments, paid social, creative, audit, measurement.",
+      "members": [
+        {
+          "slug": "growth-hacker",
+          "role": "experiments"
+        },
+        {
+          "slug": "paid-social-strategist",
+          "role": "paid-social"
+        },
+        {
+          "slug": "ppc-strategist",
+          "role": "search"
+        },
+        {
+          "slug": "auditor",
+          "role": "media-audit"
+        },
+        {
+          "slug": "tracking-specialist",
+          "role": "measurement"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Rebuild our paid funnel at a lower CAC: audit, new creative set, tracking plan."
+    },
+    {
+      "slug": "organic-social-desk",
+      "title": "Organic Social & Community Desk",
+      "category": "Marketing",
+      "purpose": "Own the unpaid channels: cross-platform posting, LinkedIn, communities, repurposing.",
+      "members": [
+        {
+          "slug": "social-media-strategist",
+          "role": "strategy"
+        },
+        {
+          "slug": "multi-platform-publisher",
+          "role": "distribution"
+        },
+        {
+          "slug": "linkedin-content-creator",
+          "role": "b2b-content"
+        },
+        {
+          "slug": "reddit-community-builder",
+          "role": "community"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Grow our B2B SaaS from 5k to 25k followers in 90 days with weekly cadence and community presence."
+    },
+    {
+      "slug": "china-market-entry",
+      "title": "China Market Entry Desk",
+      "category": "Marketing",
+      "purpose": "Enter or deepen the China market: localization, Douyin/Kuaishu/WeChat, cross-border e-com.",
+      "members": [
+        {
+          "slug": "china-market-localization-strategist",
+          "role": "localization"
+        },
+        {
+          "slug": "douyin-strategist",
+          "role": "douyin"
+        },
+        {
+          "slug": "wechat-official-account",
+          "role": "wechat"
+        },
+        {
+          "slug": "kuaishou-strategist",
+          "role": "kuaishou"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Plan our first 6 months in China: brand localization, platform mix, and a launch content calendar."
+    },
+    {
+      "slug": "local-ai-search",
+      "title": "Local SEO & AI Search Desk",
+      "category": "Marketing",
+      "purpose": "Win local + AI-answer search: classic SEO, agentic/AEO optimization, citation strategy.",
+      "members": [
+        {
+          "slug": "seo-specialist",
+          "role": "seo"
+        },
+        {
+          "slug": "agentic-search-optimizer",
+          "role": "aeo"
+        },
+        {
+          "slug": "ai-citation-strategist",
+          "role": "citations"
+        },
+        {
+          "slug": "search-query-analyst",
+          "role": "query-intel"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Get our dental practice into the top 3 local pack for 5 keywords and cited by ChatGPT for 'best implant dentist near me'."
+    },
+    {
+      "slug": "content-email-engine",
+      "title": "Content & Email Engine",
+      "category": "Marketing",
+      "purpose": "Owned-audience growth: content production, email lifecycle, visual storytelling, carousels.",
+      "members": [
+        {
+          "slug": "content-creator",
+          "role": "editor"
+        },
+        {
+          "slug": "email-strategist",
+          "role": "email"
+        },
+        {
+          "slug": "visual-storyteller",
+          "role": "visuals"
+        },
+        {
+          "slug": "carousel-growth-engine",
+          "role": "carousels"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Run our newsletter + content calendar for a quarter: 4 posts/month, email flows that grow the list."
+    },
+    {
+      "slug": "podcast-team",
+      "title": "Podcast Launch & Growth Team",
+      "category": "Marketing",
+      "purpose": "Launch or grow a podcast: strategy, distribution, growth loops, promo content.",
+      "members": [
+        {
+          "slug": "podcast-strategist",
+          "role": "strategy"
+        },
+        {
+          "slug": "growth-hacker",
+          "role": "growth-loops"
+        },
+        {
+          "slug": "video-optimization-specialist",
+          "role": "promo-clips"
+        },
+        {
+          "slug": "pr-communications-manager",
+          "role": "press"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Take our B2B podcast from 500 to 20k monthly downloads: positioning, clip strategy, and a press plan."
+    },
+    {
+      "slug": "livestream-com",
+      "title": "Live Commerce Studio",
+      "category": "Marketing",
+      "purpose": "Run live shopping shows: coaching, cross-border logistics, platform ops, video prep.",
+      "members": [
+        {
+          "slug": "livestream-commerce-coach",
+          "role": "show"
+        },
+        {
+          "slug": "cross-border-ecommerce",
+          "role": "logistics"
+        },
+        {
+          "slug": "china-ecommerce-operator",
+          "role": "platform-ops"
+        },
+        {
+          "slug": "video-optimization-specialist",
+          "role": "video-prep"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Run our twice-weekly live shopping shows for the APAC market: script, ops, and recap clips."
+    },
+    {
+      "slug": "outbound-sdr-crew",
+      "title": "Outbound SDR Crew",
+      "category": "Sales",
+      "purpose": "Generate pipeline from zero: offer/lead-gen, outbound sequences, pipeline analytics.",
+      "members": [
+        {
+          "slug": "outbound-strategist",
+          "role": "outbound"
+        },
+        {
+          "slug": "offer-lead-gen-strategist",
+          "role": "offers"
+        },
+        {
+          "slug": "sales-outreach",
+          "role": "sequences"
+        },
+        {
+          "slug": "pipeline-analyst",
+          "role": "analytics"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Build a 90-day outbound motion that books 15 discovery calls/month for our mid-market SaaS."
+    },
+    {
+      "slug": "deal-desk",
+      "title": "Deal & Account Desk",
+      "category": "Sales",
+      "purpose": "Win named accounts: account strategy, deal shaping, proposals, pricing.",
+      "members": [
+        {
+          "slug": "account-strategist",
+          "role": "account"
+        },
+        {
+          "slug": "deal-strategist",
+          "role": "deal-shaping"
+        },
+        {
+          "slug": "proposal-strategist",
+          "role": "proposals"
+        },
+        {
+          "slug": "pricing-analyst",
+          "role": "pricing"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Take us from shortlist to signature on the $400k enterprise deal: account map, proposal, and pricing strategy."
+    },
+    {
+      "slug": "presales-tech-crew",
+      "title": "Pre-Sales & Solution Crew",
+      "category": "Sales",
+      "purpose": "Technical wins in RFPs/evals: demo strategy, solution mapping, government presales.",
+      "members": [
+        {
+          "slug": "engineer",
+          "role": "sales-engineering"
+        },
+        {
+          "slug": "solution-engineer",
+          "role": "solutions"
+        },
+        {
+          "slug": "government-digital-presales-consultant",
+          "role": "gov-presales"
+        },
+        {
+          "slug": "technical-consultant",
+          "role": "consulting"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Win the federal RFP: compliance mapping, technical volumes, and a demo that closes."
+    },
+    {
+      "slug": "sales-coaching-intel",
+      "title": "Sales Coaching & Intelligence",
+      "category": "Sales",
+      "purpose": "Make reps better and see the data: coaching, discovery practice, CRM extraction, pipeline truth.",
+      "members": [
+        {
+          "slug": "coach",
+          "role": "coaching"
+        },
+        {
+          "slug": "discovery-coach",
+          "role": "discovery-practice"
+        },
+        {
+          "slug": "sales-data-extraction-agent",
+          "role": "crm-data"
+        },
+        {
+          "slug": "pipeline-analyst",
+          "role": "pipeline-truth"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Run a quarter of rep development: discovery drills, call reviews, and a clean pipeline report."
+    },
+    {
+      "slug": "gis-spatial-desk",
+      "title": "GIS & Spatial Data Desk",
+      "category": "Research",
+      "purpose": "Spatial analysis that ships: analysis, web maps, spatial pipelines, geoprocessing.",
+      "members": [
+        {
+          "slug": "analyst",
+          "role": "gis-analysis"
+        },
+        {
+          "slug": "web-gis-developer",
+          "role": "web-maps"
+        },
+        {
+          "slug": "spatial-data-engineer",
+          "role": "spatial-pipelines"
+        },
+        {
+          "slug": "geoprocessing-specialist",
+          "role": "geoprocessing"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Build a city-scale service-area analysis with a public web map and refresh pipeline."
+    },
+    {
+      "slug": "map-and-drone",
+      "title": "Mapping & Drone Survey Crew",
+      "category": "Research",
+      "purpose": "Reality capture to map deliverables: drone surveys, BIM/GIS, cartography, 3D scenes.",
+      "members": [
+        {
+          "slug": "drone-reality-mapping",
+          "role": "reality-capture"
+        },
+        {
+          "slug": "bim-specialist",
+          "role": "bim-gis"
+        },
+        {
+          "slug": "cartography-designer",
+          "role": "cartography"
+        },
+        {
+          "slug": "3d-scene-developer",
+          "role": "3d-scenes"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Map a 40-acre construction site from drone capture into a client-ready basemap and progress model."
+    },
+    {
+      "slug": "deep-research-syn",
+      "title": "Deep Research & Synthesis",
+      "category": "Research",
+      "purpose": "Answer hard questions with sourced synthesis: research synthesis, grants, consulting-grade output.",
+      "members": [
+        {
+          "slug": "synthesist",
+          "role": "synthesis"
+        },
+        {
+          "slug": "grant-research",
+          "role": "funding"
+        },
+        {
+          "slug": "technical-consultant",
+          "role": "domain-consulting"
+        },
+        {
+          "slug": "solution-engineer",
+          "role": "solution-mapping"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Produce a 12-page state-of-the-field report on solid-state batteries with a funding-landscape appendix."
+    },
+    {
+      "slug": "field-research-corp",
+      "title": "Field Research Corps",
+      "category": "Research",
+      "purpose": "Human-centered and quantitative research: anthropology, statistics, psychology, narrative analysis.",
+      "members": [
+        {
+          "slug": "anthropologist",
+          "role": "field-methods"
+        },
+        {
+          "slug": "psychologist",
+          "role": "behavior"
+        },
+        {
+          "slug": "statistician",
+          "role": "quant"
+        },
+        {
+          "slug": "narratologist",
+          "role": "narrative-analysis"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Design and analyze a user study of 60 participants: instruments, stats plan, and interpretation."
+    },
+    {
+      "slug": "product-sprint-desk",
+      "title": "Product Sprint Desk",
+      "category": "Productivity",
+      "purpose": "Run product operations: backlog, sprint cadence, delivery tracking, tooling hygiene.",
+      "members": [
+        {
+          "slug": "manager",
+          "role": "product"
+        },
+        {
+          "slug": "sprint-prioritizer",
+          "role": "backlog"
+        },
+        {
+          "slug": "project-shepherd",
+          "role": "delivery"
+        },
+        {
+          "slug": "jira-workflow-steward",
+          "role": "tooling"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Re-run our quarter: re-prioritize the backlog, set two-week sprints, and get Jira out of weeds."
+    },
+    {
+      "slug": "exec-ops-desk",
+      "title": "Executive Ops & Reporting Desk",
+      "category": "Productivity",
+      "purpose": "Keep leadership informed: analytics reporting, exec summaries, experiment tracking, meeting capture.",
+      "members": [
+        {
+          "slug": "analytics-reporter",
+          "role": "reporting"
+        },
+        {
+          "slug": "executive-summary-generator",
+          "role": "summaries"
+        },
+        {
+          "slug": "experiment-tracker",
+          "role": "experiments"
+        },
+        {
+          "slug": "meeting-notes-specialist",
+          "role": "meetings"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Give me the Monday leadership digest: KPI moves, experiment readouts, and action items from last week's meetings."
+    },
+    {
+      "slug": "finance-office",
+      "title": "CFO Finance Office",
+      "category": "Personal finance",
+      "purpose": "Small-company finance: books, FP&A, tax planning, investment-grade analysis.",
+      "members": [
+        {
+          "slug": "bookkeeper-controller",
+          "role": "books"
+        },
+        {
+          "slug": "fpa-analyst",
+          "role": "fpa"
+        },
+        {
+          "slug": "tax-strategist",
+          "role": "tax"
+        },
+        {
+          "slug": "financial-analyst",
+          "role": "analysis"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Close the month, produce the board pack, and set up next year's budget with scenario ranges."
+    },
+    {
+      "slug": "investment-desk",
+      "title": "Investment Research Desk",
+      "category": "Personal finance",
+      "purpose": "Research-grade investment diligence: ideas, due-diligence data, models, portfolio view.",
+      "members": [
+        {
+          "slug": "investment-researcher",
+          "role": "research"
+        },
+        {
+          "slug": "financial-analyst",
+          "role": "modeling"
+        },
+        {
+          "slug": "fpa-analyst",
+          "role": "scenarios"
+        },
+        {
+          "slug": "statistician",
+          "role": "quant"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Run diligence on our 3 largest positions: thesis review, updated models, and a scenario stress test."
+    },
+    {
+      "slug": "focus-audio-lab",
+      "title": "Focus Audio Lab",
+      "category": "Music",
+      "purpose": "Functional music production: focus/ambient scoring, game-audio systems, release packaging.",
+      "members": [
+        {
+          "slug": "focus-music-architect",
+          "role": "scoring"
+        },
+        {
+          "slug": "game-audio-engineer",
+          "role": "audio-systems"
+        },
+        {
+          "slug": "pitch",
+          "role": "promotion"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Score a 40-minute focus suite for our meditation app and package it for release with promo assets."
+    },
+    {
+      "slug": "game-audio-cinema",
+      "title": "Game Audio & Score Crew",
+      "category": "Music",
+      "purpose": "Game and interactive audio: score, SFX, adaptive audio systems, audio-driven delight.",
+      "members": [
+        {
+          "slug": "game-audio-engineer",
+          "role": "audio-systems"
+        },
+        {
+          "slug": "focus-music-architect",
+          "role": "score"
+        },
+        {
+          "slug": "whimsy-injector",
+          "role": "delight"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Design the full audio direction for our co-op game: adaptive score, SFX system, and the one iconic sound."
+    },
+    {
+      "slug": "personal-growth-pod",
+      "title": "Personal Growth Pod",
+      "category": "Lifestyle",
+      "purpose": "Lifestyle engineering: coaching, journaling, gifting/planning, habit nudges.",
+      "members": [
+        {
+          "slug": "personal-growth-mentor",
+          "role": "coaching"
+        },
+        {
+          "slug": "sprout-journal",
+          "role": "journaling"
+        },
+        {
+          "slug": "gift-day",
+          "role": "planning"
+        },
+        {
+          "slug": "behavioral-nudge-engine",
+          "role": "habits"
+        }
+      ],
+      "topology": "hub-and-spoke",
+      "sample_request": "Build me a 90-day routine: morning journal prompts, weekly review ritual, and two habit nudges that stick."
+    },
+    {
+      "slug": "career-desk",
+      "title": "Career & Job-Search Desk",
+      "category": "Lifestyle",
+      "purpose": "Land the next role: resume optimization, application tracking, prep coaching.",
+      "members": [
+        {
+          "slug": "resume-tailor",
+          "role": "resume"
+        },
+        {
+          "slug": "recruitment-specialist",
+          "role": "sourcing"
+        },
+        {
+          "slug": "ats-validator-architect",
+          "role": "ats"
+        },
+        {
+          "slug": "coach",
+          "role": "interview-coaching"
+        }
+      ],
+      "topology": "pipeline",
+      "sample_request": "Get me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews."
+    }
+  ]
+}

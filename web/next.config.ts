@@ -8,7 +8,9 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/*": [
       "./src/data/agency-catalog.generated.json",
+      "./src/data/team-catalog.generated.json",
       "./public/packs/agents/**/*.json",
+      "./public/packs/teams/**/*.json",
     ],
   },
   images: {

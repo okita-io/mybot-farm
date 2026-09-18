@@ -1,0 +1,90 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "indie-sprint",
+  "category": "coding",
+  "tags": [
+    "coding",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Indie Web App Sprint",
+    "title": "Greenfield web app from idea to reviewable PR: rapid MVP, clean review, tested API.",
+    "description": "A 5-agent Hermes team (pipeline): Rapid Prototyper Frontend Developer Backend Architect Api Tester Code Reviewer. Greenfield web app from idea to reviewable PR: rapid MVP, clean review, tested API.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "capsule",
+      "color": "green"
+    }
+  },
+  "members": [
+    {
+      "role": "lead-builder",
+      "summary": "Rapid Prototyper \u2014 lead-builder.",
+      "pack": "agents/rapid-prototyper.hermes.tar.gz"
+    },
+    {
+      "role": "ui",
+      "summary": "Frontend Developer \u2014 ui.",
+      "pack": "agents/frontend-developer.hermes.tar.gz"
+    },
+    {
+      "role": "api-architecture",
+      "summary": "Backend Architect \u2014 api-architecture.",
+      "pack": "agents/backend-architect.hermes.tar.gz"
+    },
+    {
+      "role": "api-qa",
+      "summary": "Api Tester \u2014 api-qa.",
+      "pack": "agents/api-tester.hermes.tar.gz"
+    },
+    {
+      "role": "quality-gate",
+      "summary": "Code Reviewer \u2014 quality-gate.",
+      "pack": "agents/code-reviewer.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 lead-builder (Rapid Prototyper) \u2192 ui (Frontend Developer) \u2192 api-architecture (Backend Architect) \u2192 api-qa (Api Tester) \u2192 quality-gate (Code Reviewer) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the quality-gate output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside lead-builder's lane \u2192 lead-builder says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "indie-sprint-team-rules",
+      "description": "Standing rules for the Indie Web App Sprint crew.",
+      "content": "Indie Web App Sprint standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Rapid Prototyper Frontend Developer Backend Architect Api Tester Code Reviewer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Build a landing page + signup flow for a coffee subscription app this week.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Indie Web App Sprint: Rapid Prototyper Frontend Developer Backend Architect Api Tester Code Reviewer work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/rapid-prototyper.hermes.tar.gz --name rapid-prototyper, hermes profile import agents/frontend-developer.hermes.tar.gz --name frontend-developer, hermes profile import agents/backend-architect.hermes.tar.gz --name backend-architect, hermes profile import agents/api-tester.hermes.tar.gz --name api-tester, hermes profile import agents/code-reviewer.hermes.tar.gz --name code-reviewer. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Rapid Prototyper, Frontend Developer, Backend Architect, Api Tester, Code Reviewer).\n3. Seed it with a request in this shape: \u201cBuild a landing page + signup flow for a coffee subscription app this week.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Code Reviewer) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/indie-sprint",
+    "tags": [
+      "coding",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "china-market-entry",
+  "category": "marketing",
+  "tags": [
+    "marketing",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "China Market Entry Desk",
+    "title": "Enter or deepen the China market: localization, Douyin/Kuaishu/WeChat, cross-border e-com.",
+    "description": "A 4-agent Hermes team (hub-and-spoke): China Market Localization Strategist Douyin Strategist Wechat Official Account Kuaishou Strategist. Enter or deepen the China market: localization, Douyin/Kuaishu/WeChat, cross-border e-com.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "diamond",
+      "color": "purple"
+    }
+  },
+  "members": [
+    {
+      "role": "localization",
+      "summary": "China Market Localization Strategist \u2014 localization.",
+      "pack": "agents/china-market-localization-strategist.hermes.tar.gz"
+    },
+    {
+      "role": "douyin",
+      "summary": "Douyin Strategist \u2014 douyin.",
+      "pack": "agents/douyin-strategist.hermes.tar.gz"
+    },
+    {
+      "role": "wechat",
+      "summary": "Wechat Official Account \u2014 wechat.",
+      "pack": "agents/wechat-official-account.hermes.tar.gz"
+    },
+    {
+      "role": "kuaishou",
+      "summary": "Kuaishou Strategist \u2014 kuaishou.",
+      "pack": "agents/kuaishou-strategist.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 localization (China Market Localization Strategist) decomposes it into lane assignments \u2192 each spoke (douyin (Douyin Strategist) ; wechat (Wechat Official Account) ; kuaishou (Kuaishou Strategist)) produces its deliverable \u2192 localization integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "china-market-entry-team-rules",
+      "description": "Standing rules for the China Market Entry Desk crew.",
+      "content": "China Market Entry Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: China Market Localization Strategist Douyin Strategist Wechat Official Account Kuaishou Strategist each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Plan our first 6 months in China: brand localization, platform mix, and a launch content calendar.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "China Market Entry Desk: China Market Localization Strategist Douyin Strategist Wechat Official Account Kuaishou Strategist work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/china-market-localization-strategist.hermes.tar.gz --name china-market-localization-strategist, hermes profile import agents/douyin-strategist.hermes.tar.gz --name douyin-strategist, hermes profile import agents/wechat-official-account.hermes.tar.gz --name wechat-official-account, hermes profile import agents/kuaishou-strategist.hermes.tar.gz --name kuaishou-strategist. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: China Market Localization Strategist, Douyin Strategist, Wechat Official Account, Kuaishou Strategist).\n3. Seed it with a request in this shape: \u201cPlan our first 6 months in China: brand localization, platform mix, and a launch content calendar.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Kuaishou Strategist) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/china-market-entry",
+    "tags": [
+      "marketing",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

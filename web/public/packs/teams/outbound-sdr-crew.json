@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "outbound-sdr-crew",
+  "category": "sales",
+  "tags": [
+    "sales",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Outbound SDR Crew",
+    "title": "Generate pipeline from zero: offer/lead-gen, outbound sequences, pipeline analytics.",
+    "description": "A 4-agent Hermes team (pipeline): Outbound Strategist Offer Lead Gen Strategist Sales Outreach Pipeline Analyst. Generate pipeline from zero: offer/lead-gen, outbound sequences, pipeline analytics.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "pentagon",
+      "color": "orange"
+    }
+  },
+  "members": [
+    {
+      "role": "outbound",
+      "summary": "Outbound Strategist \u2014 outbound.",
+      "pack": "agents/outbound-strategist.hermes.tar.gz"
+    },
+    {
+      "role": "offers",
+      "summary": "Offer Lead Gen Strategist \u2014 offers.",
+      "pack": "agents/offer-lead-gen-strategist.hermes.tar.gz"
+    },
+    {
+      "role": "sequences",
+      "summary": "Sales Outreach \u2014 sequences.",
+      "pack": "agents/sales-outreach.hermes.tar.gz"
+    },
+    {
+      "role": "analytics",
+      "summary": "Pipeline Analyst \u2014 analytics.",
+      "pack": "agents/pipeline-analyst.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 outbound (Outbound Strategist) \u2192 offers (Offer Lead Gen Strategist) \u2192 sequences (Sales Outreach) \u2192 analytics (Pipeline Analyst) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the analytics output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside outbound's lane \u2192 outbound says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "outbound-sdr-crew-team-rules",
+      "description": "Standing rules for the Outbound SDR Crew crew.",
+      "content": "Outbound SDR Crew standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Outbound Strategist Offer Lead Gen Strategist Sales Outreach Pipeline Analyst each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Build a 90-day outbound motion that books 15 discovery calls/month for our mid-market SaaS.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Outbound SDR Crew: Outbound Strategist Offer Lead Gen Strategist Sales Outreach Pipeline Analyst work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/outbound-strategist.hermes.tar.gz --name outbound-strategist, hermes profile import agents/offer-lead-gen-strategist.hermes.tar.gz --name offer-lead-gen-strategist, hermes profile import agents/sales-outreach.hermes.tar.gz --name sales-outreach, hermes profile import agents/pipeline-analyst.hermes.tar.gz --name pipeline-analyst. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Outbound Strategist, Offer Lead Gen Strategist, Sales Outreach, Pipeline Analyst).\n3. Seed it with a request in this shape: \u201cBuild a 90-day outbound motion that books 15 discovery calls/month for our mid-market SaaS.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Pipeline Analyst) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/outbound-sdr-crew",
+    "tags": [
+      "sales",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

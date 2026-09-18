@@ -23,6 +23,7 @@ import {
   type Stall,
   type StallKind,
 } from "@/lib/packs";
+import { getTeamPack, getTeamStalls } from "@/lib/team-catalog";
 import { packVersionOf } from "@/lib/pack-version";
 import {
   existingHermesArchiveHref,
@@ -135,11 +136,15 @@ async function hydrateListingStalls(listings: ListingRow[]): Promise<Stall[]> {
 }
 
 function getCatalogStall(slug: string): Stall | undefined {
-  return getStall(slug) ?? getAgencyStalls().find((stall) => stall.slug === slug);
+  return (
+    getStall(slug) ??
+    getAgencyStalls().find((stall) => stall.slug === slug) ??
+    getTeamStalls().find((stall) => stall.slug === slug)
+  );
 }
 
 function getCatalogSeedPack(slug: string): FarmPack | undefined {
-  return getPack(slug) ?? getAgencyPack(slug);
+  return getPack(slug) ?? getAgencyPack(slug) ?? getTeamPack(slug);
 }
 
 export async function findStall(slug: string): Promise<Stall | undefined> {
@@ -243,7 +248,7 @@ export async function listCatalogStalls(): Promise<Stall[]> {
     ),
   );
   const seeds = await Promise.all(
-    [...stalls, ...getAgencyStalls()]
+    [...stalls, ...getAgencyStalls(), ...getTeamStalls()]
       .filter((stall) => !takenDown.has(stall.slug))
       .map(withSeedPrice)
       .map((stall) => withSeedReadme(stall)),

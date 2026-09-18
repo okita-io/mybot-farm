@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "sales-coaching-intel",
+  "category": "sales",
+  "tags": [
+    "sales",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Sales Coaching & Intelligence",
+    "title": "Make reps better and see the data: coaching, discovery practice, CRM extraction, pipeline truth.",
+    "description": "A 4-agent Hermes team (hub-and-spoke): Coach Discovery Coach Sales Data Extraction Agent Pipeline Analyst. Make reps better and see the data: coaching, discovery practice, CRM extraction, pipeline truth.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "diamond",
+      "color": "red"
+    }
+  },
+  "members": [
+    {
+      "role": "coaching",
+      "summary": "Coach \u2014 coaching.",
+      "pack": "agents/coach.hermes.tar.gz"
+    },
+    {
+      "role": "discovery-practice",
+      "summary": "Discovery Coach \u2014 discovery-practice.",
+      "pack": "agents/discovery-coach.hermes.tar.gz"
+    },
+    {
+      "role": "crm-data",
+      "summary": "Sales Data Extraction Agent \u2014 crm-data.",
+      "pack": "agents/sales-data-extraction-agent.hermes.tar.gz"
+    },
+    {
+      "role": "pipeline-truth",
+      "summary": "Pipeline Analyst \u2014 pipeline-truth.",
+      "pack": "agents/pipeline-analyst.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 coaching (Coach) decomposes it into lane assignments \u2192 each spoke (discovery-practice (Discovery Coach) ; crm-data (Sales Data Extraction Agent) ; pipeline-truth (Pipeline Analyst)) produces its deliverable \u2192 coaching integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "sales-coaching-intel-team-rules",
+      "description": "Standing rules for the Sales Coaching & Intelligence crew.",
+      "content": "Sales Coaching & Intelligence standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Coach Discovery Coach Sales Data Extraction Agent Pipeline Analyst each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Run a quarter of rep development: discovery drills, call reviews, and a clean pipeline report.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Sales Coaching & Intelligence: Coach Discovery Coach Sales Data Extraction Agent Pipeline Analyst work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/coach.hermes.tar.gz --name coach, hermes profile import agents/discovery-coach.hermes.tar.gz --name discovery-coach, hermes profile import agents/sales-data-extraction-agent.hermes.tar.gz --name sales-data-extraction-agent, hermes profile import agents/pipeline-analyst.hermes.tar.gz --name pipeline-analyst. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Coach, Discovery Coach, Sales Data Extraction Agent, Pipeline Analyst).\n3. Seed it with a request in this shape: \u201cRun a quarter of rep development: discovery drills, call reviews, and a clean pipeline report.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Pipeline Analyst) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/sales-coaching-intel",
+    "tags": [
+      "sales",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

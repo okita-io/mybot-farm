@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "livestream-com",
+  "category": "marketing",
+  "tags": [
+    "marketing",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Live Commerce Studio",
+    "title": "Run live shopping shows: coaching, cross-border logistics, platform ops, video prep.",
+    "description": "A 4-agent Hermes team (hub-and-spoke): Livestream Commerce Coach Cross Border Ecommerce China Ecommerce Operator Video Optimization Specialist. Run live shopping shows: coaching, cross-border logistics, platform ops, video prep.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "circle",
+      "color": "cyan"
+    }
+  },
+  "members": [
+    {
+      "role": "show",
+      "summary": "Livestream Commerce Coach \u2014 show.",
+      "pack": "agents/livestream-commerce-coach.hermes.tar.gz"
+    },
+    {
+      "role": "logistics",
+      "summary": "Cross Border Ecommerce \u2014 logistics.",
+      "pack": "agents/cross-border-ecommerce.hermes.tar.gz"
+    },
+    {
+      "role": "platform-ops",
+      "summary": "China Ecommerce Operator \u2014 platform-ops.",
+      "pack": "agents/china-ecommerce-operator.hermes.tar.gz"
+    },
+    {
+      "role": "video-prep",
+      "summary": "Video Optimization Specialist \u2014 video-prep.",
+      "pack": "agents/video-optimization-specialist.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 show (Livestream Commerce Coach) decomposes it into lane assignments \u2192 each spoke (logistics (Cross Border Ecommerce) ; platform-ops (China Ecommerce Operator) ; video-prep (Video Optimization Specialist)) produces its deliverable \u2192 show integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "livestream-com-team-rules",
+      "description": "Standing rules for the Live Commerce Studio crew.",
+      "content": "Live Commerce Studio standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Livestream Commerce Coach Cross Border Ecommerce China Ecommerce Operator Video Optimization Specialist each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Run our twice-weekly live shopping shows for the APAC market: script, ops, and recap clips.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Live Commerce Studio: Livestream Commerce Coach Cross Border Ecommerce China Ecommerce Operator Video Optimization Specialist work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/livestream-commerce-coach.hermes.tar.gz --name livestream-commerce-coach, hermes profile import agents/cross-border-ecommerce.hermes.tar.gz --name cross-border-ecommerce, hermes profile import agents/china-ecommerce-operator.hermes.tar.gz --name china-ecommerce-operator, hermes profile import agents/video-optimization-specialist.hermes.tar.gz --name video-optimization-specialist. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Livestream Commerce Coach, Cross Border Ecommerce, China Ecommerce Operator, Video Optimization Specialist).\n3. Seed it with a request in this shape: \u201cRun our twice-weekly live shopping shows for the APAC market: script, ops, and recap clips.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Video Optimization Specialist) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/livestream-com",
+    "tags": [
+      "marketing",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

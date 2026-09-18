@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "finance-office",
+  "category": "finance",
+  "tags": [
+    "finance",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "CFO Finance Office",
+    "title": "Small-company finance: books, FP&A, tax planning, investment-grade analysis.",
+    "description": "A 4-agent Hermes team (pipeline): Bookkeeper Controller Fpa Analyst Tax Strategist Financial Analyst. Small-company finance: books, FP&A, tax planning, investment-grade analysis.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "hexagon",
+      "color": "orange"
+    }
+  },
+  "members": [
+    {
+      "role": "books",
+      "summary": "Bookkeeper Controller \u2014 books.",
+      "pack": "agents/bookkeeper-controller.hermes.tar.gz"
+    },
+    {
+      "role": "fpa",
+      "summary": "Fpa Analyst \u2014 fpa.",
+      "pack": "agents/fpa-analyst.hermes.tar.gz"
+    },
+    {
+      "role": "tax",
+      "summary": "Tax Strategist \u2014 tax.",
+      "pack": "agents/tax-strategist.hermes.tar.gz"
+    },
+    {
+      "role": "analysis",
+      "summary": "Financial Analyst \u2014 analysis.",
+      "pack": "agents/financial-analyst.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 books (Bookkeeper Controller) \u2192 fpa (Fpa Analyst) \u2192 tax (Tax Strategist) \u2192 analysis (Financial Analyst) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the analysis output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside books's lane \u2192 books says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "finance-office-team-rules",
+      "description": "Standing rules for the CFO Finance Office crew.",
+      "content": "CFO Finance Office standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Bookkeeper Controller Fpa Analyst Tax Strategist Financial Analyst each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Close the month, produce the board pack, and set up next year's budget with scenario ranges.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "CFO Finance Office: Bookkeeper Controller Fpa Analyst Tax Strategist Financial Analyst work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/bookkeeper-controller.hermes.tar.gz --name bookkeeper-controller, hermes profile import agents/fpa-analyst.hermes.tar.gz --name fpa-analyst, hermes profile import agents/tax-strategist.hermes.tar.gz --name tax-strategist, hermes profile import agents/financial-analyst.hermes.tar.gz --name financial-analyst. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Bookkeeper Controller, Fpa Analyst, Tax Strategist, Financial Analyst).\n3. Seed it with a request in this shape: \u201cClose the month, produce the board pack, and set up next year's budget with scenario ranges.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Financial Analyst) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/finance-office",
+    "tags": [
+      "finance",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

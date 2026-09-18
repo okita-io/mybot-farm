@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "product-sprint-desk",
+  "category": "productivity",
+  "tags": [
+    "productivity",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Product Sprint Desk",
+    "title": "Run product operations: backlog, sprint cadence, delivery tracking, tooling hygiene.",
+    "description": "A 4-agent Hermes team (hub-and-spoke): Manager Sprint Prioritizer Project Shepherd Jira Workflow Steward. Run product operations: backlog, sprint cadence, delivery tracking, tooling hygiene.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "pentagon",
+      "color": "lime"
+    }
+  },
+  "members": [
+    {
+      "role": "product",
+      "summary": "Manager \u2014 product.",
+      "pack": "agents/manager.hermes.tar.gz"
+    },
+    {
+      "role": "backlog",
+      "summary": "Sprint Prioritizer \u2014 backlog.",
+      "pack": "agents/sprint-prioritizer.hermes.tar.gz"
+    },
+    {
+      "role": "delivery",
+      "summary": "Project Shepherd \u2014 delivery.",
+      "pack": "agents/project-shepherd.hermes.tar.gz"
+    },
+    {
+      "role": "tooling",
+      "summary": "Jira Workflow Steward \u2014 tooling.",
+      "pack": "agents/jira-workflow-steward.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 product (Manager) decomposes it into lane assignments \u2192 each spoke (backlog (Sprint Prioritizer) ; delivery (Project Shepherd) ; tooling (Jira Workflow Steward)) produces its deliverable \u2192 product integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "product-sprint-desk-team-rules",
+      "description": "Standing rules for the Product Sprint Desk crew.",
+      "content": "Product Sprint Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Manager Sprint Prioritizer Project Shepherd Jira Workflow Steward each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Re-run our quarter: re-prioritize the backlog, set two-week sprints, and get Jira out of weeds.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Product Sprint Desk: Manager Sprint Prioritizer Project Shepherd Jira Workflow Steward work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/manager.hermes.tar.gz --name manager, hermes profile import agents/sprint-prioritizer.hermes.tar.gz --name sprint-prioritizer, hermes profile import agents/project-shepherd.hermes.tar.gz --name project-shepherd, hermes profile import agents/jira-workflow-steward.hermes.tar.gz --name jira-workflow-steward. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Manager, Sprint Prioritizer, Project Shepherd, Jira Workflow Steward).\n3. Seed it with a request in this shape: \u201cRe-run our quarter: re-prioritize the backlog, set two-week sprints, and get Jira out of weeds.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Jira Workflow Steward) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/product-sprint-desk",
+    "tags": [
+      "productivity",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

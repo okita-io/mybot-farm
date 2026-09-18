@@ -1,0 +1,90 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "godot-studio",
+  "category": "coding",
+  "tags": [
+    "coding",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Godot Game Studio",
+    "title": "Ship a playable Godot title: design, level, gameplay script, shaders, multiplayer.",
+    "description": "A 5-agent Hermes team (pipeline): Game Designer Godot Gameplay Scripter Godot Shader Developer Godot Multiplayer Engineer Level Designer. Ship a playable Godot title: design, level, gameplay script, shaders, multiplayer.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "diamond",
+      "color": "cyan"
+    }
+  },
+  "members": [
+    {
+      "role": "design-lead",
+      "summary": "Game Designer \u2014 design-lead.",
+      "pack": "agents/game-designer.hermes.tar.gz"
+    },
+    {
+      "role": "gameplay",
+      "summary": "Godot Gameplay Scripter \u2014 gameplay.",
+      "pack": "agents/godot-gameplay-scripter.hermes.tar.gz"
+    },
+    {
+      "role": "visuals",
+      "summary": "Godot Shader Developer \u2014 visuals.",
+      "pack": "agents/godot-shader-developer.hermes.tar.gz"
+    },
+    {
+      "role": "netcode",
+      "summary": "Godot Multiplayer Engineer \u2014 netcode.",
+      "pack": "agents/godot-multiplayer-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "levels",
+      "summary": "Level Designer \u2014 levels.",
+      "pack": "agents/level-designer.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 design-lead (Game Designer) \u2192 gameplay (Godot Gameplay Scripter) \u2192 visuals (Godot Shader Developer) \u2192 netcode (Godot Multiplayer Engineer) \u2192 levels (Level Designer) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the levels output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside design-lead's lane \u2192 design-lead says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "godot-studio-team-rules",
+      "description": "Standing rules for the Godot Game Studio crew.",
+      "content": "Godot Game Studio standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Game Designer Godot Gameplay Scripter Godot Shader Developer Godot Multiplayer Engineer Level Designer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Design and build a 5-room 2D roguelike prototype in Godot with one multiplayer co-op mode.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Godot Game Studio: Game Designer Godot Gameplay Scripter Godot Shader Developer Godot Multiplayer Engineer Level Designer work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/game-designer.hermes.tar.gz --name game-designer, hermes profile import agents/godot-gameplay-scripter.hermes.tar.gz --name godot-gameplay-scripter, hermes profile import agents/godot-shader-developer.hermes.tar.gz --name godot-shader-developer, hermes profile import agents/godot-multiplayer-engineer.hermes.tar.gz --name godot-multiplayer-engineer, hermes profile import agents/level-designer.hermes.tar.gz --name level-designer. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Game Designer, Godot Gameplay Scripter, Godot Shader Developer, Godot Multiplayer Engineer, Level Designer).\n3. Seed it with a request in this shape: \u201cDesign and build a 5-room 2D roguelike prototype in Godot with one multiplayer co-op mode.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Level Designer) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/godot-studio",
+    "tags": [
+      "coding",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

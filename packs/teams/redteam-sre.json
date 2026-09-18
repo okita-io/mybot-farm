@@ -1,0 +1,90 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "redteam-sre",
+  "category": "coding",
+  "tags": [
+    "coding",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Red Team & SRE",
+    "title": "Keep systems up and unbreakable: incident response, threat detection, pen tests, secrets hygiene.",
+    "description": "A 5-agent Hermes team (hub-and-spoke): SRE Incident Responder Threat Detection Engineer Penetration Tester Secrets Credential Engineer. Keep systems up and unbreakable: incident response, threat detection, pen tests, secrets hygiene.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "diamond",
+      "color": "green"
+    }
+  },
+  "members": [
+    {
+      "role": "reliability",
+      "summary": "SRE \u2014 reliability.",
+      "pack": "agents/sre.hermes.tar.gz"
+    },
+    {
+      "role": "incidents",
+      "summary": "Incident Responder \u2014 incidents.",
+      "pack": "agents/incident-responder.hermes.tar.gz"
+    },
+    {
+      "role": "detection",
+      "summary": "Threat Detection Engineer \u2014 detection.",
+      "pack": "agents/threat-detection-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "offense",
+      "summary": "Penetration Tester \u2014 offense.",
+      "pack": "agents/penetration-tester.hermes.tar.gz"
+    },
+    {
+      "role": "credential-hygiene",
+      "summary": "Secrets Credential Engineer \u2014 credential-hygiene.",
+      "pack": "agents/secrets-credential-engineer.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 reliability (SRE) decomposes it into lane assignments \u2192 each spoke (incidents (Incident Responder) ; detection (Threat Detection Engineer) ; offense (Penetration Tester) ; credential-hygiene (Secrets Credential Engineer)) produces its deliverable \u2192 reliability integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "redteam-sre-team-rules",
+      "description": "Standing rules for the Red Team & SRE crew.",
+      "content": "Red Team & SRE standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: SRE Incident Responder Threat Detection Engineer Penetration Tester Secrets Credential Engineer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Run a full reliability review of our API: pen test, secrets audit, and an on-call playbook.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Red Team & SRE: SRE Incident Responder Threat Detection Engineer Penetration Tester Secrets Credential Engineer work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/sre.hermes.tar.gz --name sre, hermes profile import agents/incident-responder.hermes.tar.gz --name incident-responder, hermes profile import agents/threat-detection-engineer.hermes.tar.gz --name threat-detection-engineer, hermes profile import agents/penetration-tester.hermes.tar.gz --name penetration-tester, hermes profile import agents/secrets-credential-engineer.hermes.tar.gz --name secrets-credential-engineer. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: SRE, Incident Responder, Threat Detection Engineer, Penetration Tester, Secrets Credential Engineer).\n3. Seed it with a request in this shape: \u201cRun a full reliability review of our API: pen test, secrets audit, and an on-call playbook.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Secrets Credential Engineer) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/redteam-sre",
+    "tags": [
+      "coding",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "investment-desk",
+  "category": "finance",
+  "tags": [
+    "finance",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Investment Research Desk",
+    "title": "Research-grade investment diligence: ideas, due-diligence data, models, portfolio view.",
+    "description": "A 4-agent Hermes team (hub-and-spoke): Investment Researcher Financial Analyst Fpa Analyst Statistician. Research-grade investment diligence: ideas, due-diligence data, models, portfolio view.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "diamond",
+      "color": "magenta"
+    }
+  },
+  "members": [
+    {
+      "role": "research",
+      "summary": "Investment Researcher \u2014 research.",
+      "pack": "agents/investment-researcher.hermes.tar.gz"
+    },
+    {
+      "role": "modeling",
+      "summary": "Financial Analyst \u2014 modeling.",
+      "pack": "agents/financial-analyst.hermes.tar.gz"
+    },
+    {
+      "role": "scenarios",
+      "summary": "Fpa Analyst \u2014 scenarios.",
+      "pack": "agents/fpa-analyst.hermes.tar.gz"
+    },
+    {
+      "role": "quant",
+      "summary": "Statistician \u2014 quant.",
+      "pack": "agents/statistician.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 research (Investment Researcher) decomposes it into lane assignments \u2192 each spoke (modeling (Financial Analyst) ; scenarios (Fpa Analyst) ; quant (Statistician)) produces its deliverable \u2192 research integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "investment-desk-team-rules",
+      "description": "Standing rules for the Investment Research Desk crew.",
+      "content": "Investment Research Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Investment Researcher Financial Analyst Fpa Analyst Statistician each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Run diligence on our 3 largest positions: thesis review, updated models, and a scenario stress test.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Investment Research Desk: Investment Researcher Financial Analyst Fpa Analyst Statistician work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/investment-researcher.hermes.tar.gz --name investment-researcher, hermes profile import agents/financial-analyst.hermes.tar.gz --name financial-analyst, hermes profile import agents/fpa-analyst.hermes.tar.gz --name fpa-analyst, hermes profile import agents/statistician.hermes.tar.gz --name statistician. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Investment Researcher, Financial Analyst, Fpa Analyst, Statistician).\n3. Seed it with a request in this shape: \u201cRun diligence on our 3 largest positions: thesis review, updated models, and a scenario stress test.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Statistician) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/investment-desk",
+    "tags": [
+      "finance",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

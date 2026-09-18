@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { StallView } from "@/components/stall-view";
 import { findStall } from "@/lib/catalog";
+import { getTeamStalls } from "@/lib/team-catalog";
 import { stallsOfKind, stallPagePath, stallSeo } from "@/lib/packs";
 import { stallPageState } from "@/lib/stall-page";
 import { siteOgImage } from "@/lib/site";
 
 export function generateStaticParams() {
-  return stallsOfKind("team").map((stall) => ({ slug: stall.slug }));
+  return [...stallsOfKind("team"), ...getTeamStalls()]
+    .filter((stall) => stall.kind === "team")
+    .map((stall) => ({ slug: stall.slug }));
 }
 
 export async function generateMetadata({

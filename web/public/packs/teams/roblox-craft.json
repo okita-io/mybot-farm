@@ -1,0 +1,80 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "roblox-craft",
+  "category": "coding",
+  "tags": [
+    "coding",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Roblox Experience Craft",
+    "title": "Build a Roblox experience that retains: avatars, experiences, systems that don't cheat.",
+    "description": "A 3-agent Hermes team (pipeline): Roblox Experience Designer Roblox Avatar Creator Roblox Systems Scripter. Build a Roblox experience that retains: avatars, experiences, systems that don't cheat.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "octagon",
+      "color": "blue"
+    }
+  },
+  "members": [
+    {
+      "role": "design",
+      "summary": "Roblox Experience Designer \u2014 design.",
+      "pack": "agents/roblox-experience-designer.hermes.tar.gz"
+    },
+    {
+      "role": "avatars",
+      "summary": "Roblox Avatar Creator \u2014 avatars.",
+      "pack": "agents/roblox-avatar-creator.hermes.tar.gz"
+    },
+    {
+      "role": "systems",
+      "summary": "Roblox Systems Scripter \u2014 systems.",
+      "pack": "agents/roblox-systems-scripter.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 design (Roblox Experience Designer) \u2192 avatars (Roblox Avatar Creator) \u2192 systems (Roblox Systems Scripter) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the systems output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside design's lane \u2192 design says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "roblox-craft-team-rules",
+      "description": "Standing rules for the Roblox Experience Craft crew.",
+      "content": "Roblox Experience Craft standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Roblox Experience Designer Roblox Avatar Creator Roblox Systems Scripter each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Design and script a Roblox tycoon experience with one progression loop and avatar shop.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Roblox Experience Craft: Roblox Experience Designer Roblox Avatar Creator Roblox Systems Scripter work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/roblox-experience-designer.hermes.tar.gz --name roblox-experience-designer, hermes profile import agents/roblox-avatar-creator.hermes.tar.gz --name roblox-avatar-creator, hermes profile import agents/roblox-systems-scripter.hermes.tar.gz --name roblox-systems-scripter. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Roblox Experience Designer, Roblox Avatar Creator, Roblox Systems Scripter).\n3. Seed it with a request in this shape: \u201cDesign and script a Roblox tycoon experience with one progression loop and avatar shop.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Roblox Systems Scripter) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/roblox-craft",
+    "tags": [
+      "coding",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

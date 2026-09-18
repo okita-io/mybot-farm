@@ -503,3 +503,40 @@ per-wave verify), and prefer root copies as restore source.**
   attached tarballs; add plugin management tools.
 - Known upstream Hermes bug (GAP 2, `profile import` vs `.deleted/`
   tombstone) still open — see `docs/hermes-team-stall-bundle.md`.
+
+## Team seeds (Hermes teams, 2026-09-17)
+
+39 team-pack seeds, each a GAF `mybot.farm/team-pack` with `hermes`
+runtime, 3–5 members pointing at the shipped agent tarballs
+(`agents/<slug>.hermes.tar.gz`), topology handoffs, a team-rules skill,
+shared memory, and a gettingStarted install/group-chat guide.
+
+Artifacts:
+- `agent-conversion/hermes-teams/teams.json` + `teams.md` — catalog source.
+- `web/public/packs/teams/<slug>.json` ×39 + byte-identical
+  `packs/teams/<slug>.json` mirrors (the 3 hand-made teams coexist).
+- `web/src/data/team-catalog.generated.json` — generated team catalog
+  (stalls + packs), mirrors `agency-catalog.generated.json` for agents.
+- `web/src/lib/team-catalog.ts` — resolver (getTeamStalls/getTeamPack),
+  mirrors `agency-catalog.ts`.
+- `web/src/lib/catalog.ts` — team slugs now resolvable by slug:
+  `getCatalogStall`, `getCatalogSeedPack` fall through to the team
+  catalog; `listCatalogStalls()` includes `getTeamStalls()` so they
+  appear in catalog search and `/catalog?kind=team`. (This is what makes the seeds
+  plantable end-to-end: agents resolve via the generated agency
+  catalog; hand-made teams via hardcoded entries; generated teams now
+  via this catalog.)
+
+Verified: `tsc -p tsconfig.json --noEmit` clean for the touched files
+(pre-existing MPP errors in `mpp.ts`/`mpp-pack.ts`/`mpp-server.ts` are
+Cursor's payments work, untouched); `npm test` 73/73 pass; 39/39 packs
+pass the hermes plugin's own listing validator; no slug collisions
+with the 279 agency agents or the 3 hand-made teams; every member
+slug is in the agent queue with its tarball present on disk; leak
+scan clean.
+
+Regenerators (in `/tmp/farm-conv/`, not shipped): `gen_teams.py`
+(team JSONs), `gen_team_catalog.py` (catalog), `verify_team_catalog.py`
+(full validation). Re-run `gen_team_catalog.py` after any
+`teams.json` edit.
+

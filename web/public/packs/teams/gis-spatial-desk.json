@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "gis-spatial-desk",
+  "category": "research",
+  "tags": [
+    "research",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "GIS & Spatial Data Desk",
+    "title": "Spatial analysis that ships: analysis, web maps, spatial pipelines, geoprocessing.",
+    "description": "A 4-agent Hermes team (pipeline): Analyst Web GIS Developer Spatial Data Engineer Geoprocessing Specialist. Spatial analysis that ships: analysis, web maps, spatial pipelines, geoprocessing.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "triangle",
+      "color": "yellow"
+    }
+  },
+  "members": [
+    {
+      "role": "gis-analysis",
+      "summary": "Analyst \u2014 gis-analysis.",
+      "pack": "agents/analyst.hermes.tar.gz"
+    },
+    {
+      "role": "web-maps",
+      "summary": "Web GIS Developer \u2014 web-maps.",
+      "pack": "agents/web-gis-developer.hermes.tar.gz"
+    },
+    {
+      "role": "spatial-pipelines",
+      "summary": "Spatial Data Engineer \u2014 spatial-pipelines.",
+      "pack": "agents/spatial-data-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "geoprocessing",
+      "summary": "Geoprocessing Specialist \u2014 geoprocessing.",
+      "pack": "agents/geoprocessing-specialist.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 gis-analysis (Analyst) \u2192 web-maps (Web GIS Developer) \u2192 spatial-pipelines (Spatial Data Engineer) \u2192 geoprocessing (Geoprocessing Specialist) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the geoprocessing output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside gis-analysis's lane \u2192 gis-analysis says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "gis-spatial-desk-team-rules",
+      "description": "Standing rules for the GIS & Spatial Data Desk crew.",
+      "content": "GIS & Spatial Data Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Analyst Web GIS Developer Spatial Data Engineer Geoprocessing Specialist each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Build a city-scale service-area analysis with a public web map and refresh pipeline.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "GIS & Spatial Data Desk: Analyst Web GIS Developer Spatial Data Engineer Geoprocessing Specialist work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/analyst.hermes.tar.gz --name analyst, hermes profile import agents/web-gis-developer.hermes.tar.gz --name web-gis-developer, hermes profile import agents/spatial-data-engineer.hermes.tar.gz --name spatial-data-engineer, hermes profile import agents/geoprocessing-specialist.hermes.tar.gz --name geoprocessing-specialist. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Analyst, Web GIS Developer, Spatial Data Engineer, Geoprocessing Specialist).\n3. Seed it with a request in this shape: \u201cBuild a city-scale service-area analysis with a public web map and refresh pipeline.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Geoprocessing Specialist) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/gis-spatial-desk",
+    "tags": [
+      "research",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

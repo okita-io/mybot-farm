@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "feature-copilot",
+  "category": "coding",
+  "tags": [
+    "coding",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Feature Copilot",
+    "title": "Add a feature to an existing codebase without regressions: understand, minimal diff, tested.",
+    "description": "A 4-agent Hermes team (pipeline): Codebase Onboarding Engineer Minimal Change Engineer Test Automation Engineer Code Reviewer. Add a feature to an existing codebase without regressions: understand, minimal diff, tested.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "hexagon",
+      "color": "lime"
+    }
+  },
+  "members": [
+    {
+      "role": "context",
+      "summary": "Codebase Onboarding Engineer \u2014 context.",
+      "pack": "agents/codebase-onboarding-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "implementation",
+      "summary": "Minimal Change Engineer \u2014 implementation.",
+      "pack": "agents/minimal-change-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "tests",
+      "summary": "Test Automation Engineer \u2014 tests.",
+      "pack": "agents/test-automation-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "review",
+      "summary": "Code Reviewer \u2014 review.",
+      "pack": "agents/code-reviewer.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 context (Codebase Onboarding Engineer) \u2192 implementation (Minimal Change Engineer) \u2192 tests (Test Automation Engineer) \u2192 review (Code Reviewer) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the review output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside context's lane \u2192 context says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "feature-copilot-team-rules",
+      "description": "Standing rules for the Feature Copilot crew.",
+      "content": "Feature Copilot standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Codebase Onboarding Engineer Minimal Change Engineer Test Automation Engineer Code Reviewer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Add a CSV export to our reports page with tests, no breaking changes.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Feature Copilot: Codebase Onboarding Engineer Minimal Change Engineer Test Automation Engineer Code Reviewer work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/codebase-onboarding-engineer.hermes.tar.gz --name codebase-onboarding-engineer, hermes profile import agents/minimal-change-engineer.hermes.tar.gz --name minimal-change-engineer, hermes profile import agents/test-automation-engineer.hermes.tar.gz --name test-automation-engineer, hermes profile import agents/code-reviewer.hermes.tar.gz --name code-reviewer. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Codebase Onboarding Engineer, Minimal Change Engineer, Test Automation Engineer, Code Reviewer).\n3. Seed it with a request in this shape: \u201cAdd a CSV export to our reports page with tests, no breaking changes.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Code Reviewer) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/feature-copilot",
+    "tags": [
+      "coding",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "webgl-experience",
+  "category": "coding",
+  "tags": [
+    "coding",
+    "pipeline",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "3D Web Experience Crew",
+    "title": "Browser-based 3D/immersive experiences (three.js-style): scene, WASM perf, browser QA.",
+    "description": "A 4-agent Hermes team (pipeline): 3D Scene Developer Webassembly Engineer Frontend Developer Performance Benchmarker. Browser-based 3D/immersive experiences (three.js-style): scene, WASM perf, browser QA.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "circle",
+      "color": "red"
+    }
+  },
+  "members": [
+    {
+      "role": "scene",
+      "summary": "3D Scene Developer \u2014 scene.",
+      "pack": "agents/3d-scene-developer.hermes.tar.gz"
+    },
+    {
+      "role": "wasm-performance",
+      "summary": "Webassembly Engineer \u2014 wasm-performance.",
+      "pack": "agents/webassembly-engineer.hermes.tar.gz"
+    },
+    {
+      "role": "integration",
+      "summary": "Frontend Developer \u2014 integration.",
+      "pack": "agents/frontend-developer.hermes.tar.gz"
+    },
+    {
+      "role": "perf-gate",
+      "summary": "Performance Benchmarker \u2014 perf-gate.",
+      "pack": "agents/performance-benchmarker.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "pipeline",
+    "handoffs": [
+      "User request \u2192 scene (3D Scene Developer) \u2192 wasm-performance (Webassembly Engineer) \u2192 integration (Frontend Developer) \u2192 perf-gate (Performance Benchmarker) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the perf-gate output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside scene's lane \u2192 scene says so in the first turn and re-scopes with the human before any member starts work."
+    ]
+  },
+  "skills": [
+    {
+      "name": "webgl-experience-team-rules",
+      "description": "Standing rules for the 3D Web Experience Crew crew.",
+      "content": "3D Web Experience Crew standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: 3D Scene Developer Webassembly Engineer Frontend Developer Performance Benchmarker each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Put a real-time 3D product configurator on our marketing site, 60fps on mid-tier laptops.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "3D Web Experience Crew: 3D Scene Developer Webassembly Engineer Frontend Developer Performance Benchmarker work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/3d-scene-developer.hermes.tar.gz --name 3d-scene-developer, hermes profile import agents/webassembly-engineer.hermes.tar.gz --name webassembly-engineer, hermes profile import agents/frontend-developer.hermes.tar.gz --name frontend-developer, hermes profile import agents/performance-benchmarker.hermes.tar.gz --name performance-benchmarker. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: 3D Scene Developer, Webassembly Engineer, Frontend Developer, Performance Benchmarker).\n3. Seed it with a request in this shape: \u201cPut a real-time 3D product configurator on our marketing site, 60fps on mid-tier laptops.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Performance Benchmarker) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/webgl-experience",
+    "tags": [
+      "coding",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

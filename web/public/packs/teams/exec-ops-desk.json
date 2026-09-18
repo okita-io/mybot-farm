@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "exec-ops-desk",
+  "category": "productivity",
+  "tags": [
+    "productivity",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Executive Ops & Reporting Desk",
+    "title": "Keep leadership informed: analytics reporting, exec summaries, experiment tracking, meeting capture.",
+    "description": "A 4-agent Hermes team (hub-and-spoke): Analytics Reporter Executive Summary Generator Experiment Tracker Meeting Notes Specialist. Keep leadership informed: analytics reporting, exec summaries, experiment tracking, meeting capture.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "capsule",
+      "color": "cyan"
+    }
+  },
+  "members": [
+    {
+      "role": "reporting",
+      "summary": "Analytics Reporter \u2014 reporting.",
+      "pack": "agents/analytics-reporter.hermes.tar.gz"
+    },
+    {
+      "role": "summaries",
+      "summary": "Executive Summary Generator \u2014 summaries.",
+      "pack": "agents/executive-summary-generator.hermes.tar.gz"
+    },
+    {
+      "role": "experiments",
+      "summary": "Experiment Tracker \u2014 experiments.",
+      "pack": "agents/experiment-tracker.hermes.tar.gz"
+    },
+    {
+      "role": "meetings",
+      "summary": "Meeting Notes Specialist \u2014 meetings.",
+      "pack": "agents/meeting-notes-specialist.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 reporting (Analytics Reporter) decomposes it into lane assignments \u2192 each spoke (summaries (Executive Summary Generator) ; experiments (Experiment Tracker) ; meetings (Meeting Notes Specialist)) produces its deliverable \u2192 reporting integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "exec-ops-desk-team-rules",
+      "description": "Standing rules for the Executive Ops & Reporting Desk crew.",
+      "content": "Executive Ops & Reporting Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Analytics Reporter Executive Summary Generator Experiment Tracker Meeting Notes Specialist each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Give me the Monday leadership digest: KPI moves, experiment readouts, and action items from last week's meetings.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Executive Ops & Reporting Desk: Analytics Reporter Executive Summary Generator Experiment Tracker Meeting Notes Specialist work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/analytics-reporter.hermes.tar.gz --name analytics-reporter, hermes profile import agents/executive-summary-generator.hermes.tar.gz --name executive-summary-generator, hermes profile import agents/experiment-tracker.hermes.tar.gz --name experiment-tracker, hermes profile import agents/meeting-notes-specialist.hermes.tar.gz --name meeting-notes-specialist. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Analytics Reporter, Executive Summary Generator, Experiment Tracker, Meeting Notes Specialist).\n3. Seed it with a request in this shape: \u201cGive me the Monday leadership digest: KPI moves, experiment readouts, and action items from last week's meetings.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Meeting Notes Specialist) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/exec-ops-desk",
+    "tags": [
+      "productivity",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}

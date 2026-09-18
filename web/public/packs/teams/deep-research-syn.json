@@ -1,0 +1,85 @@
+{
+  "format": "mybot.farm/team-pack",
+  "version": "0.1",
+  "runtime": [
+    "hermes"
+  ],
+  "slug": "deep-research-syn",
+  "category": "research",
+  "tags": [
+    "research",
+    "hub-and-spoke",
+    "team",
+    "hermes"
+  ],
+  "profile": {
+    "name": "Deep Research & Synthesis",
+    "title": "Answer hard questions with sourced synthesis: research synthesis, grants, consulting-grade output.",
+    "description": "A 4-agent Hermes team (hub-and-spoke): Synthesist Grant Research Technical Consultant Solution Engineer. Answer hard questions with sourced synthesis: research synthesis, grants, consulting-grade output.",
+    "avatar": {
+      "kind": "geometric",
+      "shape": "octagon",
+      "color": "teal"
+    }
+  },
+  "members": [
+    {
+      "role": "synthesis",
+      "summary": "Synthesist \u2014 synthesis.",
+      "pack": "agents/synthesist.hermes.tar.gz"
+    },
+    {
+      "role": "funding",
+      "summary": "Grant Research \u2014 funding.",
+      "pack": "agents/grant-research.hermes.tar.gz"
+    },
+    {
+      "role": "domain-consulting",
+      "summary": "Technical Consultant \u2014 domain-consulting.",
+      "pack": "agents/technical-consultant.hermes.tar.gz"
+    },
+    {
+      "role": "solution-mapping",
+      "summary": "Solution Engineer \u2014 solution-mapping.",
+      "pack": "agents/solution-engineer.hermes.tar.gz"
+    }
+  ],
+  "topology": {
+    "kind": "hub-and-spoke",
+    "handoffs": [
+      "User request \u2192 synthesis (Synthesist) decomposes it into lane assignments \u2192 each spoke (funding (Grant Research) ; domain-consulting (Technical Consultant) ; solution-mapping (Solution Engineer)) produces its deliverable \u2192 synthesis integrates and presents one consolidated result \u2192 human reviews and ships.",
+      "Spokes never talk to the user directly for decisions: they report to the hub with their artifact + confidence; the hub flags conflicts and escalates to the human with the options, not the raw threads.",
+      "Any two spokes working the same sub-problem \u2192 the hub picks one owner and tells the other to verify instead of duplicate. Quiet when idle."
+    ]
+  },
+  "skills": [
+    {
+      "name": "deep-research-syn-team-rules",
+      "description": "Standing rules for the Deep Research & Synthesis crew.",
+      "content": "Deep Research & Synthesis standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Synthesist Grant Research Technical Consultant Solution Engineer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Produce a 12-page state-of-the-field report on solid-state batteries with a funding-landscape appendix.\n"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Deep Research & Synthesis: Synthesist Grant Research Technical Consultant Solution Engineer work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+      }
+    ],
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/synthesist.hermes.tar.gz --name synthesist, hermes profile import agents/grant-research.hermes.tar.gz --name grant-research, hermes profile import agents/technical-consultant.hermes.tar.gz --name technical-consultant, hermes profile import agents/solution-engineer.hermes.tar.gz --name solution-engineer. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Synthesist, Grant Research, Technical Consultant, Solution Engineer).\n3. Seed it with a request in this shape: \u201cProduce a 12-page state-of-the-field report on solid-state batteries with a funding-landscape appendix.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Solution Engineer) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+  },
+  "commerce": {
+    "pricing": "free",
+    "currency": "usd"
+  },
+  "manifest": {
+    "author": "okita-farm",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/teams/deep-research-syn",
+    "tags": [
+      "research",
+      "team"
+    ],
+    "scrubbed": true
+  }
+}
