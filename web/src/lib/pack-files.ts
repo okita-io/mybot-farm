@@ -80,8 +80,6 @@ export function memberPackPath(pack: PackMemberRef["pack"]): string | undefined 
   return typeof pack === "string" && pack.trim() ? pack.trim() : undefined;
 }
 
-export { listingMemberHref } from "@/lib/hermes-archive";
-
 export type FarmPack = {
   format?: string;
   version?: string;

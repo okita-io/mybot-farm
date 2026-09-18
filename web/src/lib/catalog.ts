@@ -1,7 +1,6 @@
 import { getAgencyPack, getAgencyStalls } from "@/lib/agency-catalog";
 import {
   getPack,
-  listingMemberHref,
   memberPackPath,
   packCardStats,
   packSkillList,
@@ -27,6 +26,7 @@ import {
 import { packVersionOf } from "@/lib/pack-version";
 import {
   existingHermesArchiveHref,
+  listingMemberHref,
   withHermesRuntime,
 } from "@/lib/hermes-archive";
 import { catalogStallId } from "@/lib/stall-id";

@@ -30,13 +30,7 @@ export function usdAmountFromCents(cents: number) {
   return (Math.max(0, cents) / 100).toFixed(2);
 }
 
-let mppx: ReturnType<typeof Mppx.create> | undefined;
-
-export function getMppx() {
-  if (mppx) {
-    return mppx;
-  }
-
+function createMppx() {
   const secretKey = getMppStripeSecretKey();
   const mppSecretKey = crypto
     .createHmac("sha256", secretKey)
@@ -64,11 +58,17 @@ export function getMppx() {
     },
   });
 
-  mppx = Mppx.create({
+  return Mppx.create({
     methods: stripeMachinePayments.defaultMethods(),
     secretKey: mppSecretKey,
   });
+}
 
+type FarmMppx = ReturnType<typeof createMppx>;
+let mppx: FarmMppx | undefined;
+
+export function getMppx(): FarmMppx {
+  mppx ??= createMppx();
   return mppx;
 }
 
