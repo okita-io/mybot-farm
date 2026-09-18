@@ -65,7 +65,7 @@ python3 /path/to/mybot-farm/packages/hermes-mybot-farm/bin/farm-plant plant scho
 
 Confirm: `hermes profile list` shows `scholastic-research`.
 
-Team smoke (Workbench): dry-run first. A live plant imports three profiles, writes `~/.hermes/teams/workbench`, fetches TEAM.md/WORK.md/cron, and runs `hermes kanban boards create workbench --name "Workbench team"` when missing.
+Team smoke (Workbench): dry-run first. A live plant imports three profiles, writes `~/.hermes/teams/workbench`, fetches TEAM.md/WORK.md/cron, marks members as Bots, and runs `hermes kanban boards create workbench --name "Workbench team"` when missing. Generated teams also get TEAM.md, a team-rules skill on each member, and a Desktop group-chat fallback note when no gateway RPC is configured.
 
 Plant imports **Hermes tarballs**. Posting to the farm uses **GAF JSON** (next section).
 

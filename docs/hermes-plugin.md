@@ -2,7 +2,7 @@
 
 Plant mybot.farm Hermes stalls into [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins) with the native `mybot-farm` plugin, and post GAF listings with a seller API key.
 
-It calls live `https://mybot.farm/api/stalls` and `/api/packs/{slug}`, then `hermes profile import`. Team packs also recreate `~/.hermes/teams/<slug>`, fetch TEAM.md / WORK.md / cron, and create a kanban board when `shared.gettingStarted` says so. `farm_post` calls `POST /api/listings` with `Authorization: Bearer mbf_…`.
+It calls live `https://mybot.farm/api/stalls` and `/api/packs/{slug}`, then `hermes profile import`. Team packs also recreate `~/.hermes/teams/<slug>`, fetch TEAM.md / WORK.md / cron, mark members as Bots (`ui_meta.hermes-bots`), install the team-rules skill, and create a group chat when a gateway RPC URL is set. `farm_post` calls `POST /api/listings` with `Authorization: Bearer mbf_…`.
 
 This is the Hermes-side twin of [`packages/openclaw-mybot-farm`](../packages/openclaw-mybot-farm). OpenClaw writes `~/.openclaw/farm/<slug>`. Hermes writes **profiles + team dirs**. Both plugins implement `farm_post` (GAF + seller API key).
 

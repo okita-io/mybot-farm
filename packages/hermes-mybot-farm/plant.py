@@ -2,7 +2,9 @@
 
 Agent packs: download a scrubbed .hermes.tar.gz and `hermes profile import`.
 Team packs: import each member, recreate ~/.hermes/teams/<slug>, fetch TEAM.md /
-WORK.md / cron scripts, create a kanban board when gettingStarted says so.
+WORK.md / cron scripts, mark members as Bots, install team-rules, and create a
+kanban board when gettingStarted says so. Group chat is created via gateway RPC
+when reachable; otherwise members are seated in profile.yaml for a Desktop step.
 
 GAP 2: always clear matching ~/.hermes/profiles/.deleted/<name> tombstones
 before import. Never delete live profiles unless force=True. Never wipe a
@@ -40,6 +42,13 @@ from hermes_bin import (
     list_profiles,
 )
 from tombstones import clear_tombstones, hermes_home, list_tombstones
+from team_md import (
+    pack_handoffs,
+    pack_skills,
+    pack_title,
+    pack_topology_kind,
+    sample_request_from_pack,
+)
 
 ENDPOINT_PLACEHOLDER = "https://SET_YOUR_ENDPOINT/v1"
 KANBAN_RE = re.compile(
@@ -82,6 +91,11 @@ class PlantPlan:
     stall_id: str = ""
     pack_version: int | str = 1
     reason: str = ""
+    title: str = ""
+    sample_request: str = ""
+    topology_kind: str = ""
+    handoffs: list[str] = field(default_factory=list)
+    skills: list[dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass
@@ -95,6 +109,7 @@ class PlantResult:
     team_dir: str | None = None
     team_files: list[str] = field(default_factory=list)
     kanban: str | None = None
+    room: str | None = None
     endpoint_note: str = ""
     notes: list[str] = field(default_factory=list)
     dry_run: bool = False
@@ -111,6 +126,7 @@ class PlantResult:
             "team_dir": self.team_dir,
             "team_files": self.team_files,
             "kanban": self.kanban,
+            "room": self.room,
             "endpoint_note": self.endpoint_note,
             "notes": self.notes,
             "dry_run": self.dry_run,
@@ -282,6 +298,29 @@ def _member_plans_from_pack(pack: dict[str, Any], base_url: str) -> list[MemberP
     return plans
 
 
+def _merge_member_plans(
+    stall_members: list[MemberPlan], pack_members: list[MemberPlan]
+) -> list[MemberPlan]:
+    if not stall_members:
+        return pack_members
+    by_name = {m.name: m for m in pack_members}
+    merged: list[MemberPlan] = []
+    for member in stall_members:
+        extra = by_name.get(member.name)
+        if extra is None:
+            merged.append(member)
+            continue
+        merged.append(
+            MemberPlan(
+                name=member.name,
+                href=member.href,
+                role=extra.role or member.role,
+                summary=extra.summary or member.summary,
+            )
+        )
+    return merged
+
+
 def build_plant_plan(
     stall: dict[str, Any],
     pack: dict[str, Any],
@@ -299,7 +338,7 @@ def build_plant_plan(
     getting = _getting_started(pack)
     stall_members = _member_plans_from_stall(stall, base_url)
     pack_members = _member_plans_from_pack(pack, base_url)
-    members = stall_members or pack_members
+    members = _merge_member_plans(stall_members, pack_members)
     download_href = str(stall.get("downloadHref") or stall.get("packUrl") or "")
     archive_href = resolve_agent_archive_href(stall, pack) or download_href
     is_team = (
@@ -326,6 +365,11 @@ def build_plant_plan(
             homepage=str((pack.get("manifest") or {}).get("homepage") or stall.get("pageUrl") or ""),
             stall_id=stall_id,
             pack_version=pack_version,
+            title=pack_title(pack),
+            sample_request=sample_request_from_pack(pack),
+            topology_kind=pack_topology_kind(pack),
+            handoffs=pack_handoffs(pack),
+            skills=pack_skills(pack),
         )
 
     if is_team:
@@ -501,6 +545,11 @@ def plant(
                 f"dry-run: would clear tombstones: {', '.join(existing_tombstones)}"
             )
         result.notes.append(pack_summary(pack).get("homepage") or plan.homepage)
+        if plan.kind == "team":
+            result.notes.append(
+                "dry-run: would mark members as Bots, write TEAM.md, install team-rules, "
+                "and create a group chat if HERMES_GATEWAY_RPC_URL is set"
+            )
         return result
 
     existing_profiles: list[str] = []
@@ -578,6 +627,9 @@ def plant(
         team_root = _ensure_team_dirs(plan, home)
         result.team_dir = str(team_root)
         result.team_files = _fetch_team_files(plan, staging, team_root, home)
+        from team_plant import configure_planted_team, ensure_team_md
+
+        result.team_files = ensure_team_md(plan, team_root, result.team_files)
         _write_farm_md(team_root / "FARM.md", plan, date.today().isoformat())
         if plan.kanban:
             boards = list_boards()
@@ -591,6 +643,7 @@ def plant(
                 )
             result.kanban = plan.kanban.slug
         notes.append("cron scripts copied to ~/.hermes/scripts when present; schedule them yourself")
+        result.room = configure_planted_team(plan, home, team_root=team_root, notes=notes)
 
     result.notes = notes
     result.ok = True

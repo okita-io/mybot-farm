@@ -328,6 +328,8 @@ def _plant_text(result) -> str:
         lines.append(f"Team files: {', '.join(result.team_files)}")
     if result.kanban:
         lines.append(f"Kanban board: {result.kanban}")
+    if result.room:
+        lines.append(f"Room: {result.room}")
     if result.endpoint_note:
         lines.append(result.endpoint_note)
     for note in result.notes:
