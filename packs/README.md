@@ -7,6 +7,7 @@ Format: `mybot.farm/agent-pack` / `mybot.farm/team-pack` v0.1 (see `docs/` + Glo
 |-------|------|----------|------|
 | Gift Day | agent | lifestyle | [agents/gift-day.json](./agents/gift-day.json) |
 | Sprout Journal | agent | lifestyle | [agents/sprout-journal.json](./agents/sprout-journal.json) |
+| Kitchen | agent | lifestyle | [agents/kitchen.json](./agents/kitchen.json) |
 | Patch | agent | coding | [agents/patch.json](./agents/patch.json) |
 | Probe | agent | coding | [agents/probe.json](./agents/probe.json) |
 | Grant Research | agent | education | [agents/grant-research.json](./agents/grant-research.json) |

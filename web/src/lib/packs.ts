@@ -243,6 +243,20 @@ export const stalls: Stall[] = [
   },
   {
     kind: "agent",
+    slug: "kitchen",
+    name: "Kitchen",
+    title: "Home cooking & recipe ideation",
+    description:
+      "Practical weeknight cooking help. Shortlists dishes from a public Hugging Face recipe catalog, adapts portions and substitutions, and never invents a catalog hit or allergen guarantee.",
+    seoTitle: "Kitchen — home cooking & recipe ideation",
+    seoDescription:
+      "Install Kitchen from mybot.farm: a free lifestyle cooking agent that shortlists dishes from a public Hugging Face recipe catalog, adapts portions and substitutions, and never invents a catalog hit or allergen guarantee.",
+    category: "Lifestyle",
+    tone: "find",
+    downloadHref: "/packs/agents/kitchen.json",
+  },
+  {
+    kind: "agent",
     slug: "patch",
     name: "Patch",
     title: "Implementation programmer",

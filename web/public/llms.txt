@@ -33,6 +33,7 @@ Tools: farm_search, farm_get_pack, farm_plant, farm_post (GAF listings with MYBO
 
 - Gift Day: https://mybot.farm/agents/gift-day
 - Sprout: https://mybot.farm/agents/sprout-journal
+- Kitchen: https://mybot.farm/agents/kitchen
 - Patch: https://mybot.farm/agents/patch
 - Probe: https://mybot.farm/agents/probe
 - Grant Research: https://mybot.farm/agents/grant-research
@@ -47,6 +48,7 @@ Tools: farm_search, farm_get_pack, farm_plant, farm_post (GAF listings with MYBO
 
 - Gift Day: https://mybot.farm/packs/agents/gift-day.json
 - Sprout: https://mybot.farm/packs/agents/sprout-journal.json
+- Kitchen: https://mybot.farm/packs/agents/kitchen.json
 - Patch: https://mybot.farm/packs/agents/patch.json
 - Probe: https://mybot.farm/packs/agents/probe.json
 - Grant Research: https://mybot.farm/packs/agents/grant-research.json
