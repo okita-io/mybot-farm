@@ -158,8 +158,8 @@ Listing writes send `Access-Control-Allow-Origin: *` and allow headers `Authoriz
 Apply `web/drizzle/0007_stall_revisions.sql` with the rest of the Drizzle/Neon migrations (`npm run db:migrate` from `web/` when `DATABASE_URL_UNPOOLED` or `DATABASE_URL` is set). Set `CATALOG_GITHUB_TOKEN` as two separate Vercel secrets:
 
 - **Production** (and `web/.env.local`): fine-grained PAT with Contents **read/write** on `okita-io/mybot-farm-catalog` so listing publish can commit packs.
-- **Preview**: a different fine-grained PAT with Contents **read-only** on that repo so preview builds can clone the catalog without write access.
+- **Preview**: a different fine-grained PAT with Contents **read-only** on that repo so preview builds can pull the catalog without write access.
 
 Do not copy the Production write token onto Preview.
 
-Production and Preview builds run `web/scripts/pull-catalog.sh` via `prebuild` to sync `public/packs` from that repo (optional pin: `CATALOG_GITHUB_SHA`). Local or CI builds without the token keep committed packs. Production still fails closed if the token is missing.
+Production and Preview builds run `web/scripts/pull-catalog.sh` via `prebuild` to sync `public/packs` from that repo (optional pin: `CATALOG_GITHUB_SHA`). The pull uses the GitHub tarball API, not `git clone`, because read-only fine-grained PATs often get `403 Write access to repository not granted` on HTTPS clone. Local or CI builds without the token keep committed packs. Preview also keeps committed packs if the token cannot read the private catalog. Production still fails closed if the token is missing or unauthorized.
