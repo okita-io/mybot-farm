@@ -34,7 +34,10 @@ export const metadata: Metadata = {
   description: site.description,
   applicationName: site.productName,
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
   },
   alternates: { canonical: "/" },
   openGraph: {
