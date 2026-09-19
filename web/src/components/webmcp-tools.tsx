@@ -161,7 +161,7 @@ function inputSchemaFor(name: ToolName) {
       slug: {
         type: "string",
         description:
-          "Bot slug such as gift-day, sprout-journal, patch, probe, grant-research, scout, finders, pitch, pair-bench, workbench, or road-crew",
+          "Bot slug such as gift-day, sprout-journal, kitchen, patch, probe, grant-research, scout, finders, pitch, pair-bench, workbench, or road-crew",
       },
       ...(name === "get_install_prompt"
         ? {

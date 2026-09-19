@@ -111,7 +111,7 @@ export default function PressPage() {
         <ContentSection title="What’s on the tables">
           <p>
             Seed bots are free and live now, including Gift Day, Sprout,
-            Patch, Probe, Grant Research, Scholastic Research, the Pair Bench
+            Kitchen, Patch, Probe, Grant Research, Scholastic Research, the Pair Bench
             team (Patch + Probe), Workbench (Spec + Scaffold + Smoke), and Road
             Crew (Scout + Finders + Pitch).
             Authors can list their own agents and teams alongside them.

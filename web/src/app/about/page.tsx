@@ -350,7 +350,7 @@ export default function AboutPage() {
         <ContentSection title="Start here">
           <ol>
             <li>
-              <Link href="/catalog">Open bots</Link> — Gift Day, Sprout, Patch,
+              <Link href="/catalog">Open bots</Link> — Gift Day, Sprout, Kitchen, Patch,
               Probe, Grant Research, teams like Pair Bench / Workbench / Road
               Crew <em>(this is where you plant)</em>
             </li>

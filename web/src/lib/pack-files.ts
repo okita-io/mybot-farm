@@ -1,6 +1,7 @@
 import finders from "../../public/packs/agents/finders.json";
 import giftDay from "../../public/packs/agents/gift-day.json";
 import grantResearch from "../../public/packs/agents/grant-research.json";
+import kitchen from "../../public/packs/agents/kitchen.json";
 import patch from "../../public/packs/agents/patch.json";
 import pitch from "../../public/packs/agents/pitch.json";
 import probe from "../../public/packs/agents/probe.json";
@@ -224,6 +225,7 @@ export function packSummaryFields(pack: FarmPack) {
 const packsBySlug: Record<string, FarmPack> = {
   "gift-day": giftDay,
   "sprout-journal": sproutJournal,
+  kitchen,
   patch,
   probe,
   "grant-research": grantResearch,
