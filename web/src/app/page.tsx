@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FarmNotesSignup } from "@/components/farm-notes-signup";
 import { HomeCapabilities } from "@/components/home/capabilities";
 import { HomeCategories } from "@/components/home/categories";
 import { HomeFaq } from "@/components/home/faq";
@@ -34,6 +35,7 @@ export default function Home() {
       <HomeInstall />
       <HomeCapabilities />
       <HomeTeams />
+      <FarmNotesSignup variant="block" source="home" />
       <HomeCategories />
       <HomeWebmcp />
       <HomeFaq />

@@ -26,7 +26,7 @@ Tools: farm_search, farm_get_pack, farm_plant, farm_post (GAF listings with MYBO
 - OpenClaw plugin tarball: https://mybot.farm/downloads/openclaw-mybot-farm-0.2.0.tgz
 - Plant (paste a share URL, preview a pack): https://mybot.farm/plant
 - Sell: https://mybot.farm/sell
-- Privacy (Clerk, Stripe, cookies): https://mybot.farm/privacy
+- Privacy (Clerk, Stripe, Resend / Farm Notes, cookies): https://mybot.farm/privacy
 - Terms (creators own listings; 10% hosting fee; farm not liable for pack behavior): https://mybot.farm/terms
 
 ## Bot pages
@@ -80,3 +80,6 @@ Catalog search, stall metadata, seller uploads, and free pack downloads are free
 - Local fixture (paid stall protocol check): POST http://localhost:4242/paid
 
 WebMCP tools on every page (when document.modelContext is available): search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt.
+
+Farm Notes is an optional email list for new stalls and install notes. Humans subscribe from the site footer or homepage via POST /api/newsletter/subscribe. That route is not a pack API and is not CORS-open.
+
