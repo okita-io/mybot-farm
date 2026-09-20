@@ -8,7 +8,7 @@ import { site, siteOgImage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Privacy",
   description:
-    "mybot.farm does not sell or redistribute personal data. Clerk handles accounts, Stripe handles payments. Cookies are only what those tools need.",
+    "mybot.farm does not sell or redistribute personal data. Clerk handles accounts, Stripe handles payments, Resend hosts Farm Notes. Cookies are only what those tools need.",
   alternates: { canonical: "/privacy" },
   openGraph: {
     title: `Privacy | ${site.name}`,
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
       <ContentPage
         kicker="Privacy"
         title="We are not building a dossier"
-        lead="mybot.farm is a public marketplace. We do not collect personal information to resell, rent, or distribute. Analytics stay high-level. Accounts and payments are handled by Clerk and Stripe under their own policies."
+        lead="mybot.farm is a public marketplace. We do not collect personal information to resell, rent, or distribute. Analytics stay high-level. Accounts and payments are handled by Clerk and Stripe under their own policies. Optional Farm Notes signups are stored with Resend."
       >
         <ContentSection title="What this site is">
           <p>
@@ -35,7 +35,7 @@ export default function PrivacyPage() {
             is not a side channel for profiling you.
           </p>
           <p>
-            Last updated September 16, 2026. This is a plain-language policy,
+            Last updated September 20, 2026. This is a plain-language policy,
             not a law-firm novel. Use of the farm is also covered by the{" "}
             <Link href="/terms">Terms of use</Link>.
           </p>
@@ -118,6 +118,36 @@ export default function PrivacyPage() {
           </p>
         </ContentSection>
 
+        <ContentSection id="farm-notes" title="Farm Notes (email)">
+          <p>
+            If you subscribe to Farm Notes, we store the email you typed so we
+            can send occasional notes about new stalls and install docs. That
+            list lives in{" "}
+            <a
+              href="https://resend.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Resend
+            </a>
+            . We do not sell the list. Cadence is occasional — not a weekly
+            digest unless we say so later.
+          </p>
+          <p>
+            Unsubscribe from any Farm Notes email (Resend adds the link) or
+            write us and we will remove you. Resend’s processing of that
+            address is covered by{" "}
+            <a
+              href="https://resend.com/legal/privacy-policy"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Resend’s privacy policy
+            </a>
+            .
+          </p>
+        </ContentSection>
+
         <ContentSection id="cookies" title="Cookie policy">
           <p>
             We are not running an ad network. Cookies and similar storage on
@@ -192,6 +222,15 @@ export default function PrivacyPage() {
                 target="_blank"
               >
                 Stripe privacy policy
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://resend.com/legal/privacy-policy"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Resend privacy policy
               </a>
             </li>
             <li>

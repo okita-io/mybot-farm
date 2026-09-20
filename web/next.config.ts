@@ -42,7 +42,31 @@ const nextConfig: NextConfig = {
 
     return [
       {
-        source: "/api/:path*",
+        source: "/api",
+        headers: cors,
+      },
+      {
+        source: "/api/stalls/:path*",
+        headers: cors,
+      },
+      {
+        source: "/api/packs/:path*",
+        headers: cors,
+      },
+      {
+        source: "/api/install-prompt/:path*",
+        headers: cors,
+      },
+      {
+        source: "/api/resolve-share",
+        headers: cors,
+      },
+      {
+        source: "/api/listings/:path*",
+        headers: cors,
+      },
+      {
+        source: "/api/library/:path*",
         headers: cors,
       },
       {

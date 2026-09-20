@@ -1,3 +1,17 @@
+import { SIGNUP_SOURCES, type SignupSource } from "./newsletter-parse";
+
+export { SIGNUP_SOURCES, type SignupSource };
+
+export const farmNotes = {
+  headline: "New stalls when they land — not when you remember to check.",
+  sub: "Whole agents and teams for Grok Bot, Hermes, and OpenClaw. Occasional, no fluff.",
+  blockButton: "Get farm notes",
+  footerLabel: "Farm updates · New stalls + install notes. No weekly digests.",
+  footerButton: "Subscribe",
+  finePrint: "Occasional. Unsubscribe anytime.",
+  success: "You’re on the list.",
+} as const;
+
 export const site = {
   name: "mybot.farm",
   productName: "My Bot Farm",
