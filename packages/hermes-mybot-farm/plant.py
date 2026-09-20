@@ -110,6 +110,7 @@ class PlantResult:
     team_files: list[str] = field(default_factory=list)
     kanban: str | None = None
     room: str | None = None
+    recruited: list[str] = field(default_factory=list)
     endpoint_note: str = ""
     notes: list[str] = field(default_factory=list)
     dry_run: bool = False
@@ -127,6 +128,7 @@ class PlantResult:
             "team_files": self.team_files,
             "kanban": self.kanban,
             "room": self.room,
+            "recruited": self.recruited,
             "endpoint_note": self.endpoint_note,
             "notes": self.notes,
             "dry_run": self.dry_run,
@@ -508,6 +510,7 @@ def plant(
     dry_run: bool = False,
     plugin_config: dict[str, Any] | None = None,
     reinstall: bool = False,
+    recruit: bool = False,
 ) -> PlantResult:
     origin = resolve_base_url(plugin_config if base_url is None else {"baseUrl": base_url})
     stall = get_stall(origin, slug)
@@ -534,6 +537,7 @@ def plant(
         notes=notes,
         dry_run=dry_run,
         kanban=plan.kanban.slug if plan.kanban else None,
+        recruited=[],
     )
 
     if dry_run:
@@ -549,6 +553,11 @@ def plant(
             result.notes.append(
                 "dry-run: would mark members as Bots, write TEAM.md, install team-rules, "
                 "and create a group chat if HERMES_GATEWAY_RPC_URL is set"
+            )
+        elif recruit:
+            result.notes.append(
+                "dry-run: would stamp ui_meta.hermes-bots so the agent lands in the "
+                "Desktop Bots roster (Recruit)"
             )
         return result
 
@@ -623,6 +632,27 @@ def plant(
         result.notes = notes
         return result
 
+    if recruit and plan.kind == "agent":
+        from team_plant import recruit_agent_bot
+
+        recruited_name = plan.profile_name or names[0]
+        title = str(stall.get("name") or recruited_name).strip()
+        if recruit_agent_bot(home / "profiles" / recruited_name, title=title):
+            result.recruited = [recruited_name]
+            notes.append(
+                f"Recruit: stamped ui_meta.hermes-bots on {recruited_name} "
+                "(ui_meta.hermes-bots) so it lands in the Desktop Bots roster "
+                "and is DM-eligible via message_agent"
+            )
+        else:
+            result.notes = notes
+            result.ok = False
+            result.error = (
+                f"imported {recruited_name} but could not write its profile.yaml "
+                "to stamp the Bot marker. Check the profile dir and retry."
+            )
+            return result
+
     if plan.kind == "team":
         team_root = _ensure_team_dirs(plan, home)
         result.team_dir = str(team_root)
@@ -658,6 +688,7 @@ def reinstall(
     dry_run: bool = False,
     name: str | None = None,
     plugin_config: dict[str, Any] | None = None,
+    recruit: bool = False,
 ) -> PlantResult:
     return plant(
         slug,
@@ -667,4 +698,5 @@ def reinstall(
         dry_run=dry_run,
         plugin_config=plugin_config,
         reinstall=True,
+        recruit=recruit,
     )

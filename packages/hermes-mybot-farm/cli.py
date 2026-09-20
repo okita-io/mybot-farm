@@ -75,6 +75,7 @@ def build_parser() -> argparse.ArgumentParser:
 _BOOL_FLAGS = {
     "--force": "force",
     "--clean": "clean",
+    "--recruit": "recruit",
     "--dry-run": "dry_run",
     "--dry_run": "dry_run",
     "--json": "json",
@@ -131,8 +132,8 @@ def usage() -> str:
   farm-plant search <query> [--limit N]
   farm-plant get <slug>
   farm-plant stall <slug>
-  farm-plant plant <slug> [--name NAME] [--force] [--clean] [--dry-run]
-  farm-plant reinstall <slug> [--force] [--clean] [--dry-run]
+  farm-plant plant <slug> [--name NAME] [--force] [--clean] [--recruit] [--dry-run]
+  farm-plant reinstall <slug> [--force] [--clean] [--recruit] [--dry-run]
   farm-plant post --kind agent|team --name NAME --title TITLE --description DESC
                  --category LABEL --price-cents N --pack pack.json
                  [--slug SLUG] [--pack-version N] [--api-key KEY] [--dry-run] [--json]
@@ -197,14 +198,20 @@ def _dispatch(argv: list[str], *, as_text: bool) -> int:
         if not rest:
             print("plant requires a slug", file=sys.stderr)
             return 1
-        args = {"slug": rest[0], **{k: flags[k] for k in ("force", "clean", "dry_run", "name") if k in flags}}
+        args = {
+            "slug": rest[0],
+            **{k: flags[k] for k in ("force", "clean", "dry_run", "recruit", "name") if k in flags},
+        }
         return printer(farm_plant(args))
 
     if cmd == "reinstall":
         if not rest:
             print("reinstall requires a slug", file=sys.stderr)
             return 1
-        args = {"slug": rest[0], **{k: flags[k] for k in ("force", "clean", "dry_run", "name") if k in flags}}
+        args = {
+            "slug": rest[0],
+            **{k: flags[k] for k in ("force", "clean", "dry_run", "recruit", "name") if k in flags},
+        }
         return printer(farm_reinstall(args))
 
     if cmd in {"post", "update"}:

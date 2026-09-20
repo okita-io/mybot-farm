@@ -69,6 +69,9 @@ FARM_PLANT = {
         "when runtime includes hermes). Team packs: each member tarball, team workspace "
         "(TEAM.md/WORK.md/cron), Bot-mode markers, team-rules skill, and a group chat "
         "when a gateway is reachable. "
+        "recruit=true (single-agent packs): after import, stamp ui_meta.hermes-bots on the "
+        "profile so it lands in the Desktop Bots roster as a first-class Bot (Bot Chat, "
+        "DM-eligible via message_agent). Ignored for team packs — members are always recruited. "
         "Always clears ~/.hermes/profiles/.deleted/<name> tombstones (GAP 2) before import. "
         "Does not delete live profiles unless force is true. Does not wipe team dir/board "
         "unless clean is true. Verify hermes profile list before declaring success. "
@@ -103,6 +106,17 @@ FARM_PLANT = {
             "dry_run": {
                 "type": "boolean",
                 "description": "Fetch stall+pack and print the plant plan; do not import.",
+            },
+            "recruit": {
+                "type": "boolean",
+                "description": (
+                    "Single-agent packs only: after import, stamp "
+                    "ui_meta.hermes-bots on the profile so it lands in the Desktop "
+                    "Bots roster (a first-class Bot: Bot Chat registry, DM-eligible "
+                    "via message_agent). Ignored for team packs (members are always "
+                    "recruited). Default false — a plain plant imports a solo "
+                    "profile without the Bot marker."
+                ),
             },
         },
         "required": ["slug"],
@@ -141,6 +155,14 @@ FARM_REINSTALL = {
             "dry_run": {
                 "type": "boolean",
                 "description": "Show the reinstall plan without changing the machine.",
+            },
+            "recruit": {
+                "type": "boolean",
+                "description": (
+                    "Single-agent packs only: after import, stamp "
+                    "ui_meta.hermes-bots so the profile lands in the Desktop Bots "
+                    "roster. Ignored for team packs. Default false."
+                ),
             },
         },
         "required": ["slug"],

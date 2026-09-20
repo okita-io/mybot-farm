@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 import uuid
 from pathlib import Path
 from typing import Any, Callable
@@ -33,6 +34,47 @@ def bot_title_for_member(member) -> str:
         return summary
     role = str(getattr(member, "role", "") or "").strip()
     return role or str(getattr(member, "name", "") or "Bot")
+
+
+def recruit_agent_bot(profile_path: Path, *, title: str) -> bool:
+    """Merge ui_meta.hermes-bots so a single imported agent is a roster Bot.
+
+    A team's members get this via configure_planted_team (which also seats them
+    in the team group). A single agent planted with recruit=True gets this with
+    no groups — enough to satisfy _is_bot_managed() so the Desktop Bots roster
+    treats it as a full Bot (Bot Chat registry, DM-eligible via message_agent).
+    Idempotent: keeps an existing title, bumps the revision.
+    """
+    if not profile_path.is_dir():
+        return False
+    path = profile_path / "profile.yaml"
+    data = load_yaml_dict(path)
+    ui_meta = data.get("ui_meta")
+    if not isinstance(ui_meta, dict):
+        ui_meta = {}
+        data["ui_meta"] = ui_meta
+    bots = ui_meta.get("hermes-bots")
+    if not isinstance(bots, dict):
+        bots = {}
+        ui_meta["hermes-bots"] = bots
+    bots.setdefault("custom", True)
+    if title and not str(bots.get("title") or "").strip():
+        bots["title"] = title
+    created = bots.get("created")
+    if not (isinstance(created, int) and created > 0):
+        bots["created"] = int(time.time() * 1000)
+    # Only add `groups` when the profile is genuinely part of a team; a
+    # recruited solo bot has no group. Absent key = not in any room.
+    if not isinstance(bots.get("groups"), (list, dict)):
+        bots.pop("groups", None)
+    revisions = data.get("_ui_meta_revisions")
+    if not isinstance(revisions, dict):
+        revisions = {}
+        data["_ui_meta_revisions"] = revisions
+    current = revisions.get("hermes-bots")
+    revisions["hermes-bots"] = (int(current) if isinstance(current, int) else 0) + 1
+    atomic_yaml_write(path, data)
+    return True
 
 
 def mark_member_bot(profile_path: Path, *, title: str, team_slug: str) -> bool:

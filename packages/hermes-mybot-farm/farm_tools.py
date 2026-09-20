@@ -173,6 +173,7 @@ def _plant_args(args: dict) -> dict[str, Any]:
         "force": bool(args.get("force")),
         "clean": bool(args.get("clean")),
         "dry_run": bool(args.get("dry_run")),
+        "recruit": bool(args.get("recruit")),
     }
 
 
@@ -330,6 +331,8 @@ def _plant_text(result) -> str:
         lines.append(f"Kanban board: {result.kanban}")
     if result.room:
         lines.append(f"Room: {result.room}")
+    if result.recruited:
+        lines.append(f"Recruited into the Bots roster: {', '.join(result.recruited)}")
     if result.endpoint_note:
         lines.append(result.endpoint_note)
     for note in result.notes:

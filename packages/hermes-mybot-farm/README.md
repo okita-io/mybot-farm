@@ -20,6 +20,33 @@ Default plant is **safe**. Live profiles are never deleted unless `force` is tru
 
 **Plant vs post:** `farm_plant` still imports Hermes `.tar.gz` profiles. `farm_post` publishes **GAF JSON** to the farm. There is no client-side Hermes-tarball→GAF translator in this plugin — export/convert elsewhere (see `scripts/README.md` / `toGAF`). Scrub with `scripts/scrub.py` before you share an archive; posting still expects a GAF object.
 
+## Desktop UI (browse the farm, one-click Plant)
+
+`desktop/plugin.js` is the desktop half of this package: a **Farm** sidebar page that
+browses the live `mybot.farm` catalog (search, All/Agents/Teams filter, stall detail
+with members) and hands **Plant** / **Recruit** / **Replant** to the active profile's
+agent via `session.create` + `prompt.submit` (a new "Farm · <slug>" chat runs
+`farm_plant` / `farm_reinstall`), plus ⌘K `mybot.farm: Open catalog`.
+
+**Plant vs Recruit:** Plant imports a solo agent as a plain profile (not a Bot).
+Recruit (single-agent stalls only) passes `recruit: true` to `farm_plant`, which
+stamps `ui_meta.hermes-bots` on the imported `profile.yaml` after import — the same
+marker the desktop's own create-bot dialog writes — so the agent lands in the
+Desktop **Bots roster** as a first-class Bot (Bot Chat registry, DM-eligible via
+`message_agent`). Team members are always recruited by team plant, so Recruit is
+agent-only in the UI.
+
+The catalog is public and CORS-open (`access-control-allow-origin: *`), so the page
+fetches `https://mybot.farm/api/stalls` directly — no backend half needed.
+
+**Live door:** `~/.hermes/desktop-plugins/mybot-farm/plugin.js` (hot-reloads on save;
+fallback ⌘K → "Reload desktop plugins"). Note: the unified-package door
+(`plugins/mybot-farm/desktop/plugin.js`) only auto-materializes when the plugin
+folder is a REAL directory — Electron's materializer filters `readdir(withFileTypes)`
+on `isDirectory()`, and Node reports a symlinked folder as a non-dir, so a symlinked
+`~/.hermes/plugins/mybot-farm` install (this machine) must use the standalone door
+above. Both are kept byte-identical.
+
 ## Install (from a checkout)
 
 `hermes plugins install` takes a Git URL or `owner/repo[/subdir]`, not a local folder. From this repo:

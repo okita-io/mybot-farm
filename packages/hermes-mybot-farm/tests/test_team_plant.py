@@ -18,6 +18,7 @@ from team_plant import (
     ensure_team_md,
     install_team_rules_skill,
     mark_member_bot,
+    recruit_agent_bot,
     try_create_group_chat,
     warm_bot_note,
 )
@@ -98,6 +99,50 @@ class TeamMdTests(unittest.TestCase):
 
 
 class TeamPlantTests(unittest.TestCase):
+    def test_recruit_stamps_bot_marker_on_missing_profile(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            profile_dir = Path(tmp) / "profiles" / "solo-agent"
+            profile_dir.mkdir(parents=True)
+            self.assertTrue(recruit_agent_bot(profile_dir, title="Solo Agent"))
+            cfg = load_yaml_dict(profile_dir / "profile.yaml")
+            self.assertIsNotNone(cfg)
+            bot = cfg["ui_meta"]["hermes-bots"]
+            # Roster / DM-eligibility contract: the marker must satisfy
+            # hermes's _is_bot_managed (ui_meta.hermes-bots present).
+            self.assertTrue(bot.get("custom"))
+            self.assertEqual(bot.get("title"), "Solo Agent")
+            self.assertFalse(bot.get("groups"))
+
+    def test_recruit_idempotent_no_duplicate_markers(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            profile_dir = Path(tmp) / "profiles" / "solo-agent"
+            profile_dir.mkdir(parents=True)
+            recruit_agent_bot(profile_dir, title="Solo Agent")
+            recruit_agent_bot(profile_dir, title="Solo Agent")
+            cfg = load_yaml_dict(profile_dir / "profile.yaml")
+            bot = cfg["ui_meta"]["hermes-bots"]
+            self.assertTrue(bot["custom"])
+            self.assertEqual(bot["title"], "Solo Agent")
+            # Exactly one marker block: the second occurrence of the key lives in
+            # hermes's internal _ui_meta_revisions ledger, not a duplicated block.
+            raw = (profile_dir / "profile.yaml").read_text(encoding="utf-8")
+            self.assertEqual(raw.count("custom: true"), 1)
+            self.assertEqual(raw.count("created:"), 1)
+
+    def test_recruit_preserves_existing_profile_config(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            profile_dir = Path(tmp) / "profiles" / "solo-agent"
+            profile_dir.mkdir(parents=True)
+            atomic_yaml_write(
+                profile_dir / "profile.yaml",
+                {"model": {"provider": "custom"}, "plugins": {"enabled": ["x"]}},
+            )
+            recruit_agent_bot(profile_dir, title="Solo Agent")
+            cfg = load_yaml_dict(profile_dir / "profile.yaml")
+            self.assertEqual(cfg["model"], {"provider": "custom"})
+            self.assertEqual(cfg["plugins"], {"enabled": ["x"]})
+            self.assertTrue(cfg["ui_meta"]["hermes-bots"]["custom"])
+
     def test_mark_bot_and_merge_groups(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             home = Path(raw)
