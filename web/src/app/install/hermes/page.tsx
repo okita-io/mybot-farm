@@ -10,12 +10,12 @@ import { hermesPlugin, site, siteOgImage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Install in Hermes",
   description:
-    "Plant mybot.farm Hermes stalls with the mybot-farm plugin. Symlink or unzip into ~/.hermes/plugins/mybot-farm, enable it, then farm_search / farm_get_stall / farm_plant / farm_reinstall.",
+    "Enable the mybot-farm plugin, open Hermes Desktop, browse stalls, and one-click Recruit into the Bots roster. CLI farm_search / farm_plant / farm_reinstall still work.",
   alternates: { canonical: "/install/hermes" },
   openGraph: {
     title: `Install in Hermes | ${site.name}`,
     description:
-      "Install the mybot-farm Hermes plugin, then search and plant scrubbed profiles into Hermes — including GAP 2 tombstone cleanup on reinstall.",
+      "Install the mybot-farm Hermes plugin, then Recruit stalls from Desktop into the Bots roster — or plant from CLI, including GAP 2 tombstone cleanup on reinstall.",
     url: "/install/hermes",
     images: [siteOgImage],
   },
@@ -27,8 +27,8 @@ export default function HermesInstallPage() {
       <JsonLd data={howToHermesPluginLd} />
       <ContentPage
         kicker="Hermes"
-        title="Plant a farm stall into Hermes"
-        lead="Install the mybot-farm plugin, enable it, then search and plant scrubbed profile archives. You get Hermes profiles (and for teams, a team dir + kanban board) — not the author’s computer, logins, or chat history."
+        title="Recruit a farm stall into Hermes"
+        lead="Enable the mybot-farm plugin, open Hermes Desktop, browse the farm, and one-click Recruit. Solo agents land in the Desktop Bots roster. You get a copy — not the author’s computer, logins, or chat history."
       >
         <div className="flex flex-wrap gap-2">
           <Button asChild size="lg" className="h-9 rounded-full px-4">
@@ -47,8 +47,10 @@ export default function HermesInstallPage() {
 
         <ContentSection id="what" title="What you get">
           <p>
-            Native Hermes tools (plugin name <code>{hermesPlugin.id}</code>),
-            registered with <code>register(ctx)</code>:
+            A <strong>Farm</strong> page in Hermes Desktop (plugin name{" "}
+            <code>{hermesPlugin.id}</code> {hermesPlugin.version}): search the
+            live catalog, open a stall, <strong>Recruit</strong> into the Bots
+            roster. Native tools, registered with <code>register(ctx)</code>:
           </p>
           <ul>
             <li>
@@ -65,7 +67,10 @@ export default function HermesInstallPage() {
             </li>
             <li>
               <code>farm_plant</code> — download +{" "}
-              <code>hermes profile import</code>. Teams also get{" "}
+              <code>hermes profile import</code>. Solo Recruit passes{" "}
+              <code>recruit: true</code> so the profile is stamped{" "}
+              <code>ui_meta.hermes-bots</code> and lands in the Desktop Bots
+              roster. Teams also get{" "}
               <code>~/.hermes/teams/{"{slug}"}</code>, TEAM.md / WORK.md / cron,
               and a kanban board when gettingStarted says so
             </li>
@@ -88,7 +93,7 @@ export default function HermesInstallPage() {
           </p>
         </ContentSection>
 
-        <ContentSection id="install" title="Install the plugin">
+        <ContentSection id="install" title="Enable the plugin">
           <p>
             Plugins are opt-in.{" "}
             <code>hermes plugins install</code> takes a Git URL or{" "}
@@ -98,7 +103,12 @@ export default function HermesInstallPage() {
           <pre>{`mkdir -p ~/.hermes/plugins
 ln -sfn "$(pwd)/packages/hermes-mybot-farm" ~/.hermes/plugins/mybot-farm
 hermes plugins enable mybot-farm`}</pre>
-          <p>Copy the folder instead of linking if you prefer a snapshot.</p>
+          <p>
+            Copy the folder instead of linking if you prefer a snapshot. A
+            real directory is what Desktop uses to materialize{" "}
+            <code>desktop/plugin.js</code>. A symlink install needs the
+            standalone door in Recruit from Desktop below.
+          </p>
           <h3>From GitHub</h3>
           <p>
             Subdir is required — this plugin is not at the repo root.{" "}
@@ -119,10 +129,43 @@ hermes plugins enable mybot-farm`}</pre>
           <pre>{`hermes plugins install mybot-farm
 hermes plugins enable mybot-farm`}</pre>
           <h3>From the public zip</h3>
+          <p>
+            Packed after the v{hermesPlugin.version} tag — not committed
+            in-tree.
+          </p>
           <pre>{`curl -LO ${hermesPlugin.downloadUrl}
 mkdir -p ~/.hermes/plugins/mybot-farm
-unzip hermes-mybot-farm-0.1.0.zip -d ~/.hermes/plugins/mybot-farm
+unzip hermes-mybot-farm-${hermesPlugin.version}.zip -d ~/.hermes/plugins/mybot-farm
 hermes plugins enable mybot-farm`}</pre>
+        </ContentSection>
+
+        <ContentSection id="desktop" title="Recruit from Hermes Desktop">
+          <p>
+            Open <strong>Hermes Desktop</strong>. Sidebar <strong>Farm</strong>{" "}
+            (or ⌘K → <code>mybot.farm: Open catalog</code>). Search, filter All
+            / Agents / Teams, open a stall, <strong>Recruit</strong>.
+          </p>
+          <ul>
+            <li>
+              Solo agents: <code>farm_plant</code> with{" "}
+              <code>recruit: true</code> stamps{" "}
+              <code>ui_meta.hermes-bots</code> — the same marker as Desktop’s
+              create-bot dialog — so the agent lands in the Bots roster.
+            </li>
+            <li>
+              Teams: members always land in the Bots roster. Team dir, TEAM.md,
+              group-chat setup note as usual.
+            </li>
+            <li>
+              <strong>Page</strong> opens the listing on the farm.
+            </li>
+          </ul>
+          <p>
+            Plant-as-plain-profile and Replant stay on the CLI / tools. If Farm
+            does not appear after a symlink install, copy{" "}
+            <code>desktop/plugin.js</code> to{" "}
+            <code>~/.hermes/desktop-plugins/mybot-farm/plugin.js</code>.
+          </p>
         </ContentSection>
 
         <ContentSection id="validate" title="Validate">
@@ -138,7 +181,7 @@ python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v`}</pre>
           </p>
         </ContentSection>
 
-        <ContentSection id="plant" title="Plant a stall">
+        <ContentSection id="plant" title="CLI plant (secondary)">
           <p>
             After install, ask your Hermes agent to call{" "}
             <code>farm_search</code>, <code>farm_get_stall</code>,{" "}
@@ -146,8 +189,9 @@ python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v`}</pre>
             such as <code>scholastic-research</code> (one profile) or{" "}
             <code>workbench</code> (three members + board). Optional plant
             params: <code>name</code>, <code>force</code>, <code>clean</code>,{" "}
-            <code>dry_run</code>. Also: <code>hermes farm search workbench</code>{" "}
-            and <code>/farm plant scholastic-research</code>.
+            <code>dry_run</code>, <code>recruit</code>. Also:{" "}
+            <code>hermes farm search workbench</code> and{" "}
+            <code>/farm plant scholastic-research</code>.
           </p>
           <p>From a checkout, CLI with no agent loop:</p>
           <pre>{`python3 packages/hermes-mybot-farm/bin/farm-plant search workbench

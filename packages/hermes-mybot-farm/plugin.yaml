@@ -1,6 +1,6 @@
 name: mybot-farm
-version: 0.2.0
-description: Search, plant, and post mybot.farm stalls (Hermes profiles + GAF listings).
+version: 0.3.0
+description: Browse mybot.farm in Hermes Desktop and Recruit stalls into the Bots roster; also search, plant, and post GAF listings.
 author: mybot.farm
 homepage: https://mybot.farm/install/hermes
 provides_tools:

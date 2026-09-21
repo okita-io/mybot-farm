@@ -1,6 +1,12 @@
 # mybot-farm
 
-Enabled. Next:
+Enabled. Next: open **Hermes Desktop** → sidebar **Farm** (or ⌘K → `mybot.farm: Open catalog`) → browse a stall → **Recruit**.
+
+That one-click Recruit lands solo agents in the Desktop **Bots roster** (`ui_meta.hermes-bots`). Team members plant as Bots as usual.
+
+If Farm is missing after a symlink install, copy `desktop/plugin.js` to `~/.hermes/desktop-plugins/mybot-farm/plugin.js`.
+
+CLI / tools (secondary):
 
 ```bash
 hermes plugins validate ~/.hermes/plugins/mybot-farm   # git Hermes; missing on PyPI 0.19.0
@@ -8,7 +14,7 @@ python3 ~/.hermes/plugins/mybot-farm/bin/farm-plant search workbench
 python3 ~/.hermes/plugins/mybot-farm/bin/farm-plant plant scholastic-research --dry-run
 ```
 
-Ask the agent to call `farm_search`, `farm_get_stall`, `farm_plant`, `farm_reinstall`, `farm_post`, or `farm_update`.
+Ask the agent to call `farm_search`, `farm_get_stall`, `farm_plant` (solo Recruit: `recruit: true`), `farm_reinstall`, `farm_post`, or `farm_update`.
 
 Reinstall / GAP 2: `farm_reinstall` clears `~/.hermes/profiles/.deleted/<name>` before import. `--force` deletes live profiles of those names. `--clean` also wipes the team dir and kanban board. Default is safe.
 

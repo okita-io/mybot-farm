@@ -235,7 +235,7 @@ def http_gateway_rpc(method: str, params: dict[str, Any]) -> dict[str, Any]:
     payload = json.dumps(
         {"jsonrpc": "2.0", "id": str(uuid.uuid4()), "method": method, "params": params}
     ).encode("utf-8")
-    headers = {"Content-Type": "application/json", "User-Agent": "hermes-mybot-farm/0.2.0"}
+    headers = {"Content-Type": "application/json", "User-Agent": "hermes-mybot-farm/0.3.0"}
     token = (os.environ.get("HERMES_GATEWAY_TOKEN") or "").strip()
     if token:
         headers["Authorization"] = f"Bearer {token}"

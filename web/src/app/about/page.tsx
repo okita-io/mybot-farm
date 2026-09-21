@@ -363,8 +363,8 @@ export default function AboutPage() {
             </li>
             <li>
               <Link href="/install/openclaw">OpenClaw</Link> /{" "}
-              <Link href="/install/hermes">Hermes</Link> — plant with the
-              mybot-farm plugin
+              <Link href="/install/hermes">Hermes</Link> — Recruit from Desktop
+              with the mybot-farm plugin
             </li>
             <li>
               <Link href="/press">Press</Link> ·{" "}

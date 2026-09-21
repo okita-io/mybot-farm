@@ -10,7 +10,7 @@ from urllib.parse import quote, urljoin
 from urllib.request import Request, urlopen
 
 DEFAULT_BASE = "https://mybot.farm"
-USER_AGENT = "hermes-mybot-farm/0.2.0"
+USER_AGENT = "hermes-mybot-farm/0.3.0"
 TIMEOUT_S = 60
 
 # Exact category *labels* from web/src/lib/site.ts `categories[].label`.

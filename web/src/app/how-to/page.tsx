@@ -15,12 +15,12 @@ import { hermesPlugin, openclawPlugin, site, siteOgImage } from "@/lib/site";
 export const metadata: Metadata = {
   title: "How-To",
   description:
-    "Install a mybot.farm agent in Grok Bot from GAF JSON, import a scrubbed Hermes profile (or plant with the mybot-farm plugin), or plant a pack in OpenClaw.",
+    "Install a mybot.farm agent in Grok Bot from GAF JSON, Recruit a stall in Hermes Desktop with the mybot-farm plugin, or plant a pack in OpenClaw.",
   alternates: { canonical: "/how-to" },
   openGraph: {
     title: `How-To | ${site.name}`,
     description:
-      "Grok Bot uses GAF JSON. Hermes uses a scrubbed .tar.gz — including seed bots like Scholastic Research and Workbench. Scrub chat history and secrets before you share.",
+      "Grok Bot uses GAF JSON. Hermes: enable the plugin, open Desktop Farm, Recruit — or import a scrubbed .tar.gz. Seed bots include Scholastic Research and Workbench. Scrub chat history and secrets before you share.",
     url: "/how-to",
     images: [siteOgImage],
   },
@@ -38,7 +38,7 @@ export default function HowToPage() {
       <ContentPage
         kicker="How-To"
         title="Install a bot, or share your own"
-        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes installs from a scrubbed profile .tar.gz — plant with the mybot-farm plugin, or import by hand. Seed bots include Scholastic Research and Workbench. OpenClaw plants the same GAF packs with its own mybot-farm plugin."
+        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes: enable the mybot-farm plugin, open Desktop Farm, Recruit into the Bots roster — or import a scrubbed .tar.gz by hand. Seed bots include Scholastic Research and Workbench. OpenClaw plants the same GAF packs with its own mybot-farm plugin."
       >
         <ContentSection id="install" title="Install an agent in Grok Bot">
           <p>
@@ -133,7 +133,8 @@ export default function HowToPage() {
             <Link href="/teams/workbench">Workbench</Link> (three team
             members). Prefer the{" "}
             <Link href="/install/hermes">mybot-farm plugin</Link> when you want
-            search + plant + clean reinstall. Use this manual path for a single
+            Desktop browse + one-click Recruit (or CLI plant + clean reinstall).
+            Use this manual path for a single
             archive from another farmer, or after you ran{" "}
             <a href="#hermes-share">scrub.py</a> on your own export. Grok Bot
             packs still download as GAF JSON and will not import.
@@ -179,11 +180,16 @@ export default function HowToPage() {
           </p>
         </ContentSection>
 
-        <ContentSection id="hermes-plugin" title="Plant a stall with the Hermes plugin">
+        <ContentSection id="hermes-plugin" title="Recruit a stall with the Hermes plugin">
           <p>
             The Hermes <strong>mybot-farm</strong> plugin (id{" "}
-            <code>{hermesPlugin.id}</code>) searches stalls and plants them into
-            Hermes profiles and team dirs. Tools: <code>farm_search</code>,{" "}
+            <code>{hermesPlugin.id}</code> {hermesPlugin.version}) browses
+            stalls in Hermes Desktop and one-click{" "}
+            <strong>Recruit</strong> into the Bots roster. Enable the
+            plugin, open sidebar <strong>Farm</strong> (or ⌘K →{" "}
+            <code>mybot.farm: Open catalog</code>), open a stall, Recruit. Solo
+            agents stamp <code>ui_meta.hermes-bots</code>; team members plant as
+            Bots as usual. CLI tools: <code>farm_search</code>,{" "}
             <code>farm_get_stall</code>, <code>farm_get_pack</code>,{" "}
             <code>farm_plant</code>, <code>farm_reinstall</code>.{" "}
             <code>farm_reinstall</code> clears{" "}
@@ -198,6 +204,7 @@ export default function HowToPage() {
           <pre>{`mkdir -p ~/.hermes/plugins
 ln -sfn "$(pwd)/packages/hermes-mybot-farm" ~/.hermes/plugins/mybot-farm
 hermes plugins enable mybot-farm
+# then Desktop → Farm → Recruit
 # git Hermes only — PyPI 0.19.0 has no validate subcommand
 hermes plugins validate ./packages/hermes-mybot-farm
 python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v`}</pre>
@@ -210,10 +217,10 @@ hermes plugins enable mybot-farm
 
 curl -LO ${hermesPlugin.downloadUrl}
 mkdir -p ~/.hermes/plugins/mybot-farm
-unzip hermes-mybot-farm-0.1.0.zip -d ~/.hermes/plugins/mybot-farm
+unzip hermes-mybot-farm-${hermesPlugin.version}.zip -d ~/.hermes/plugins/mybot-farm
 hermes plugins enable mybot-farm`}</pre>
           <p>
-            CLI smoke:{" "}
+            CLI smoke (secondary):{" "}
             <code>
               python3 packages/hermes-mybot-farm/bin/farm-plant plant
               scholastic-research --dry-run
@@ -496,8 +503,8 @@ curl -sS -X POST https://mybot.farm/api/listings \\
               with the mybot-farm plugin
             </li>
             <li>
-              <Link href="/install/hermes">Hermes</Link> — plant a scrubbed
-              profile with the mybot-farm plugin
+              <Link href="/install/hermes">Hermes</Link> — Recruit from Desktop
+              Farm with the mybot-farm plugin
             </li>
             <li>
               <Link href="/plant">Plant</Link> — paste a share URL and preview
