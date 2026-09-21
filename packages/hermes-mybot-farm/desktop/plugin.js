@@ -1,5 +1,5 @@
 /**
- * mybot.farm desktop UI — browse the farm catalog, hand Plant/Reinstall to the agent.
+ * mybot.farm desktop UI — browse the farm catalog, Recruit stalls onto the desktop.
  *
  * Live door: ~/.hermes/desktop-plugins/mybot-farm/plugin.js  (hot-reloads on save;
  * fallback: ⌘K → "Reload desktop plugins").
@@ -31,7 +31,7 @@ import {
   useQuery
 } from '@hermes/plugin-sdk'
 import { jsx, jsxs } from 'react/jsx-runtime'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const ID = 'mybot-farm'
 const FARM = 'https://mybot.farm'
@@ -81,7 +81,7 @@ function StallRow({ stall, selected, onOpen, t }) {
   })
 }
 
-function DetailCard({ stall, onPlant, onRecruit, onReinstall, onOpenPage }) {
+function DetailCard({ stall, onRecruit, onOpenPage }) {
   const t = usePluginI18n(ID)
 
   return jsxs('div', {
@@ -112,15 +112,7 @@ function DetailCard({ stall, onPlant, onRecruit, onReinstall, onOpenPage }) {
                 onClick: onOpenPage,
                 children: t('openPage')
               }),
-              jsx(Button, {
-                variant: 'outline',
-                onClick: onReinstall,
-                children: t('reinstall')
-              }),
-              onRecruit
-                ? jsx(Button, { variant: 'secondary', onClick: onRecruit, children: t('recruit') })
-                : null,
-              jsx(Button, { onClick: onPlant, children: t('plant') })
+              jsx(Button, { onClick: onRecruit, children: t('recruit') })
             ]
           })
         ]
@@ -148,8 +140,67 @@ function DetailCard({ stall, onPlant, onRecruit, onReinstall, onOpenPage }) {
 
       jsx('div', {
         className: 'text-[0.6875rem] text-(--ui-text-quaternary)',
-        children: t('plantHint', stall.kind === 'team')
+        children: t('recruitHint', stall.kind === 'team')
       })
+    ]
+  })
+}
+
+function AccordionDetail({
+  selected,
+  isLoading,
+  isError,
+  error,
+  onRetry,
+  detail,
+  onRecruit,
+  onOpenPage,
+  t
+}) {
+  const ref = useRef(null)
+
+  // Keep the freshly-opened panel in view so the user never scrolls to the
+  // bottom of a long list to reach the agent/team they just selected.
+  useEffect(() => {
+    if (ref.current && typeof ref.current.scrollIntoView === 'function') {
+      ref.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    }
+  }, [selected])
+
+  if (!selected) return null
+
+  return jsxs('div', {
+    ref: ref,
+    className: 'rounded-md ring-1 ring-(--ui-accent)',
+    children: [
+      isLoading
+        ? jsxs('div', {
+            className: 'flex items-center gap-2 rounded-lg border border-(--ui-stroke-secondary) p-3 text-sm text-(--ui-text-tertiary)',
+            children: [jsx(GlyphSpinner, {}), t('loadingDetail')]
+          })
+        : null,
+      isError
+        ? jsxs('div', {
+            className: 'rounded-lg border border-(--ui-stroke-secondary) p-3 text-xs text-(--ui-text-secondary)',
+            children: [
+              String((error && error.message) || error),
+              ' — ',
+              jsx('button', {
+                type: 'button',
+                className: 'text-(--ui-accent) underline',
+                onClick: onRetry,
+                children: t('retry')
+              })
+            ]
+          })
+        : null,
+      detail && !isLoading && !isError
+        ? jsx(DetailCard, {
+            stall: detail,
+            onRecruit,
+            onOpenPage
+          })
+        : null
     ]
   })
 }
@@ -162,7 +213,7 @@ function openExternal(url) {
   host.notify({ kind: 'info', message: `mybot.farm: ${url || 'https://mybot.farm'}` })
 }
 
-async function plantViaAgent(slug, name, kind, recruit) {
+async function recruitViaAgent(slug, name, kind) {
   const created = await host.request('session.create', { title: `Farm · ${slug}` })
   // session.create returns BOTH ids: `session_id` is the RUNTIME id prompt.submit
   // keys off, `stored_session_id` is the durable id host.openSession navigates to.
@@ -170,23 +221,21 @@ async function plantViaAgent(slug, name, kind, recruit) {
   const storedId = created && created.stored_session_id
 
   if (!runtimeId) {
-    host.notify({ kind: 'error', message: 'Farm: could not start a chat to plant this stall.' })
+    host.notify({ kind: 'error', message: 'Farm: could not start a chat to recruit this stall.' })
     return
   }
 
   const prompt =
     kind === 'team'
-      ? `Use the farm_plant tool to plant the mybot.farm team "${slug}" (${name}). Confirm when the profiles, team dir, and group-chat fallback note are done.`
-      : recruit
-        ? `Use the farm_plant tool to plant the mybot.farm agent "${slug}" (${name}) with recruit: true, so the imported profile is stamped ui_meta.hermes-bots and lands in the Desktop Bots roster. Confirm the profile imported and the marker is present in its profile.yaml.`
-        : `Use the farm_plant tool to plant the mybot.farm agent "${slug}" (${name}).`
+      ? `Use the farm_plant tool to plant the mybot.farm team "${slug}" (${name}). Members should land in the Desktop Bots roster. Confirm when the profiles, team dir, and group-chat fallback note are done.`
+      : `Use the farm_plant tool to plant the mybot.farm agent "${slug}" (${name}) with recruit: true, so the imported profile is stamped ui_meta.hermes-bots and lands in the Desktop Bots roster. Confirm the profile imported and the marker is present in its profile.yaml.`
 
   try {
     await host.request('prompt.submit', { session_id: runtimeId, text: prompt })
   } catch (error) {
     host.notify({
       kind: 'error',
-      message: `Farm: chat started but the plant request failed — ${String((error && error.message) || error)}`
+      message: `Farm: chat started but the recruit request failed — ${String((error && error.message) || error)}`
     })
     return
   }
@@ -199,43 +248,7 @@ async function plantViaAgent(slug, name, kind, recruit) {
     }
   }
 
-  host.notify({ kind: 'info', message: `Farm: planting ${slug} — watch the new chat.` })
-}
-
-async function reinstallViaAgent(slug, name, kind) {
-  const created = await host.request('session.create', { title: `Farm · ${slug} (reinstall)` })
-  const runtimeId = created && created.session_id
-  const storedId = created && created.stored_session_id
-
-  if (!runtimeId) {
-    host.notify({ kind: 'error', message: 'Farm: could not start a chat to reinstall this stall.' })
-    return
-  }
-
-  const prompt =
-    kind === 'team'
-      ? `Use the farm_reinstall tool to reinstall the mybot.farm team "${slug}" (${name}). Clear tombstones and any old profile/team/board state, then plant again and verify with \`hermes profile list\`.`
-      : `Use the farm_reinstall tool to reinstall the mybot.farm agent "${slug}" (${name}). Clear tombstones, then plant again and verify.`
-
-  try {
-    await host.request('prompt.submit', { session_id: runtimeId, text: prompt })
-  } catch (error) {
-    host.notify({
-      kind: 'error',
-      message: `Farm: chat started but the reinstall request failed — ${String((error && error.message) || error)}`
-    })
-    return
-  }
-
-  if (storedId && typeof host.openSession === 'function') {
-    try {
-      await host.openSession(storedId, { intent: 'in-place' })
-    } catch {
-      // best-effort navigation
-    }
-  }
-
-  host.notify({ kind: 'info', message: `Farm: reinstalling ${slug} — watch the new chat.` })
+  host.notify({ kind: 'info', message: `Farm: recruiting ${slug} — watch the new chat.` })
 }
 
 function FarmPage() {
@@ -243,6 +256,12 @@ function FarmPage() {
   const [query, setQuery] = useState('')
   const [kind, setKind] = useState('all')
   const [selected, setSelected] = useState(null)
+
+  // A search/filter change rewrites the visible list — close any open panel so
+  // a stale selection can't linger under a row that's no longer in view.
+  useEffect(() => {
+    setSelected(null)
+  }, [query, kind])
 
   const list = useQuery({
     queryKey: ['farm-stalls', query, kind],
@@ -261,7 +280,6 @@ function FarmPage() {
   })
 
   const stalls = (list.data && list.data.stalls) || []
-  const stall = detail.data
 
   return jsxs('div', {
     className: 'flex h-full min-h-0 flex-col gap-3 p-4',
@@ -343,51 +361,37 @@ function FarmPage() {
           className: 'flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-1',
           children: [
             ...stalls.map(stall =>
-              jsx(StallRow, {
-                key: stall.slug,
-                stall: stall,
-                selected: selected === stall.slug,
-                onOpen: slug => setSelected(slug),
-                t: t
-              })
-            ),
-
-            selected && detail.isLoading
-              ? jsxs('div', {
-                  className: 'flex items-center gap-2 text-sm text-(--ui-text-tertiary)',
-                  children: [jsx(GlyphSpinner, {}), t('loadingDetail')]
-                })
-              : null,
-
-            selected && detail.isError
-              ? jsxs('div', {
-                  className: 'rounded-md border border-(--ui-stroke-secondary) p-3 text-xs text-(--ui-text-secondary)',
+              jsxs(
+                'div',
+                {
+                  key: stall.slug,
                   children: [
-                    String((detail.error && detail.error.message) || detail.error),
-                    ' — ',
-                    jsx('button', {
-                      type: 'button',
-                      className: 'text-(--ui-accent) underline',
-                      onClick: () => detail.refetch(),
-                      children: t('retry')
+                    jsx(StallRow, {
+                      stall: stall,
+                      selected: selected === stall.slug,
+                      onOpen: slug => setSelected(prev => (prev === slug ? null : slug)),
+                      t: t
+                    }),
+                    jsx(AccordionDetail, {
+                      selected: selected === stall.slug ? stall.slug : null,
+                      isLoading: selected === stall.slug ? detail.isLoading : false,
+                      isError: selected === stall.slug ? detail.isError : false,
+                      error: detail.error,
+                      onRetry: () => detail.refetch(),
+                      detail: selected === stall.slug ? detail.data : null,
+                      onRecruit: () =>
+                        recruitViaAgent(
+                          detail.data.slug,
+                          detail.data.name || detail.data.slug,
+                          detail.data.kind || 'agent'
+                        ),
+                      onOpenPage: () => openExternal(detail.data.pageUrl),
+                      t: t
                     })
                   ]
-                })
-              : null,
-
-            stall
-              ? jsx(DetailCard, {
-                  stall: stall,
-                  onPlant: () => plantViaAgent(stall.slug, stall.name || stall.slug, stall.kind || 'agent'),
-                  onRecruit:
-                    stall.kind === 'agent'
-                      ? () => plantViaAgent(stall.slug, stall.name || stall.slug, 'agent', true)
-                      : null,
-                  onReinstall: () =>
-                    reinstallViaAgent(stall.slug, stall.name || stall.slug, stall.kind || 'agent'),
-                  onOpenPage: () => openExternal(stall.pageUrl)
-                })
-              : null
+                }
+              )
+            )
           ]
         }
       )
@@ -415,15 +419,13 @@ export default {
         retry: 'retry',
         openSite: 'Open site',
         openPage: 'Page',
-        plant: 'Plant',
         recruit: 'Recruit',
-        reinstall: 'Replant',
         membersLabel: 'members',
-        hint: 'Plant hands the request to the active profile’s agent.',
-        plantHint: isTeam =>
+        hint: 'Recruit brings a stall into this desktop as a Bot.',
+        recruitHint: isTeam =>
           isTeam
-            ? 'Plant seeds this team into this profile as Bots — team dir, TEAM.md, and a group-chat setup note. Team members always land in the Bots roster. Recruit applies to single agents only.'
-            : 'Plant seeds this agent into this profile — tombstones cleared, then imported. Recruit imports it AND stamps it as a Bot, so it lands in the Desktop Bots roster.'
+            ? 'Recruit seeds this team into this profile as Bots — team dir, TEAM.md, and a group-chat setup note. Members always land in the Bots roster.'
+            : 'Recruit imports this agent and stamps it as a Bot, so it lands in the Desktop Bots roster.'
       }
     })
 
@@ -447,7 +449,7 @@ export default {
       data: {
         id: 'mybot-farm.open',
         label: 'mybot.farm: Open catalog',
-        keywords: ['farm', 'mybot', 'plant', 'agents', 'teams'],
+        keywords: ['farm', 'mybot', 'recruit', 'agents', 'teams'],
         run: () => host.navigate(ROUTE)
       }
     })

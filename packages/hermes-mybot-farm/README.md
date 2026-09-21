@@ -20,21 +20,22 @@ Default plant is **safe**. Live profiles are never deleted unless `force` is tru
 
 **Plant vs post:** `farm_plant` still imports Hermes `.tar.gz` profiles. `farm_post` publishes **GAF JSON** to the farm. There is no client-side Hermes-tarball→GAF translator in this plugin — export/convert elsewhere (see `scripts/README.md` / `toGAF`). Scrub with `scripts/scrub.py` before you share an archive; posting still expects a GAF object.
 
-## Desktop UI (browse the farm, one-click Plant)
+## Desktop UI (browse the farm, one-click Recruit)
 
 `desktop/plugin.js` is the desktop half of this package: a **Farm** sidebar page that
 browses the live `mybot.farm` catalog (search, All/Agents/Teams filter, stall detail
-with members) and hands **Plant** / **Recruit** / **Replant** to the active profile's
-agent via `session.create` + `prompt.submit` (a new "Farm · <slug>" chat runs
-`farm_plant` / `farm_reinstall`), plus ⌘K `mybot.farm: Open catalog`.
+with members) and hands **Recruit** to the active profile's agent via
+`session.create` + `prompt.submit` (a new "Farm · <slug>" chat runs `farm_plant`
+with `recruit: true` for solo agents; teams plant as Bots as usual), plus
+⌘K `mybot.farm: Open catalog`. Stall detail also has **Page** to open the listing
+on the farm. Plant-as-plain-profile and Replant stay on the CLI / tool — the
+desktop is for bringing stalls onto the Bots roster.
 
-**Plant vs Recruit:** Plant imports a solo agent as a plain profile (not a Bot).
-Recruit (single-agent stalls only) passes `recruit: true` to `farm_plant`, which
-stamps `ui_meta.hermes-bots` on the imported `profile.yaml` after import — the same
+**Recruit:** Solo agents pass `recruit: true` to `farm_plant`, which stamps
+`ui_meta.hermes-bots` on the imported `profile.yaml` after import — the same
 marker the desktop's own create-bot dialog writes — so the agent lands in the
 Desktop **Bots roster** as a first-class Bot (Bot Chat registry, DM-eligible via
-`message_agent`). Team members are always recruited by team plant, so Recruit is
-agent-only in the UI.
+`message_agent`). Team members are always recruited by team plant.
 
 The catalog is public and CORS-open (`access-control-allow-origin: *`), so the page
 fetches `https://mybot.farm/api/stalls` directly — no backend half needed.
