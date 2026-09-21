@@ -2,7 +2,7 @@
 #
 # `sha:` MUST be the 40-hex of the release tag commit after merge/tag
 # `hermes-mybot-farm-v0.3.0`. Do not invent a SHA. This file currently pins
-# the commit that contains the 0.3.0 version bump; Manager will retag and
+# the commit that contains the 0.3.0 version bump (889fc21); Manager will retag and
 # retarget catalog PR https://github.com/NousResearch/hermes-agent/pull/116414
 # once the tag exists. Branches/tags are rejected by the catalog loader.
 #
@@ -19,7 +19,7 @@
 
 name: mybot-farm
 repo: https://github.com/okita-io/mybot-farm
-sha: 4432d8083590402af8cf6fdeabe52d3c0a89fa33
+sha: 889fc2117694a80593dff883f41b7ee812edc7e4
 subdir: packages/hermes-mybot-farm
 description: Browse mybot.farm in Hermes Desktop and Recruit stalls into the Bots roster; also search, plant, and post GAF listings.
 maintainer: okita-io / Alex Okita
