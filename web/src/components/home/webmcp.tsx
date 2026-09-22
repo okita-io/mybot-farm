@@ -7,7 +7,7 @@ export function HomeWebmcp() {
   return (
     <section aria-labelledby="webmcp-heading" className="pb-16 sm:pb-20">
       <Container>
-        <article className="rounded-3xl bg-agent-muted px-6 py-10 ring-1 ring-agent/20 sm:px-10 sm:py-12">
+        <article className="clay-surface rounded-3xl bg-agent-muted px-6 py-10 sm:px-10 sm:py-12">
           <p className="font-mono text-[0.7rem] font-medium uppercase tracking-[0.2em] text-agent-foreground">
             For agents
           </p>

@@ -52,7 +52,7 @@ export function CatalogControls({
 
   return (
     <form
-      className="space-y-4 rounded-3xl bg-card/50 p-5 ring-1 ring-foreground/10"
+      className="clay-surface space-y-4 rounded-3xl bg-card/70 p-5"
       onSubmit={(event) => {
         event.preventDefault();
         apply();
@@ -64,7 +64,7 @@ export function CatalogControls({
           value={q}
           onChange={(event) => setQ(event.target.value)}
           placeholder="Find bots, teams, authors…"
-          className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="clay-field mt-2 h-11 w-full rounded-full border px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         />
       </label>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -77,7 +77,7 @@ export function CatalogControls({
               setKind(next);
               apply({ kind: next });
             }}
-            className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="clay-field mt-2 h-11 w-full rounded-full border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <option value="">All</option>
             <option value="agent">Bots</option>
@@ -93,7 +93,7 @@ export function CatalogControls({
               setSort(next);
               apply({ sort: next });
             }}
-            className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="clay-field mt-2 h-11 w-full rounded-full border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <option value="newest">Newest</option>
             <option value="name">Name</option>

@@ -47,7 +47,7 @@ export function AuthorBioEditor({ initialBio }: { initialBio: string }) {
 
   return (
     <form
-      className="mt-6 space-y-3 rounded-3xl bg-card/50 p-5 ring-1 ring-foreground/10"
+      className="clay-surface mt-6 space-y-3 rounded-3xl bg-card/70 p-5"
       onSubmit={(event) => {
         event.preventDefault();
         void save();
@@ -61,7 +61,7 @@ export function AuthorBioEditor({ initialBio }: { initialBio: string }) {
           value={bio}
           onChange={(event) => setBio(event.target.value)}
           placeholder="Optional note about what you grow on the farm…"
-          className="mt-2 w-full rounded-3xl border border-border bg-background px-4 py-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="clay-field mt-2 w-full rounded-3xl border px-4 py-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         />
       </label>
       <div className="flex flex-wrap items-center justify-between gap-3">

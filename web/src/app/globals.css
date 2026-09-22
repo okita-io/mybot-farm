@@ -48,6 +48,15 @@
   --agent: oklch(0.5 0.09 290);
   --agent-foreground: oklch(0.38 0.1 290);
   --agent-muted: oklch(0.95 0.03 290);
+  --clay-shadow:
+    0 1px 1px oklch(0.35 0.04 270 / 0.06),
+    0 12px 28px -12px oklch(0.4 0.07 270 / 0.32);
+  --clay-shadow-sm:
+    0 1px 1px oklch(0.35 0.04 270 / 0.05),
+    0 5px 12px -6px oklch(0.38 0.06 270 / 0.22);
+  --clay-highlight: inset 0 1px 0 oklch(1 0 0 / 0.72);
+  --clay-press: inset 0 1px 2px oklch(0.35 0.04 270 / 0.18);
+  --clay-title-shadow: 0 1px 0 oklch(1 0 0 / 0.55);
   color-scheme: light;
 }
 
@@ -92,6 +101,15 @@
   --agent: oklch(0.58 0.09 290);
   --agent-foreground: oklch(0.84 0.06 290);
   --agent-muted: oklch(0.24 0.04 290);
+  --clay-shadow:
+    0 1px 1px oklch(0 0 0 / 0.4),
+    0 14px 30px -14px oklch(0 0 0 / 0.65);
+  --clay-shadow-sm:
+    0 1px 1px oklch(0 0 0 / 0.35),
+    0 6px 14px -8px oklch(0 0 0 / 0.5);
+  --clay-highlight: inset 0 1px 0 oklch(1 0 0 / 0.1);
+  --clay-press: inset 0 1px 2px oklch(0 0 0 / 0.4);
+  --clay-title-shadow: 0 1px 0 oklch(0 0 0 / 0.4);
   color-scheme: dark;
 }
 
@@ -179,6 +197,79 @@
 }
 
 @layer components {
+  .clay-surface {
+    box-shadow: var(--clay-highlight), var(--clay-shadow);
+  }
+
+  .clay-chip {
+    box-shadow: var(--clay-highlight), var(--clay-shadow-sm);
+  }
+
+  .clay-primary {
+    border-color: transparent;
+    background-image: linear-gradient(
+      180deg,
+      oklch(0.42 0.12 264),
+      oklch(0.26 0.07 258)
+    );
+    color: oklch(0.98 0.005 260);
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.28),
+      var(--clay-shadow-sm);
+  }
+
+  .clay-primary:hover:not(:disabled) {
+    filter: brightness(1.08);
+  }
+
+  .clay-primary:active {
+    box-shadow: var(--clay-press);
+    filter: none;
+  }
+
+  .dark .clay-primary {
+    background-image: linear-gradient(
+      180deg,
+      oklch(0.92 0.02 255),
+      oklch(0.78 0.03 255)
+    );
+    color: oklch(0.22 0.02 260);
+    box-shadow:
+      inset 0 1px 0 oklch(1 0 0 / 0.65),
+      var(--clay-shadow-sm);
+  }
+
+  .clay-outline {
+    border-color: color-mix(in oklch, var(--foreground) 10%, transparent);
+    background: color-mix(in oklch, var(--background) 78%, white);
+    box-shadow: var(--clay-highlight), var(--clay-shadow-sm);
+  }
+
+  .dark .clay-outline {
+    background: color-mix(in oklch, var(--card) 88%, white);
+  }
+
+  .clay-outline:active {
+    box-shadow: var(--clay-press);
+  }
+
+  .clay-field {
+    border-color: color-mix(in oklch, var(--foreground) 10%, transparent);
+    background: color-mix(in oklch, var(--background) 86%, white);
+    box-shadow:
+      inset 0 1px 2px oklch(0.4 0.04 270 / 0.1),
+      var(--clay-highlight);
+  }
+
+  .dark .clay-field {
+    background: color-mix(in oklch, var(--card) 92%, black);
+    box-shadow: inset 0 1px 2px oklch(0 0 0 / 0.4);
+  }
+
+  .clay-title {
+    text-shadow: var(--clay-title-shadow);
+  }
+
   .stall-readme {
     overflow-wrap: anywhere;
   }
@@ -267,7 +358,7 @@
     border-radius: 1rem;
     background: var(--card);
     padding: 1rem 1.15rem;
-    box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--foreground) 10%, transparent);
+    box-shadow: var(--clay-highlight), var(--clay-shadow-sm);
   }
 
   .stall-readme pre code {

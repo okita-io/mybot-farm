@@ -13,17 +13,19 @@ export const runtimeTags: Record<RuntimeId, RuntimeTag> = {
     id: "grok-bot",
     label: "GrokBot",
     className:
-      "border-transparent bg-black text-white! dark:bg-white dark:text-black!",
+      "border-transparent bg-black text-white! shadow-[inset_0_1px_0_oklch(1_0_0/0.28),var(--clay-shadow-sm)] dark:bg-white dark:text-black!",
   },
   hermes: {
     id: "hermes",
     label: "Hermes",
-    className: "border-transparent bg-blue-600 text-white!",
+    className:
+      "border-transparent bg-linear-to-b from-blue-500 to-blue-700 text-white! shadow-[inset_0_1px_0_oklch(1_0_0/0.35),var(--clay-shadow-sm)]",
   },
   openclaw: {
     id: "openclaw",
     label: "OpenClaw",
-    className: "border-transparent bg-red-600 text-black!",
+    className:
+      "border-transparent bg-linear-to-b from-red-500 to-red-700 text-black! shadow-[inset_0_1px_0_oklch(1_0_0/0.35),var(--clay-shadow-sm)]",
   },
 };
 

@@ -45,13 +45,13 @@ export const stallToneClasses: Record<
   StallTone,
   { card: string; label: string }
 > = {
-  find: { card: "bg-find-muted/60 ring-find/20", label: "text-find-foreground" },
+  find: { card: "clay-surface bg-find-muted/80", label: "text-find-foreground" },
   share: {
-    card: "bg-share-muted/60 ring-share/20",
+    card: "clay-surface bg-share-muted/80",
     label: "text-share-foreground",
   },
   agent: {
-    card: "bg-agent-muted/60 ring-agent/20",
+    card: "clay-surface bg-agent-muted/80",
     label: "text-agent-foreground",
   },
 };

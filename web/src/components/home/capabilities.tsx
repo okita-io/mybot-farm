@@ -12,18 +12,18 @@ const icons: Record<CapabilityTone, LucideIcon> = {
 
 const tones: Record<CapabilityTone, { card: string; icon: string; label: string }> = {
   find: {
-    card: "bg-find-muted ring-find/20",
-    icon: "bg-find text-white",
+    card: "bg-find-muted",
+    icon: "clay-chip bg-find text-white",
     label: "text-find-foreground",
   },
   share: {
-    card: "bg-share-muted ring-share/20",
-    icon: "bg-share text-white",
+    card: "bg-share-muted",
+    icon: "clay-chip bg-share text-white",
     label: "text-share-foreground",
   },
   agent: {
-    card: "bg-agent-muted ring-agent/20",
-    icon: "bg-agent text-white",
+    card: "bg-agent-muted",
+    icon: "clay-chip bg-agent text-white",
     label: "text-agent-foreground",
   },
 };
@@ -46,12 +46,12 @@ export function HomeCapabilities() {
             return (
               <Card
                 key={capability.id}
-                className={cn("min-w-0 gap-5 py-6 ring-1", tone.card)}
+                className={cn("min-w-0 gap-5 py-6", tone.card)}
               >
                 <CardHeader className="gap-4">
                   <span
                     className={cn(
-                      "inline-flex size-10 items-center justify-center rounded-xl",
+                      "clay-chip inline-flex size-10 items-center justify-center rounded-full",
                       tone.icon,
                     )}
                   >
@@ -59,7 +59,7 @@ export function HomeCapabilities() {
                   </span>
                   <CardTitle
                     className={cn(
-                      "text-2xl font-semibold tracking-tight",
+                      "clay-title text-2xl font-extrabold tracking-tight",
                       tone.label,
                     )}
                   >

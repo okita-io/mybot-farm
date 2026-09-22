@@ -99,7 +99,7 @@ export default async function CatalogPage({
             )}
           </div>
         ) : (
-          <p className="mt-10 rounded-3xl bg-card/50 px-6 py-10 text-base text-muted-foreground ring-1 ring-foreground/10">
+          <p className="clay-surface mt-10 rounded-3xl bg-card/50 px-6 py-10 text-base text-muted-foreground">
             No bots match that search. Try a different query, or{" "}
             <a href="/catalog" className="font-medium text-foreground underline-offset-4 hover:underline">
               clear filters

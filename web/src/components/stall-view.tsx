@@ -98,7 +98,7 @@ export async function StallView({
             </>
           ) : null}
         </p>
-        <div className={cn("mt-6 rounded-3xl px-6 py-8 ring-1 sm:px-8", tone.card)}>
+        <div className={cn("mt-6 rounded-3xl px-6 py-8 sm:px-8", tone.card)}>
           <StallHeaderMeta
             kind={stall.kind}
             category={stall.category}
@@ -107,7 +107,7 @@ export async function StallView({
             author={stall.author}
             priceCents={stall.priceCents ?? 0}
           />
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+          <h1 className="clay-title mt-4 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
             {stall.name}
           </h1>
           <div className="mt-2">
@@ -231,12 +231,12 @@ export async function StallView({
           {canDownload ? (
             <pre
               id="install-prompt"
-              className="mt-6 overflow-x-auto rounded-2xl bg-card px-5 py-5 font-mono text-sm leading-relaxed text-foreground ring-1 ring-foreground/10 whitespace-pre-wrap"
+              className="clay-surface mt-6 overflow-x-auto rounded-2xl bg-card px-5 py-5 font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap"
             >
               {prompt}
             </pre>
           ) : (
-            <p className="mt-6 rounded-2xl bg-card px-5 py-5 text-sm leading-relaxed text-muted-foreground ring-1 ring-foreground/10">
+            <p className="clay-surface mt-6 rounded-2xl bg-card px-5 py-5 text-sm leading-relaxed text-muted-foreground">
               Install prompt unlocks after purchase.
             </p>
           )}

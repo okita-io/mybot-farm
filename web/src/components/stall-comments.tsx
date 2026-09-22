@@ -31,12 +31,12 @@ function CommentAuthor({ comment }: { comment: StallComment }) {
       alt=""
       width={32}
       height={32}
-      className="size-8 rounded-full ring-1 ring-foreground/10"
+      className="clay-chip size-8 rounded-full"
     />
   ) : (
     <div
       aria-hidden="true"
-      className="flex size-8 items-center justify-center rounded-full bg-foreground/10 text-xs font-semibold text-foreground"
+      className="clay-chip flex size-8 items-center justify-center rounded-full border border-foreground/10 bg-background/80 text-xs font-semibold text-foreground"
     >
       {comment.author.username.slice(0, 1).toUpperCase()}
     </div>
@@ -269,7 +269,7 @@ function CommentItem({
   );
 
   return (
-    <li className="rounded-2xl bg-background/50 px-4 py-4 ring-1 ring-foreground/10">
+    <li className="clay-surface rounded-2xl bg-background/50 px-4 py-4">
       <CommentAuthor comment={comment} />
       <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-foreground/90">
         {comment.body}
@@ -297,7 +297,7 @@ function CommentItem({
       </div>
       {signedIn && flagOpen && !comment.flagged && !comment.isOwn ? (
         <form
-          className="mt-3 space-y-3 rounded-2xl bg-background/70 p-4 ring-1 ring-foreground/10"
+          className="clay-surface mt-3 space-y-3 rounded-2xl bg-background/70 p-4"
           onSubmit={(event) => {
             event.preventDefault();
             void submitFlag();
@@ -325,7 +325,7 @@ function CommentItem({
               maxLength={500}
               value={details}
               onChange={(event) => setDetails(event.target.value)}
-              className="mt-2 w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm font-normal outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="clay-field mt-2 w-full rounded-2xl border px-3 py-2 text-sm font-normal outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             />
           </label>
           {flagError ? (
@@ -434,7 +434,7 @@ export function StallComments({
             setError(null);
           }}
           placeholder="What did you think of this bot?"
-          className="mt-2 w-full rounded-2xl border border-border bg-background px-4 py-3 text-sm font-normal outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="clay-field mt-2 w-full rounded-3xl border px-4 py-3 text-sm font-normal outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         />
       </label>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -462,7 +462,7 @@ export function StallComments({
       ) : null}
     </form>
   ) : (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-background/60 px-4 py-3 ring-1 ring-foreground/10">
+    <div className="clay-surface flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-background/60 px-4 py-3">
       <p className="text-sm text-muted-foreground">Sign in to leave a comment.</p>
       <SignInButton mode="modal">
         <Button type="button" size="sm" className="rounded-full">
@@ -474,7 +474,7 @@ export function StallComments({
 
   return (
     <section
-      className={cn("mt-4 rounded-3xl px-6 py-6 ring-1 sm:px-8", toneCardClassName)}
+      className={cn("mt-4 rounded-3xl px-6 py-6 sm:px-8", toneCardClassName)}
       aria-labelledby="stall-comments-heading"
     >
       <h2

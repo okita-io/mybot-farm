@@ -159,7 +159,7 @@ export function StallEngagement({
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
         <span
-          className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-sm text-foreground/80"
+          className="clay-outline inline-flex h-8 items-center gap-1.5 rounded-full border border-foreground/10 px-3 text-sm text-foreground/80"
           title={`${downloadCount} downloads`}
         >
           <Download className="size-3.5" aria-hidden="true" />
@@ -173,7 +173,7 @@ export function StallEngagement({
       </div>
       {signedIn && flagOpen && !isFlagged ? (
         <form
-          className="space-y-3 rounded-2xl bg-background/70 p-4 ring-1 ring-foreground/10"
+          className="clay-surface space-y-3 rounded-2xl bg-background/70 p-4"
           onSubmit={(event) => {
             event.preventDefault();
             void submitFlag();
@@ -201,7 +201,7 @@ export function StallEngagement({
               maxLength={500}
               value={details}
               onChange={(event) => setDetails(event.target.value)}
-              className="mt-2 w-full rounded-2xl border border-border bg-background px-3 py-2 text-sm font-normal outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="clay-field mt-2 w-full rounded-2xl border px-3 py-2 text-sm font-normal outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             />
           </label>
           {flagError ? (

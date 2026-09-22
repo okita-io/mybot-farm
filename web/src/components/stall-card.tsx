@@ -42,7 +42,7 @@ export async function StallCard({
   const isAdmin = isAdminEmail(viewer?.email);
 
   return (
-    <Card className={cn("min-w-0 gap-4 py-6 ring-1", tone.card)}>
+    <Card className={cn("min-w-0 gap-4 py-6", tone.card)}>
       <CardHeader className="gap-3">
         <StallHeaderMeta
           kind={stall.kind}
@@ -52,7 +52,7 @@ export async function StallCard({
           author={stall.author}
           priceCents={stall.priceCents ?? 0}
         />
-        <CardTitle className="text-2xl font-semibold tracking-tight">
+        <CardTitle className="clay-title text-2xl font-extrabold tracking-tight">
           <Link href={href} className="underline-offset-4 hover:underline">
             {stall.name}
           </Link>

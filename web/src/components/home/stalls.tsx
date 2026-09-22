@@ -53,12 +53,12 @@ export async function HomeStalls() {
               );
             }),
           )}
-          <Card className="min-w-0 justify-center gap-3 border-dashed bg-card/40 py-6 ring-1 ring-foreground/10">
+          <Card className="min-w-0 justify-center gap-3 border border-dashed border-foreground/20 bg-card/40 py-6">
             <CardHeader className="gap-3">
               <Badge variant="secondary" className="h-6 w-fit px-2.5">
                 Sell
               </Badge>
-              <CardTitle className="text-2xl font-semibold tracking-tight">
+              <CardTitle className="clay-title text-2xl font-extrabold tracking-tight">
                 List yours
               </CardTitle>
             </CardHeader>

@@ -31,7 +31,7 @@ export function StallHeaderMeta({
   return (
     <div className="flex flex-wrap items-center gap-2">
       {category ? (
-        <Badge variant="secondary" className={cn("h-6 px-2.5", categoryClassName)}>
+        <Badge variant="outline" className={cn("h-8 px-3.5", categoryClassName)}>
           {category}
         </Badge>
       ) : null}
@@ -39,13 +39,13 @@ export function StallHeaderMeta({
         const runtime = runtimeTag(id);
 
         return runtime ? (
-          <Badge key={id} className={cn("h-6 px-2.5", runtime.className)}>
+          <Badge key={id} className={cn("h-8 px-3.5", runtime.className)}>
             {runtime.label}
           </Badge>
         ) : null;
       })}
       {author ? (
-        <Badge variant="outline" className="h-6 px-2.5 font-normal">
+        <Badge variant="outline" className="h-8 px-3.5 font-normal">
           {author.href ? (
             <Link
               href={author.href}
@@ -62,7 +62,7 @@ export function StallHeaderMeta({
         <Badge
           variant="secondary"
           className={cn(
-            "h-6 px-2.5",
+            "h-8 px-3.5",
             priceCents <= 0 ? "bg-find/15 text-find-foreground" : undefined,
           )}
         >
@@ -71,8 +71,8 @@ export function StallHeaderMeta({
       ) : null}
       <span
         className={cn(
-          "inline-flex size-6 items-center justify-center rounded-full text-foreground",
-          kind === "team" ? "bg-agent/20" : "bg-foreground/10",
+          "clay-chip inline-flex size-8 items-center justify-center rounded-full border border-foreground/10 bg-background/80 text-foreground",
+          kind === "team" ? "bg-agent/15" : undefined,
         )}
         title={kindLabel}
         aria-label={kindLabel}

@@ -55,9 +55,9 @@ export function HomeTeams() {
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {teams.map((team) => (
-            <Card key={team.name} className="min-w-0 gap-3 py-5 ring-1 ring-foreground/10">
+            <Card key={team.name} className="min-w-0 gap-3 py-5">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold tracking-tight">
+                <CardTitle className="clay-title text-lg font-extrabold tracking-tight">
                   {team.name}
                 </CardTitle>
               </CardHeader>

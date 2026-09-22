@@ -226,7 +226,7 @@ export function PlantShareForm({
       ) : null}
 
       {preview && tone ? (
-        <article className={cn("rounded-3xl px-6 py-8 ring-1 sm:px-8", tone.card)}>
+        <article className={cn("rounded-3xl px-6 py-8 sm:px-8", tone.card)}>
           <StallHeaderMeta
             kind={preview.kind}
             category={preview.stall.category}

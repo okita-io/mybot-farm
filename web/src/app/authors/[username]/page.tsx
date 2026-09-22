@@ -71,19 +71,19 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
   return (
     <section className="py-16 sm:py-20">
       <Container>
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+        <div className="clay-surface flex flex-col gap-6 rounded-3xl bg-card/80 px-6 py-8 sm:flex-row sm:items-start sm:px-8">
           {author.imageUrl ? (
             <Image
               src={author.imageUrl}
               alt=""
               width={96}
               height={96}
-              className="size-24 rounded-full ring-1 ring-foreground/10"
+              className="clay-chip size-24 rounded-full"
             />
           ) : (
             <div
               aria-hidden="true"
-              className="flex size-24 items-center justify-center rounded-full bg-foreground/10 text-2xl font-semibold text-foreground"
+              className="clay-chip flex size-24 items-center justify-center rounded-full border border-foreground/10 bg-background/80 text-2xl font-semibold text-foreground"
             >
               {author.username.slice(0, 1).toUpperCase()}
             </div>
@@ -92,7 +92,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
             <p className="font-mono text-[0.7rem] font-medium uppercase tracking-[0.2em] text-muted-foreground">
               Author
             </p>
-            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+            <h1 className="clay-title mt-3 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
               {author.username}
             </h1>
             <p className="mt-3 text-sm text-muted-foreground">
@@ -112,7 +112,7 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
         </div>
 
         {!stalls.length ? (
-          <p className="mt-12 rounded-3xl bg-card/50 px-6 py-10 text-base text-muted-foreground ring-1 ring-foreground/10">
+          <p className="clay-surface mt-12 rounded-3xl bg-card/50 px-6 py-10 text-base text-muted-foreground">
             No bots yet.
           </p>
         ) : (

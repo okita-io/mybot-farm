@@ -236,7 +236,7 @@ export function StallReadmeCard({
   return (
     <div
       className={cn(
-        "mt-4 rounded-3xl px-6 py-6 ring-1 sm:px-8",
+        "mt-4 rounded-3xl px-6 py-6 sm:px-8",
         toneCardClassName,
         canEdit && empty && "border border-dashed border-foreground/20",
         dragOver && "ring-2 ring-foreground/30",
@@ -324,7 +324,7 @@ export function StallReadmeCard({
 
       {!fail && warnings.length && canEdit ? (
         <div
-          className="mt-4 rounded-2xl bg-muted/80 px-4 py-3 ring-1 ring-foreground/10"
+          className="clay-surface mt-4 rounded-2xl bg-muted/80 px-4 py-3"
           role="status"
         >
           <p className="flex items-center gap-2 text-sm font-medium text-foreground">
@@ -350,7 +350,7 @@ export function StallReadmeCard({
           {readmeOverflows && !readmeExpanded ? (
             <button
               type="button"
-              className="absolute right-0 bottom-0 inline-flex h-[1.625em] items-center gap-0.5 rounded-full bg-background/90 px-2 text-sm font-medium text-foreground ring-1 ring-foreground/10 backdrop-blur-sm"
+              className="clay-outline absolute right-0 bottom-0 inline-flex h-[1.625em] items-center gap-0.5 rounded-full border bg-background/90 px-2 text-sm font-medium text-foreground backdrop-blur-sm"
               aria-expanded={false}
               onClick={() => setReadmeExpanded(true)}
             >
@@ -371,7 +371,7 @@ export function StallReadmeCard({
           ) : null}
         </div>
       ) : (
-        <div className="mt-4 rounded-2xl bg-card/40 px-5 py-8 text-center ring-1 ring-foreground/5">
+        <div className="clay-surface mt-4 rounded-2xl bg-card/40 px-5 py-8 text-center">
           {canEdit ? (
             <p className="text-sm text-muted-foreground">
               {busy

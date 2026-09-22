@@ -75,14 +75,14 @@ export function FarmNotesSignup({
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     placeholder="you@example.com"
-                    className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                    className="clay-field mt-2 h-11 w-full rounded-full border px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                   />
                 </label>
                 <Button
                   type="submit"
                   size="lg"
                   disabled={status === "pending"}
-                  className="sm:mt-7 sm:w-auto"
+                  className="h-11 sm:mt-7 sm:w-auto"
                 >
                   {status === "pending" ? "Subscribing…" : farmNotes.blockButton}
                 </Button>
@@ -126,9 +126,9 @@ export function FarmNotesSignup({
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="you@example.com"
-              className="h-9 w-full min-w-0 rounded-full border border-border bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 sm:flex-1"
+              className="clay-field h-9 w-full min-w-0 rounded-full border px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 sm:flex-1"
             />
-            <Button type="submit" size="sm" disabled={status === "pending"}>
+            <Button type="submit" size="sm" className="h-9 px-3.5" disabled={status === "pending"}>
               {status === "pending" ? "…" : farmNotes.footerButton}
             </Button>
           </div>

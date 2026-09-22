@@ -8,7 +8,7 @@ export function HeaderAuth() {
     <div className="flex h-7 min-w-16 items-center justify-end">
       <Show when="signed-out">
         <SignInButton>
-          <Button type="button" variant="outline" size="sm">
+          <Button type="button" variant="outline" size="sm" className="px-3.5">
             Sign in
           </Button>
         </SignInButton>
