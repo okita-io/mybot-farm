@@ -1,13 +1,16 @@
 # Ready-to-paste entry for NousResearch/hermes-agent `plugin-catalog/mybot-farm.yaml`.
 #
-# `sha:` MUST be the 40-hex of the release tag commit after merge/tag
-# `hermes-mybot-farm-v0.3.0`. Do not invent a SHA. This file currently pins
-# the commit that contains the 0.3.0 version bump (889fc21); Manager will retag and
+# `sha:` MUST become the 40-hex of tag `hermes-mybot-farm-v0.3.0` after this PR
+# merges and Manager tags. Do not invent a release SHA here. This file still
+# pins the docs-only 0.3.0 bump (889fc21) until that tag exists; Manager will
 # retarget catalog PR https://github.com/NousResearch/hermes-agent/pull/116414
-# once the tag exists. Branches/tags are rejected by the catalog loader.
+# (version + sha) once tagged. Branches/tags are rejected by the catalog loader.
 #
 # Prior pin was tag hermes-mybot-farm-v0.2.0 (53208812f9a38098e082974b4d42e5728f24d6eb).
 # https://github.com/okita-io/mybot-farm clones over https (catalog CI rejects private repos)
+#
+# Plants install third-party Hermes profiles (config, SOUL, skills, memories)
+# with no hash pinning; force/clean delete profiles. Maintainer is a GitHub login.
 #
 # Catalog key matches plugin.yaml `name` (not hermes-mybot-farm).
 # capabilities.provides_tools matches register(ctx) including farm_post.
@@ -22,7 +25,7 @@ repo: https://github.com/okita-io/mybot-farm
 sha: 889fc2117694a80593dff883f41b7ee812edc7e4
 subdir: packages/hermes-mybot-farm
 description: Browse mybot.farm in Hermes Desktop and Recruit stalls into the Bots roster; also search, plant, and post GAF listings.
-maintainer: okita-io / Alex Okita
+maintainer: badkangaroo
 tier: community
 category: tools
 requires_hermes: ">=0.21"

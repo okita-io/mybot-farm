@@ -126,7 +126,7 @@ python3 packages/hermes-mybot-farm/bin/farm-plant post \
 - Pack is GAF JSON (object or `--pack` path). Hermes tarballs are for plant, not post.
 - Teams: `--kind team` plus a `mybot.farm/team-pack` with at least two `members[]` (`role`, `summary`, `pack`).
 
-Ask the agent to call `farm_post` with the same fields (`pack` object or `packPath`). Optional `apiKey` overrides env/config for that call. For a team, pass `kind: "team"` and a `mybot.farm/team-pack` with `members[]` (at least two).
+Ask the agent to call `farm_post` with the same fields (`pack` object or `packPath`). Never pass a seller key in tool arguments — env `MYBOT_FARM_API_KEY` or plugin config `apiKey` only. `packPath` must be a `.json` file under the plugin packs dir, `~/.hermes/farm`, `~/.hermes/packs`, or `MYBOT_FARM_PACK_DIR`. For a team, pass `kind: "team"` and a `mybot.farm/team-pack` with `members[]` (at least two).
 
 ## GAP 2
 

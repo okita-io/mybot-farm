@@ -1,18 +1,15 @@
 from __future__ import annotations
 
 import json
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+import plugin_import  # noqa: F401
 
-from plant import MemberPlan, PlantPlan, build_plant_plan
-from team_md import render_team_md_for_pack, sample_request_from_pack
-from team_plant import (
+from hermes_mybot_farm.plant import MemberPlan, PlantPlan, build_plant_plan  # noqa: E402
+from hermes_mybot_farm.team_md import render_team_md_for_pack, sample_request_from_pack  # noqa: E402
+from hermes_mybot_farm.team_plant import (  # noqa: E402
     append_team_memory,
     configure_planted_team,
     ensure_team_md,
@@ -22,7 +19,7 @@ from team_plant import (
     try_create_group_chat,
     warm_bot_note,
 )
-from yamlutil import atomic_yaml_write, load_yaml_dict
+from hermes_mybot_farm.yamlutil import atomic_yaml_write, load_yaml_dict  # noqa: E402
 
 GODOT = json.loads(
     (Path(__file__).resolve().parents[3] / "packs" / "teams" / "godot-studio.json").read_text(

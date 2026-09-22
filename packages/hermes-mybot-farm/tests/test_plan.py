@@ -1,21 +1,27 @@
 from __future__ import annotations
 
-import sys
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+import plugin_import  # noqa: F401
 
-from plant import (
+from hermes_mybot_farm.plant import (  # noqa: E402
     PlantError,
+    PlantPlan,
+    _ensure_team_dirs,
+    _fetch_team_files,
     build_plant_plan,
+    confined_path,
     expand_braces,
     member_archive_href,
     parse_kanban,
+    parse_pack_dir_url,
     parse_team_dirs,
     parse_team_files,
+    plant,
+    safe_slug,
     target_profile_names,
 )
 
@@ -163,7 +169,7 @@ class PlanTests(unittest.TestCase):
         )
 
     def test_list_boards_imported_for_team_plant(self) -> None:
-        import plant as plant_mod
+        import hermes_mybot_farm.plant as plant_mod
 
         self.assertTrue(callable(plant_mod.list_boards))
         self.assertTrue(callable(plant_mod.create_board))
@@ -220,6 +226,154 @@ class PlanTests(unittest.TestCase):
             build_plant_plan(stall, pack, "https://mybot.farm")
         self.assertIn("no Hermes member archives", str(ctx.exception))
         self.assertIn("farm_post does not upload tarballs", str(ctx.exception))
+
+
+class PlantSecurityTests(unittest.TestCase):
+    def test_safe_slug_accepts_simple_names(self) -> None:
+        self.assertEqual(safe_slug("workbench"), "workbench")
+        self.assertEqual(safe_slug("scholastic-research"), "scholastic-research")
+        self.assertEqual(safe_slug("a_b-1"), "a_b-1")
+
+    def test_safe_slug_rejects_traversal_and_junk(self) -> None:
+        for bad in ("../etc", "foo/bar", "foo.bar", "foo bar", "", "..", "foo;rm", "C:\\x"):
+            with self.subTest(bad=bad):
+                with self.assertRaises(PlantError):
+                    safe_slug(bad)
+
+    def test_confined_path_rejects_parent_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            with self.assertRaises(PlantError):
+                confined_path(root, "..", "etc", "passwd")
+            dest = confined_path(root, "teams", "workbench")
+            self.assertTrue(str(dest).startswith(str(root.resolve())))
+
+    def test_pack_dir_url_always_pins_farm_origin(self) -> None:
+        evil = "Download from https://evil.example/packs/teams/workbench/"
+        self.assertEqual(
+            parse_pack_dir_url(evil, "https://mybot.farm", "workbench"),
+            "https://mybot.farm/packs/teams/workbench/",
+        )
+        other = "https://mybot.farm/packs/teams/other-slug/"
+        self.assertEqual(
+            parse_pack_dir_url(other, "https://mybot.farm", "workbench"),
+            "https://mybot.farm/packs/teams/workbench/",
+        )
+
+    def test_member_href_off_origin_dropped(self) -> None:
+        self.assertEqual(
+            member_archive_href(
+                "https://evil.example/packs/agents/x.hermes.tar.gz",
+                "https://mybot.farm",
+            ),
+            "",
+        )
+
+    def test_agent_archive_off_origin_rejected(self) -> None:
+        stall = {
+            **SCHOLASTIC_STALL,
+            "downloadHref": "https://evil.example/x.hermes.tar.gz",
+            "hermesHref": "https://evil.example/x.hermes.tar.gz",
+        }
+        with self.assertRaises(PlantError) as ctx:
+            build_plant_plan(stall, SCHOLASTIC_PACK, "https://mybot.farm")
+        self.assertIn("farm origin", str(ctx.exception))
+
+    def test_unsafe_stall_slug_rejected(self) -> None:
+        stall = {**SCHOLASTIC_STALL, "slug": "../etc"}
+        pack = {**SCHOLASTIC_PACK, "slug": "../etc"}
+        with self.assertRaises(PlantError):
+            build_plant_plan(stall, pack, "https://mybot.farm")
+
+    def test_plant_rejects_unsafe_slug_before_network(self) -> None:
+        called = {"n": 0}
+
+        def boom(*_a, **_k):
+            called["n"] += 1
+            raise AssertionError("must not fetch stall for unsafe slug")
+
+        with patch("hermes_mybot_farm.plant.get_stall", boom):
+            with self.assertRaises(PlantError):
+                plant("../etc")
+        self.assertEqual(called["n"], 0)
+
+    def test_ensure_team_dirs_ignores_seller_mkdir_home(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            home = Path(raw)
+            plan = PlantPlan(
+                slug="workbench",
+                kind="team",
+                profile_name=None,
+                members=[],
+                team_dirs=["$HOME/evil", "~/.ssh", "/tmp/pwn"],
+                team_files=["TEAM.md", "pwn.sh"],
+                pack_dir_url="https://evil.example/packs/teams/workbench/",
+                kanban=None,
+                getting_started="mkdir -p $HOME/evil ~/.hermes/scripts",
+                endpoint_note="",
+                homepage="",
+            )
+            root = _ensure_team_dirs(plan, home)
+            self.assertEqual(root, (home / "teams" / "workbench").resolve())
+            self.assertTrue((root / "reports").is_dir())
+            self.assertTrue((root / "repos").is_dir())
+            self.assertTrue((root / "state").is_dir())
+            self.assertFalse((home / "evil").exists())
+            self.assertFalse((home / "scripts").exists())
+            self.assertFalse((home / ".ssh").exists())
+
+    def test_fetch_team_files_skips_shell_and_off_origin(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            home = Path(raw)
+            team_root = home / "teams" / "workbench"
+            team_root.mkdir(parents=True)
+            plan = PlantPlan(
+                slug="workbench",
+                kind="team",
+                profile_name=None,
+                members=[],
+                team_dirs=[],
+                team_files=["TEAM.md", "pwn.sh", "../escape.md"],
+                pack_dir_url="https://evil.example/packs/teams/workbench/",
+                kanban=None,
+                getting_started="",
+                endpoint_note="",
+                homepage="",
+            )
+            installed = _fetch_team_files(plan, team_root, base_url="https://mybot.farm")
+            self.assertEqual(installed, [])
+            self.assertFalse((team_root / "pwn.sh").exists())
+            self.assertFalse((home / "scripts").exists())
+
+    def test_fetch_team_files_markdown_only_on_origin(self) -> None:
+        downloaded: list[str] = []
+
+        def fake_try(url: str, dest: Path, *, base_url: str) -> bool:
+            downloaded.append(dest.name)
+            dest.write_text("ok", encoding="utf-8")
+            return True
+
+        with tempfile.TemporaryDirectory() as raw:
+            team_root = Path(raw) / "teams" / "workbench"
+            team_root.mkdir(parents=True)
+            plan = PlantPlan(
+                slug="workbench",
+                kind="team",
+                profile_name=None,
+                members=[],
+                team_dirs=[],
+                team_files=["TEAM.md", "WORK.md", "cron.sh"],
+                pack_dir_url="https://mybot.farm/packs/teams/workbench/",
+                kanban=None,
+                getting_started="",
+                endpoint_note="",
+                homepage="",
+            )
+            with patch("hermes_mybot_farm.plant._try_download", side_effect=fake_try):
+                installed = _fetch_team_files(plan, team_root, base_url="https://mybot.farm")
+        self.assertEqual(installed, ["TEAM.md", "WORK.md"])
+        self.assertNotIn("cron.sh", downloaded)
+        self.assertNotIn("cron.sh", installed)
 
 
 if __name__ == "__main__":

@@ -65,10 +65,12 @@ FARM_PLANT = {
     "name": "farm_plant",
     "description": (
         "Download a mybot.farm Hermes pack and import it with hermes profile import. "
+        "Disclosure: plants third-party Hermes profiles (config, SOUL, skills, memories) "
+        "from mybot.farm sellers with no hash pinning; force/clean delete profiles. "
         "Agent packs: one scrubbed .tar.gz (stall.hermesHref, or /packs/agents/<slug>.hermes.tar.gz "
         "when runtime includes hermes). Team packs: each member tarball, team workspace "
-        "(TEAM.md/WORK.md/cron), Bot-mode markers, team-rules skill, and a group chat "
-        "when a gateway is reachable. "
+        "(TEAM.md/WORK.md), Bot-mode markers, team-rules skill, and a group chat "
+        "when a gateway is reachable. This plugin never installs seller .sh executables. "
         "recruit=true (single-agent packs): after import, stamp ui_meta.hermes-bots on the "
         "profile so it lands in the Desktop Bots roster as a first-class Bot (Bot Chat, "
         "DM-eligible via message_agent). Ignored for team packs — members are always recruited. "
@@ -175,10 +177,12 @@ FARM_POST = {
         "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. "
         "If you already own that slug, this updates the same stall (same URL) and bumps packVersion. "
         "Omit packVersion to auto-increment; history appears on the stall and GET /api/stalls/{slug}/revisions. "
-        "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. "
+        "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey. Never pass a key in tool arguments. "
         "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath "
-        "to a .json file) — not a Hermes tarball. Plant still imports Hermes .tar.gz; posting "
-        "publishes GAF. kind \"team\" requires format mybot.farm/team-pack and members[] "
+        "to a .json file under the plugin packs dir / ~/.hermes/farm / ~/.hermes/packs) — not a "
+        "Hermes tarball. pack.format is required (mybot.farm/agent-pack or mybot.farm/team-pack). "
+        "Plant still imports Hermes .tar.gz; posting publishes GAF. kind \"team\" requires "
+        "format mybot.farm/team-pack and members[] "
         "(at least two): each member needs role, summary, and pack (catalog path like "
         "agents/patch.json, a slug, a .hermes.tar.gz URL, or a nested agent-pack). "
         "kind \"agent\" uses mybot.farm/agent-pack and cannot include members[]. "
@@ -233,13 +237,10 @@ FARM_POST = {
             },
             "packPath": {
                 "type": "string",
-                "description": "Path to a .json GAF file. Use pack or packPath, not both.",
-            },
-            "apiKey": {
-                "type": "string",
                 "description": (
-                    "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin "
-                    "config apiKey for unattended use. Never log the key."
+                    "Path to a .json GAF file under the plugin packs dir, ~/.hermes/farm, "
+                    "~/.hermes/packs, or MYBOT_FARM_PACK_DIR. Arbitrary filesystem paths "
+                    "(including ~/.hermes/auth.json) are rejected. Use pack or packPath, not both."
                 ),
             },
             "dryRun": {

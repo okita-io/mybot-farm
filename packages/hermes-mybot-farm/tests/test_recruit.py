@@ -1,22 +1,19 @@
 from __future__ import annotations
 
 import json
-import sys
 import tempfile
 import unittest
 from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+import plugin_import  # noqa: F401
 
-from cli import _parse_flags
-from farm_tools import _plant_args, _plant_text, farm_plant
-from plant import PlantResult, plant, reinstall
-from schemas import FARM_PLANT, FARM_REINSTALL
-from yamlutil import atomic_yaml_write, load_yaml_dict
+from hermes_mybot_farm.cli import _parse_flags  # noqa: E402
+from hermes_mybot_farm.farm_tools import _plant_args, _plant_text, farm_plant  # noqa: E402
+from hermes_mybot_farm.plant import PlantResult, plant, reinstall  # noqa: E402
+from hermes_mybot_farm.schemas import FARM_PLANT, FARM_REINSTALL  # noqa: E402
+from hermes_mybot_farm.yamlutil import atomic_yaml_write, load_yaml_dict  # noqa: E402
 
 AGENT_STALL = {
     "kind": "agent",
@@ -71,18 +68,18 @@ def planted_home(stall: dict, pack: dict, *, write_profile: bool = True):
                 listed.append(name)
             return name
 
-        def fake_download(_url: str, dest: Path) -> None:
+        def fake_download(_url: str, dest: Path, **_kwargs) -> None:
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_bytes(b"fake-tarball")
 
         with (
-            patch("plant.get_stall", return_value=stall),
-            patch("plant.get_pack", return_value=pack),
-            patch("plant.hermes_home", return_value=home),
-            patch("plant.list_profiles", side_effect=lambda: list(listed)),
-            patch("plant.import_profile", side_effect=fake_import),
-            patch("plant._download", side_effect=fake_download),
-            patch("team_plant.gateway_looks_running", return_value=False),
+            patch("hermes_mybot_farm.plant.get_stall", return_value=stall),
+            patch("hermes_mybot_farm.plant.get_pack", return_value=pack),
+            patch("hermes_mybot_farm.plant.hermes_home", return_value=home),
+            patch("hermes_mybot_farm.plant.list_profiles", side_effect=lambda: list(listed)),
+            patch("hermes_mybot_farm.plant.import_profile", side_effect=fake_import),
+            patch("hermes_mybot_farm.plant._download", side_effect=fake_download),
+            patch("hermes_mybot_farm.team_plant.gateway_looks_running", return_value=False),
         ):
             yield home
 
@@ -138,7 +135,7 @@ class RecruitPlantTests(unittest.TestCase):
 
     def test_team_plant_ignores_recruit_flag(self) -> None:
         with planted_home(TEAM_STALL, TEAM_PACK) as home:
-            with patch("team_plant.recruit_agent_bot") as recruit_solo:
+            with patch("hermes_mybot_farm.team_plant.recruit_agent_bot") as recruit_solo:
                 result = plant("smoke-crew", recruit=True)
             recruit_solo.assert_not_called()
             self.assertTrue(result.ok)
@@ -192,7 +189,7 @@ class RecruitWiringTests(unittest.TestCase):
             profiles=["scholastic-research"],
             recruited=["scholastic-research"],
         )
-        with patch("farm_tools.plant", return_value=fake) as planted:
+        with patch("hermes_mybot_farm.farm_tools.plant", return_value=fake) as planted:
             raw = farm_plant({"slug": "scholastic-research", "recruit": True})
         planted.assert_called_once()
         self.assertTrue(planted.call_args.kwargs["recruit"])

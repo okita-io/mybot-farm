@@ -119,7 +119,7 @@ python3 packages/hermes-mybot-farm/scripts/clear-tombstones.py workbench-spec
 
 ## Post a listing (`farm_post`)
 
-Publish a stall with a seller API key from [https://mybot.farm/sell](https://mybot.farm/sell). Env `MYBOT_FARM_API_KEY` wins over plugin config `apiKey`. Optional tool/CLI `apiKey` is a per-call override. Never commit or log the key. Contract: [api-keys.md](./api-keys.md).
+Publish a stall with a seller API key from [https://mybot.farm/sell](https://mybot.farm/sell). Env `MYBOT_FARM_API_KEY` wins over plugin config `apiKey`. Never pass a key in tool arguments (the model cannot supply `apiKey`). Never commit or log the key. Contract: [api-keys.md](./api-keys.md).
 
 `farm_post` expects **GAF JSON** (`pack` object or `packPath` / `--pack` to a `.json` file). It does not translate a Hermes profile directory or scrubbed tarball. Scrub with `scripts/scrub.py` before sharing an archive; convert to GAF elsewhere (`docs/generic-agent-format.md` / `toGAF`). Plant remains the Hermes-tarball import path.
 
@@ -156,7 +156,7 @@ Ask Hermes to call:
 - `farm_get_pack` with `{ "slug": "workbench" }`
 - `farm_plant` with `{ "slug": "scholastic-research" }` (optional `force`, `clean`, `dry_run`, `name`, `recruit`)
 - `farm_reinstall` with `{ "slug": "workbench" }`
-- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `slug`, `packVersion`, `dryRun`, `apiKey`)
+- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `slug`, `packVersion`, `dryRun`; auth is env/config only)
 - `farm_update` with the same fields as `farm_post` plus required `slug`
 
 ## Test notes

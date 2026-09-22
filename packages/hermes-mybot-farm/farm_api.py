@@ -6,7 +6,7 @@ import json
 import os
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urljoin
+from urllib.parse import quote, urljoin, urlparse
 from urllib.request import Request, urlopen
 
 DEFAULT_BASE = "https://mybot.farm"
@@ -57,21 +57,27 @@ def resolve_base_url(plugin_config: dict[str, Any] | None = None) -> str:
     return base.rstrip("/")
 
 
-def resolve_api_key(
-    plugin_config: dict[str, Any] | None = None,
-    override: str | None = None,
-) -> str:
-    """Seller key: per-call override, else env MYBOT_FARM_API_KEY, else config apiKey.
+def resolve_api_key(plugin_config: dict[str, Any] | None = None) -> str:
+    """Seller key: env MYBOT_FARM_API_KEY, else plugin config apiKey.
 
-    Never log the returned value.
+    Never from the model / tool args. Never log the returned value.
     """
-    if isinstance(override, str) and override.strip():
-        return override.strip()
     env = (os.environ.get("MYBOT_FARM_API_KEY") or "").strip()
     if env:
         return env
     cfg = plugin_config or {}
     return str(cfg.get("apiKey") or cfg.get("api_key") or "").strip()
+
+
+def url_same_origin(url: str, base_url: str) -> bool:
+    """True when url is http(s) and shares scheme+host with the farm origin."""
+    left = urlparse(url)
+    right = urlparse(base_url)
+    if left.scheme.lower() not in {"http", "https"}:
+        return False
+    if right.scheme.lower() not in {"http", "https"}:
+        return False
+    return left.scheme.lower() == right.scheme.lower() and left.netloc.lower() == right.netloc.lower()
 
 
 def _short_error_body(raw: str) -> str:
@@ -383,6 +389,8 @@ def validate_listing_pack(kind: str, pack: dict[str, Any]) -> None:
         return
     if fmt == TEAM_PACK_FORMAT:
         raise FarmError(f'kind "agent" cannot use pack.format "{TEAM_PACK_FORMAT}"')
+    if fmt != AGENT_PACK_FORMAT:
+        raise FarmError(f'kind "agent" requires pack.format "{AGENT_PACK_FORMAT}"')
     members = pack.get("members")
     if isinstance(members, list) and members:
         raise FarmError('kind "agent" listings cannot include members[] — use kind "team"')

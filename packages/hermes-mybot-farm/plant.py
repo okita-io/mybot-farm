@@ -2,7 +2,7 @@
 
 Agent packs: download a scrubbed .hermes.tar.gz and `hermes profile import`.
 Team packs: import each member, recreate ~/.hermes/teams/<slug>, fetch TEAM.md /
-WORK.md / cron scripts, mark members as Bots, install team-rules, and create a
+WORK.md (never seller .sh executables), mark members as Bots, install team-rules, and create a
 kanban board when gettingStarted says so. Group chat is created via gateway RPC
 when reachable; otherwise members are seated in profile.yaml for a Desktop step.
 
@@ -15,13 +15,12 @@ from __future__ import annotations
 
 import re
 import shutil
-import stat
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any
 
-from farm_api import (
+from .farm_api import (
     FarmError,
     absolute_url,
     farm_fetch_bytes,
@@ -31,8 +30,9 @@ from farm_api import (
     pack_summary,
     resolve_agent_archive_href,
     resolve_base_url,
+    url_same_origin,
 )
-from hermes_bin import (
+from .hermes_bin import (
     HermesCliError,
     create_board,
     delete_board,
@@ -41,8 +41,8 @@ from hermes_bin import (
     list_boards,
     list_profiles,
 )
-from tombstones import clear_tombstones, hermes_home, list_tombstones
-from team_md import (
+from .tombstones import clear_tombstones, hermes_home, list_tombstones
+from .team_md import (
     pack_handoffs,
     pack_skills,
     pack_title,
@@ -59,6 +59,28 @@ MKDIR_RE = re.compile(r"mkdir\s+-p\s+(\S+)")
 PACK_DIR_RE = re.compile(r"https?://[^\s]+/packs/teams/([A-Za-z0-9._-]+)/?", re.I)
 TEAM_FILE_RE = re.compile(r"\b((?:TEAM|WORK|README)\.md|[\w.-]+\.sh)\b")
 BRACE_RE = re.compile(r"\{([^{}]+)\}")
+SAFE_SLUG_RE = re.compile(r"^[a-z0-9_-]+$")
+TEAM_WORKSPACE_SUBDIRS = ("reports", "repos", "state")
+ALLOWED_TEAM_MARKDOWN = re.compile(r"^[A-Za-z0-9._-]+\.md$")
+
+
+def safe_slug(value: str, *, what: str = "slug") -> str:
+    """Seller/model-chosen names used as path segments. Reject traversal."""
+    text = str(value or "").strip().lower()
+    if not text or not SAFE_SLUG_RE.fullmatch(text):
+        raise PlantError(f"unsafe {what}: must match [a-z0-9_-]+")
+    if ".." in text:
+        raise PlantError(f"unsafe {what}: {value!r}")
+    return text
+
+
+def confined_path(root: Path, *parts: str) -> Path:
+    """Join parts under root; raise if the result escapes root."""
+    root_res = root.resolve()
+    dest = root_res.joinpath(*parts).resolve()
+    if dest != root_res and root_res not in dest.parents:
+        raise PlantError(f"path escapes {root_res}: {dest}")
+    return dest
 
 
 @dataclass
@@ -181,14 +203,21 @@ def _getting_started(pack: dict[str, Any]) -> str:
 
 def parse_kanban(getting_started: str, fallback_slug: str) -> KanbanPlan | None:
     match = KANBAN_RE.search(getting_started or "")
-    if match:
-        return KanbanPlan(slug=match.group(1), name=match.group(2))
-    if re.search(r"\bkanban\b", getting_started or "", re.I):
-        return KanbanPlan(slug=fallback_slug, name=None)
-    return None
+    raw_slug = match.group(1) if match else ""
+    raw_name = match.group(2) if match else None
+    if not raw_slug and re.search(r"\bkanban\b", getting_started or "", re.I):
+        raw_slug = fallback_slug
+    if not raw_slug:
+        return None
+    try:
+        slug = safe_slug(raw_slug, what="kanban slug")
+    except PlantError:
+        return None
+    return KanbanPlan(slug=slug, name=raw_name)
 
 
 def parse_team_dirs(getting_started: str, slug: str) -> list[str]:
+    """Parse seller mkdir hints for display only. Writes never use these paths."""
     dirs: list[str] = []
     for match in MKDIR_RE.finditer(getting_started or ""):
         raw = match.group(1).rstrip(".,;:")
@@ -204,10 +233,15 @@ def parse_team_dirs(getting_started: str, slug: str) -> list[str]:
 
 
 def parse_pack_dir_url(getting_started: str, base_url: str, slug: str) -> str:
+    """Always pin to the farm origin + /packs/teams/<slug>/. Ignore seller hosts."""
+    clean = safe_slug(slug, what="team slug")
+    pinned = f"{base_url.rstrip('/')}/packs/teams/{clean}/"
     match = PACK_DIR_RE.search(getting_started or "")
     if match:
-        return match.group(0).rstrip("/") + "/"
-    return f"{base_url}/packs/teams/{slug}/"
+        candidate = match.group(0).rstrip("/") + "/"
+        if url_same_origin(candidate, base_url):
+            return pinned
+    return pinned
 
 
 def parse_team_files(getting_started: str, slug: str) -> list[str]:
@@ -240,7 +274,10 @@ def _member_plans_from_stall(stall: dict[str, Any], base_url: str) -> list[Membe
         archive = member_archive_href(href, base_url)
         if not archive:
             continue
-        name = pack_dir_stem(archive)
+        try:
+            name = safe_slug(pack_dir_stem(archive), what="member slug")
+        except PlantError as exc:
+            raise PlantError(f"seller stall has {exc}") from exc
         plans.append(
             MemberPlan(
                 name=name,
@@ -253,7 +290,10 @@ def _member_plans_from_stall(stall: dict[str, Any], base_url: str) -> list[Membe
 
 
 def member_archive_href(pack_ref: Any, base_url: str) -> str:
-    """Resolve a members[].pack / stall member href to a Hermes tarball URL."""
+    """Resolve a members[].pack / stall member href to a Hermes tarball URL.
+
+    Off-origin URLs are dropped so a seller cannot fetch from an arbitrary host.
+    """
     if isinstance(pack_ref, dict):
         return ""
     if not isinstance(pack_ref, str):
@@ -263,10 +303,13 @@ def member_archive_href(pack_ref: Any, base_url: str) -> str:
         return ""
     if is_hermes_archive(rel):
         if rel.startswith("http://") or rel.startswith("https://") or rel.startswith("/"):
-            return absolute_url(base_url, rel)
-        return absolute_url(base_url, f"/packs/{rel.lstrip('/')}")
+            url = absolute_url(base_url, rel)
+        else:
+            url = absolute_url(base_url, f"/packs/{rel.lstrip('/')}")
+        return url if url_same_origin(url, base_url) else ""
     if re.fullmatch(r"[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*", rel):
-        return absolute_url(base_url, f"/packs/agents/{rel}.hermes.tar.gz")
+        url = absolute_url(base_url, f"/packs/agents/{rel}.hermes.tar.gz")
+        return url if url_same_origin(url, base_url) else ""
     if rel.lower().endswith(".json"):
         tarball = re.sub(r"\.json$", ".hermes.tar.gz", rel, flags=re.I)
         if (
@@ -274,8 +317,10 @@ def member_archive_href(pack_ref: Any, base_url: str) -> str:
             or tarball.startswith("https://")
             or tarball.startswith("/")
         ):
-            return absolute_url(base_url, tarball)
-        return absolute_url(base_url, f"/packs/{tarball.lstrip('/')}")
+            url = absolute_url(base_url, tarball)
+        else:
+            url = absolute_url(base_url, f"/packs/{tarball.lstrip('/')}")
+        return url if url_same_origin(url, base_url) else ""
     return ""
 
 
@@ -288,7 +333,11 @@ def _member_plans_from_pack(pack: dict[str, Any], base_url: str) -> list[MemberP
         archive = member_archive_href(member.get("pack"), base_url)
         if not archive:
             continue
-        name = str(member.get("slug") or pack_dir_stem(archive))
+        raw_name = str(member.get("slug") or pack_dir_stem(archive))
+        try:
+            name = safe_slug(raw_name, what="member slug")
+        except PlantError as exc:
+            raise PlantError(f"seller pack has {exc}") from exc
         plans.append(
             MemberPlan(
                 name=name,
@@ -330,7 +379,7 @@ def build_plant_plan(
     *,
     name_override: str | None = None,
 ) -> PlantPlan:
-    slug = str(pack.get("slug") or stall.get("slug") or "")
+    slug = safe_slug(str(pack.get("slug") or stall.get("slug") or ""), what="stall slug")
     stall_id = str(stall.get("stallId") or stall.get("listingId") or "")
     pack_version = stall.get("packVersion")
     if pack_version is None:
@@ -382,8 +431,13 @@ def build_plant_plan(
         )
 
     if is_hermes_archive(archive_href):
-        profile_name = name_override or pack_dir_stem(archive_href) or slug
+        raw_profile = name_override or pack_dir_stem(archive_href) or slug
+        profile_name = safe_slug(raw_profile, what="profile name")
         href = absolute_url(base_url, archive_href)
+        if not url_same_origin(href, base_url):
+            raise PlantError(
+                f"Pack '{slug}' archive is not on the farm origin ({base_url})."
+            )
         return PlantPlan(
             slug=slug,
             kind="agent",
@@ -436,57 +490,52 @@ def _write_farm_md(path: Path, plan: PlantPlan, planted_at: str) -> None:
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
-def _download(url: str, dest: Path) -> None:
+def _download(url: str, dest: Path, *, base_url: str) -> None:
+    if not url_same_origin(url, base_url):
+        raise FarmError(f"refusing download off farm origin: {url}")
     dest.parent.mkdir(parents=True, exist_ok=True)
     data = farm_fetch_bytes(url)
     dest.write_bytes(data)
 
 
-def _try_download(url: str, dest: Path) -> bool:
+def _try_download(url: str, dest: Path, *, base_url: str) -> bool:
     try:
-        _download(url, dest)
+        _download(url, dest, base_url=base_url)
         return dest.stat().st_size > 0
-    except (FarmError, OSError):
+    except (FarmError, OSError, PlantError):
         return False
 
 
-def _copy_executable(src: Path, dest: Path) -> None:
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src, dest)
-    mode = dest.stat().st_mode
-    dest.chmod(mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-
-
 def _ensure_team_dirs(plan: PlantPlan, home: Path) -> Path:
-    team_root = home / "teams" / plan.slug
-    for raw in plan.team_dirs:
-        Path(expand_home(raw, home)).mkdir(parents=True, exist_ok=True)
+    """Only create ~/.hermes/teams/<slug>/ and fixed subdirs. Ignore seller mkdir text."""
+    slug = safe_slug(plan.slug, what="team slug")
+    team_root = confined_path(home / "teams", slug)
     team_root.mkdir(parents=True, exist_ok=True)
+    for sub in TEAM_WORKSPACE_SUBDIRS:
+        (team_root / sub).mkdir(parents=True, exist_ok=True)
     return team_root
 
 
-def _fetch_team_files(plan: PlantPlan, staging: Path, team_root: Path, home: Path) -> list[str]:
+def _fetch_team_files(plan: PlantPlan, team_root: Path, *, base_url: str) -> list[str]:
+    """Copy TEAM.md / WORK.md / README.md into the team dir. Never install .sh."""
     installed: list[str] = []
-    if not plan.pack_dir_url:
+    if not plan.pack_dir_url or not url_same_origin(plan.pack_dir_url, base_url):
         return installed
-    scripts_dir = home / "scripts"
     for name in plan.team_files:
-        dest = staging / name
-        url = plan.pack_dir_url.rstrip("/") + "/" + name
-        if not _try_download(url, dest):
+        if not ALLOWED_TEAM_MARKDOWN.fullmatch(name):
             continue
-        if name.lower().endswith(".md"):
-            shutil.copy2(dest, team_root / name)
-        elif name.lower().endswith(".sh"):
-            _copy_executable(dest, scripts_dir / name)
-        else:
-            shutil.copy2(dest, team_root / name)
+        dest = confined_path(team_root, name)
+        url = plan.pack_dir_url.rstrip("/") + "/" + name
+        if not url_same_origin(url, base_url):
+            continue
+        if not _try_download(url, dest, base_url=base_url):
+            continue
         installed.append(name)
     return installed
 
 
 def _wipe_team_dir(slug: str, home: Path) -> bool:
-    path = home / "teams" / slug
+    path = confined_path(home / "teams", safe_slug(slug, what="team slug"))
     if path.is_dir():
         shutil.rmtree(path)
         return True
@@ -513,6 +562,7 @@ def plant(
     recruit: bool = False,
 ) -> PlantResult:
     origin = resolve_base_url(plugin_config if base_url is None else {"baseUrl": base_url})
+    slug = safe_slug(slug, what="stall slug")
     stall = get_stall(origin, slug)
     pack = get_pack(origin, slug)
     plan = build_plant_plan(stall, pack, origin, name_override=name)
@@ -600,13 +650,14 @@ def plant(
             + ", ".join(result.tombstones_cleared)
         )
 
-    staging = home / "farm" / plan.slug
+    staging = confined_path(home / "farm", plan.slug)
     staging.mkdir(parents=True, exist_ok=True)
 
     for member in plan.members:
-        archive = staging / f"{member.name}.hermes.tar.gz"
-        _download(member.href, archive)
-        import_profile(str(archive), member.name)
+        member_name = safe_slug(member.name, what="member slug")
+        archive = confined_path(staging, f"{member_name}.hermes.tar.gz")
+        _download(member.href, archive, base_url=origin)
+        import_profile(str(archive), member_name)
 
     present, missing = _verify_profiles(names)
     if missing:
@@ -616,7 +667,7 @@ def plant(
         for member in plan.members:
             if member.name not in missing:
                 continue
-            archive = staging / f"{member.name}.hermes.tar.gz"
+            archive = confined_path(staging, f"{safe_slug(member.name, what='member slug')}.hermes.tar.gz")
             import_profile(str(archive), member.name)
         present, missing = _verify_profiles(names)
 
@@ -633,7 +684,7 @@ def plant(
         return result
 
     if recruit and plan.kind == "agent":
-        from team_plant import recruit_agent_bot
+        from .team_plant import recruit_agent_bot
 
         recruited_name = plan.profile_name or names[0]
         title = str(stall.get("name") or recruited_name).strip()
@@ -656,8 +707,8 @@ def plant(
     if plan.kind == "team":
         team_root = _ensure_team_dirs(plan, home)
         result.team_dir = str(team_root)
-        result.team_files = _fetch_team_files(plan, staging, team_root, home)
-        from team_plant import configure_planted_team, ensure_team_md
+        result.team_files = _fetch_team_files(plan, team_root, base_url=origin)
+        from .team_plant import configure_planted_team, ensure_team_md
 
         result.team_files = ensure_team_md(plan, team_root, result.team_files)
         _write_farm_md(team_root / "FARM.md", plan, date.today().isoformat())
@@ -672,7 +723,7 @@ def plant(
                     + (f' ({plan.kanban.name})' if plan.kanban.name else "")
                 )
             result.kanban = plan.kanban.slug
-        notes.append("cron scripts copied to ~/.hermes/scripts when present; schedule them yourself")
+        notes.append("seller cron/shell scripts are not installed; schedule them yourself if the listing documents them")
         result.room = configure_planted_team(plan, home, team_root=team_root, notes=notes)
 
     result.notes = notes

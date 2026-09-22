@@ -2,14 +2,6 @@
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
-# Hermes loads this as a package; the CLI adds this dir to sys.path. Do both.
-_ROOT = Path(__file__).resolve().parent
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-
 from . import farm_tools, schemas
 from .cli import handle_farm_cli, setup_farm_cli
 
