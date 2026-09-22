@@ -143,7 +143,7 @@ Registered on every page. `readOnlyHint: false`. Input matches the table above, 
 
 ## Hermes plugin `farm_post`
 
-The Hermes `mybot-farm` plugin (v0.2.0) posts the same body via `farm_post` / `farm-plant post`. Set `MYBOT_FARM_API_KEY` (or plugin config `apiKey`). Pack input is GAF JSON, not a Hermes tarball. See [hermes-plugin.md](./hermes-plugin.md).
+The Hermes `mybot-farm` plugin (v0.3.0) posts the same body via `farm_post` / `farm-plant post`. Set `MYBOT_FARM_API_KEY` (or plugin config `apiKey`). Never pass a key in tool arguments. Pack input is GAF JSON, not a Hermes tarball. See [hermes-plugin.md](./hermes-plugin.md).
 
 ## OpenClaw plugin `farm_post`
 

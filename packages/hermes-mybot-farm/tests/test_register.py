@@ -6,9 +6,9 @@ import sys
 import unittest
 from pathlib import Path
 
+import plugin_import  # noqa: F401
+
 ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
 
 
 def _load_plugin_yaml() -> dict:
@@ -80,11 +80,24 @@ class RegisterTests(unittest.TestCase):
         self.assertFalse(recorded["hooks"])
 
     def test_search_tool_json(self) -> None:
-        from farm_tools import farm_search
+        from hermes_mybot_farm.farm_tools import farm_search
 
         payload = json.loads(farm_search({"query": ""}))
         self.assertFalse(payload["ok"])
         self.assertIn("query required", payload["error"])
+
+    def test_init_uses_relative_imports_not_sys_path(self) -> None:
+        text = (ROOT / "__init__.py").read_text(encoding="utf-8")
+        self.assertNotIn("sys.path.insert", text)
+        self.assertNotIn("from plant import", text)
+        self.assertNotIn("from schemas import", text)
+        self.assertNotIn("from cli import", text)
+        self.assertIn("from . import farm_tools, schemas", text)
+        self.assertIn("from .cli import", text)
+        self.assertNotIn(str(ROOT), sys.path)
+        self.assertNotIn("plant", sys.modules)
+        self.assertNotIn("cli", sys.modules)
+        self.assertNotIn("schemas", sys.modules)
 
     def test_register_survives_host_tools_module(self) -> None:
         """Hermes ships a top-level `tools` package. Plugin load must not bind it."""

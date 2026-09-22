@@ -7,10 +7,11 @@ package, so `from tools import …` inside a plugin binds the host, not us.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
-from farm_api import (
+from .farm_api import (
     FarmError,
     build_listing_payload,
     create_listing,
@@ -24,9 +25,9 @@ from farm_api import (
     search_stalls,
     stall_summary,
 )
-from hermes_bin import HermesCliError
-from plant import PlantError, plant, reinstall
-from tombstones import clear_tombstones, hermes_home, list_tombstones
+from .hermes_bin import HermesCliError
+from .plant import PlantError, plant, reinstall
+from .tombstones import clear_tombstones, hermes_home, list_tombstones
 
 
 def _ok(payload: dict[str, Any]) -> str:
@@ -54,6 +55,49 @@ def _truthy(value: Any) -> bool:
     return bool(value)
 
 
+PLUGIN_ROOT = Path(__file__).resolve().parent
+SAFE_PACK_SUFFIX = ".json"
+
+
+def _pack_path_roots() -> list[Path]:
+    """Directories the model may read a GAF file from. Not the rest of the FS."""
+    from .tombstones import hermes_home
+
+    home = hermes_home()
+    roots = [
+        PLUGIN_ROOT / "packs",
+        home / "farm",
+        home / "packs",
+    ]
+    extra = (os.environ.get("MYBOT_FARM_PACK_DIR") or "").strip()
+    if extra:
+        roots.append(Path(extra).expanduser())
+    return roots
+
+
+def _resolve_safe_pack_path(path: str) -> Path:
+    raw = Path(str(path).strip()).expanduser()
+    if raw.suffix.lower() != SAFE_PACK_SUFFIX:
+        raise FarmError("packPath must be a .json GAF file")
+    try:
+        resolved = raw.resolve()
+    except OSError as exc:
+        raise FarmError(f"cannot resolve packPath: {exc}") from exc
+    if not resolved.is_file():
+        raise FarmError(f"pack file not found: {resolved}")
+    for root in _pack_path_roots():
+        try:
+            root_res = root.resolve()
+        except OSError:
+            continue
+        if resolved == root_res or root_res in resolved.parents:
+            return resolved
+    raise FarmError(
+        "packPath must be under the plugin packs dir, ~/.hermes/farm, ~/.hermes/packs, "
+        "or MYBOT_FARM_PACK_DIR — not an arbitrary filesystem path"
+    )
+
+
 def _load_pack(args: dict) -> Any:
     pack = args.get("pack")
     path = args.get("packPath") or args.get("pack_path")
@@ -62,9 +106,7 @@ def _load_pack(args: dict) -> Any:
     if has_pack and has_path:
         raise FarmError("provide pack or packPath, not both")
     if has_path:
-        file_path = Path(str(path)).expanduser()
-        if not file_path.is_file():
-            raise FarmError(f"pack file not found: {file_path}")
+        file_path = _resolve_safe_pack_path(str(path))
         try:
             raw = file_path.read_text(encoding="utf-8")
             return json.loads(raw)
@@ -194,9 +236,7 @@ def farm_plant(args: dict, **kwargs) -> str:
 def farm_post(args: dict, **kwargs) -> str:
     cfg = _plugin_config(kwargs)
     dry_run = _truthy(args.get("dryRun") if "dryRun" in args else args.get("dry_run"))
-    override = args.get("apiKey") if args.get("apiKey") is not None else args.get("api_key")
-    override_s = override.strip() if isinstance(override, str) else None
-    api_key = resolve_api_key(cfg, override_s)
+    api_key = resolve_api_key(cfg)
     try:
         pack = _load_pack(args)
         payload = build_listing_payload(
@@ -246,8 +286,8 @@ def farm_post(args: dict, **kwargs) -> str:
 
     if not api_key:
         return _err(
-            "seller API key required (set MYBOT_FARM_API_KEY, plugin config apiKey, "
-            "or pass apiKey). Create a key at https://mybot.farm/sell — see docs/api-keys.md"
+            "seller API key required (set MYBOT_FARM_API_KEY or plugin config apiKey). "
+            "Create a key at https://mybot.farm/sell — see docs/api-keys.md"
         )
     try:
         result = create_listing(base, payload, api_key)

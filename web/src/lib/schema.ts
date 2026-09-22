@@ -141,25 +141,30 @@ export const howToHermesShareLd = {
 export const howToHermesPluginLd = {
   "@context": "https://schema.org",
   "@type": "HowTo",
-  name: "Plant a mybot.farm stall in Hermes Agent",
+  name: "Recruit a mybot.farm stall in Hermes Agent",
   description:
-    "Install the mybot-farm Hermes plugin, enable it, then search and plant scrubbed profile archives with farm_search, farm_get_stall, farm_get_pack, farm_plant, and farm_reinstall.",
+    "Enable the mybot-farm Hermes plugin, open Hermes Desktop, browse stalls, and one-click Recruit into the Bots roster. CLI farm_search, farm_get_stall, farm_get_pack, farm_plant, and farm_reinstall still work.",
   url: `${site.url}/install/hermes`,
   step: [
     {
       "@type": "HowToStep",
-      name: "Install the plugin",
-      text: "From a checkout, symlink packages/hermes-mybot-farm to ~/.hermes/plugins/mybot-farm. hermes plugins install does not take a local folder path. Git: hermes plugins install okita-io/mybot-farm/packages/hermes-mybot-farm --enable. After Plugin Catalog admission: hermes plugins install mybot-farm then hermes plugins enable mybot-farm. Or unzip https://mybot.farm/downloads/hermes-mybot-farm-0.1.0.zip into ~/.hermes/plugins/mybot-farm.",
+      name: "Enable the plugin",
+      text: "From a checkout, symlink or copy packages/hermes-mybot-farm to ~/.hermes/plugins/mybot-farm. hermes plugins install does not take a local folder path. Git: hermes plugins install okita-io/mybot-farm/packages/hermes-mybot-farm --enable. After Plugin Catalog admission: hermes plugins install mybot-farm then hermes plugins enable mybot-farm. Or unzip https://mybot.farm/downloads/hermes-mybot-farm-0.3.0.zip into ~/.hermes/plugins/mybot-farm.",
     },
     {
       "@type": "HowToStep",
-      name: "Enable mybot-farm",
-      text: "Run hermes plugins enable mybot-farm. Plugins are opt-in. Current Hermes git: hermes plugins validate ./packages/hermes-mybot-farm. PyPI hermes-agent 0.19.0 has no validate subcommand — run python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v instead.",
+      name: "Recruit from Hermes Desktop",
+      text: "Open Hermes Desktop. Sidebar Farm (or ⌘K → mybot.farm: Open catalog). Browse stalls, open one, Recruit. Solo agents stamp ui_meta.hermes-bots and land in the Desktop Bots roster. Teams plant as Bots as usual.",
     },
     {
       "@type": "HowToStep",
-      name: "Plant a pack",
-      text: "Ask the agent to farm_plant a slug such as scholastic-research, or run python3 packages/hermes-mybot-farm/bin/farm-plant plant scholastic-research. Team packs (Workbench) import each member, recreate the team dir, and create the kanban board when gettingStarted says so.",
+      name: "Optional: validate",
+      text: "Current Hermes git: hermes plugins validate ./packages/hermes-mybot-farm. PyPI hermes-agent 0.19.0 has no validate subcommand — run python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v instead.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Optional: plant from CLI",
+      text: "Ask the agent to farm_plant a slug such as scholastic-research (pass recruit: true for solo Bots roster), or run python3 packages/hermes-mybot-farm/bin/farm-plant plant scholastic-research. Team packs (Workbench) import each member, recreate the team dir, and create the kanban board when gettingStarted says so.",
     },
     {
       "@type": "HowToStep",

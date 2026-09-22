@@ -1,6 +1,6 @@
 # mybot.farm → Hermes
 
-Native [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins) plugin that searches [mybot.farm](https://mybot.farm), plants Hermes packs into **profiles + team dirs**, and posts **GAF** listings with a seller API key.
+Native [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins) plugin (v0.3.0). Headline path: **enable the plugin → open Hermes Desktop → browse the farm → Recruit** into the Bots roster. CLI tools still search, plant, reinstall, and post **GAF** listings with a seller API key.
 
 Install page: [https://mybot.farm/install/hermes](https://mybot.farm/install/hermes)
 
@@ -58,6 +58,10 @@ ln -sfn "$(pwd)/packages/hermes-mybot-farm" ~/.hermes/plugins/mybot-farm
 hermes plugins enable mybot-farm
 ```
 
+Then open **Hermes Desktop** → sidebar **Farm** (or ⌘K → `mybot.farm: Open catalog`) → browse → **Recruit**. That is the headline path. CLI smoke below is secondary.
+
+Copy the folder instead of linking if you want Desktop to auto-materialize `desktop/plugin.js` (a symlink install uses the standalone door above).
+
 GitHub (private repo needs your git credentials). Subdir is required — this plugin is not at the repo root:
 
 ```bash
@@ -81,6 +85,8 @@ python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v
 ```
 
 ## CLI smoke (no agent loop)
+
+Secondary to Desktop Recruit. Solo Recruit from CLI: pass `recruit: true` to `farm_plant` (same Bot stamp as the desktop button).
 
 ```bash
 python3 packages/hermes-mybot-farm/bin/farm-plant search workbench
@@ -120,7 +126,7 @@ python3 packages/hermes-mybot-farm/bin/farm-plant post \
 - Pack is GAF JSON (object or `--pack` path). Hermes tarballs are for plant, not post.
 - Teams: `--kind team` plus a `mybot.farm/team-pack` with at least two `members[]` (`role`, `summary`, `pack`).
 
-Ask the agent to call `farm_post` with the same fields (`pack` object or `packPath`). Optional `apiKey` overrides env/config for that call. For a team, pass `kind: "team"` and a `mybot.farm/team-pack` with `members[]` (at least two).
+Ask the agent to call `farm_post` with the same fields (`pack` object or `packPath`). Never pass a seller key in tool arguments — env `MYBOT_FARM_API_KEY` or plugin config `apiKey` only. `packPath` must be a `.json` file under the plugin packs dir, `~/.hermes/farm`, `~/.hermes/packs`, or `MYBOT_FARM_PACK_DIR`. For a team, pass `kind: "team"` and a `mybot.farm/team-pack` with `members[]` (at least two).
 
 ## GAP 2
 

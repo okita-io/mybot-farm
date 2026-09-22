@@ -1,6 +1,6 @@
 # Hermes plant plugin
 
-Plant mybot.farm Hermes stalls into [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins) with the native `mybot-farm` plugin, and post GAF listings with a seller API key.
+Plant mybot.farm Hermes stalls into [Hermes Agent](https://hermes-agent.nousresearch.com/docs/user-guide/features/plugins) with the native `mybot-farm` plugin (v0.3.0). Headline path: **enable the plugin → open Hermes Desktop → browse → Recruit** into the Bots roster. CLI still plants, reinstalls, and posts GAF listings with a seller API key.
 
 It calls live `https://mybot.farm/api/stalls` and `/api/packs/{slug}`, then `hermes profile import`. Team packs also recreate `~/.hermes/teams/<slug>`, fetch TEAM.md / WORK.md / cron, mark members as Bots (`ui_meta.hermes-bots`), install the team-rules skill, and create a group chat when a gateway RPC URL is set. `farm_post` calls `POST /api/listings` with `Authorization: Bearer mbf_…`.
 
@@ -10,7 +10,9 @@ Install page: [https://mybot.farm/install/hermes](https://mybot.farm/install/her
 
 ## In short
 
-- Plugin name: `mybot-farm` (`plugin.yaml`)
+- Plugin name: `mybot-farm` (`plugin.yaml` **0.3.0**)
+- Headline: Hermes Desktop sidebar **Farm** (⌘K `mybot.farm: Open catalog`) → browse stalls → **Recruit**
+- Solo Recruit stamps `ui_meta.hermes-bots` so the agent lands in the Desktop **Bots roster**. Teams plant as Bots as usual.
 - Tools: `farm_search`, `farm_get_pack`, `farm_get_stall`, `farm_plant`, `farm_reinstall`, `farm_post`, `farm_update`
 - Also: `hermes farm …` and `/farm`
 - Does not email, spend money, invent pack fields, or delete live profiles unless `force` is true
@@ -27,6 +29,8 @@ mkdir -p ~/.hermes/plugins
 ln -sfn "$(pwd)/packages/hermes-mybot-farm" ~/.hermes/plugins/mybot-farm
 hermes plugins enable mybot-farm
 ```
+
+Then open Hermes Desktop → **Farm** → browse → **Recruit**. Copy the folder instead of linking if you want Desktop to auto-materialize `desktop/plugin.js`; a symlink needs `~/.hermes/desktop-plugins/mybot-farm/plugin.js`.
 
 Validate (current Hermes git has this subcommand; **PyPI `hermes-agent` 0.19.0 does not** — that CLI only has install/update/remove/list/enable/disable):
 
@@ -57,17 +61,21 @@ hermes plugins install mybot-farm
 hermes plugins enable mybot-farm
 ```
 
-That PR is **not** opened from this repo. Draft entry + GitHub Release checklist: [`packages/hermes-mybot-farm/catalog/`](../packages/hermes-mybot-farm/catalog/). Gates: public `https://` clone, tag/release `hermes-mybot-farm-v0.2.0`, paste the 40-hex SHA, `hermes plugins validate` clean, capabilities match `plugin.yaml`. Catalog `requires_hermes: ">=0.21"`.
+That PR is **not** opened from this repo. Draft entry + GitHub Release checklist: [`packages/hermes-mybot-farm/catalog/`](../packages/hermes-mybot-farm/catalog/). Gates: public `https://` clone, tag/release `hermes-mybot-farm-v0.3.0`, paste the 40-hex SHA, `hermes plugins validate` clean, capabilities match `plugin.yaml`. Catalog `requires_hermes: ">=0.21"`. Open catalog PR #116414 — retarget `sha` + `version: "0.3.0"` after the tag.
 
 ## Install from the public zip
 
-`https://mybot.farm/downloads/hermes-mybot-farm-0.2.0.zip` is the plugin directory packed. Unzip into `~/.hermes/plugins/mybot-farm`, then enable:
+`https://mybot.farm/downloads/hermes-mybot-farm-0.3.0.zip` is the plugin directory packed after the v0.3.0 tag (not in-tree). Unzip into `~/.hermes/plugins/mybot-farm`, then enable:
 
 ```bash
 mkdir -p ~/.hermes/plugins/mybot-farm
-unzip hermes-mybot-farm-0.2.0.zip -d ~/.hermes/plugins/mybot-farm
+unzip hermes-mybot-farm-0.3.0.zip -d ~/.hermes/plugins/mybot-farm
 hermes plugins enable mybot-farm
 ```
+
+## Recruit from Hermes Desktop
+
+Headline path after enable: sidebar **Farm** (or ⌘K → `mybot.farm: Open catalog`). Search, filter All / Agents / Teams, open a stall, **Recruit**. Solo agents pass `recruit: true` to `farm_plant` and land in the Desktop Bots roster. Teams plant as Bots as usual. **Page** opens the listing on the farm. Plant-as-plain-profile and Replant stay on the CLI / tools.
 
 ## Plant from CLI
 
@@ -111,7 +119,7 @@ python3 packages/hermes-mybot-farm/scripts/clear-tombstones.py workbench-spec
 
 ## Post a listing (`farm_post`)
 
-Publish a stall with a seller API key from [https://mybot.farm/sell](https://mybot.farm/sell). Env `MYBOT_FARM_API_KEY` wins over plugin config `apiKey`. Optional tool/CLI `apiKey` is a per-call override. Never commit or log the key. Contract: [api-keys.md](./api-keys.md).
+Publish a stall with a seller API key from [https://mybot.farm/sell](https://mybot.farm/sell). Env `MYBOT_FARM_API_KEY` wins over plugin config `apiKey`. Never pass a key in tool arguments (the model cannot supply `apiKey`). Never commit or log the key. Contract: [api-keys.md](./api-keys.md).
 
 `farm_post` expects **GAF JSON** (`pack` object or `packPath` / `--pack` to a `.json` file). It does not translate a Hermes profile directory or scrubbed tarball. Scrub with `scripts/scrub.py` before sharing an archive; convert to GAF elsewhere (`docs/generic-agent-format.md` / `toGAF`). Plant remains the Hermes-tarball import path.
 
@@ -146,9 +154,9 @@ Ask Hermes to call:
 - `farm_search` with `{ "query": "workbench" }`
 - `farm_get_stall` with `{ "slug": "workbench" }`
 - `farm_get_pack` with `{ "slug": "workbench" }`
-- `farm_plant` with `{ "slug": "scholastic-research" }` (optional `force`, `clean`, `dry_run`, `name`)
+- `farm_plant` with `{ "slug": "scholastic-research" }` (optional `force`, `clean`, `dry_run`, `name`, `recruit`)
 - `farm_reinstall` with `{ "slug": "workbench" }`
-- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `slug`, `packVersion`, `dryRun`, `apiKey`)
+- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `slug`, `packVersion`, `dryRun`; auth is env/config only)
 - `farm_update` with the same fields as `farm_post` plus required `slug`
 
 ## Test notes

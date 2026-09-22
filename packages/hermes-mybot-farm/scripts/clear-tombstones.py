@@ -12,15 +12,27 @@ directory entry is removed.
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+_spec = importlib.util.spec_from_file_location(
+    "hermes_mybot_farm_plugin_loader",
+    ROOT / "plugin_loader.py",
+)
+assert _spec and _spec.loader
+_loader = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_loader)
+_loader.ensure_plugin_package()
 
-from tombstones import clear_tombstones, deleted_dir, hermes_home, list_tombstones  # noqa: E402
+from hermes_mybot_farm.tombstones import (  # noqa: E402
+    clear_tombstones,
+    deleted_dir,
+    hermes_home,
+    list_tombstones,
+)
 
 
 def main(argv: list[str] | None = None) -> int:

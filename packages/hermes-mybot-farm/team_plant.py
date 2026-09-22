@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
 import uuid
 from pathlib import Path
@@ -11,19 +12,32 @@ from typing import Any, Callable
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 
-from hermes_bin import HermesCliError, run_hermes
-from team_md import render_team_md_for_plan
-from yamlutil import atomic_yaml_write, load_yaml_dict
+from .hermes_bin import HermesCliError, run_hermes
+from .team_md import render_team_md_for_plan
+from .yamlutil import atomic_yaml_write, load_yaml_dict
 
 GatewayRpc = Callable[[str, dict[str, Any]], dict[str, Any]]
 
 MEMORY_BEGIN = "<!-- mybot.farm team:{slug} -->"
 MEMORY_END = "<!-- /mybot.farm team:{slug} -->"
 WARM_BOT_DEFAULT = 3
+SAFE_NAME_RE = re.compile(r"^[a-z0-9_-]+$")
+
+
+def _safe_dir_name(value: str, *, what: str = "name") -> str:
+    text = str(value or "").strip().lower()
+    if not text or not SAFE_NAME_RE.fullmatch(text):
+        raise ValueError(f"unsafe {what}: must match [a-z0-9_-]+")
+    return text
 
 
 def profile_dir(home: Path, name: str) -> Path:
-    return home / "profiles" / name
+    clean = _safe_dir_name(name, what="profile name")
+    root = (home / "profiles").resolve()
+    dest = (root / clean).resolve()
+    if dest != root and root not in dest.parents:
+        raise ValueError(f"profile path escapes {root}")
+    return dest
 
 
 def bot_title_for_member(member) -> str:
@@ -173,10 +187,16 @@ def install_team_rules_skill(profile_path: Path, plan) -> bool:
             break
     if skill is None:
         return False
-    name = str(skill.get("name") or expected).strip() or expected
+    try:
+        name = _safe_dir_name(str(skill.get("name") or expected).strip() or expected, what="skill name")
+    except ValueError:
+        return False
     content = str(skill.get("content") or "").strip()
     description = str(skill.get("description") or f"Standing rules for {plan.title or plan.slug}.")
-    dest = profile_path / "skills" / name
+    skills_root = (profile_path / "skills").resolve()
+    dest = (skills_root / name).resolve()
+    if dest != skills_root and skills_root not in dest.parents:
+        return False
     dest.mkdir(parents=True, exist_ok=True)
     body = "\n".join(
         [
@@ -235,7 +255,7 @@ def http_gateway_rpc(method: str, params: dict[str, Any]) -> dict[str, Any]:
     payload = json.dumps(
         {"jsonrpc": "2.0", "id": str(uuid.uuid4()), "method": method, "params": params}
     ).encode("utf-8")
-    headers = {"Content-Type": "application/json", "User-Agent": "hermes-mybot-farm/0.2.0"}
+    headers = {"Content-Type": "application/json", "User-Agent": "hermes-mybot-farm/0.3.0"}
     token = (os.environ.get("HERMES_GATEWAY_TOKEN") or "").strip()
     if token:
         headers["Authorization"] = f"Bearer {token}"

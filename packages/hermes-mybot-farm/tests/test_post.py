@@ -3,7 +3,6 @@ from __future__ import annotations
 import io
 import json
 import os
-import sys
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -13,18 +12,17 @@ from unittest.mock import patch
 from urllib.error import HTTPError
 from urllib.request import Request
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+import plugin_import  # noqa: F401
 
-from farm_api import (  # noqa: E402
+from hermes_mybot_farm.farm_api import (  # noqa: E402
     FarmError,
     build_listing_payload,
     create_listing,
     resolve_api_key,
 )
-from farm_tools import farm_post, farm_update  # noqa: E402
-from cli import main  # noqa: E402
+from hermes_mybot_farm.farm_tools import farm_post, farm_update  # noqa: E402
+from hermes_mybot_farm.cli import main  # noqa: E402
+from hermes_mybot_farm.schemas import FARM_POST, FARM_UPDATE  # noqa: E402
 
 SAMPLE_PACK = {
     "format": "mybot.farm/agent-pack",
@@ -104,6 +102,8 @@ class PostTests(unittest.TestCase):
     def tearDown(self) -> None:
         os.environ.pop("MYBOT_FARM_API_KEY", None)
         os.environ.pop("MYBOT_FARM_URL", None)
+        os.environ.pop("MYBOT_FARM_PACK_DIR", None)
+        os.environ.pop("HERMES_HOME", None)
 
     def test_env_wins_over_config(self) -> None:
         os.environ["MYBOT_FARM_API_KEY"] = TEST_KEY
@@ -112,11 +112,21 @@ class PostTests(unittest.TestCase):
         self.assertEqual(len(resolved), len(TEST_KEY))
         self.assertNotEqual(resolved, "mbf_from_config_only")
 
-    def test_override_wins_over_env(self) -> None:
-        os.environ["MYBOT_FARM_API_KEY"] = "mbf_from_env_only________"
-        resolved = resolve_api_key({"apiKey": "mbf_cfg"}, override=TEST_KEY)
-        self.assertTrue(resolved.startswith("mbf_"))
-        self.assertEqual(len(resolved), len(TEST_KEY))
+    def test_tool_apikey_argument_is_ignored(self) -> None:
+        called = {"n": 0}
+
+        def boom(*_a, **_k):
+            called["n"] += 1
+            raise AssertionError("must not open a network connection")
+
+        with patch("hermes_mybot_farm.farm_api.urlopen", boom):
+            payload = json.loads(farm_post(_listing_args(apiKey=TEST_KEY)))
+        self.assertFalse(payload["ok"])
+        self.assertIn("seller API key required", payload["error"])
+        self.assertNotIn("or pass apiKey", payload["error"])
+        self.assertEqual(called["n"], 0)
+        self.assertNotIn("apiKey", FARM_POST["parameters"]["properties"])
+        self.assertNotIn("apiKey", FARM_UPDATE["parameters"]["properties"])
 
     def test_missing_key_fails_before_network(self) -> None:
         called = {"n": 0}
@@ -125,7 +135,7 @@ class PostTests(unittest.TestCase):
             called["n"] += 1
             raise AssertionError("must not open a network connection")
 
-        with patch("farm_api.urlopen", boom):
+        with patch("hermes_mybot_farm.farm_api.urlopen", boom):
             payload = json.loads(farm_post(_listing_args()))
         self.assertFalse(payload["ok"])
         self.assertIn("seller API key required", payload["error"])
@@ -139,8 +149,8 @@ class PostTests(unittest.TestCase):
             called["n"] += 1
             raise AssertionError("must not open a network connection")
 
-        with patch("farm_api.urlopen", boom):
-            payload = json.loads(farm_post(_listing_args(priceCents=199, apiKey=TEST_KEY)))
+        with patch("hermes_mybot_farm.farm_api.urlopen", boom):
+            payload = json.loads(farm_post(_listing_args(priceCents=199)))
         self.assertFalse(payload["ok"])
         self.assertIn("$2.00", payload["error"])
         self.assertEqual(called["n"], 0)
@@ -152,9 +162,9 @@ class PostTests(unittest.TestCase):
             called["n"] += 1
             raise AssertionError("must not open a network connection")
 
-        with patch("farm_api.urlopen", boom):
+        with patch("hermes_mybot_farm.farm_api.urlopen", boom):
             payload = json.loads(
-                farm_post(_listing_args(category="coding", apiKey=TEST_KEY))
+                farm_post(_listing_args(category="coding"))
             )
         self.assertFalse(payload["ok"])
         self.assertIn("exact farm label", payload["error"])
@@ -187,7 +197,7 @@ class PostTests(unittest.TestCase):
             return _FakeResponse(body)
 
         os.environ["MYBOT_FARM_API_KEY"] = TEST_KEY
-        with patch("farm_api.urlopen", fake_urlopen):
+        with patch("hermes_mybot_farm.farm_api.urlopen", fake_urlopen):
             payload = json.loads(farm_post(_listing_args()))
 
         self.assertTrue(payload["ok"])
@@ -223,7 +233,7 @@ class PostTests(unittest.TestCase):
                 BytesIO(err_body),
             )
 
-        with patch("farm_api.urlopen", fake_urlopen):
+        with patch("hermes_mybot_farm.farm_api.urlopen", fake_urlopen):
             with self.assertRaises(FarmError) as ctx:
                 create_listing(
                     "https://mybot.farm",
@@ -252,8 +262,9 @@ class PostTests(unittest.TestCase):
             called["n"] += 1
             raise AssertionError("dry-run must not POST")
 
-        with patch("farm_api.urlopen", boom):
-            payload = json.loads(farm_post(_listing_args(apiKey=TEST_KEY, dryRun=True)))
+        os.environ["MYBOT_FARM_API_KEY"] = TEST_KEY
+        with patch("hermes_mybot_farm.farm_api.urlopen", boom):
+            payload = json.loads(farm_post(_listing_args(dryRun=True)))
         self.assertTrue(payload["ok"])
         self.assertTrue(payload["dryRun"])
         self.assertIn("not posted", payload["text"])
@@ -285,7 +296,7 @@ class PostTests(unittest.TestCase):
             os.environ["MYBOT_FARM_API_KEY"] = TEST_KEY
             buf = io.StringIO()
             err = io.StringIO()
-            with patch("farm_api.urlopen", fake_urlopen):
+            with patch("hermes_mybot_farm.farm_api.urlopen", fake_urlopen):
                 with redirect_stdout(buf), redirect_stderr(err):
                     code = main(
                         [
@@ -349,7 +360,7 @@ class PostTests(unittest.TestCase):
         self.assertEqual(data["payload"]["priceCents"], 0)
 
     def test_farm_update_requires_slug(self) -> None:
-        payload = json.loads(farm_update(_listing_args(apiKey=TEST_KEY)))
+        payload = json.loads(farm_update(_listing_args()))
         self.assertFalse(payload["ok"])
         self.assertIn("slug required", payload["error"])
 
@@ -375,7 +386,7 @@ class PostTests(unittest.TestCase):
             return _FakeResponse(body, status=200)
 
         os.environ["MYBOT_FARM_API_KEY"] = TEST_KEY
-        with patch("farm_api.urlopen", fake_urlopen):
+        with patch("hermes_mybot_farm.farm_api.urlopen", fake_urlopen):
             payload = json.loads(
                 farm_update(_listing_args(slug="smoke-bot", packVersion=2))
             )
@@ -395,7 +406,7 @@ class PostTests(unittest.TestCase):
             called["n"] += 1
             raise AssertionError("dry-run must not POST")
 
-        with patch("farm_api.urlopen", boom):
+        with patch("hermes_mybot_farm.farm_api.urlopen", boom):
             payload = json.loads(
                 farm_post(
                     _listing_args(
@@ -404,7 +415,6 @@ class PostTests(unittest.TestCase):
                         title="Two-agent smoke team",
                         description="Minimal free team listing posted with a seller API key.",
                         pack=dict(SAMPLE_TEAM_PACK),
-                        apiKey=TEST_KEY,
                         dryRun=True,
                     )
                 )
@@ -440,7 +450,7 @@ class PostTests(unittest.TestCase):
             return _FakeResponse(body)
 
         os.environ["MYBOT_FARM_API_KEY"] = TEST_KEY
-        with patch("farm_api.urlopen", fake_urlopen):
+        with patch("hermes_mybot_farm.farm_api.urlopen", fake_urlopen):
             payload = json.loads(
                 farm_post(
                     _listing_args(
@@ -465,7 +475,7 @@ class PostTests(unittest.TestCase):
 
     def test_kind_team_rejects_agent_pack(self) -> None:
         payload = json.loads(
-            farm_post(_listing_args(kind="team", apiKey=TEST_KEY, dryRun=True))
+            farm_post(_listing_args(kind="team", dryRun=True))
         )
         self.assertFalse(payload["ok"])
         self.assertIn("team-pack", payload["error"])
@@ -475,13 +485,96 @@ class PostTests(unittest.TestCase):
             farm_post(
                 _listing_args(
                     pack={**SAMPLE_PACK, "members": SAMPLE_TEAM_PACK["members"]},
-                    apiKey=TEST_KEY,
                     dryRun=True,
                 )
             )
         )
         self.assertFalse(payload["ok"])
         self.assertIn("kind \"team\"", payload["error"])
+
+    def test_missing_pack_format_rejected(self) -> None:
+        pack = dict(SAMPLE_PACK)
+        del pack["format"]
+        payload = json.loads(farm_post(_listing_args(pack=pack, dryRun=True)))
+        self.assertFalse(payload["ok"])
+        self.assertIn("agent-pack", payload["error"])
+
+    def test_wrong_pack_format_rejected(self) -> None:
+        pack = {**SAMPLE_PACK, "format": "openclaw/bundle"}
+        payload = json.loads(farm_post(_listing_args(pack=pack, dryRun=True)))
+        self.assertFalse(payload["ok"])
+        self.assertIn("agent-pack", payload["error"])
+
+    def test_pack_path_rejects_arbitrary_filesystem(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            secret = Path(raw) / "auth.json"
+            secret.write_text(json.dumps(SAMPLE_PACK), encoding="utf-8")
+            args = dict(LISTING_FIELDS)
+            args["packPath"] = str(secret)
+            args["dryRun"] = True
+            payload = json.loads(farm_post(args))
+        self.assertFalse(payload["ok"])
+        self.assertIn("packPath must be under", payload["error"])
+
+    def test_pack_path_allows_hermes_farm_dir(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            os.environ["HERMES_HOME"] = raw
+            dest = Path(raw) / "farm" / "smoke.json"
+            dest.parent.mkdir(parents=True)
+            dest.write_text(json.dumps(SAMPLE_PACK), encoding="utf-8")
+            args = dict(LISTING_FIELDS)
+            args["packPath"] = str(dest)
+            args["dryRun"] = True
+            payload = json.loads(farm_post(args))
+        self.assertTrue(payload["ok"], payload)
+        self.assertTrue(payload["dryRun"])
+
+    def test_pack_path_allows_env_pack_dir(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            os.environ["MYBOT_FARM_PACK_DIR"] = raw
+            dest = Path(raw) / "smoke.json"
+            dest.write_text(json.dumps(SAMPLE_PACK), encoding="utf-8")
+            args = dict(LISTING_FIELDS)
+            args["packPath"] = str(dest)
+            args["dryRun"] = True
+            payload = json.loads(farm_post(args))
+        self.assertTrue(payload["ok"], payload)
+
+    def test_pack_path_rejects_non_json(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            os.environ["MYBOT_FARM_PACK_DIR"] = raw
+            dest = Path(raw) / "smoke.tar.gz"
+            dest.write_bytes(b"not-json")
+            args = dict(LISTING_FIELDS)
+            args["packPath"] = str(dest)
+            args["dryRun"] = True
+            payload = json.loads(farm_post(args))
+        self.assertFalse(payload["ok"])
+        self.assertIn(".json", payload["error"])
+
+    def test_plugin_config_key_used_when_env_missing(self) -> None:
+        captured: dict[str, object] = {}
+        body = json.dumps(
+            {
+                "ok": True,
+                "slug": "smoke-bot",
+                "kind": "agent",
+                "pagePath": "/agents/smoke-bot",
+                "created": True,
+            }
+        ).encode("utf-8")
+
+        def fake_urlopen(req: Request, timeout=None):
+            captured["auth"] = req.get_header("Authorization") or ""
+            return _FakeResponse(body)
+
+        with patch("hermes_mybot_farm.farm_api.urlopen", fake_urlopen):
+            payload = json.loads(
+                farm_post(_listing_args(), plugin_config={"apiKey": TEST_KEY})
+            )
+        self.assertTrue(payload["ok"])
+        self.assertTrue(str(captured.get("auth", "")).startswith("Bearer mbf_"))
+        self.assertNotIn(TEST_KEY, json.dumps(payload))
 
 
 if __name__ == "__main__":

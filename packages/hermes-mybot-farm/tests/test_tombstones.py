@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+import plugin_import  # noqa: F401
 
-from tombstones import clear_tombstones, deleted_dir, hermes_home, list_tombstones
+from hermes_mybot_farm.tombstones import (  # noqa: E402
+    clear_tombstones,
+    deleted_dir,
+    hermes_home,
+    list_tombstones,
+)
 
 
 class TombstoneTests(unittest.TestCase):

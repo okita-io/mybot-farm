@@ -7,10 +7,10 @@ import json
 import sys
 from typing import Any
 
-from farm_api import FarmError
-from hermes_bin import HermesCliError
-from plant import PlantError
-from farm_tools import (
+from .farm_api import FarmError
+from .hermes_bin import HermesCliError
+from .plant import PlantError
+from .farm_tools import (
     clear_named_tombstones,
     farm_get_pack,
     farm_get_stall,
@@ -92,8 +92,6 @@ _VALUE_FLAGS = {
     "--priceCents": ("priceCents", int),
     "--pack": ("packPath", str),
     "--pack-path": ("packPath", str),
-    "--api-key": ("apiKey", str),
-    "--apiKey": ("apiKey", str),
     "--slug": ("slug", str),
     "--pack-version": ("packVersion", int),
     "--packVersion": ("packVersion", int),
@@ -136,10 +134,10 @@ def usage() -> str:
   farm-plant reinstall <slug> [--force] [--clean] [--recruit] [--dry-run]
   farm-plant post --kind agent|team --name NAME --title TITLE --description DESC
                  --category LABEL --price-cents N --pack pack.json
-                 [--slug SLUG] [--pack-version N] [--api-key KEY] [--dry-run] [--json]
+                 [--slug SLUG] [--pack-version N] [--dry-run] [--json]
   farm-plant update --slug SLUG --kind agent|team --name NAME --title TITLE --description DESC
                  --category LABEL --price-cents N --pack pack.json
-                 [--pack-version N] [--api-key KEY] [--dry-run] [--json]
+                 [--pack-version N] [--dry-run] [--json]
   farm-plant clear-tombstones [name ...]
 
 Env:
@@ -233,6 +231,17 @@ def _dispatch(argv: list[str], *, as_text: bool) -> int:
                 file=sys.stderr,
             )
             return 1
+        from pathlib import Path
+
+        file_path = Path(str(pack_path)).expanduser()
+        if file_path.suffix.lower() != ".json":
+            print("pack must be a .json GAF file", file=sys.stderr)
+            return 1
+        try:
+            pack = json.loads(file_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"cannot read pack file: {exc}", file=sys.stderr)
+            return 1
         args = {
             "kind": flags["kind"],
             "name": flags["name"],
@@ -240,12 +249,10 @@ def _dispatch(argv: list[str], *, as_text: bool) -> int:
             "description": flags["description"],
             "category": flags["category"],
             "priceCents": flags["priceCents"],
-            "packPath": pack_path,
+            "pack": pack,
         }
         if flags.get("dry_run"):
             args["dryRun"] = True
-        if flags.get("apiKey"):
-            args["apiKey"] = flags["apiKey"]
         if flags.get("slug"):
             args["slug"] = flags["slug"]
         if "packVersion" in flags:

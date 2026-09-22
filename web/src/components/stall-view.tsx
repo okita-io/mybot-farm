@@ -216,9 +216,10 @@ export async function StallView({
             <Link href="/how-to" className="underline-offset-4 hover:underline">
               How-To
             </Link>{" "}
-            covers Grok Bot (this GAF prompt) and Hermes (a scrubbed{" "}
+            covers Grok Bot (this GAF prompt) and Hermes (Desktop{" "}
+            <strong>Farm → Recruit</strong>, or a scrubbed{" "}
             <code className="font-mono text-[0.9em] text-foreground">.tar.gz</code>
-            , or the{" "}
+            via the{" "}
             <Link href="/install/hermes" className="underline-offset-4 hover:underline">
               Hermes mybot-farm plugin
             </Link>
