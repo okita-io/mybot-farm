@@ -25,6 +25,14 @@ export function SiteFooter() {
                   {link.label}
                 </Link>
               ))}
+              <a
+                href="https://ko-fi.com/alexokita"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+              >
+                Support on Ko-fi
+              </a>
               <span className="font-mono text-xs text-muted-foreground">
                 {site.url.replace("https://", "")}
               </span>

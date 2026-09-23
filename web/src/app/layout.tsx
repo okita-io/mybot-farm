@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { JsonLd } from "@/components/json-ld";
+import { KofiWidget } from "@/components/kofi-widget";
 import { MobileSponsors, SponsorRail } from "@/components/sponsor-rails";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -102,6 +103,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <SponsorRail side="right" />
             </div>
             <MobileSponsors />
+            <KofiWidget />
             <Analytics />
           </ThemeProvider>
         </ClerkProvider>
