@@ -1,48 +1,26 @@
 import { Resend } from "resend";
+import { shouldAddExistingContactToSegment } from "./newsletter-consent.ts";
 import {
   parseSubscribeBody,
   type SignupSource,
 } from "./newsletter-parse.ts";
+import {
+  checkSubscribeRateLimit,
+  clientIp,
+  resetSubscribeRateLimitForTests,
+} from "./newsletter-rate.ts";
 
-export { parseSubscribeBody };
+export { parseSubscribeBody, shouldAddExistingContactToSegment };
 export type { SignupSource };
-
-const RATE_WINDOW_MS = 10 * 60 * 1000;
-const RATE_MAX = 5;
-
-const hitsByIp = new Map<string, number[]>();
-
-export type RateLimitResult =
-  | { ok: true }
-  | { ok: false; retryAfter: number };
+export {
+  checkSubscribeRateLimit,
+  clientIp,
+  resetSubscribeRateLimitForTests,
+};
 
 export type SubscribeResult =
   | { ok: true }
   | { ok: false; error: "misconfigured" | "upstream" };
-
-export function clientIp(request: Request) {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const first = forwarded.split(",")[0]?.trim();
-    if (first) {
-      return first;
-    }
-  }
-  return request.headers.get("x-real-ip")?.trim() || "unknown";
-}
-
-export function checkSubscribeRateLimit(ip: string, now = Date.now()): RateLimitResult {
-  const windowStart = now - RATE_WINDOW_MS;
-  const previous = (hitsByIp.get(ip) ?? []).filter((stamp) => stamp > windowStart);
-  if (previous.length >= RATE_MAX) {
-    const retryAfter = Math.max(1, Math.ceil((previous[0]! + RATE_WINDOW_MS - now) / 1000));
-    hitsByIp.set(ip, previous);
-    return { ok: false, retryAfter };
-  }
-  previous.push(now);
-  hitsByIp.set(ip, previous);
-  return { ok: true };
-}
 
 function newsletterConfig() {
   const apiKey = process.env.RESEND_API_KEY?.trim() ?? "";
@@ -99,14 +77,24 @@ export async function subscribeFarmNotes(
     return { ok: false, error: "upstream" };
   }
 
+  // Never clear an existing unsubscribe flag — update properties only.
   const updated = await resend.contacts.update({
     email,
-    unsubscribed: false,
     properties,
   });
   if (updated.error) {
     console.error("Farm Notes subscribe update failed:", updated.error.name);
     return { ok: false, error: "upstream" };
+  }
+
+  const existing = await resend.contacts.get({ email });
+  if (existing.error) {
+    console.error("Farm Notes subscribe get failed:", existing.error.name);
+    return { ok: false, error: "upstream" };
+  }
+
+  if (!shouldAddExistingContactToSegment({ unsubscribed: existing.data.unsubscribed })) {
+    return { ok: true };
   }
 
   const inSegment = await addToSegment(resend, email, config.segmentId);

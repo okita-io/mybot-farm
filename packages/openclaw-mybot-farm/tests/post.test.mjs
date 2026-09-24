@@ -85,11 +85,15 @@ test("env wins over config", () => {
   assert.notEqual(resolved, "mbf_from_config_only");
 });
 
-test("override wins over env", () => {
+test("tool argument override is ignored", () => {
   process.env.MYBOT_FARM_API_KEY = "mbf_from_env_only________";
   const resolved = api.resolveApiKey({ apiKey: "mbf_cfg" }, TEST_KEY);
-  assert.equal(resolved.startsWith("mbf_"), true);
-  assert.equal(resolved.length, TEST_KEY.length);
+  assert.equal(resolved, "mbf_from_env_only________");
+});
+
+test("config is used when env is unset", () => {
+  const resolved = api.resolveApiKey({ apiKey: TEST_KEY });
+  assert.equal(resolved, TEST_KEY);
 });
 
 test("missing key fails before network", async () => {
@@ -118,7 +122,10 @@ test("invalid price fails before network", async () => {
     throw new Error("must not open a network connection");
   };
   try {
-    const payload = await postListing({ args: listingArgs({ priceCents: 199, apiKey: TEST_KEY }) });
+    const payload = await postListing({
+      args: listingArgs({ priceCents: 199 }),
+      pluginConfig: { apiKey: TEST_KEY },
+    });
     assert.equal(payload.ok, false);
     assert.match(payload.error, /\$2\.00/);
     assert.equal(called, 0);
@@ -136,7 +143,8 @@ test("invalid category fails before network", async () => {
   };
   try {
     const payload = await postListing({
-      args: listingArgs({ category: "coding", apiKey: TEST_KEY }),
+      args: listingArgs({ category: "coding" }),
+      pluginConfig: { apiKey: TEST_KEY },
     });
     assert.equal(payload.ok, false);
     assert.match(payload.error, /exact farm label/);
@@ -245,7 +253,10 @@ test("dry-run redacts key and skips post", async () => {
     throw new Error("dry-run must not POST");
   };
   try {
-    const payload = await postListing({ args: listingArgs({ apiKey: TEST_KEY, dryRun: true }) });
+    const payload = await postListing({
+      args: listingArgs({ dryRun: true }),
+      pluginConfig: { apiKey: TEST_KEY },
+    });
     assert.equal(payload.ok, true);
     assert.equal(payload.dryRun, true);
     assert.match(payload.text, /not posted/);
@@ -351,7 +362,10 @@ test("CLI post --json dry-run", async () => {
 });
 
 test("farm_update requires slug", async () => {
-  const payload = await updateListing({ args: listingArgs({ apiKey: TEST_KEY }) });
+  const payload = await updateListing({
+    args: listingArgs(),
+    pluginConfig: { apiKey: TEST_KEY },
+  });
   assert.equal(payload.ok, false);
   assert.match(payload.error, /slug required/);
 });
@@ -410,9 +424,9 @@ test("team pack dry-run", async () => {
         title: "Two-agent smoke team",
         description: "Minimal free team listing posted with a seller API key.",
         pack: { ...SAMPLE_TEAM_PACK },
-        apiKey: TEST_KEY,
         dryRun: true,
       }),
+      pluginConfig: { apiKey: TEST_KEY },
     });
     assert.equal(payload.ok, true);
     assert.equal(payload.dryRun, true);
@@ -427,7 +441,8 @@ test("team pack dry-run", async () => {
 
 test("kind team rejects agent-pack", async () => {
   const payload = await postListing({
-    args: listingArgs({ kind: "team", apiKey: TEST_KEY, dryRun: true }),
+    args: listingArgs({ kind: "team", dryRun: true }),
+    pluginConfig: { apiKey: TEST_KEY },
   });
   assert.equal(payload.ok, false);
   assert.match(payload.error, /team-pack/);

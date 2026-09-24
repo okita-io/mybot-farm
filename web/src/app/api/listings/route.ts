@@ -147,6 +147,7 @@ export async function POST(request: Request) {
     const listing = await updatePublishedListing({
       listingId: existing.id,
       sellerUserId: user.id,
+      slug: existing.slug,
       kind: value.kind,
       name: value.name,
       title: value.title,
@@ -154,6 +155,7 @@ export async function POST(request: Request) {
       category: value.category,
       priceCents: value.priceCents,
       pack: finalized.pack,
+      previousPack: existing.pack as FarmPack,
       source,
       summary: published.summary,
       commitSha: published.commitSha,

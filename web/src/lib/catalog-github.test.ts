@@ -4,6 +4,7 @@ import {
   catalogPackPath,
   getCatalogFileSha,
   putCatalogPack,
+  revertCatalogPack,
 } from "./catalog-github.ts";
 
 const originalFetch = globalThis.fetch;
@@ -57,9 +58,54 @@ describe("catalog github", () => {
     assert.equal(JSON.parse(calls[1]?.body ?? "{}").branch, "main");
   });
 
-  it("returns undefined sha for a missing file", async () => {
+  it("deletes a new file when reverting a create", async () => {
     process.env.CATALOG_GITHUB_TOKEN = "test-token";
-    globalThis.fetch = (async () => new Response("Not Found", { status: 404 })) as typeof fetch;
-    assert.equal(await getCatalogFileSha("agents/missing.json"), undefined);
+    const calls: { method?: string; body?: string }[] = [];
+    globalThis.fetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+      calls.push({
+        method: init?.method,
+        body: typeof init?.body === "string" ? init.body : undefined,
+      });
+      if (!init?.method || init.method === "GET") {
+        return Response.json({ sha: "blob-sha" });
+      }
+      return Response.json({ commit: { sha: "revert-commit" } });
+    }) as typeof fetch;
+
+    const result = await revertCatalogPack({
+      kind: "agent",
+      slug: "smoke-bot",
+      previousPack: null,
+    });
+
+    assert.equal(result.commitSha, "revert-commit");
+    assert.equal(calls.some((call) => call.method === "DELETE"), true);
+  });
+
+  it("restores the previous pack when reverting an update", async () => {
+    process.env.CATALOG_GITHUB_TOKEN = "test-token";
+    let putBody: string | undefined;
+    globalThis.fetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+      if (!init?.method || init.method === "GET") {
+        return Response.json({ sha: "blob-sha" });
+      }
+      putBody = typeof init?.body === "string" ? init.body : undefined;
+      return Response.json({ commit: { sha: "restore-commit" } });
+    }) as typeof fetch;
+
+    const previous = { format: "mybot.farm/agent-pack", packVersion: 1 };
+    const result = await revertCatalogPack({
+      kind: "agent",
+      slug: "smoke-bot",
+      previousPack: previous,
+    });
+
+    assert.equal(result.commitSha, "restore-commit");
+    const parsed = JSON.parse(putBody ?? "{}");
+    assert.equal(parsed.sha, "blob-sha");
+    const restored = JSON.parse(
+      Buffer.from(parsed.content, "base64").toString("utf8"),
+    );
+    assert.equal(restored.packVersion, 1);
   });
 });

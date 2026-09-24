@@ -9,7 +9,7 @@ import {
   type CommentVote,
   type StallComment,
 } from "@/lib/comment-text";
-import { getDb, hasDatabase } from "@/lib/db";
+import { getDb, hasDatabase, withTransaction } from "@/lib/db";
 import {
   stallCommentFlags,
   stallComments,
@@ -231,6 +231,15 @@ async function getLiveComment(slug: string, commentId: string) {
   return row ?? null;
 }
 
+function isUniqueViolation(error: unknown) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    (error as { code: unknown }).code === "23505"
+  );
+}
+
 export async function voteOnStallComment(input: {
   slug: string;
   commentId: string;
@@ -240,72 +249,113 @@ export async function voteOnStallComment(input: {
   | { ok: true; upCount: number; downCount: number; vote: CommentVote }
   | { ok: false; error: "not_found" | "own_comment" | "failed"; message: string }
 > {
-  const db = getDb();
-  const comment = await getLiveComment(input.slug, input.commentId);
-  if (!comment) {
-    return { ok: false, error: "not_found", message: "That comment is gone." };
-  }
-  if (comment.userId === input.userId) {
-    return {
-      ok: false,
-      error: "own_comment",
-      message: "You cannot vote on your own comment.",
-    };
-  }
-
-  const [existing] = await db
-    .select()
-    .from(stallCommentVotes)
-    .where(
-      and(
-        eq(stallCommentVotes.commentId, input.commentId),
-        eq(stallCommentVotes.userId, input.userId),
-      ),
-    )
-    .limit(1);
-
-  const current: CommentVote =
-    existing?.value === 1 || existing?.value === -1 ? existing.value : 0;
-  const next = nextCommentVote(current, input.value);
-  const delta = voteDeltas(current, next);
-  const now = new Date();
-
   try {
-    if (!existing && next !== 0) {
-      await db.insert(stallCommentVotes).values({
-        commentId: input.commentId,
-        userId: input.userId,
-        value: next,
-        createdAt: now,
-      });
-    } else if (existing && next === 0) {
-      await db.delete(stallCommentVotes).where(eq(stallCommentVotes.id, existing.id));
-    } else if (existing && next !== 0) {
-      await db
-        .update(stallCommentVotes)
-        .set({ value: next })
-        .where(eq(stallCommentVotes.id, existing.id));
-    }
+    return await withTransaction(async (tx) => {
+      const [comment] = await tx
+        .select()
+        .from(stallComments)
+        .where(
+          and(
+            eq(stallComments.id, input.commentId),
+            eq(stallComments.slug, input.slug),
+            isNull(stallComments.deletedAt),
+          ),
+        )
+        .for("update")
+        .limit(1);
 
-    const [updated] = await db
-      .update(stallComments)
-      .set({
-        upCount: sql`greatest(${stallComments.upCount} + ${delta.up}, 0)`,
-        downCount: sql`greatest(${stallComments.downCount} + ${delta.down}, 0)`,
-      })
-      .where(eq(stallComments.id, input.commentId))
-      .returning({
-        upCount: stallComments.upCount,
-        downCount: stallComments.downCount,
-      });
+      if (!comment) {
+        return {
+          ok: false as const,
+          error: "not_found" as const,
+          message: "That comment is gone.",
+        };
+      }
+      if (comment.userId === input.userId) {
+        return {
+          ok: false as const,
+          error: "own_comment" as const,
+          message: "You cannot vote on your own comment.",
+        };
+      }
 
-    return {
-      ok: true,
-      upCount: updated?.upCount ?? Math.max(comment.upCount + delta.up, 0),
-      downCount: updated?.downCount ?? Math.max(comment.downCount + delta.down, 0),
-      vote: next,
-    };
+      const [existing] = await tx
+        .select()
+        .from(stallCommentVotes)
+        .where(
+          and(
+            eq(stallCommentVotes.commentId, input.commentId),
+            eq(stallCommentVotes.userId, input.userId),
+          ),
+        )
+        .limit(1);
+
+      const current: CommentVote =
+        existing?.value === 1 || existing?.value === -1 ? existing.value : 0;
+      const next = nextCommentVote(current, input.value);
+      const delta = voteDeltas(current, next);
+      const now = new Date();
+
+      if (!existing && next !== 0) {
+        await tx.insert(stallCommentVotes).values({
+          commentId: input.commentId,
+          userId: input.userId,
+          value: next,
+          createdAt: now,
+        });
+      } else if (existing && next === 0) {
+        await tx.delete(stallCommentVotes).where(eq(stallCommentVotes.id, existing.id));
+      } else if (existing && next !== 0) {
+        await tx
+          .update(stallCommentVotes)
+          .set({ value: next })
+          .where(eq(stallCommentVotes.id, existing.id));
+      }
+
+      const [updated] = await tx
+        .update(stallComments)
+        .set({
+          upCount: sql`greatest(${stallComments.upCount} + ${delta.up}, 0)`,
+          downCount: sql`greatest(${stallComments.downCount} + ${delta.down}, 0)`,
+        })
+        .where(eq(stallComments.id, input.commentId))
+        .returning({
+          upCount: stallComments.upCount,
+          downCount: stallComments.downCount,
+        });
+
+      return {
+        ok: true as const,
+        upCount: updated?.upCount ?? Math.max(comment.upCount + delta.up, 0),
+        downCount: updated?.downCount ?? Math.max(comment.downCount + delta.down, 0),
+        vote: next,
+      };
+    });
   } catch (error) {
+    if (isUniqueViolation(error)) {
+      const comment = await getLiveComment(input.slug, input.commentId);
+      if (comment) {
+        const db = getDb();
+        const [existing] = await db
+          .select()
+          .from(stallCommentVotes)
+          .where(
+            and(
+              eq(stallCommentVotes.commentId, input.commentId),
+              eq(stallCommentVotes.userId, input.userId),
+            ),
+          )
+          .limit(1);
+        const vote: CommentVote =
+          existing?.value === 1 || existing?.value === -1 ? existing.value : 0;
+        return {
+          ok: true,
+          upCount: comment.upCount,
+          downCount: comment.downCount,
+          vote,
+        };
+      }
+    }
     console.error("voteOnStallComment failed:", error);
     return { ok: false, error: "failed", message: "Could not save that vote." };
   }

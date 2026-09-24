@@ -123,6 +123,7 @@ export async function PATCH(
   const listing = await updatePublishedListing({
     listingId: id,
     sellerUserId: user.id,
+    slug: existing.slug,
     kind: value.kind,
     name: value.name,
     title: value.title,
@@ -130,6 +131,7 @@ export async function PATCH(
     category: value.category,
     priceCents: value.priceCents,
     pack: finalized.pack,
+    previousPack: existing.pack as FarmPack,
     source: readApiKeyFromRequest(request) ? "api_key" : "session",
     summary: published.summary,
     commitSha: published.commitSha,

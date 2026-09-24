@@ -1,5 +1,5 @@
 import { desc, eq } from "drizzle-orm";
-import { getDb, hasDatabase } from "@/lib/db";
+import { getDb, hasDatabase, type DbLike } from "@/lib/db";
 import { stallRevisions } from "@/lib/db/schema";
 import type { FarmPack } from "@/lib/pack-files";
 
@@ -14,19 +14,21 @@ export type StallRevision = {
   createdAt: string;
 };
 
-export async function insertStallRevision(input: {
-  listingId: string;
-  slug: string;
-  packVersion: number;
-  source: StallRevisionSource;
-  summary: string;
-  commitSha?: string | null;
-  githubPath?: string | null;
-  actorUserId?: string | null;
-  pack: FarmPack;
-}) {
-  const db = getDb();
-  const [row] = await db
+export async function insertStallRevision(
+  input: {
+    listingId: string;
+    slug: string;
+    packVersion: number;
+    source: StallRevisionSource;
+    summary: string;
+    commitSha?: string | null;
+    githubPath?: string | null;
+    actorUserId?: string | null;
+    pack: FarmPack;
+  },
+  executor: DbLike = getDb(),
+) {
+  const [row] = await executor
     .insert(stallRevisions)
     .values({
       listingId: input.listingId,

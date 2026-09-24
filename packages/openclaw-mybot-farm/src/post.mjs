@@ -69,9 +69,7 @@ function errPayload(message, extra = {}) {
 export async function postListing({ args, pluginConfig } = { args: {} }) {
   const cfg = pluginConfig && typeof pluginConfig === "object" ? pluginConfig : {};
   const dryRun = truthy("dryRun" in args ? args.dryRun : args.dry_run);
-  const override = args.apiKey != null ? args.apiKey : args.api_key;
-  const overrideS = typeof override === "string" ? override.trim() : undefined;
-  const apiKey = resolveApiKey(cfg, overrideS);
+  const apiKey = resolveApiKey(cfg);
 
   let payload;
   try {
@@ -124,7 +122,7 @@ export async function postListing({ args, pluginConfig } = { args: {} }) {
 
   if (!apiKey) {
     return errPayload(
-      "seller API key required (set MYBOT_FARM_API_KEY, plugin config apiKey, or pass apiKey). Create a key at https://mybot.farm/sell — see docs/api-keys.md",
+      "seller API key required (set MYBOT_FARM_API_KEY or plugin config apiKey). Create a key at https://mybot.farm/sell — see docs/api-keys.md",
     );
   }
 
