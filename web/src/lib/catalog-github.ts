@@ -140,6 +140,91 @@ export async function putCatalogPack(input: {
   return { path, commitSha, contentSha };
 }
 
+/**
+ * Undo a catalog publish after the database write fails.
+ * New files are deleted; updates restore the previous pack blob.
+ */
+export async function revertCatalogPack(input: {
+  kind: StallKind;
+  slug: string;
+  previousPack: FarmPack | null;
+}): Promise<{ path: string; commitSha: string }> {
+  const { token, owner, repo, branch } = requireToken();
+  const path = catalogPackPath(input.kind, input.slug);
+  const sha = await getCatalogFileSha(path);
+  if (!sha) {
+    throw new CatalogGithubError(
+      "catalog_revert_failed",
+      "Catalog file is already gone; nothing to revert.",
+      502,
+    );
+  }
+
+  if (!input.previousPack) {
+    const response = await fetch(apiUrl(owner, repo, path), {
+      method: "DELETE",
+      headers: {
+        ...authHeaders(token),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: `revert ${input.slug}: drop orphaned catalog publish`,
+        branch,
+        sha,
+      }),
+    });
+
+    if (!response.ok) {
+      throw await githubError(response);
+    }
+
+    const body = (await response.json()) as { commit?: { sha?: string } };
+    const commitSha = body.commit?.sha;
+    if (!commitSha) {
+      throw new CatalogGithubError(
+        "catalog_revert_failed",
+        "GitHub did not return a revert commit SHA.",
+        502,
+      );
+    }
+    return { path, commitSha };
+  }
+
+  const content = Buffer.from(
+    `${JSON.stringify(input.previousPack, null, 2)}\n`,
+    "utf8",
+  ).toString("base64");
+
+  const response = await fetch(apiUrl(owner, repo, path), {
+    method: "PUT",
+    headers: {
+      ...authHeaders(token),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message: `revert ${input.slug}: restore previous pack after DB failure`,
+      content,
+      branch,
+      sha,
+    }),
+  });
+
+  if (!response.ok) {
+    throw await githubError(response);
+  }
+
+  const body = (await response.json()) as { commit?: { sha?: string } };
+  const commitSha = body.commit?.sha;
+  if (!commitSha) {
+    throw new CatalogGithubError(
+      "catalog_revert_failed",
+      "GitHub did not return a revert commit SHA.",
+      502,
+    );
+  }
+  return { path, commitSha };
+}
+
 async function githubError(response: Response) {
   const text = await response.text().catch(() => "");
   let message = `GitHub catalog publish failed (${response.status}).`;

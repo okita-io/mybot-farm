@@ -1,10 +1,25 @@
 import crypto from "node:crypto";
 import Stripe from "stripe";
 import { Mppx, stripe } from "mppx/server";
+import {
+  buildTempoConnectPaymentIntent,
+  parseTempoSettlementMetadata,
+} from "@/lib/mpp-settlement";
 
 export const MPP_MIN_USD = "0.50";
 export const MPP_PRICE_USD = MPP_MIN_USD;
 export const MPP_PRICE_DESCRIPTION = "mybot.farm paid stall download";
+
+export { usdAmountFromCents } from "@/lib/mpp-amount";
+
+export {
+  buildTempoConnectPaymentIntent,
+  parseTempoSettlementMetadata,
+  tempoRawAmountToCents,
+  tempoSettlementMetadata,
+  TEMPO_APP_FEE_META,
+  TEMPO_CONNECT_ACCOUNT_META,
+} from "@/lib/mpp-settlement";
 
 function requiredEnv(name: string) {
   const value = process.env[name];
@@ -26,8 +41,65 @@ export function hasMppConfig() {
   );
 }
 
-export function usdAmountFromCents(cents: number) {
-  return (Math.max(0, cents) / 100).toFixed(2);
+function createTempoConnectRecorder(client: Stripe) {
+  return async (params: {
+    receipt?: { reference?: string } | null;
+    request?: { amount?: string } | null;
+    requestInput?: {
+      paymentIntentOptions?:
+        | { metadata?: Record<string, string> }
+        | ((...args: unknown[]) => unknown)
+        | undefined;
+    };
+  }) => {
+    const reference = params.receipt?.reference;
+    const rawAmount = params.request?.amount;
+    if (!reference || !rawAmount) {
+      return;
+    }
+
+    const optionsInput = params.requestInput?.paymentIntentOptions;
+    const options =
+      typeof optionsInput === "function" ? undefined : optionsInput;
+    const metadata = {
+      product: "mybot.farm",
+      billed: "stall_download",
+      ...(options?.metadata ?? {}),
+    };
+    const settlement = parseTempoSettlementMetadata(metadata);
+    if (!settlement) {
+      console.error(
+        "[mpp] tempo payment missing connect settlement metadata; skipping PI recording",
+      );
+      return;
+    }
+
+    const built = buildTempoConnectPaymentIntent({
+      rawAmount,
+      reference,
+      metadata,
+      connectAccountId: settlement.connectAccountId,
+      applicationFeeCents: settlement.applicationFeeCents,
+    });
+
+    if (built.amountCents < 1) {
+      console.warn(
+        `[mpp] skipping Tempo PI: ${rawAmount} raw units rounds to ${built.amountCents} cents`,
+      );
+      return;
+    }
+
+    try {
+      await client.paymentIntents.create(
+        built.createParams as Stripe.PaymentIntentCreateParams,
+        {
+          idempotencyKey: built.idempotencyKey,
+        },
+      );
+    } catch (error) {
+      console.error("[mpp] failed to record Tempo payment with Connect:", error);
+    }
+  };
 }
 
 function createMppx() {
@@ -45,12 +117,13 @@ function createMppx() {
     },
   });
 
+  const depositAddress = requiredEnv("TEMPO_DEPOSIT_ADDRESS");
   const stripeMachinePayments = stripe.create({
     client: stripeClient,
     networkId: requiredEnv("STRIPE_PROFILE_ID"),
     livemode: !secretKey.includes("_test_"),
     depositAddresses: {
-      tempo: requiredEnv("TEMPO_DEPOSIT_ADDRESS"),
+      tempo: depositAddress,
     },
     metadata: {
       product: "mybot.farm",
@@ -58,8 +131,16 @@ function createMppx() {
     },
   });
 
+  // Override Tempo onPaymentSuccess so Connect destination/fee land on the
+  // recorded crypto PaymentIntent (mppx only applies create-time connect).
+  // Runtime accepts onPaymentSuccess via ...rest; published types omit it.
+  const tempoMethod = stripeMachinePayments.tempo.charge({
+    recipient: depositAddress as never,
+    onPaymentSuccess: createTempoConnectRecorder(stripeClient),
+  } as Parameters<typeof stripeMachinePayments.tempo.charge>[0]);
+
   return Mppx.create({
-    methods: stripeMachinePayments.defaultMethods(),
+    methods: [tempoMethod, stripeMachinePayments.spt.charge()],
     secretKey: mppSecretKey,
   });
 }

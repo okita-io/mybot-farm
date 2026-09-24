@@ -62,13 +62,10 @@ export function resolveFarmConfig(pluginConfig) {
 }
 
 /**
- * Seller key: per-call override, else env MYBOT_FARM_API_KEY, else config apiKey.
- * Never log the returned value.
+ * Seller key: env MYBOT_FARM_API_KEY, else plugin config apiKey.
+ * Never from the model / tool args. Never log the returned value.
  */
-export function resolveApiKey(pluginConfig, override) {
-  if (typeof override === "string" && override.trim()) {
-    return override.trim();
-  }
+export function resolveApiKey(pluginConfig) {
   const env =
     typeof process.env.MYBOT_FARM_API_KEY === "string" ? process.env.MYBOT_FARM_API_KEY.trim() : "";
   if (env) return env;

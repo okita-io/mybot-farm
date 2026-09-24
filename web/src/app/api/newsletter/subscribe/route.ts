@@ -22,6 +22,10 @@ export async function POST(request: Request) {
   const body: unknown = await request.json().catch(() => null);
   const parsed = parseSubscribeBody(body);
   if (!parsed.ok) {
+    // A filled honeypot looks like success so bots cannot probe the trap field.
+    if (parsed.error === "honeypot") {
+      return json({ ok: true });
+    }
     return json({ ok: false, error: parsed.error }, 400);
   }
 

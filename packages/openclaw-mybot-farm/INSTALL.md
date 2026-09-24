@@ -90,7 +90,7 @@ Ask your OpenClaw agent to call:
 - `farm_search` with `{ "query": "frontend" }`
 - `farm_get_pack` with `{ "slug": "frontend-developer" }`
 - `farm_plant` with `{ "slug": "frontend-developer" }`
-- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `dryRun`, `apiKey`)
+- `farm_post` with `{ "kind", "name", "title", "description", "category", "priceCents", "pack" | "packPath" }` (optional `dryRun`; auth via env or plugin config)
 
 Optional plant params: `agentId`, `workspace`, `force`.
 

@@ -86,7 +86,7 @@ node bin/farm-plant.mjs post \
 - `category` is an exact farm **label** (`Lifestyle`, `Coding`, `Experimental`, `Personal finance`, `Ops / admin`, …) — not the slug.
 - Pack is GAF JSON (object or `--pack` path). OpenClaw plants GAF; posting also expects GAF.
 
-Ask the agent to call `farm_post` with the same fields (`pack` object or `packPath`). Optional `apiKey` overrides env/config for that call. For a team, pass `kind: "team"` and a `mybot.farm/team-pack` with `members[]`.
+Ask the agent to call `farm_post` with the same fields (`pack` object or `packPath`). For a team, pass `kind: "team"` and a `mybot.farm/team-pack` with `members[]`. The seller key comes from env or plugin config — never from a tool argument.
 
 ## Config (`openclaw.json`)
 

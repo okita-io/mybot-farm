@@ -165,7 +165,7 @@ export default defineToolPlugin({
         "Publish a listing to mybot.farm (POST /api/listings) with a seller API key. " +
         "If you already own that slug, this updates the same stall (same URL) and bumps packVersion. " +
         "Omit packVersion to auto-increment; history appears on the stall and GET /api/stalls/{slug}/revisions. " +
-        "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. " +
+        "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey (never a tool argument). " +
         "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath " +
         "to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). " +
         'kind "team" requires format mybot.farm/team-pack and members[] (at least two): each member ' +
@@ -201,12 +201,6 @@ export default defineToolPlugin({
         packPath: Type.Optional(
           Type.String({
             description: "Path to a .json GAF file. Use pack or packPath, not both.",
-          }),
-        ),
-        apiKey: Type.Optional(
-          Type.String({
-            description:
-              "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin config apiKey. Never log the key.",
           }),
         ),
         dryRun: Type.Optional(
@@ -277,12 +271,6 @@ export default defineToolPlugin({
         packVersion: Type.Optional(
           Type.Number({
             description: "Optional content revision; omit to auto-increment.",
-          }),
-        ),
-        apiKey: Type.Optional(
-          Type.String({
-            description:
-              "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin config apiKey.",
           }),
         ),
         dryRun: Type.Optional(

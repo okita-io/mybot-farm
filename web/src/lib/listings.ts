@@ -1,5 +1,5 @@
 import { and, desc, eq, isNull } from "drizzle-orm";
-import { getDb, hasDatabase } from "@/lib/db";
+import { getDb, hasDatabase, type DbLike } from "@/lib/db";
 import { listings } from "@/lib/db/schema";
 import { isAgencyPackSlug } from "@/lib/agency-catalog";
 import { isTeamPackSlug } from "@/lib/team-catalog";
@@ -390,22 +390,24 @@ export function packForListingWrite(
   };
 }
 
-export async function createListing(input: {
-  sellerUserId: string;
-  slug: string;
-  kind: StallKind;
-  name: string;
-  title: string;
-  description: string;
-  category: string;
-  priceCents: number;
-  pack: FarmPack;
-  readmeMarkdown?: string | null;
-  readmeHtml?: string | null;
-}) {
-  const db = getDb();
+export async function createListing(
+  input: {
+    sellerUserId: string;
+    slug: string;
+    kind: StallKind;
+    name: string;
+    title: string;
+    description: string;
+    category: string;
+    priceCents: number;
+    pack: FarmPack;
+    readmeMarkdown?: string | null;
+    readmeHtml?: string | null;
+  },
+  executor: DbLike = getDb(),
+) {
   const now = new Date();
-  const [row] = await db
+  const [row] = await executor
     .insert(listings)
     .values({
       sellerUserId: input.sellerUserId,
@@ -489,10 +491,10 @@ export async function updateListing(
     priceCents: number;
     pack: FarmPack;
   },
+  executor: DbLike = getDb(),
 ) {
-  const db = getDb();
   const now = new Date();
-  const [row] = await db
+  const [row] = await executor
     .update(listings)
     .set({
       kind: input.kind,

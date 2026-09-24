@@ -155,12 +155,16 @@ export async function run(argv, { stdout = console.log, stderr = console.error }
       packPath,
     };
     if (args.dryRun) postArgs.dryRun = true;
-    if (args.apiKey) postArgs.apiKey = args.apiKey;
     if (args.slug) postArgs.slug = args.slug;
     if (args.packVersion != null) postArgs.packVersion = args.packVersion;
+    // CLI --api-key is operator config, not a model tool arg.
+    const pluginConfig =
+      args.apiKey && typeof args.apiKey === "string"
+        ? { ...farm, apiKey: args.apiKey }
+        : farm;
     const result = cmd === "update"
-      ? await updateListing({ args: postArgs, pluginConfig: farm })
-      : await postListing({ args: postArgs, pluginConfig: farm });
+      ? await updateListing({ args: postArgs, pluginConfig })
+      : await postListing({ args: postArgs, pluginConfig });
     if (args.json) {
       stdout(JSON.stringify(result, null, 2));
     } else if (result.text) {

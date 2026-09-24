@@ -11,8 +11,6 @@ export type PostListingArgs = {
   pack?: unknown;
   packPath?: unknown;
   pack_path?: unknown;
-  apiKey?: unknown;
-  api_key?: unknown;
   dryRun?: unknown;
   dry_run?: unknown;
 };

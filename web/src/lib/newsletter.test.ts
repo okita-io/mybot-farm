@@ -1,10 +1,15 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { shouldAddExistingContactToSegment } from "./newsletter-consent.ts";
 import {
   isValidEmail,
   normalizeEmail,
   parseSubscribeBody,
 } from "./newsletter-parse.ts";
+import {
+  checkSubscribeRateLimit,
+  resetSubscribeRateLimitForTests,
+} from "./newsletter-rate.ts";
 
 describe("parseSubscribeBody", () => {
   it("accepts a valid email and known source", () => {
@@ -50,5 +55,27 @@ describe("email helpers", () => {
 
   it("allows unusual but valid-looking addresses", () => {
     assert.equal(isValidEmail("a+tag@sub.example.co.uk"), true);
+  });
+});
+
+describe("shouldAddExistingContactToSegment", () => {
+  it("adds subscribed contacts to the segment", () => {
+    assert.equal(shouldAddExistingContactToSegment({ unsubscribed: false }), true);
+  });
+
+  it("skips contacts who have opted out", () => {
+    assert.equal(shouldAddExistingContactToSegment({ unsubscribed: true }), false);
+  });
+});
+
+describe("checkSubscribeRateLimit", () => {
+  it("evicts an IP once all stamps fall outside the window", () => {
+    resetSubscribeRateLimitForTests();
+    const ip = "203.0.113.10";
+    const t0 = 1_000_000;
+    assert.equal(checkSubscribeRateLimit(ip, t0).ok, true);
+    // Ten minutes later the prior stamp is stale; a fresh call starts a new bucket.
+    const later = checkSubscribeRateLimit(ip, t0 + 10 * 60 * 1000 + 1);
+    assert.equal(later.ok, true);
   });
 });

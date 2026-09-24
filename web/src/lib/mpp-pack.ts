@@ -4,6 +4,7 @@ import {
   getMppx,
   hasMppConfig,
   MPP_PRICE_DESCRIPTION,
+  tempoSettlementMetadata,
   usdAmountFromCents,
 } from "@/lib/mpp";
 import type { Stall } from "@/lib/packs";
@@ -40,6 +41,14 @@ export async function withPaidStallPayment(
 
   const amount = usdAmountFromCents(priceCents);
   const description = `${MPP_PRICE_DESCRIPTION}: ${stall.name}`;
+  const feeCents = applicationFeeCents(priceCents);
+  const connectAccountId = seller.stripeConnectAccountId;
+  const listingMeta = {
+    billed: "stall_download",
+    slug: stall.slug,
+    listingId: stall.listingId ?? "",
+  };
+
   const result = await getMppx().compose(
     [
       "stripe/charge",
@@ -47,19 +56,29 @@ export async function withPaidStallPayment(
         amount,
         description,
         connect: {
-          applicationFeeAmount: applicationFeeCents(priceCents),
-          transferData: { destination: seller.stripeConnectAccountId },
+          applicationFeeAmount: feeCents,
+          transferData: { destination: connectAccountId },
         },
         paymentIntentOptions: {
-          metadata: {
-            billed: "stall_download",
-            slug: stall.slug,
-            listingId: stall.listingId ?? "",
-          },
+          metadata: listingMeta,
         },
       },
     ],
-    ["tempo/charge", { amount, description }],
+    [
+      "tempo/charge",
+      {
+        amount,
+        description,
+        paymentIntentOptions: {
+          metadata: tempoSettlementMetadata({
+            connectAccountId,
+            applicationFeeCents: feeCents,
+            slug: stall.slug,
+            listingId: stall.listingId ?? "",
+          }),
+        },
+      },
+    ],
   )(request);
 
   if (result.status === 402) {

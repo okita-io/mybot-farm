@@ -49,10 +49,7 @@ function resolveFarmConfig(pluginConfig) {
   const workspaceRoot = typeof cfg.workspaceRoot === "string" && cfg.workspaceRoot.trim() || DEFAULT_WORKSPACE_ROOT;
   return { baseUrl, workspaceRoot };
 }
-function resolveApiKey(pluginConfig, override) {
-  if (typeof override === "string" && override.trim()) {
-    return override.trim();
-  }
+function resolveApiKey(pluginConfig) {
   const env = typeof process.env.MYBOT_FARM_API_KEY === "string" ? process.env.MYBOT_FARM_API_KEY.trim() : "";
   if (env) return env;
   const cfg = pluginConfig ?? {};
@@ -688,9 +685,7 @@ function errPayload(message, extra = {}) {
 async function postListing({ args, pluginConfig } = { args: {} }) {
   const cfg = pluginConfig && typeof pluginConfig === "object" ? pluginConfig : {};
   const dryRun = truthy("dryRun" in args ? args.dryRun : args.dry_run);
-  const override = args.apiKey != null ? args.apiKey : args.api_key;
-  const overrideS = typeof override === "string" ? override.trim() : void 0;
-  const apiKey = resolveApiKey(cfg, overrideS);
+  const apiKey = resolveApiKey(cfg);
   let payload;
   try {
     const pack = await loadPack(args);
@@ -740,7 +735,7 @@ async function postListing({ args, pluginConfig } = { args: {} }) {
   }
   if (!apiKey) {
     return errPayload(
-      "seller API key required (set MYBOT_FARM_API_KEY, plugin config apiKey, or pass apiKey). Create a key at https://mybot.farm/sell \u2014 see docs/api-keys.md"
+      "seller API key required (set MYBOT_FARM_API_KEY or plugin config apiKey). Create a key at https://mybot.farm/sell \u2014 see docs/api-keys.md"
     );
   }
   let result;
@@ -926,7 +921,7 @@ var index_default = defineToolPlugin({
     tool({
       name: "farm_post",
       label: "Farm Post",
-      description: 'Publish a listing to mybot.farm (POST /api/listings) with a seller API key. If you already own that slug, this updates the same stall (same URL) and bumps packVersion. Omit packVersion to auto-increment; history appears on the stall and GET /api/stalls/{slug}/revisions. Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey, else the apiKey argument. Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). kind "team" requires format mybot.farm/team-pack and members[] (at least two): each member needs role, summary, and pack (catalog path, slug, tarball URL, or nested agent-pack). kind "agent" uses mybot.farm/agent-pack and cannot include members[]. category is an exact farm label (Lifestyle, Coding, Experimental, \u2026). priceCents is 0 (free) or 200\u2013999900. Paid listings need Stripe Connect on the seller (403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money. Catalog/agency slugs cannot be overwritten.',
+      description: 'Publish a listing to mybot.farm (POST /api/listings) with a seller API key. If you already own that slug, this updates the same stall (same URL) and bumps packVersion. Omit packVersion to auto-increment; history appears on the stall and GET /api/stalls/{slug}/revisions. Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey (never a tool argument). Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). kind "team" requires format mybot.farm/team-pack and members[] (at least two): each member needs role, summary, and pack (catalog path, slug, tarball URL, or nested agent-pack). kind "agent" uses mybot.farm/agent-pack and cannot include members[]. category is an exact farm label (Lifestyle, Coding, Experimental, \u2026). priceCents is 0 (free) or 200\u2013999900. Paid listings need Stripe Connect on the seller (403 connect_required). Prefer dryRun to validate without posting. Does not email or spend money. Catalog/agency slugs cannot be overwritten.',
       parameters: Type.Object({
         kind: Type.String({
           description: 'Listing kind: "agent" or "team". Teams land on /teams/{slug} and need a team-pack with members[].'
@@ -948,11 +943,6 @@ var index_default = defineToolPlugin({
         packPath: Type.Optional(
           Type.String({
             description: "Path to a .json GAF file. Use pack or packPath, not both."
-          })
-        ),
-        apiKey: Type.Optional(
-          Type.String({
-            description: "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin config apiKey. Never log the key."
           })
         ),
         dryRun: Type.Optional(
@@ -1013,11 +1003,6 @@ var index_default = defineToolPlugin({
         packVersion: Type.Optional(
           Type.Number({
             description: "Optional content revision; omit to auto-increment."
-          })
-        ),
-        apiKey: Type.Optional(
-          Type.String({
-            description: "Per-call seller key override. Prefer MYBOT_FARM_API_KEY or plugin config apiKey."
           })
         ),
         dryRun: Type.Optional(
