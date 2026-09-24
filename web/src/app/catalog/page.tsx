@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { auth } from "@clerk/nextjs/server";
 import { CatalogControls } from "@/components/catalog-controls";
+import { CatalogInfinite, CatalogLoadTrigger } from "@/components/catalog-infinite";
+import { CatalogCardsFallback } from "@/components/catalog-cards-fallback";
+import { CatalogStallCards } from "@/components/catalog-stall-cards";
 import { Container } from "@/components/container";
-import { StallCard } from "@/components/stall-card";
 import {
-  canDownloadStall,
   isCatalogSort,
   searchCatalogStalls,
   type CatalogSort,
 } from "@/lib/catalog";
+import { CATALOG_PAGE_SIZE } from "@/lib/catalog-feed";
 import { isStallKind, listingNoun, type StallKind } from "@/lib/packs";
 import { site, siteOgImage } from "@/lib/site";
 
@@ -83,21 +86,21 @@ export default async function CatalogPage({
         </p>
 
         {stalls.length ? (
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {await Promise.all(
-              stalls.map(async (stall) => {
-                const canDownload = await canDownloadStall(stall, userId);
-                return (
-                  <StallCard
-                    key={stall.slug}
-                    stall={stall}
-                    canDownload={canDownload}
-                    signedIn={Boolean(userId)}
-                  />
-                );
-              }),
-            )}
-          </div>
+          <CatalogInfinite
+            key={`${q}\0${kind ?? ""}\0${sort}`}
+            total={stalls.length}
+            query={q}
+            kind={kind ?? ""}
+            sort={sort}
+          >
+            <Suspense fallback={<CatalogCardsFallback />}>
+              <CatalogStallCards
+                stalls={stalls.slice(0, CATALOG_PAGE_SIZE)}
+                userId={userId}
+              />
+              <CatalogLoadTrigger />
+            </Suspense>
+          </CatalogInfinite>
         ) : (
           <p className="clay-surface mt-10 rounded-3xl bg-card/50 px-6 py-10 text-base text-muted-foreground">
             No bots match that search. Try a different query, or{" "}
