@@ -19,6 +19,7 @@ function RuntimeBadge({ runtime }: { runtime: RuntimeTag }) {
     return badge;
   }
 
+  const tipId = `runtime-tip-${runtime.id}`;
   const className =
     "group/runtime relative inline-flex rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
   const tooltip = (
