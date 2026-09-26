@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Pull agents/ + teams/ from okita-io/mybot-farm-catalog into public/packs.
 # Used at Vercel build time so mybot-farm does not need to ship catalog blobs.
+# Production replaces these files, so runtime tags (including kirocrew) have to
+# be on okita-io/mybot-farm-catalog main before the build.
 #
 # Auth is the GitHub REST tarball API (Bearer), not git clone. Fine-grained PATs
 # with Contents: Read often fail HTTPS git clone with
