@@ -2,7 +2,8 @@
   "format": "mybot.farm/team-pack",
   "version": "0.1",
   "runtime": [
-    "hermes"
+    "hermes",
+    "kirocrew"
   ],
   "slug": "mobile-forge",
   "category": "coding",

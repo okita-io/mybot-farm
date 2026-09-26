@@ -4,7 +4,8 @@
   "runtime": [
     "grok-bot",
     "openclaw",
-    "hermes"
+    "hermes",
+    "kirocrew"
   ],
   "slug": "china-network-engineer",
   "category": "coding",

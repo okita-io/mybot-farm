@@ -4,7 +4,8 @@
   "runtime": [
     "grok-bot",
     "openclaw",
-    "hermes"
+    "hermes",
+    "kirocrew"
   ],
   "slug": "language-translator",
   "category": "experimental",

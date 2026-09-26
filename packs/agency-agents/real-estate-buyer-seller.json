@@ -4,7 +4,8 @@
   "runtime": [
     "grok-bot",
     "openclaw",
-    "hermes"
+    "hermes",
+    "kirocrew"
   ],
   "slug": "real-estate-buyer-seller",
   "category": "experimental",

@@ -4,7 +4,8 @@
   "runtime": [
     "grok-bot",
     "openclaw",
-    "hermes"
+    "hermes",
+    "kirocrew"
   ],
   "slug": "xr-cockpit-interaction-specialist",
   "category": "experimental",

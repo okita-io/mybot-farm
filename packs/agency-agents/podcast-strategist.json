@@ -4,7 +4,8 @@
   "runtime": [
     "grok-bot",
     "openclaw",
-    "hermes"
+    "hermes",
+    "kirocrew"
   ],
   "slug": "podcast-strategist",
   "category": "marketing",
