@@ -149,7 +149,7 @@ export const howToHermesPluginLd = {
     {
       "@type": "HowToStep",
       name: "Enable the plugin",
-      text: "From a checkout, symlink or copy packages/hermes-mybot-farm to ~/.hermes/plugins/mybot-farm. hermes plugins install does not take a local folder path. Git: hermes plugins install okita-io/mybot-farm/packages/hermes-mybot-farm --enable. After Plugin Catalog admission: hermes plugins install mybot-farm then hermes plugins enable mybot-farm. Or unzip https://mybot.farm/downloads/hermes-mybot-farm-0.3.0.zip into ~/.hermes/plugins/mybot-farm.",
+      text: "From a checkout, symlink or copy packages/hermes-mybot-farm to ~/.hermes/plugins/mybot-farm. hermes plugins install does not take a local folder path. Git: hermes plugins install okita-io/mybot-farm/packages/hermes-mybot-farm --enable. From the Plugin Catalog: hermes plugins install mybot-farm then hermes plugins enable mybot-farm. Or unzip https://mybot.farm/downloads/hermes-mybot-farm-0.3.0.zip into ~/.hermes/plugins/mybot-farm.",
     },
     {
       "@type": "HowToStep",

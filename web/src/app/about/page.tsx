@@ -23,7 +23,7 @@ const glossary = [
   {
     term: "Agent Runtime",
     meaning:
-      "The workshop (Grok Bot, Hermes, OpenClaw…) that runs agents",
+      "The workshop (Grok Bot, Hermes, OpenClaw, KiroCrew…) that runs agents",
   },
   {
     term: "Agent",
@@ -122,9 +122,9 @@ export default function AboutPage() {
           <p>
             People who want a teammate with a job — gift reminders, a debugger
             pair, a grant researcher — without stacking skills from scratch.
-            Authors who already run a Grok Bot, Hermes, or OpenClaw profile and
-            want to share a scrubbed copy. Agents that would rather call a tool
-            than click a page.
+            Authors who already run a Grok Bot, Hermes, OpenClaw, or KiroCrew
+            profile and want to share a scrubbed copy. Agents that would rather
+            call a tool than click a page.
           </p>
           <p>
             Lifestyle sits next to coding next to education. Shop by life job,
@@ -143,11 +143,25 @@ export default function AboutPage() {
             the workshop where an agent <em>lives</em>: it can use tools,
             remember how you work, follow a schedule, and hand work to other
             agents on your team. Examples: <strong>Grok Bot</strong>,{" "}
-            <strong>Hermes</strong>, <strong>OpenClaw</strong>.
+            <strong>Hermes</strong>, <strong>OpenClaw</strong>,{" "}
+            <strong>KiroCrew</strong>.
           </p>
           <p>
             Chat answers. A runtime <strong>does the work</strong> — including
             while you’re away.
+          </p>
+          <p>
+            <strong>Now planting into KiroCrew.</strong> mybot.farm&apos;s
+            fourth runtime. The mybot-farm plugin (v0.1.0, install from the
+            repo at <code>packages/kirocrew-mybot-farm</code>) turns a farm
+            agent into a KiroCrew agent template, with its persona in the prompt
+            and its skills as steering files. A farm team becomes a crew: each
+            member gets its own template, plus a shared-context file, a
+            topology doc and the <code>kirocrew</code> commands to bind the
+            crew. Planted agents are safe by default. They get read, search and
+            web tools only, never shell or file-write access, and shipped
+            routines stay off until you turn them on.{" "}
+            <Link href="/install/kirocrew">Install in KiroCrew</Link>.
           </p>
           <p>Series: “What Agents Actually Are,” ep. 01 — Beyond the Chat Window.</p>
         </ContentSection>
@@ -334,6 +348,46 @@ export default function AboutPage() {
           </p>
         </ContentSection>
 
+        <ContentSection id="whats-new" title="What’s new">
+          <p>
+            <strong>New: KiroCrew support (plugin v0.1.0).</strong> You can now
+            plant mybot.farm agents and teams into KiroCrew, next to Grok Bot,
+            Hermes and OpenClaw.
+          </p>
+          <ul>
+            <li>
+              <code>farm-plant search | get | plant | post</code> CLI and{" "}
+              <code>farm_*</code> plugin tools
+            </li>
+            <li>
+              Agents become <code>~/.kiro/agents/&lt;name&gt;.json</code>{" "}
+              templates; skills go to{" "}
+              <code>.kiro/steering/farm/&lt;slug&gt;/</code> and uninstall
+              cleanly
+            </li>
+            <li>
+              Teams become crews, with bind commands printed for you (for
+              example, Pair Bench plants as <code>patch</code> +{" "}
+              <code>probe</code> in a <code>pair-bench</code> workspace)
+            </li>
+            <li>
+              Deny-by-default tools for third-party packs; routines are
+              documented, not scheduled
+            </li>
+            <li>
+              Round trip: export a KiroCrew agent back to a GAF pack
+              (machine-local MCP servers and hooks are scrubbed) and post it to
+              the farm
+            </li>
+          </ul>
+          <p>
+            Guide: <Link href="/install/kirocrew">Install in KiroCrew</Link>.
+            Plugin v0.1.0 installs from the repo checkout at{" "}
+            <code>packages/kirocrew-mybot-farm</code> — there is no npm package
+            yet.
+          </p>
+        </ContentSection>
+
         <ContentSection title="Don’t build the crew from scratch — plant one">
           <p>
             You can wire runtimes, context, tools, skills, memory, and routines
@@ -342,7 +396,7 @@ export default function AboutPage() {
           <p>
             Or you can plant a crew that already knows how to work together.
             Browse a stall. Grab a pack. Install your own copy in Grok Bot,
-            Hermes, OpenClaw, and more.
+            Hermes, OpenClaw, KiroCrew, and more.
           </p>
           <p>Series finale ep. 07.</p>
         </ContentSection>
@@ -356,15 +410,16 @@ export default function AboutPage() {
             </li>
             <li>
               <Link href="/how-to">How-To</Link> — install a pack in Grok Bot,
-              Hermes, or OpenClaw
+              Hermes, OpenClaw, or KiroCrew
             </li>
             <li>
               <Link href="/sell">Sell</Link> — list a priced agent or team
             </li>
             <li>
               <Link href="/install/openclaw">OpenClaw</Link> /{" "}
-              <Link href="/install/hermes">Hermes</Link> — Recruit from Desktop
-              with the mybot-farm plugin
+              <Link href="/install/hermes">Hermes</Link> /{" "}
+              <Link href="/install/kirocrew">KiroCrew</Link> — plant with the
+              mybot-farm plugin
             </li>
             <li>
               <Link href="/press">Press</Link> ·{" "}

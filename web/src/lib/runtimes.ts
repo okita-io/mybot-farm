@@ -6,6 +6,9 @@ export type RuntimeTag = {
   id: RuntimeId;
   label: string;
   className: string;
+  /** Short explainer shown as an accessible tooltip on stall badges. */
+  description?: string;
+  href?: string;
 };
 
 export const runtimeTags: Record<RuntimeId, RuntimeTag> = {
@@ -32,6 +35,9 @@ export const runtimeTags: Record<RuntimeId, RuntimeTag> = {
     label: "KiroCrew",
     className:
       "border-transparent bg-linear-to-b from-purple-500 to-purple-700 text-white! shadow-[inset_0_1px_0_oklch(1_0_0/0.35),var(--clay-shadow-sm)]",
+    description:
+      "KiroCrew: plant this agent into ~/.kiro/agents, or a team as a KiroCrew crew.",
+    href: "/install/kirocrew",
   },
 };
 

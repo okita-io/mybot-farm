@@ -4,8 +4,53 @@ import { User, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatPriceLabel } from "@/lib/money";
 import { type StallAuthor, type StallKind } from "@/lib/packs";
-import { runtimeTag } from "@/lib/runtimes";
+import { runtimeTag, type RuntimeTag } from "@/lib/runtimes";
 import { cn } from "@/lib/utils";
+
+function RuntimeBadge({ runtime }: { runtime: RuntimeTag }) {
+  const tip = runtime.description;
+  const badge = (
+    <Badge className={cn("h-8 px-3.5", runtime.className, tip && "cursor-help")}>
+      {runtime.label}
+    </Badge>
+  );
+
+  if (!tip) {
+    return badge;
+  }
+
+  const className =
+    "group/runtime relative inline-flex rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
+  const tooltip = (
+    <>
+      <span className="sr-only">. {tip}</span>
+      <span
+        id={tipId}
+        role="tooltip"
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-full z-20 mt-1.5 hidden w-64 rounded-xl border border-foreground/10 bg-background px-3 py-2 text-left text-xs font-normal leading-relaxed text-pretty text-foreground shadow-md group-hover/runtime:block group-focus-visible/runtime:block"
+      >
+        {tip}
+      </span>
+    </>
+  );
+
+  if (runtime.href) {
+    return (
+      <Link href={runtime.href} title={tip} className={className}>
+        {badge}
+        {tooltip}
+      </Link>
+    );
+  }
+
+  return (
+    <span tabIndex={0} title={tip} className={className}>
+      {badge}
+      {tooltip}
+    </span>
+  );
+}
 
 export function StallHeaderMeta({
   kind,
@@ -38,11 +83,7 @@ export function StallHeaderMeta({
       {runtimes.map((id) => {
         const runtime = runtimeTag(id);
 
-        return runtime ? (
-          <Badge key={id} className={cn("h-8 px-3.5", runtime.className)}>
-            {runtime.label}
-          </Badge>
-        ) : null;
+        return runtime ? <RuntimeBadge key={id} runtime={runtime} /> : null;
       })}
       {author ? (
         <Badge variant="outline" className="h-8 px-3.5 font-normal">
