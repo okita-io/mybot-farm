@@ -72,6 +72,13 @@ export const openclawPlugin = {
   downloadUrl: "https://mybot.farm/downloads/openclaw-mybot-farm-0.2.0.tgz",
 } as const;
 
+export const kirocrewPlugin = {
+  id: "mybot-farm",
+  packageName: "@okita-io/kirocrew-mybot-farm",
+  version: "0.1.0",
+  gitInstall: "okita-io/mybot-farm/packages/kirocrew-mybot-farm",
+} as const;
+
 export const contentRoutes = [
   {
     path: "/catalog",
