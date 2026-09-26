@@ -11,7 +11,7 @@
 
 import { readFile } from "node:fs/promises";
 import { searchStalls, getPack, postListing, farmBase, farmKey } from "../src/farm-api.mjs";
-import { plantAgent, kiroHome } from "../src/plant.mjs";
+import { plantAgent, plantTeam, kiroHome } from "../src/plant.mjs";
 import { kirocrewAgentToGaf } from "../src/gaf-to-kirocrew.mjs";
 
 function parseArgs(argv) {
@@ -55,7 +55,28 @@ switch (cmd) {
     const { status, body } = await getPack(pos[0]);
     if (status === 402) die("pack is paid (402)");
     if (status !== 200) die(`could not fetch pack (${status})`);
-    if (body.format === "mybot.farm/team-pack") die("team packs: plant members individually for now (team crew mapping is next)");
+    if (body.format === "mybot.farm/team-pack") {
+      // resolve each member pack from the farm
+      const memberPacks = {};
+      for (const ref of body.members ?? []) {
+        const memberSlug = typeof ref.pack === "string"
+          ? ref.pack.split("/").pop().replace(/\.(json|hermes\.tar\.gz|tar\.gz)$/i, "")
+          : null;
+        if (!memberSlug) continue;
+        const r = await getPack(memberSlug);
+        if (r.status === 200) memberPacks[memberSlug] = r.body;
+      }
+      const plan = await plantTeam(body, memberPacks, { workspace: flags.workspace, force: Boolean(flags.force), dryRun: Boolean(flags["dry-run"]) });
+      out({
+        action: flags["dry-run"] ? "dry-run" : plan.wrote ? "planted-team" : "noop",
+        kiroHome: kiroHome(),
+        teamSlug: plan.teamSlug, workspace: plan.workspace, members: plan.memberNames,
+        agentPaths: plan.agentPaths, steeringPaths: plan.steeringPaths,
+        sharedSteeringPath: plan.sharedSteeringPath, topologyDocPath: plan.topologyDocPath,
+        bindCommands: plan.bindCommands, notes: plan.notes,
+      });
+      break;
+    }
     const plan = await plantAgent(body, { name: flags.name, force: Boolean(flags.force), dryRun: Boolean(flags["dry-run"]) });
     out({
       action: flags["dry-run"] ? "dry-run" : plan.wrote ? "planted" : plan.skippedExisting ? "skipped-existing" : "noop",

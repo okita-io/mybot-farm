@@ -129,6 +129,67 @@ export function gafToKirocrewAgent(pack, opts = {}) {
 }
 
 /**
+ * Project a GAF team-pack onto a KiroCrew crew:
+ *   - one agent template + steering set per member (via gafToKirocrewAgent)
+ *   - a shared steering file for shared.memory
+ *   - a workspace (name = team slug) that members bind to
+ *   - the CLI bind commands to run (workspace create + agent create per member),
+ *     since D1 established the CLI binds members but the plugin writes templates.
+ *   - topology + shared.gettingStarted preserved as documentation
+ *
+ * memberPacks: map of memberSlug -> resolved GAF agent-pack (fetched by caller).
+ * @returns {{ workspace, members[], sharedSteering, bindCommands[], topologyDoc, notes }}
+ */
+export function gafTeamToKirocrewCrew(teamPack, memberPacks, opts = {}) {
+  const teamSlug = slugifyName(teamPack?.slug || teamPack?.profile?.name || "team");
+  const workspace = safeAgentName({ slug: teamSlug }, opts.workspace);
+  const notes = [];
+  const members = [];
+  const bindCommands = [];
+
+  bindCommands.push(`kirocrew workspace create --name ${workspace}`);
+
+  const refs = Array.isArray(teamPack?.members) ? teamPack.members : [];
+  for (const ref of refs) {
+    const memberSlug = typeof ref.pack === "string"
+      ? String(ref.pack).split("/").pop().replace(/\.(json|hermes\.tar\.gz|tar\.gz)$/i, "")
+      : slugifyName(ref.role || "member");
+    const resolved = memberPacks?.[memberSlug];
+    if (!resolved) {
+      notes.push(`member "${memberSlug}" (${ref.role ?? "?"}) could not be resolved — skipped; fetch its pack and re-run.`);
+      continue;
+    }
+    const mapped = gafToKirocrewAgent(resolved, {});
+    members.push({ role: ref.role, summary: ref.summary, ...mapped });
+    bindCommands.push(
+      `kirocrew agent create --name "${mapped.name}" --kiro-agent ${mapped.name} --workspace ${workspace} --memory-store default`,
+    );
+  }
+
+  // shared.memory -> a shared steering file all members can reference
+  let sharedSteering = null;
+  const sharedMem = Array.isArray(teamPack?.shared?.memory) ? teamPack.shared.memory : [];
+  if (sharedMem.length) {
+    sharedSteering = {
+      path: `.kiro/steering/farm/${teamSlug}/_shared.md`,
+      content: `# ${teamPack.profile?.name ?? teamSlug} — shared context\n\n${sharedMem.map((m) => `- ${m.content}`).join("\n")}\n`,
+    };
+  }
+
+  const topo = teamPack?.topology;
+  const topologyDoc = [
+    `# ${teamPack.profile?.name ?? teamSlug} — crew`,
+    teamPack.profile?.description ? `\n${teamPack.profile.description}` : "",
+    topo?.kind ? `\n**Topology:** ${topo.kind}` : "",
+    Array.isArray(topo?.handoffs) && topo.handoffs.length
+      ? `\n**Handoffs:**\n${topo.handoffs.map((h) => `- ${h}`).join("\n")}` : "",
+    teamPack?.shared?.gettingStarted ? `\n**Getting started:** ${teamPack.shared.gettingStarted}` : "",
+  ].filter(Boolean).join("\n") + "\n";
+
+  return { teamSlug, workspace, members, sharedSteering, bindCommands, topologyDoc, notes };
+}
+
+/**
  * Reverse: a KiroCrew agent template -> GAF agent-pack, scrubbed of machine-local
  * fields (mcpServers with absolute paths, hooks, keys). For farm_post export.
  */

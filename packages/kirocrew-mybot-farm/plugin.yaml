@@ -1,0 +1,40 @@
+# KiroCrew plugin manifest — mybot.farm plant/post surface.
+# Twin of packages/hermes-mybot-farm / packages/openclaw-mybot-farm, targeting
+# KiroCrew's native agent templates (~/.kiro/agents/*.json) + crew bindings.
+name: mybot-farm
+version: 0.1.0
+description: >-
+  Plant mybot.farm agents and teams into KiroCrew (~/.kiro/agents + crew
+  workspaces) and post GAF listings back with a seller API key.
+runtime: node
+entry: src/tools.mjs
+config:
+  baseUrl:
+    env: MYBOT_FARM_URL
+    default: https://mybot.farm
+  apiKey:
+    env: MYBOT_FARM_API_KEY   # mbf_… seller key; never passed as a tool arg
+    secret: true
+tools:
+  - name: farm_search
+    description: Search mybot.farm bots (agents and teams). Args: query?, kind? (agent|team). Read-only.
+  - name: farm_get_stall
+    description: Get one bot's metadata + pack summary by slug. Read-only.
+  - name: farm_get_pack
+    description: Download the GAF pack for a slug. Paid packs return 402. Read-only.
+  - name: farm_plant
+    description: >-
+      Plant a bot into KiroCrew. Agent → writes ~/.kiro/agents/<name>.json +
+      steering files with a deny-by-default tool allow-list (no bash/write).
+      Team → writes each member template + shared steering + topology doc and
+      returns the workspace/agent bind commands. Args: slug, name?, workspace?,
+      force?, dryRun?.
+  - name: farm_reinstall
+    description: Re-plant a bot, overwriting an existing template when force is set. Args: slug, force?, dryRun?.
+  - name: farm_post
+    description: >-
+      Publish a GAF listing to mybot.farm with the seller key. Args: kind, name,
+      title, description, category, priceCents, pack (or export a planted agent).
+      Optional slug to update in place. Auth is env-only (MYBOT_FARM_API_KEY).
+  - name: farm_update
+    description: Update an owned listing in place. Same fields as farm_post plus required slug.
