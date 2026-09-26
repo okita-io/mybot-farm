@@ -105,6 +105,31 @@ export function HomeInstall() {
           </Link>
           .
         </p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+          <strong className="font-medium text-foreground">
+            Now planting into KiroCrew.
+          </strong>{" "}
+          mybot.farm&apos;s fourth runtime. The mybot-farm plugin turns a farm
+          agent into a KiroCrew agent template, with its persona in the prompt
+          and its skills as steering files. A farm team becomes a crew: each
+          member gets its own template, plus a shared-context file, a topology
+          doc and the <code className="font-mono text-[0.9em] text-foreground">kirocrew</code>{" "}
+          commands to bind the crew. Planted agents are safe by default. They
+          get read, search and web tools only, never shell or file-write access,
+          and shipped routines stay off until you turn them on. Install from
+          the repo checkout at{" "}
+          <code className="font-mono text-[0.9em] text-foreground">
+            packages/kirocrew-mybot-farm
+          </code>{" "}
+          (plugin v0.1.0).{" "}
+          <Link
+            href="/install/kirocrew"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            Install in KiroCrew
+          </Link>
+          .
+        </p>
       </Container>
     </section>
   );

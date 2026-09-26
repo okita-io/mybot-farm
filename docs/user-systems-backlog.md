@@ -6,13 +6,27 @@
 
 This is a living backlog. Each system links to the existing code it builds on so a spec never starts from zero. When a system ships, move it to a `## Shipped` section with the PR/commit.
 
+## Shipped
+
+### 14. KiroCrew runtime — export/import plugin (2026-09-26, plugin v0.1.0)
+
+**New: KiroCrew support (plugin v0.1.0).** You can now plant mybot.farm agents and teams into KiroCrew, next to Grok Bot, Hermes and OpenClaw.
+
+- `farm-plant search | get | plant | post` CLI and `farm_*` plugin tools
+- Agents become `~/.kiro/agents/<name>.json` templates; skills go to `.kiro/steering/farm/<slug>/` and uninstall cleanly
+- Teams become crews, with bind commands printed for you (for example, Pair Bench plants as `patch` + `probe` in a `pair-bench` workspace)
+- Deny-by-default tools for third-party packs; routines are documented, not scheduled
+- Round trip: export a KiroCrew agent back to a GAF pack (machine-local MCP servers and hooks are scrubbed) and post it to the farm
+
+Guide: https://mybot.farm/install/kirocrew — install from the repo checkout at `packages/kirocrew-mybot-farm` (no npm package yet). Farm-side Track A + plugin Track B landed in `d3ac4d6` / `19bebf8` / `85e276f` and PR #35.
+
 ---
 
 ## The three user types
 
 The marketplace "user" is not one person:
 
-- **Buyers / planters** — install whole agents/teams into their runtime (Grok Bot, Hermes, OpenClaw). Want trust and fit *before* they commit a copy.
+- **Buyers / planters** — install whole agents/teams into their runtime (Grok Bot, Hermes, OpenClaw, KiroCrew). Want trust and fit *before* they commit a copy.
 - **Sellers / authors** — publish, maintain, and (optionally) earn from packs. Want easy publishing, safety gates, and signal on how packs perform.
 - **Agents** — discover and transact over WebMCP (`search_stalls`, `download_pack`, …) without clicking UI. The strategic audience: the farm as the supply side for autonomous crews.
 
@@ -38,7 +52,6 @@ The marketplace "user" is not one person:
 | 11 | Capability search (index by what agents *do*) | ★★★★ | M | `web/src/lib/catalog.ts`, `list_pack_skills` |
 | 1 | Post-plant verification / smoke test | ★★★★ | M–L | `web/src/lib/install-prompt.ts`, runtime plugins |
 | 10 | Team composer (goal → team pack + topology) | ★★★★ | M–L | `web/src/lib/team-catalog.ts`, `docs/teams.md` |
-| 14 | KiroCrew runtime — export/import plugin | ★★★★ | M | `web/src/lib/runtimes.ts`, `web/src/lib/gaf-to-grok-template.ts`, `packages/hermes-mybot-farm` (twin) — spec: [kirocrew-plugin-spec.md](./kirocrew-plugin-spec.md) |
 
 ### Tier 3 — Trust & monetization
 
@@ -103,8 +116,8 @@ Sign packs so a planter can verify authorship and that content wasn't tampered p
 ### 13. Reputation graph — *trust*
 Author trust from verified installs + review history, feeding featured/ranking. Depends on #4 + #7 signal.
 
-### 14. KiroCrew runtime — export/import plugin — *buyer/seller/agent*
-Add KiroCrew as a fourth plant/export runtime alongside Grok Bot, Hermes, and OpenClaw. Two tracks: **A (farm-side, S)** — register `kirocrew` in `runtimes.ts` + install page + doc; **B (the plugin, M)** — a `packages/kirocrew-mybot-farm` package (twin of the Hermes/OpenClaw plugins) that plants GAF into `~/.kiro/agents/*.json` (+ crew members for teams) and posts GAF back via a seller key. GAF teams map onto KiroCrew's native crews better than any other runtime. Full spec: [kirocrew-plugin-spec.md](./kirocrew-plugin-spec.md). Shares scrub code with #5.
+### 14. KiroCrew runtime — export/import plugin — *buyer/seller/agent* — **shipped**
+Shipped 2026-09-26 as plugin v0.1.0. See [Shipped](#shipped). Full spec: [kirocrew-plugin-spec.md](./kirocrew-plugin-spec.md).
 
 ---
 

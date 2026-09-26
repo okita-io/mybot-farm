@@ -51,6 +51,7 @@ export const footerLinks = [
   { href: "/how-to", label: "How-To" },
   { href: "/install/openclaw", label: "OpenClaw" },
   { href: "/install/hermes", label: "Hermes" },
+  { href: "/install/kirocrew", label: "KiroCrew" },
   { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
@@ -113,6 +114,12 @@ export const contentRoutes = [
   {
     path: "/install/hermes",
     title: "Install in Hermes",
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  },
+  {
+    path: "/install/kirocrew",
+    title: "Install in KiroCrew",
     changeFrequency: "monthly" as const,
     priority: 0.8,
   },
@@ -250,12 +257,17 @@ export const faqs = [
   {
     question: "How do I import a pack into Hermes?",
     answer:
-      "Enable the mybot-farm plugin (symlink or copy packages/hermes-mybot-farm into ~/.hermes/plugins/mybot-farm, then hermes plugins enable mybot-farm). Open Hermes Desktop → Farm → browse a stall → Recruit. Solo agents land in the Desktop Bots roster. After Plugin Catalog admission: hermes plugins install mybot-farm. CLI tools: farm_search, farm_get_stall, farm_get_pack, farm_plant, farm_reinstall. Manual path: hermes profile import on a scrubbed .tar.gz (Scholastic Research, Workbench). After import, add your own API keys. Full steps: /install/hermes.",
+      "Enable the mybot-farm plugin (symlink or copy packages/hermes-mybot-farm into ~/.hermes/plugins/mybot-farm, then hermes plugins enable mybot-farm). Open Hermes Desktop → Farm → browse a stall → Recruit. Solo agents land in the Desktop Bots roster. From the Plugin Catalog: hermes plugins install mybot-farm. CLI tools: farm_search, farm_get_stall, farm_get_pack, farm_plant, farm_reinstall. Manual path: hermes profile import on a scrubbed .tar.gz (Scholastic Research, Workbench). After import, add your own API keys. Full steps: /install/hermes.",
   },
   {
     question: "How do I plant a pack in OpenClaw?",
     answer:
       "Install from ClawHub: openclaw plugins install clawhub:@okita-io/openclaw-mybot-farm, then openclaw plugins enable mybot-farm and openclaw gateway restart. Optional: openclaw plugins search mybot-farm. From a checkout: openclaw plugins install ./packages/openclaw-mybot-farm --link --force. Or download https://mybot.farm/downloads/openclaw-mybot-farm-0.2.0.tgz and run openclaw plugins install on that .tgz (or npm-pack:). Tools are farm_search, farm_get_pack, farm_plant, farm_post, and farm_update. Full steps: /install/openclaw.",
+  },
+  {
+    question: "How do I plant a pack in KiroCrew?",
+    answer:
+      "Install the mybot-farm plugin from the repo checkout at packages/kirocrew-mybot-farm (v0.1.0; there is no npm package yet). Then node bin/farm-plant.mjs plant <slug> writes ~/.kiro/agents/<name>.json plus steering files. A team slug also prints kirocrew workspace create / kirocrew agent create bind commands. Planted third-party agents get read, search, and web tools only. Full steps: /install/kirocrew.",
   },
   {
     question: "How do I share my Hermes agent?",

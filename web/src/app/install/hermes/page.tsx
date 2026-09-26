@@ -115,15 +115,14 @@ hermes plugins enable mybot-farm`}</pre>
             <code>--enable</code> skips the Enable now? prompt.
           </p>
           <pre>{`hermes plugins install ${hermesPlugin.gitInstall} --enable`}</pre>
-          <h3>From the Plugin Catalog (after admission)</h3>
+          <h3>From the Plugin Catalog</h3>
           <p>
-            Once{" "}
-            <code>plugin-catalog/mybot-farm.yaml</code> is merged into{" "}
+            The plugin is in the{" "}
             <a href="https://hermes-agent.nousresearch.com/docs/plugins">
               Hermes Plugin Catalog
-            </a>
-            , current Hermes installs by name (SHA-pinned). The farm repo must
-            be a public https clone; the plugin lives at{" "}
+            </a>{" "}
+            as <code>mybot-farm</code> (SHA-pinned). Current Hermes installs by
+            name. The farm repo is a public https clone; the plugin lives at{" "}
             <code>packages/hermes-mybot-farm</code>.
           </p>
           <pre>{`hermes plugins install mybot-farm
@@ -238,6 +237,10 @@ python3 packages/hermes-mybot-farm/scripts/clear-tombstones.py`}</pre>
             <li>
               <Link href="/install/openclaw">OpenClaw</Link> — plant GAF JSON
               with the mybot-farm plugin
+            </li>
+            <li>
+              <Link href="/install/kirocrew">KiroCrew</Link> — plant an agent
+              as a <code>~/.kiro/agents</code> template, or a team as a crew
             </li>
             <li>
               <Link href="/how-to">How-To</Link> — install and share

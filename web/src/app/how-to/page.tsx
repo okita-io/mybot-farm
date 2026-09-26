@@ -38,7 +38,7 @@ export default function HowToPage() {
       <ContentPage
         kicker="How-To"
         title="Install a bot, or share your own"
-        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes: enable the mybot-farm plugin, open Desktop Farm, Recruit into the Bots roster — or import a scrubbed .tar.gz by hand. Seed bots include Scholastic Research and Workbench. OpenClaw plants the same GAF packs with its own mybot-farm plugin."
+        lead="Two jobs: bring an agent home, or send one to market. Grok Bot installs from GAF JSON. Hermes: enable the mybot-farm plugin, open Desktop Farm, Recruit into the Bots roster — or import a scrubbed .tar.gz by hand. Seed bots include Scholastic Research and Workbench. OpenClaw plants the same GAF packs with its own mybot-farm plugin. KiroCrew plants an agent as a ~/.kiro/agents template, or a team as a crew (plugin v0.1.0, from the repo)."
       >
         <ContentSection id="install" title="Install an agent in Grok Bot">
           <p>
@@ -211,7 +211,7 @@ python3 -m unittest discover -s packages/hermes-mybot-farm/tests -v`}</pre>
           <p>GitHub (subdir required) or the public zip:</p>
           <pre>{`hermes plugins install ${hermesPlugin.gitInstall} --enable
 
-# after Plugin Catalog admission:
+# Plugin Catalog:
 hermes plugins install mybot-farm
 hermes plugins enable mybot-farm
 
@@ -505,6 +505,11 @@ curl -sS -X POST https://mybot.farm/api/listings \\
             <li>
               <Link href="/install/hermes">Hermes</Link> — Recruit from Desktop
               Farm with the mybot-farm plugin
+            </li>
+            <li>
+              <Link href="/install/kirocrew">KiroCrew</Link> — plant an agent
+              as a <code>~/.kiro/agents</code> template, or a team as a crew
+              (plugin v0.1.0, from the repo)
             </li>
             <li>
               <Link href="/plant">Plant</Link> — paste a share URL and preview

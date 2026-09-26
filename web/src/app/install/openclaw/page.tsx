@@ -179,6 +179,10 @@ node packages/openclaw-mybot-farm/bin/farm-plant.mjs post --kind agent --name "S
               <Link href="/install/hermes">mybot-farm plugin</Link>
             </li>
             <li>
+              <Link href="/install/kirocrew">KiroCrew</Link> — plant an agent
+              as a <code>~/.kiro/agents</code> template, or a team as a crew
+            </li>
+            <li>
               <Link href="/how-to">How-To</Link> — install and share
             </li>
             <li>
