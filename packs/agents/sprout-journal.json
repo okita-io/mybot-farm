@@ -3,7 +3,8 @@
   "version": "0.1",
   "runtime": [
     "grok-bot",
-    "hermes"
+    "hermes",
+    "kirocrew"
   ],
   "slug": "sprout-journal",
   "category": "lifestyle",

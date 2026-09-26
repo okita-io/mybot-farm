@@ -1,0 +1,13 @@
+{
+  "name": "@okita-io/kirocrew-mybot-farm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Plant mybot.farm GAF packs into KiroCrew (~/.kiro/agents) and post GAF listings back. System #14 Track B.",
+  "bin": {
+    "farm-plant": "bin/farm-plant.mjs"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  }
+}

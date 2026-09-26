@@ -1,15 +1,27 @@
 {
   "format": "mybot.farm/team-pack",
   "version": "0.1",
-  "runtime": ["grok-bot"],
+  "runtime": [
+    "grok-bot",
+    "kirocrew"
+  ],
   "slug": "pair-bench",
   "category": "coding",
-  "tags": ["pair", "programmer", "debugger", "team"],
+  "tags": [
+    "pair",
+    "programmer",
+    "debugger",
+    "team"
+  ],
   "profile": {
     "name": "Pair Bench",
     "title": "Programmer + debugger team",
     "description": "A two-agent bench: Patch implements; Probe reproduces and verifies. Install both and let them hand off until the verify path passes.",
-    "avatar": { "kind": "geometric", "shape": "capsule", "color": "cyan" }
+    "avatar": {
+      "kind": "geometric",
+      "shape": "capsule",
+      "color": "cyan"
+    }
   },
   "members": [
     {
@@ -43,7 +55,10 @@
     "author": "mybot.farm seeds",
     "license": "MIT",
     "homepage": "https://mybot.farm/teams/pair-bench",
-    "tags": ["coding", "team"],
+    "tags": [
+      "coding",
+      "team"
+    ],
     "scrubbed": true
   }
 }

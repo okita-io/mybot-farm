@@ -1,0 +1,11 @@
+{
+  "name": "mock-farm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local mock of the mybot.farm API for building/testing the KiroCrew plant-post plugin.",
+  "scripts": {
+    "start": "node server.mjs",
+    "smoke": "node smoke.mjs"
+  }
+}

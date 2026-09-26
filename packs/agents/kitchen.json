@@ -1,10 +1,18 @@
 {
   "format": "mybot.farm/agent-pack",
   "version": "0.1",
-  "runtime": ["grok-bot"],
+  "runtime": [
+    "grok-bot",
+    "kirocrew"
+  ],
   "slug": "kitchen",
   "category": "lifestyle",
-  "tags": ["cooking", "recipes", "home", "huggingface"],
+  "tags": [
+    "cooking",
+    "recipes",
+    "home",
+    "huggingface"
+  ],
   "profile": {
     "name": "Kitchen",
     "title": "Home cooking & recipe ideation",
@@ -45,7 +53,10 @@
     "author": "mybot.farm seeds",
     "license": "MIT",
     "homepage": "https://mybot.farm/agents/kitchen",
-    "tags": ["lifestyle", "cooking"],
+    "tags": [
+      "lifestyle",
+      "cooking"
+    ],
     "scrubbed": true
   }
 }

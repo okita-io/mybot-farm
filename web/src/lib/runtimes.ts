@@ -1,4 +1,4 @@
-export const RUNTIME_IDS = ["grok-bot", "hermes", "openclaw"] as const;
+export const RUNTIME_IDS = ["grok-bot", "hermes", "openclaw", "kirocrew"] as const;
 
 export type RuntimeId = (typeof RUNTIME_IDS)[number];
 
@@ -26,6 +26,12 @@ export const runtimeTags: Record<RuntimeId, RuntimeTag> = {
     label: "OpenClaw",
     className:
       "border-transparent bg-linear-to-b from-red-500 to-red-700 text-black! shadow-[inset_0_1px_0_oklch(1_0_0/0.35),var(--clay-shadow-sm)]",
+  },
+  kirocrew: {
+    id: "kirocrew",
+    label: "KiroCrew",
+    className:
+      "border-transparent bg-linear-to-b from-purple-500 to-purple-700 text-white! shadow-[inset_0_1px_0_oklch(1_0_0/0.35),var(--clay-shadow-sm)]",
   },
 };
 
