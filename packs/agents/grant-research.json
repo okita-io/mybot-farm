@@ -3,7 +3,8 @@
   "version": "0.2",
   "runtime": [
     "grok-bot",
-    "hermes"
+    "hermes",
+    "kirocrew"
   ],
   "slug": "grant-research",
   "category": "education",

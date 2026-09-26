@@ -50,13 +50,21 @@ switch (cmd) {
     out(body);
     break;
   }
-  case "plant": {
-    if (!pos[0]) die("usage: farm-plant plant <slug>");
+  case "plant":
+  case "reinstall": {
+    if (!pos[0]) die(`usage: farm-plant ${cmd} <slug>`);
+    const isReinstall = cmd === "reinstall";
     const { status, body } = await getPack(pos[0]);
     if (status === 402) die("pack is paid (402)");
     if (status !== 200) die(`could not fetch pack (${status})`);
+    const baseOpts = {
+      name: flags.name, workspace: flags.workspace,
+      force: Boolean(flags.force) || isReinstall,
+      reinstall: isReinstall,
+      clean: Boolean(flags.clean) || isReinstall,
+      dryRun: Boolean(flags["dry-run"]),
+    };
     if (body.format === "mybot.farm/team-pack") {
-      // resolve each member pack from the farm
       const memberPacks = {};
       for (const ref of body.members ?? []) {
         const memberSlug = typeof ref.pack === "string"
@@ -66,9 +74,9 @@ switch (cmd) {
         const r = await getPack(memberSlug);
         if (r.status === 200) memberPacks[memberSlug] = r.body;
       }
-      const plan = await plantTeam(body, memberPacks, { workspace: flags.workspace, force: Boolean(flags.force), dryRun: Boolean(flags["dry-run"]) });
+      const plan = await plantTeam(body, memberPacks, baseOpts);
       out({
-        action: flags["dry-run"] ? "dry-run" : plan.wrote ? "planted-team" : "noop",
+        action: flags["dry-run"] ? "dry-run" : plan.wrote ? (isReinstall ? "reinstalled-team" : "planted-team") : "noop",
         kiroHome: kiroHome(),
         teamSlug: plan.teamSlug, workspace: plan.workspace, members: plan.memberNames,
         agentPaths: plan.agentPaths, steeringPaths: plan.steeringPaths,
@@ -77,11 +85,12 @@ switch (cmd) {
       });
       break;
     }
-    const plan = await plantAgent(body, { name: flags.name, force: Boolean(flags.force), dryRun: Boolean(flags["dry-run"]) });
+    const plan = await plantAgent(body, baseOpts);
     out({
-      action: flags["dry-run"] ? "dry-run" : plan.wrote ? "planted" : plan.skippedExisting ? "skipped-existing" : "noop",
+      action: flags["dry-run"] ? "dry-run" : plan.wrote ? (isReinstall ? "reinstalled" : "planted") : plan.skippedExisting ? "skipped-existing" : "noop",
       kiroHome: kiroHome(),
       name: plan.name, agentPath: plan.agentPath, steeringPaths: plan.steeringPaths,
+      packVersion: plan.packVersion, priorVersion: plan.priorVersion, cleanedFiles: plan.cleanedFiles,
       withheldTools: plan.withheldTools, notes: plan.notes,
     });
     break;

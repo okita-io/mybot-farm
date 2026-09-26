@@ -50,7 +50,7 @@ async function farm_plant(args = {}) {
   if (status === 402) return { ok: false, status, error: "purchase_required", slug: args.slug };
   if (status !== 200) return { ok: false, status, error: body?.error ?? "not_found" };
 
-  const opts = { name: args.name, workspace: args.workspace, force: Boolean(args.force), dryRun: Boolean(args.dryRun) };
+  const opts = { name: args.name, workspace: args.workspace, force: Boolean(args.force), reinstall: Boolean(args.reinstall), clean: Boolean(args.clean), dryRun: Boolean(args.dryRun) };
   if (body.format === "mybot.farm/team-pack") {
     const memberPacks = await resolveMembers(body);
     const plan = await plantTeam(body, memberPacks, opts);
@@ -61,7 +61,7 @@ async function farm_plant(args = {}) {
 }
 
 function farm_reinstall(args = {}) {
-  return farm_plant({ ...args, force: true });
+  return farm_plant({ ...args, reinstall: true, force: true, clean: args.clean !== false });
 }
 
 async function farm_post(args = {}) {
