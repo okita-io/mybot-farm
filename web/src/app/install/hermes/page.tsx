@@ -250,6 +250,19 @@ python3 packages/hermes-mybot-farm/scripts/clear-tombstones.py`}</pre>
             </li>
           </ul>
         </ContentSection>
+
+        <ContentSection title="Related">
+          <p>
+            Build your own Bot instead:{" "}
+            <a href="https://hermes-agent.nousresearch.com/docs/plugins/bot-forge">
+              bot-forge
+            </a>{" "}
+            is a community Hermes plugin (MIT, by Bikash Joshi) that creates a
+            Bot Mode bot or a small team from a one-sentence request. Recruit a
+            ready-made crew from the farm, or forge a custom one. Both land in
+            the same Bots roster.
+          </p>
+        </ContentSection>
       </ContentPage>
     </>
   );
