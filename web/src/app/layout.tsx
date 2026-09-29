@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/ui/themes";
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { JsonLd } from "@/components/json-ld";
@@ -79,6 +80,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       )}
     >
       <body className="min-h-full bg-background text-foreground">
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0029381417017790"
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
         <ClerkProvider appearance={{ theme: shadcn }}>
           <ThemeProvider>
             <JsonLd data={websiteLd} />
