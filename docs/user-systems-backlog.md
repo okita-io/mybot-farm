@@ -52,6 +52,7 @@ The marketplace "user" is not one person:
 | 11 | Capability search (index by what agents *do*) | ★★★★ | M | `web/src/lib/catalog.ts`, `list_pack_skills` |
 | 1 | Post-plant verification / smoke test | ★★★★ | M–L | `web/src/lib/install-prompt.ts`, runtime plugins |
 | 10 | Team composer (goal → team pack + topology) | ★★★★ | M–L | `web/src/lib/team-catalog.ts`, `docs/teams.md` |
+| 15 | Team workflows (bundle orchestration with a team) | ★★★★ | M | `web/src/lib/pack-files.ts`, `web/src/lib/gaf-pack.ts`, `packages/kirocrew-mybot-farm`, `scripts/scrub.py` |
 
 ### Tier 3 — Trust & monetization
 
@@ -118,6 +119,9 @@ Author trust from verified installs + review history, feeding featured/ranking. 
 
 ### 14. KiroCrew runtime — export/import plugin — *buyer/seller/agent* — **shipped**
 Shipped 2026-09-26 as plugin v0.1.0. See [Shipped](#shipped). Full spec: [kirocrew-plugin-spec.md](./kirocrew-plugin-spec.md).
+
+### 15. Team workflows — bundle orchestration with a team — *buyer/seller/agent*
+Extend the existing `team` kind with an **optional, additive, runtime-neutral `workflows[]`** so a team pack ships its orchestrating workflow scripts alongside its agent members. When planted into KiroCrew the workflows are written **after** the members, so each `ctx.agent("<member>")` reference resolves against the just-planted crew — a self-satisfying install where the orchestrator and the agents it drives arrive together and are immediately runnable. Empty/absent `workflows` == today's team (hard back-compat). The stall card lists the workflows (default marked) gated on `workflows?.length`; publishing with workflows runs the #5 scrub over each script and rejects on a hit. **Effort M / Impact ★★★★:** purely additive (one optional array, one gated card node, a third plant step reusing the #14 package and the #5 scrub) — no new kind, no new scrub engine, no breaking change — yet it turns a team from "a bag of agents" into "a runnable crew with its own orchestration," which is the strategic leap for the agent audience and composes with #10 (team composer can emit a default workflow). Full spec below → [kirocrew-team-workflows-spec.md](./kirocrew-team-workflows-spec.md).
 
 ---
 
