@@ -70,9 +70,9 @@ The marketplace "user" is not one person:
 | 3 | "Try before plant" sandbox | ★★★ | L | Needs ephemeral runtime execution — infra-heavy |
 | 13 | Reputation graph | ★★★ | L | Depends on #4 + #7 producing signal first |
 
-**Dependency chains:** #11 → #9 (capability index enables recommendation) · #4 + #7 → #13 (install/analytics signal feeds reputation) · #12 should land before broad open publishing to untrusted authors.
+**Dependency chains:** #11 → #9 (capability index enables recommendation) · #4 + #7 → #13 (install/analytics signal feeds reputation) · #14 shipped → #15 plant path · #5 → #15 publish-side scrub (plugin `farm_post` can share #14's scrub until #5 lands) · #12 should land before broad open publishing to untrusted authors.
 
-**Suggested roadmap:** #5 this sprint → #9 + #11 together → #12 before scaling open publishing.
+**Suggested roadmap:** #5 this sprint → #15 after #5's publish seam (plant path can land in parallel) → #9 + #11 together → #12 before scaling open publishing.
 
 ---
 
@@ -121,7 +121,7 @@ Author trust from verified installs + review history, feeding featured/ranking. 
 Shipped 2026-09-26 as plugin v0.1.0. See [Shipped](#shipped). Full spec: [kirocrew-plugin-spec.md](./kirocrew-plugin-spec.md).
 
 ### 15. Team workflows — bundle orchestration with a team — *buyer/seller/agent*
-Extend the existing `team` kind with an **optional, additive, runtime-neutral `workflows[]`** so a team pack ships its orchestrating workflow scripts alongside its agent members. When planted into KiroCrew the workflows are written **after** the members, so each `ctx.agent("<member>")` reference resolves against the just-planted crew — a self-satisfying install where the orchestrator and the agents it drives arrive together and are immediately runnable. Empty/absent `workflows` == today's team (hard back-compat). The stall card lists the workflows (default marked) gated on `workflows?.length`; publishing with workflows runs the #5 scrub over each script and rejects on a hit. **Effort M / Impact ★★★★:** purely additive (one optional array, one gated card node, a third plant step reusing the #14 package and the #5 scrub) — no new kind, no new scrub engine, no breaking change — yet it turns a team from "a bag of agents" into "a runnable crew with its own orchestration," which is the strategic leap for the agent audience and composes with #10 (team composer can emit a default workflow). Full spec below → [kirocrew-team-workflows-spec.md](./kirocrew-team-workflows-spec.md).
+Extend the existing `team` kind with an **optional, additive, runtime-neutral `workflows[]`** so a team pack ships its orchestrating workflow scripts alongside its agent members. When planted into KiroCrew the workflows are written **after** member templates are written **and Crew Member binds have run**, so each `ctx.agent(..., agent="<member>")` call resolves against the just-planted crew — a self-satisfying install where the orchestrator and the agents it drives arrive together and are immediately runnable. Empty/absent `workflows` == today's team (hard back-compat). The stall card lists the workflows (default marked) gated on `workflows?.length`; publishing with workflows runs the #5 scrub over each script (plugin `farm_post` until that seam exists in `listing-publish.ts`) and rejects on a hit. **Effort M / Impact ★★★★:** additive schema + gated card + plant steps (run binds, then write workflows) reusing the #14 package and `scripts/scrub.py` — no new kind, no new scrub engine, no breaking change — yet it turns a team from "a bag of agents" into "a runnable crew with its own orchestration," which is the strategic leap for the agent audience and composes with #10 (team composer can emit a default workflow). Full spec below → [kirocrew-team-workflows-spec.md](./kirocrew-team-workflows-spec.md).
 
 ---
 

@@ -5,7 +5,7 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | Doc | What it covers |
 |-----|----------------|
 | [positioning-farmers-market.md](./positioning-farmers-market.md) | Open “farmers market” for whole agents — positioning & principles |
-| [user-systems-backlog.md](./user-systems-backlog.md) | **User systems backlog**: 13 systems for buyers/sellers/agents, ranked effort×impact, with the `recommend_stall` (#9) spec |
+| [user-systems-backlog.md](./user-systems-backlog.md) | **User systems backlog**: ranked systems for buyers/sellers/agents (#14 KiroCrew shipped; #15 team workflows specced), plus the `recommend_stall` (#9) spec |
 | [teams.md](./teams.md) | **Teams**: multi-agent packs that work together (e.g. programmer + debugger) |
 | [categories.md](./categories.md) | Browse taxonomy (lifestyle, coding, marketing, …) |
 | [ultimate-aeo-seo-geo.md](./ultimate-aeo-seo-geo.md) | SEO / AEO / GEO doctrine for the site |
