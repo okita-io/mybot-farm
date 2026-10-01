@@ -235,6 +235,66 @@ The `workflows[]` field is **runtime-neutral** (any runtime may populate it with
 
 ---
 
+## 11. End-to-end acceptance fixture — "Storytime" children's short-story crew
+
+The canonical test for the whole bundle: a real team pack with members **and** a workflow, planted and run, that proves the self-satisfying install (§5) end to end. Simple enough to eyeball, exercises every seam.
+
+**The pack (`storytime`, kind `team`, `runtime: ["kirocrew"]`):**
+- **Members (3):**
+  - `story-lead` — Team Lead. The user-facing entry point; takes a request ("a book for my kid Paul"), invokes the workflow, returns the finished markdown path. Deny-by-default tools + `fs_write` to the output dir only (per D3 the planted default is read/search; this fixture documents the one write grant the crew needs).
+  - `story-writer` — Creative writer. Drafts the story from a brief (child's name, setting).
+  - `story-editor` — Editor. Checks length (400–900 words), reading age, fairy-tale tone; returns a corrected draft.
+- **Workflow (1, default): `write-childrens-story`** — the orchestration `story-lead` runs:
+
+```python
+META = {
+    "name": "write-childrens-story",
+    "description": "Draft and edit a simplified fairy-tale short story for a child, 400-900 words, written to a markdown file.",
+    "phases": ["draft", "edit", "finalize"],
+}
+
+async def workflow(ctx):
+    args = ctx.args if isinstance(ctx.args, dict) else {}
+    child = (args.get("child_name") or "the child").strip()
+    setting = (args.get("setting") or "a simplified fairy-tale kingdom").strip()
+
+    ctx.phase("draft")
+    draft = await ctx.agent(
+        f"Write a children's short story for a kid named {child}, set in {setting}. "
+        f"Simplified fairy-tale tone, warm and gentle, 400-900 words. "
+        f"Make {child} the hero. Return the story text only.",
+        schema={"type": "object", "properties": {"title": {"type": "string"},
+                "story": {"type": "string"}}, "required": ["title", "story"]},
+        label="writer-draft", phase="draft", agent="story-writer")
+
+    ctx.phase("edit")
+    edited = await ctx.agent(
+        "You are a children's book editor. Ensure the story is 400-900 words, "
+        "age-appropriate, consistent fairy-tale tone, and keeps the child as hero. "
+        "Fix and return the final version.\n\n"
+        f"TITLE: {draft.get('title','')}\n\nSTORY:\n{draft.get('story','')}",
+        schema={"type": "object", "properties": {"title": {"type": "string"},
+                "story": {"type": "string"}, "word_count": {"type": "integer"}},
+                "required": ["title", "story"]},
+        label="editor-pass", phase="edit", agent="story-editor")
+
+    ctx.phase("finalize")
+    title = edited.get("title") or draft.get("title") or "A Story"
+    story = edited.get("story") or draft.get("story") or ""
+    md = f"# {title}\n\nFor {child}\n\n{story}\n"
+    return {"title": title, "markdown": md, "word_count": edited.get("word_count")}
+```
+
+**What it proves (maps to the DoD, §8):**
+- `ctx.agent(..., agent="story-writer"/"story-editor")` resolves against the just-planted members → the **self-satisfying install** (§5) is real, not theoretical.
+- The pack validates as a team with a non-empty `workflows[]` (§3) and the card lists `write-childrens-story` with the default marked (§4).
+- Round-trip through `mock-farm`: `farm_post` the pack (scrub gate passes — the script has no machine-local paths), `farm_plant` it into a temp `KIRO_HOME`, confirm 3 member templates + `~/.kiro/crew/workflows/write-childrens-story.py` land, then run the workflow and assert a 400–900-word markdown file is produced.
+- The Team-Lead interaction model ("ask `story-lead` for a book for Paul") is the user-facing demo once G1/G2 and the plant path land.
+
+**Why this fixture:** it's the smallest pack that is *simultaneously* a multi-member team and a workflow owner, so it's the one artifact that regression-guards the entire #15 surface — schema, card, plant ordering, and run-time member resolution — in a form a human can read end to end.
+
+---
+
 ## Related
 
 - [kirocrew-plugin-spec.md](./kirocrew-plugin-spec.md) — the KiroCrew plugin this extends (system #14); plant/export/scrub seams
