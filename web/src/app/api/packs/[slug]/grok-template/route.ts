@@ -7,13 +7,21 @@ import type { FarmPack } from "@/lib/pack-files";
 import type { Stall } from "@/lib/packs";
 
 function grokTemplateResponse(slug: string, stall: Stall, pack: FarmPack) {
-  if (stall.kind === "team" || pack.format === "mybot.farm/team-pack") {
+  if (
+    stall.kind === "team" ||
+    stall.kind === "world" ||
+    pack.format === "mybot.farm/team-pack" ||
+    pack.format === "mybot.farm/world-pack"
+  ) {
+    const noun = stall.kind === "world" || pack.format === "mybot.farm/world-pack"
+      ? "World"
+      : "Team";
     return jsonResponse(
       {
         error: "not_a_single_bot_template",
         slug,
         message:
-          "Team packs are not 1:1 create_bot_share_json recipes. Project each members[] agent pack with gafToGrokTemplate, or open that member's /api/packs/{slug}/grok-template.",
+          `${noun} packs are not 1:1 create_bot_share_json recipes. Project each members[] agent pack with gafToGrokTemplate, or open that member's /api/packs/{slug}/grok-template.`,
       },
       { status: 400 },
     );

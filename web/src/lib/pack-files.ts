@@ -11,6 +11,7 @@ import sproutJournal from "../../public/packs/agents/sprout-journal.json";
 import pairBench from "../../public/packs/teams/pair-bench.json";
 import roadCrew from "../../public/packs/teams/road-crew.json";
 import workbench from "../../public/packs/teams/workbench.json";
+import neonHarbor from "../../public/packs/worlds/neon-harbor.json";
 import { getStall, packPathStem, type Stall } from "@/lib/packs";
 import { packVersionOf } from "@/lib/pack-version";
 import { normalizeRuntimes, type RuntimeId } from "@/lib/runtimes";
@@ -236,6 +237,7 @@ const packsBySlug: Record<string, FarmPack> = {
   "pair-bench": pairBench,
   "road-crew": roadCrew,
   workbench,
+  "neon-harbor": neonHarbor,
 };
 
 function memberSlugFromPackPath(packPath: string): string {

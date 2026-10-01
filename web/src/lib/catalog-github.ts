@@ -1,3 +1,4 @@
+import { catalogDirForKind } from "./world-card.ts";
 import type { StallKind } from "@/lib/packs";
 import type { FarmPack } from "@/lib/pack-files";
 
@@ -29,7 +30,7 @@ export function catalogGithubConfig() {
 }
 
 export function catalogPackPath(kind: StallKind, slug: string) {
-  const dir = kind === "team" ? "teams" : "agents";
+  const dir = catalogDirForKind(kind);
   return `${dir}/${slug}.json`;
 }
 

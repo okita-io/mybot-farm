@@ -4,6 +4,18 @@ import os from "node:os";
 import path from "node:path";
 import { getPack } from "./farm-api.mjs";
 
+const TEAM_PACK_FORMAT = "mybot.farm/team-pack";
+const WORLD_PACK_FORMAT = "mybot.farm/world-pack";
+
+function isGroupPack(pack) {
+  return pack?.format === TEAM_PACK_FORMAT || pack?.format === WORLD_PACK_FORMAT;
+}
+
+function memberSlugFromRef(ref) {
+  if (!ref || typeof ref.pack !== "string") return null;
+  return ref.pack.split("/").pop().replace(/\.(json|hermes\.tar\.gz|tar\.gz)$/i, "");
+}
+
 function expandHome(p) {
   if (!p) return p;
   if (p === "~") return os.homedir();
@@ -258,11 +270,24 @@ export async function writePackWorkspace(pack, workspace) {
   return installed;
 }
 
-export async function plantPack(opts) {
-  const pack = await getPack(opts.config.baseUrl, opts.slug);
+export async function plantSingleAgentPack(pack, opts) {
   const agentId = slugifyAgentId(opts.agentId || pack.slug);
   const workspaceRoot = expandHome(opts.config.workspaceRoot);
   const workspace = expandHome(opts.workspace?.trim() || path.join(workspaceRoot, agentId));
+  const dryRun = Boolean(opts.dryRun);
+
+  if (dryRun) {
+    return {
+      agentId,
+      workspace,
+      skillsInstalled: (pack.skills ?? []).map((skill) => skill?.name).filter(Boolean),
+      attribution: pack.manifest?.attribution ?? "",
+      sourceNote: pack.manifest?.sourceNote ?? "",
+      packSlug: pack.slug,
+      createdAgent: false,
+      dryRun: true,
+    };
+  }
 
   const exists = await agentExists(agentId);
   if (exists && !opts.force) {
@@ -304,4 +329,50 @@ export async function plantPack(opts) {
     packSlug: pack.slug,
     createdAgent,
   };
+}
+
+export async function plantGroupPack(pack, opts) {
+  const workspaceRoot = expandHome(opts.config.workspaceRoot);
+  const groupSlug = slugifyAgentId(pack.slug);
+  const dryRun = Boolean(opts.dryRun);
+  const members = [];
+
+  for (const ref of pack.members ?? []) {
+    const memberSlug = memberSlugFromRef(ref);
+    if (!memberSlug) continue;
+    const memberPack = await getPack(opts.config.baseUrl, memberSlug);
+    const result = await plantSingleAgentPack(memberPack, {
+      ...opts,
+      agentId: memberSlug,
+      workspace: path.join(workspaceRoot, slugifyAgentId(memberSlug)),
+      dryRun,
+    });
+    members.push(result);
+  }
+
+  let worldJsonPath = null;
+  if (pack.format === WORLD_PACK_FORMAT && pack.world && typeof pack.world === "object") {
+    const worldDir = path.join(workspaceRoot, groupSlug);
+    worldJsonPath = path.join(worldDir, "world.json");
+    if (!dryRun) {
+      await fs.mkdir(worldDir, { recursive: true });
+      await fs.writeFile(worldJsonPath, JSON.stringify(pack.world, null, 2) + "\n", "utf8");
+    }
+  }
+
+  return {
+    kind: pack.format === WORLD_PACK_FORMAT ? "world" : "team",
+    packSlug: pack.slug,
+    members,
+    worldJsonPath,
+    dryRun,
+  };
+}
+
+export async function plantPack(opts) {
+  const pack = await getPack(opts.config.baseUrl, opts.slug);
+  if (isGroupPack(pack)) {
+    return plantGroupPack(pack, opts);
+  }
+  return plantSingleAgentPack(pack, opts);
 }

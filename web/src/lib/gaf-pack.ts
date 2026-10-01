@@ -43,7 +43,26 @@ export const GROK_BOT_MARK_COLOR_SET = new Set<string>(GROK_BOT_MARK_COLORS);
 
 export const AGENT_PACK_FORMAT = "mybot.farm/agent-pack";
 export const TEAM_PACK_FORMAT = "mybot.farm/team-pack";
+/**
+ * World pack: a team-pack superset. The cast (members[]) and their handoffs
+ * (topology) install as a plain team on any runtime; the extra `world` block
+ * (setting, scenes, cast skins, thumbnail, render hints) is what embodies them
+ * as characters. Runtimes that do not understand `world` ignore it and plant
+ * the team — graceful degradation, matching worlds-exchange-spec.md.
+ */
+export const WORLD_PACK_FORMAT = "mybot.farm/world-pack";
 export const MIN_TEAM_MEMBERS = 2;
+/** Minimum cast for a world. One character is a solo agent, not a world. */
+export const MIN_WORLD_CAST = 2;
+/** Closed capability set shared with the world-exchange bundle (worlds/v1). */
+export const WORLD_CAPABILITIES = ["web", "files", "schedule"] as const;
+/** Turn models a world scene can declare. `defer` = runtime's own room protocol picks the speaker. */
+export const WORLD_TURN_MODELS = ["director", "free-for-all", "round-robin", "defer"] as const;
+/** Portable world block schema id (worlds-exchange-spec §2.1). */
+export const WORLD_BLOCK_SCHEMA = "worlds/v1";
+export const WORLD_MEMORY_SCOPES = ["private", "shared", "substrate"] as const;
+/** Default cap on characters listed at one place (Grok group size). */
+export const DEFAULT_WORLD_MAX_PRESENT = 6;
 
 /** Farm-only geometric shapes → nearest Grok mark enum. */
 export const DEFAULT_AVATAR_SHAPE_FALLBACKS: Record<string, GrokBotMarkShape> = {
@@ -307,6 +326,278 @@ function memberPackError(index: number, pack: unknown): string | null {
   return null;
 }
 
+/** Shared team-member array check used by both team and world listings. */
+function validateTeamMembers(
+  members: unknown,
+  minMembers: number,
+): { ok: true } | { ok: false; error: string } {
+  if (!Array.isArray(members) || members.length < minMembers) {
+    return {
+      ok: false,
+      error: `requires members[] with at least ${minMembers} agents`,
+    };
+  }
+
+  for (let i = 0; i < members.length; i += 1) {
+    const member = members[i];
+    if (!isPlainObject(member)) {
+      return {
+        ok: false,
+        error: `members[${i}] must be an object with role, summary, and pack`,
+      };
+    }
+    const role = typeof member.role === "string" ? member.role.trim() : "";
+    const summary = typeof member.summary === "string" ? member.summary.trim() : "";
+    if (!role) {
+      return { ok: false, error: `members[${i}].role is required` };
+    }
+    if (!summary) {
+      return { ok: false, error: `members[${i}].summary is required` };
+    }
+    const packError = memberPackError(i, member.pack);
+    if (packError) {
+      return { ok: false, error: packError };
+    }
+  }
+
+  return { ok: true };
+}
+
+const WORLD_TURN_MODEL_SET = new Set<string>(WORLD_TURN_MODELS);
+const WORLD_CAPABILITY_SET = new Set<string>(WORLD_CAPABILITIES);
+const WORLD_MEMORY_SCOPE_SET = new Set<string>(WORLD_MEMORY_SCOPES);
+
+/** Thumbnail must be https or a relative path (no `..`, no URL scheme). */
+export function validateWorldThumbnail(
+  thumbnail: string,
+): { ok: true } | { ok: false; error: string } {
+  const value = thumbnail.trim();
+  if (!value) {
+    return { ok: false, error: "world.thumbnail must be a non-empty string path or URL." };
+  }
+  if (value.includes("..")) {
+    return { ok: false, error: "world.thumbnail must not contain .." };
+  }
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(value)) {
+    if (!value.startsWith("https://")) {
+      return {
+        ok: false,
+        error: "world.thumbnail must be an https URL or a relative path without a scheme.",
+      };
+    }
+  }
+  return { ok: true };
+}
+
+/**
+ * Validate the `world` block of a world-pack. Additive and tolerant: unknown
+ * keys are allowed so the block can grow, but the fields the Worlds tab and the
+ * importers rely on (thumbnail, cast role refs, place/scene ids, turn model,
+ * capability names) are shape-checked here. Mirrors worlds/v1 in
+ * worlds-exchange-spec.md §2.1.
+ */
+export function validateWorldBlock(
+  world: unknown,
+  memberRoles: Set<string>,
+): { ok: true } | { ok: false; error: string } {
+  if (!isPlainObject(world)) {
+    return { ok: false, error: "world must be an object." };
+  }
+
+  if (world.schema !== WORLD_BLOCK_SCHEMA) {
+    return { ok: false, error: `world.schema must be "${WORLD_BLOCK_SCHEMA}".` };
+  }
+
+  if (typeof world.title !== "string" || !world.title.trim()) {
+    return { ok: false, error: "world.title is required." };
+  }
+
+  if (world.thumbnail !== undefined) {
+    if (typeof world.thumbnail !== "string") {
+      return { ok: false, error: "world.thumbnail must be a non-empty string path or URL." };
+    }
+    const thumbnailResult = validateWorldThumbnail(world.thumbnail);
+    if (!thumbnailResult.ok) {
+      return thumbnailResult;
+    }
+  }
+
+  if (world.theme !== undefined && !isPlainObject(world.theme)) {
+    return { ok: false, error: "world.theme must be an object." };
+  }
+
+  let maxPresent = DEFAULT_WORLD_MAX_PRESENT;
+  if (world.rules !== undefined) {
+    if (!isPlainObject(world.rules)) {
+      return { ok: false, error: "world.rules must be an object." };
+    }
+    if (
+      world.rules.turnModel !== undefined &&
+      (typeof world.rules.turnModel !== "string" ||
+        !WORLD_TURN_MODEL_SET.has(world.rules.turnModel))
+    ) {
+      return {
+        ok: false,
+        error: `world.rules.turnModel must be one of ${WORLD_TURN_MODELS.join(", ")}.`,
+      };
+    }
+    if (world.rules.maxPresent !== undefined) {
+      if (
+        typeof world.rules.maxPresent !== "number" ||
+        !Number.isInteger(world.rules.maxPresent) ||
+        world.rules.maxPresent < 1
+      ) {
+        return {
+          ok: false,
+          error: "world.rules.maxPresent must be a positive integer.",
+        };
+      }
+      maxPresent = world.rules.maxPresent;
+    }
+  }
+
+  if (!Array.isArray(world.places) || world.places.length === 0) {
+    return { ok: false, error: "world.places must include at least one place." };
+  }
+
+  const placeIds = new Set<string>();
+  for (let i = 0; i < world.places.length; i += 1) {
+    const place = world.places[i];
+    if (!isPlainObject(place)) {
+      return { ok: false, error: `world.places[${i}] must be an object.` };
+    }
+    const id = typeof place.id === "string" ? place.id.trim() : "";
+    if (!id) {
+      return { ok: false, error: `world.places[${i}].id is required.` };
+    }
+    if (placeIds.has(id)) {
+      return { ok: false, error: `world.places[${i}].id "${id}" is duplicated.` };
+    }
+    placeIds.add(id);
+    if (typeof place.name !== "string" || !place.name.trim()) {
+      return { ok: false, error: `world.places[${i}].name is required.` };
+    }
+  }
+
+  for (let i = 0; i < world.places.length; i += 1) {
+    const place = world.places[i] as Record<string, unknown>;
+    if (place.connects !== undefined) {
+      if (!Array.isArray(place.connects)) {
+        return { ok: false, error: `world.places[${i}].connects must be an array of place ids.` };
+      }
+      for (const target of place.connects) {
+        if (typeof target !== "string" || !placeIds.has(target)) {
+          return {
+            ok: false,
+            error: `world.places[${i}].connects references "${target}" which is not a place id.`,
+          };
+        }
+      }
+    }
+    if (place.present !== undefined) {
+      if (!Array.isArray(place.present)) {
+        return { ok: false, error: `world.places[${i}].present must be an array of cast roles.` };
+      }
+      if (place.present.length > maxPresent) {
+        return {
+          ok: false,
+          error: `world.places[${i}].present has ${place.present.length} characters; max is ${maxPresent}.`,
+        };
+      }
+      for (const role of place.present) {
+        if (typeof role !== "string" || !memberRoles.has(role)) {
+          return {
+            ok: false,
+            error: `world.places[${i}].present references "${role}" which is not a member role.`,
+          };
+        }
+      }
+    }
+  }
+
+  if (world.cast !== undefined) {
+    if (!Array.isArray(world.cast)) {
+      return { ok: false, error: "world.cast must be an array." };
+    }
+    const castRoles = new Set<string>();
+    for (let i = 0; i < world.cast.length; i += 1) {
+      const member = world.cast[i];
+      if (!isPlainObject(member)) {
+        return { ok: false, error: `world.cast[${i}] must be an object.` };
+      }
+      const role = typeof member.role === "string" ? member.role.trim() : "";
+      if (!role) {
+        return { ok: false, error: `world.cast[${i}].role is required.` };
+      }
+      if (castRoles.has(role)) {
+        return { ok: false, error: `world.cast[${i}].role "${role}" is duplicated.` };
+      }
+      castRoles.add(role);
+      if (!memberRoles.has(role)) {
+        return {
+          ok: false,
+          error: `world.cast[${i}].role "${role}" is not a member role.`,
+        };
+      }
+      if (member.home !== undefined) {
+        const home = typeof member.home === "string" ? member.home.trim() : "";
+        if (!home || !placeIds.has(home)) {
+          return {
+            ok: false,
+            error: `world.cast[${i}].home "${member.home}" is not a place id.`,
+          };
+        }
+      }
+      if (member.memoryScope !== undefined) {
+        if (
+          typeof member.memoryScope !== "string" ||
+          !WORLD_MEMORY_SCOPE_SET.has(member.memoryScope)
+        ) {
+          return {
+            ok: false,
+            error: `world.cast[${i}].memoryScope must be one of ${WORLD_MEMORY_SCOPES.join(", ")}.`,
+          };
+        }
+      }
+      if (member.capabilities !== undefined) {
+        if (!Array.isArray(member.capabilities)) {
+          return { ok: false, error: `world.cast[${i}].capabilities must be an array.` };
+        }
+        for (const cap of member.capabilities) {
+          if (typeof cap !== "string" || !WORLD_CAPABILITY_SET.has(cap)) {
+            return {
+              ok: false,
+              error: `world.cast[${i}].capabilities "${cap}" must be one of ${WORLD_CAPABILITIES.join(", ")}.`,
+            };
+          }
+        }
+      }
+    }
+  }
+
+  if (!isPlainObject(world.entrypoint)) {
+    return { ok: false, error: "world.entrypoint is required." };
+  }
+  const entryPlace =
+    typeof world.entrypoint.place === "string" ? world.entrypoint.place.trim() : "";
+  if (!entryPlace || !placeIds.has(entryPlace)) {
+    return {
+      ok: false,
+      error: `world.entrypoint.place "${world.entrypoint.place}" is not a place id.`,
+    };
+  }
+  const greeter =
+    typeof world.entrypoint.greeter === "string" ? world.entrypoint.greeter.trim() : "";
+  if (!greeter || !memberRoles.has(greeter)) {
+    return {
+      ok: false,
+      error: `world.entrypoint.greeter "${world.entrypoint.greeter}" is not a member role.`,
+    };
+  }
+
+  return { ok: true };
+}
+
 /**
  * Kind-aware checks for POST /api/listings (and plugin farm_post dry-run).
  * Additive on top of validateGafPack. Seed catalog files are not required to
@@ -330,33 +621,9 @@ export function validateListingPack(
       };
     }
 
-    if (!Array.isArray(pack.members) || pack.members.length < MIN_TEAM_MEMBERS) {
-      return {
-        ok: false,
-        error: `kind "team" requires members[] with at least ${MIN_TEAM_MEMBERS} agents`,
-      };
-    }
-
-    for (let i = 0; i < pack.members.length; i += 1) {
-      const member = pack.members[i];
-      if (!isPlainObject(member)) {
-        return {
-          ok: false,
-          error: `members[${i}] must be an object with role, summary, and pack`,
-        };
-      }
-      const role = typeof member.role === "string" ? member.role.trim() : "";
-      const summary = typeof member.summary === "string" ? member.summary.trim() : "";
-      if (!role) {
-        return { ok: false, error: `members[${i}].role is required` };
-      }
-      if (!summary) {
-        return { ok: false, error: `members[${i}].summary is required` };
-      }
-      const packError = memberPackError(i, member.pack);
-      if (packError) {
-        return { ok: false, error: packError };
-      }
+    const membersResult = validateTeamMembers(pack.members, MIN_TEAM_MEMBERS);
+    if (!membersResult.ok) {
+      return { ok: false, error: `kind "team" ${membersResult.error}` };
     }
 
     if (pack.shared !== undefined) {
@@ -377,10 +644,64 @@ export function validateListingPack(
     return { ok: true };
   }
 
+  if (kind === "world") {
+    if (format !== WORLD_PACK_FORMAT) {
+      return {
+        ok: false,
+        error: `kind "world" requires pack.format "${WORLD_PACK_FORMAT}"`,
+      };
+    }
+
+    // A world is a team-pack superset: the cast is members[], same shape.
+    const membersResult = validateTeamMembers(pack.members, MIN_WORLD_CAST);
+    if (!membersResult.ok) {
+      return { ok: false, error: `kind "world" ${membersResult.error}` };
+    }
+
+    if (!isPlainObject(pack.world)) {
+      return { ok: false, error: 'kind "world" requires a world{} block.' };
+    }
+
+    const memberRoles = new Set<string>(
+      (pack.members as Array<Record<string, unknown>>)
+        .map((m) => (typeof m.role === "string" ? m.role.trim() : ""))
+        .filter(Boolean),
+    );
+
+    const worldResult = validateWorldBlock(pack.world, memberRoles);
+    if (!worldResult.ok) {
+      return worldResult;
+    }
+
+    if (pack.shared !== undefined) {
+      if (!isPlainObject(pack.shared)) {
+        return { ok: false, error: "shared must be an object." };
+      }
+      if (
+        pack.shared.gettingStarted !== undefined &&
+        typeof pack.shared.gettingStarted !== "string"
+      ) {
+        return {
+          ok: false,
+          error: "shared.gettingStarted must be a string.",
+        };
+      }
+    }
+
+    return { ok: true };
+  }
+
   if (format === TEAM_PACK_FORMAT) {
     return {
       ok: false,
       error: `kind "agent" cannot use pack.format "${TEAM_PACK_FORMAT}"`,
+    };
+  }
+
+  if (format === WORLD_PACK_FORMAT) {
+    return {
+      ok: false,
+      error: `kind "agent" cannot use pack.format "${WORLD_PACK_FORMAT}"`,
     };
   }
 

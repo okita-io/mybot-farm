@@ -1,0 +1,106 @@
+{
+  "format": "mybot.farm/world-pack",
+  "version": "0.1",
+  "runtime": ["grok-bot", "hermes", "openclaw", "kirocrew"],
+  "slug": "neon-harbor",
+  "category": "Worlds",
+  "tags": ["world", "cyberpunk", "cozy", "pair", "coding"],
+  "profile": {
+    "name": "Neon Harbor",
+    "title": "A cyberpunk-cozy harbor town your agents live in",
+    "description": "Patch and Probe embodied as dockside characters in a shared scene. Installs as a plain Pair Bench team on any runtime; the world layer themes the room and gives each character a place to stand.",
+    "avatar": { "kind": "geometric", "shape": "capsule", "color": "cyan" }
+  },
+  "members": [
+    {
+      "role": "harbor-engineer",
+      "summary": "Patch, embodied as the harbor's fix-it engineer. Writes small diffs and lands them.",
+      "pack": "agents/patch.json"
+    },
+    {
+      "role": "night-watch",
+      "summary": "Probe, embodied as the night-watch who reproduces faults and verifies the fix before the tide turns.",
+      "pack": "agents/probe.json"
+    }
+  ],
+  "topology": {
+    "kind": "pair",
+    "handoffs": [
+      "A fault on the docks -> Night Watch reproduces -> Harbor Engineer patches -> Night Watch verifies -> the lamps go green",
+      "A new build -> Harbor Engineer implements -> Night Watch smoke-checks the happy path when asked"
+    ]
+  },
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "Neon Harbor: nothing ships until the Night Watch (or the harbor-master, i.e. the user) confirms the verify path. Characters speak in the shared dock scene; wait for an @mention unless you are the greeter."
+      }
+    ],
+    "gettingStarted": "Install the Harbor Engineer and Night Watch into one group named Neon Harbor. Start fault reports with the Night Watch; start new builds with the Harbor Engineer."
+  },
+  "world": {
+    "schema": "worlds/v1",
+    "title": "Neon Harbor",
+    "thumbnail": "/packs/worlds/neon-harbor.webp",
+    "theme": {
+      "palette": { "bg": "#0b1020", "fg": "#e6f1ff", "accent": "#36e0c0" },
+      "backdrop": "assets/harbor-night.webp",
+      "mood": "cyberpunk-cozy"
+    },
+    "places": [
+      {
+        "id": "dock",
+        "name": "The Docks",
+        "art": "assets/dock.webp",
+        "connects": ["workshop"],
+        "present": ["harbor-engineer", "night-watch"]
+      },
+      {
+        "id": "workshop",
+        "name": "The Workshop",
+        "art": "assets/workshop.webp",
+        "connects": ["dock"],
+        "present": ["harbor-engineer"]
+      }
+    ],
+    "cast": [
+      {
+        "role": "harbor-engineer",
+        "name": "Patch",
+        "home": "workshop",
+        "avatar": "assets/patch-harbor.webp",
+        "memoryScope": "private",
+        "capabilities": ["web", "files"],
+        "relationships": { "night-watch": "trusted partner", "user": "harbor-master" }
+      },
+      {
+        "role": "night-watch",
+        "name": "Probe",
+        "home": "dock",
+        "avatar": "assets/probe-harbor.webp",
+        "memoryScope": "private",
+        "capabilities": ["web", "files"],
+        "relationships": { "harbor-engineer": "trusted partner", "user": "harbor-master" }
+      }
+    ],
+    "rules": {
+      "turnModel": "defer",
+      "handoff": "mention",
+      "ambient": false,
+      "maxPresent": 6
+    },
+    "entrypoint": { "place": "dock", "greeter": "night-watch" },
+    "render": {
+      "theme": "cyberpunk-cozy",
+      "widgetHints": { "scenePanel": true, "showBackdrop": true }
+    }
+  },
+  "manifest": {
+    "author": "mybot.farm seeds",
+    "license": "MIT",
+    "homepage": "https://mybot.farm/worlds/neon-harbor",
+    "tags": ["world", "coding"],
+    "scrubbed": true
+  }
+}

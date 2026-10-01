@@ -10,7 +10,7 @@ import { stallPagePath } from "@/lib/packs";
 type AdminFlagGroup = {
   slug: string;
   name: string;
-  kind: "agent" | "team";
+  kind: "agent" | "team" | "world";
   listingId: string | null;
   removable: boolean;
   takenDown: boolean;
@@ -106,7 +106,7 @@ export function AdminFlagQueue({ groups }: { groups: AdminFlagGroup[] }) {
                 )}
               </h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                {group.kind === "team" ? "Team" : "Agent"} · {group.slug}
+                {group.kind === "world" ? "World" : group.kind === "team" ? "Team" : "Agent"} · {group.slug}
                 {group.takenDown ? " · already removed" : ""}
                 {` · ${group.flags.length} ${group.flags.length === 1 ? "report" : "reports"}`}
               </p>

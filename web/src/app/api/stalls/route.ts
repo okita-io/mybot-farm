@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
   if (kindParam && !kind) {
     return jsonResponse(
-      { error: "invalid_kind", kind: kindParam, allowed: ["agent", "team"] },
+      { error: "invalid_kind", kind: kindParam, allowed: ["agent", "team", "world"] },
       { status: 400 },
     );
   }

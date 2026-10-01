@@ -82,6 +82,7 @@ export function CatalogControls({
             <option value="">All</option>
             <option value="agent">Bots</option>
             <option value="team">Teams</option>
+            <option value="world">Worlds</option>
           </select>
         </label>
         <label className="block text-sm font-medium text-foreground">

@@ -204,6 +204,38 @@ class PlanTests(unittest.TestCase):
         self.assertEqual(plan.kind, "team")
         self.assertEqual(target_profile_names(plan), ["patch", "probe"])
 
+    def test_world_pack_plans_cast_and_world_file(self) -> None:
+        stall = {
+            "kind": "world",
+            "slug": "neon-harbor",
+            "pageUrl": "https://mybot.farm/worlds/neon-harbor",
+            "members": [
+                {"name": "patch", "href": "/packs/agents/patch.hermes.tar.gz"},
+                {"name": "probe", "href": "/packs/agents/probe.hermes.tar.gz"},
+            ],
+        }
+        pack = {
+            "format": "mybot.farm/world-pack",
+            "slug": "neon-harbor",
+            "runtime": ["hermes"],
+            "members": [
+                {"role": "harbor-engineer", "summary": "Patch", "pack": "agents/patch.json"},
+                {"role": "night-watch", "summary": "Probe", "pack": "agents/probe.json"},
+            ],
+            "shared": {"gettingStarted": "Install Patch and Probe into one group named Neon Harbor."},
+            "world": {
+                "schema": "worlds/v1",
+                "title": "Neon Harbor",
+                "entrypoint": {"place": "dock", "greeter": "night-watch"},
+            },
+        }
+        plan = build_plant_plan(stall, pack, "https://mybot.farm")
+        self.assertEqual(plan.kind, "world")
+        self.assertEqual(target_profile_names(plan), ["patch", "probe"])
+        self.assertIsNotNone(plan.world_file)
+        self.assertTrue(str(plan.world_file).endswith("/worlds/neon-harbor/world.json"))
+        self.assertEqual(plan.world_block["title"], "Neon Harbor")
+
     def test_team_without_archives_explains_gap(self) -> None:
         stall = {"kind": "team", "slug": "paper-crew", "downloadHref": "/api/packs/paper-crew"}
         pack = {

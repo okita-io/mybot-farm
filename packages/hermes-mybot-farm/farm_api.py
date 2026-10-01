@@ -29,12 +29,15 @@ CATEGORY_LABELS = frozenset(
         "Education",
         "Ops / admin",
         "Experimental",
+        "Worlds",
     }
 )
-LISTING_KINDS = frozenset({"agent", "team"})
+LISTING_KINDS = frozenset({"agent", "team", "world"})
 AGENT_PACK_FORMAT = "mybot.farm/agent-pack"
 TEAM_PACK_FORMAT = "mybot.farm/team-pack"
+WORLD_PACK_FORMAT = "mybot.farm/world-pack"
 MIN_TEAM_MEMBERS = 2
+MIN_WORLD_CAST = 2
 MIN_PAID_PRICE_CENTS = 200
 MAX_PRICE_CENTS = 999_900
 MAX_PACK_CHARS = 500_000
@@ -345,50 +348,72 @@ def _member_pack_error(index: int, pack: Any) -> str | None:
         )
     if pack.get("format") == TEAM_PACK_FORMAT:
         return f"members[{index}].pack nested object cannot be a team-pack"
+    if pack.get("format") == WORLD_PACK_FORMAT:
+        return f"members[{index}].pack nested object cannot be a world-pack"
     return None
+
+
+def _validate_group_members(
+    members: Any, min_count: int, label: str
+) -> None:
+    if not isinstance(members, list) or len(members) < min_count:
+        raise FarmError(
+            f'kind "{label}" requires members[] with at least {min_count} agents'
+        )
+    for i, member in enumerate(members):
+        if not isinstance(member, dict) or isinstance(member, list):
+            raise FarmError(
+                f"members[{i}] must be an object with role, summary, and pack"
+            )
+        role = member.get("role").strip() if isinstance(member.get("role"), str) else ""
+        summary = (
+            member.get("summary").strip()
+            if isinstance(member.get("summary"), str)
+            else ""
+        )
+        if not role:
+            raise FarmError(f"members[{i}].role is required")
+        if not summary:
+            raise FarmError(f"members[{i}].summary is required")
+        pack_error = _member_pack_error(i, member.get("pack"))
+        if pack_error:
+            raise FarmError(pack_error)
+
+
+def _validate_shared_block(shared: Any) -> None:
+    if shared is None:
+        return
+    if not isinstance(shared, dict) or isinstance(shared, list):
+        raise FarmError("shared must be an object.")
+    getting = shared.get("gettingStarted")
+    if getting is not None and not isinstance(getting, str):
+        raise FarmError(
+            "shared.gettingStarted must be a string (Hermes install steps)."
+        )
 
 
 def validate_listing_pack(kind: str, pack: dict[str, Any]) -> None:
     """Match web/src/lib/gaf-pack.ts validateListingPack for farm_post dry-run."""
     fmt = pack.get("format").strip() if isinstance(pack.get("format"), str) else ""
+    if kind == "world":
+        if fmt != WORLD_PACK_FORMAT:
+            raise FarmError(f'kind "world" requires pack.format "{WORLD_PACK_FORMAT}"')
+        _validate_group_members(pack.get("members"), MIN_WORLD_CAST, "world")
+        world = pack.get("world")
+        if not isinstance(world, dict) or isinstance(world, list):
+            raise FarmError('kind "world" requires a world{} block.')
+        _validate_shared_block(pack.get("shared"))
+        return
     if kind == "team":
         if fmt != TEAM_PACK_FORMAT:
             raise FarmError(f'kind "team" requires pack.format "{TEAM_PACK_FORMAT}"')
-        members = pack.get("members")
-        if not isinstance(members, list) or len(members) < MIN_TEAM_MEMBERS:
-            raise FarmError(
-                f'kind "team" requires members[] with at least {MIN_TEAM_MEMBERS} agents'
-            )
-        for i, member in enumerate(members):
-            if not isinstance(member, dict) or isinstance(member, list):
-                raise FarmError(
-                    f"members[{i}] must be an object with role, summary, and pack"
-                )
-            role = member.get("role").strip() if isinstance(member.get("role"), str) else ""
-            summary = (
-                member.get("summary").strip()
-                if isinstance(member.get("summary"), str)
-                else ""
-            )
-            if not role:
-                raise FarmError(f"members[{i}].role is required")
-            if not summary:
-                raise FarmError(f"members[{i}].summary is required")
-            pack_error = _member_pack_error(i, member.get("pack"))
-            if pack_error:
-                raise FarmError(pack_error)
-        shared = pack.get("shared")
-        if shared is not None:
-            if not isinstance(shared, dict) or isinstance(shared, list):
-                raise FarmError("shared must be an object.")
-            getting = shared.get("gettingStarted")
-            if getting is not None and not isinstance(getting, str):
-                raise FarmError(
-                    "shared.gettingStarted must be a string (Hermes install steps)."
-                )
+        _validate_group_members(pack.get("members"), MIN_TEAM_MEMBERS, "team")
+        _validate_shared_block(pack.get("shared"))
         return
     if fmt == TEAM_PACK_FORMAT:
         raise FarmError(f'kind "agent" cannot use pack.format "{TEAM_PACK_FORMAT}"')
+    if fmt == WORLD_PACK_FORMAT:
+        raise FarmError(f'kind "agent" cannot use pack.format "{WORLD_PACK_FORMAT}"')
     if fmt != AGENT_PACK_FORMAT:
         raise FarmError(f'kind "agent" requires pack.format "{AGENT_PACK_FORMAT}"')
     members = pack.get("members")
@@ -410,7 +435,7 @@ def build_listing_payload(
 ) -> dict[str, Any]:
     parsed_kind = parse_listing_kind(kind)
     if not parsed_kind:
-        raise FarmError('kind must be "agent" or "team"')
+        raise FarmError('kind must be "agent", "team", or "world"')
 
     parsed_name = name.strip() if isinstance(name, str) else ""
     parsed_title = title.strip() if isinstance(title, str) else ""

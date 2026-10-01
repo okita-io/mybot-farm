@@ -107,5 +107,41 @@ ok("POST update own listing → 200 updated + version bump", r.status === 200 &&
 r = await j("/api/listings", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${KEY}` }, body: JSON.stringify({ kind: "team", name: "Bad Team", title: "t", description: "d", category: "Coding", priceCents: 0, pack: { format: "mybot.farm/team-pack", members: [{ role: "solo", summary: "s", pack: "agents/patch.json" }] } }) });
 ok("POST team with 1 member → 400", r.status === 400 && r.body?.error === "invalid_pack");
 
+// world listing
+const worldPack = {
+  format: "mybot.farm/world-pack",
+  profile: { name: "Smoke Harbor", title: "Smoke world", description: "Posted by smoke." },
+  members: [
+    { role: "lead", summary: "Lead cast member.", pack: "agents/patch.json" },
+    { role: "guide", summary: "Guide cast member.", pack: "agents/probe.json" },
+  ],
+  world: {
+    schema: "worlds/v1",
+    title: "Smoke Harbor",
+    places: [{ id: "dock", name: "The Docks", present: ["lead", "guide"] }],
+    entrypoint: { place: "dock", greeter: "guide" },
+  },
+};
+r = await j("/api/listings", {
+  method: "POST",
+  headers: { "Content-Type": "application/json", Authorization: `Bearer ${KEY}` },
+  body: JSON.stringify({
+    kind: "world",
+    name: "Smoke Harbor",
+    title: "Smoke world",
+    description: "Posted by smoke.",
+    category: "Worlds",
+    priceCents: 0,
+    pack: worldPack,
+  }),
+});
+ok("POST world listing → 201 created", r.status === 201 && r.body?.created === true && r.body?.kind === "world");
+const worldSlug = r.body?.slug;
+r = await j(`/api/stalls/${worldSlug}`);
+ok("GET posted world stall → kind world", r.status === 200 && r.body?.kind === "world" && r.body?.pagePath === `/worlds/${worldSlug}`);
+
+r = await j("/api/stalls?kind=world");
+ok("GET /api/stalls?kind=world includes posted world", r.status === 200 && r.body.stalls.some((s) => s.slug === worldSlug));
+
 console.log(`\n[smoke] ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

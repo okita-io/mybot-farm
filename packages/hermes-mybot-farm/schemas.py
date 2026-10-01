@@ -180,11 +180,12 @@ FARM_POST = {
         "Auth: env MYBOT_FARM_API_KEY, else plugin config apiKey. Never pass a key in tool arguments. "
         "Create a key at https://mybot.farm/sell. Pack must be GAF JSON (object or packPath "
         "to a .json file under the plugin packs dir / ~/.hermes/farm / ~/.hermes/packs) — not a "
-        "Hermes tarball. pack.format is required (mybot.farm/agent-pack or mybot.farm/team-pack). "
-        "Plant still imports Hermes .tar.gz; posting publishes GAF. kind \"team\" requires "
-        "format mybot.farm/team-pack and members[] "
-        "(at least two): each member needs role, summary, and pack (catalog path like "
-        "agents/patch.json, a slug, a .hermes.tar.gz URL, or a nested agent-pack). "
+        "Hermes tarball. pack.format is required (mybot.farm/agent-pack, mybot.farm/team-pack, "
+        "or mybot.farm/world-pack). Plant still imports Hermes .tar.gz; posting publishes GAF. "
+        "kind \"team\" requires format mybot.farm/team-pack and members[] (at least two): each "
+        "member needs role, summary, and pack (catalog path like agents/patch.json, a slug, a "
+        ".hermes.tar.gz URL, or a nested agent-pack). kind \"world\" requires "
+        "mybot.farm/world-pack with members[] plus a world{} block. "
         "kind \"agent\" uses mybot.farm/agent-pack and cannot include members[]. "
         "category is an exact farm label (Lifestyle, Coding, Experimental, …). "
         "priceCents is 0 (free) or 200–999900. Paid listings need Stripe Connect on the seller "
@@ -197,8 +198,8 @@ FARM_POST = {
             "kind": {
                 "type": "string",
                 "description": (
-                    'Listing kind: "agent" or "team". Teams land on /teams/{slug} and '
-                    "need a team-pack with members[]."
+                    'Listing kind: "agent", "team", or "world". Teams land on /teams/{slug}; '
+                    "worlds on /worlds/{slug}."
                 ),
             },
             "name": {
@@ -229,7 +230,8 @@ FARM_POST = {
                 "type": "object",
                 "description": (
                     "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: "
-                    "mybot.farm/team-pack with members[] (role, summary, pack). "
+                    "mybot.farm/team-pack with members[] (role, summary, pack). Worlds: "
+                    "mybot.farm/world-pack with members[] plus world{}. "
                     "Member pack may be agents/<slug>.json, a slug, a tarball path, "
                     "or a nested agent-pack. Export/convert elsewhere; this tool does "
                     "not translate Hermes tarballs."

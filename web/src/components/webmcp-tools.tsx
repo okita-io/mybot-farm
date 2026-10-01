@@ -83,7 +83,7 @@ function inputSchemaFor(name: ToolName) {
         },
         kind: {
           type: "string",
-          enum: ["agent", "team"],
+          enum: ["agent", "team", "world"],
           description: "Optional bot kind filter",
         },
       },
@@ -97,8 +97,8 @@ function inputSchemaFor(name: ToolName) {
       properties: {
         kind: {
           type: "string",
-          enum: ["agent", "team"],
-          description: 'Listing kind: "agent" or "team"',
+          enum: ["agent", "team", "world"],
+          description: 'Listing kind: "agent", "team", or "world"',
         },
         name: {
           type: "string",
@@ -125,7 +125,7 @@ function inputSchemaFor(name: ToolName) {
         pack: {
           type: "object",
           description:
-            "GAF JSON object (max ~500KB encoded). Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack).",
+            "GAF JSON object (max ~500KB encoded). Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack). Worlds: mybot.farm/world-pack with members[] plus a world{} block.",
         },
         apiKey: {
           type: "string",
@@ -195,7 +195,7 @@ export function WebmcpTools() {
         if (typeof args.q === "string" && args.q.trim()) {
           params.set("q", args.q.trim());
         }
-        if (args.kind === "agent" || args.kind === "team") {
+        if (args.kind === "agent" || args.kind === "team" || args.kind === "world") {
           params.set("kind", args.kind);
         }
         const query = params.toString();

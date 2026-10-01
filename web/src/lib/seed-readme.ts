@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { parseStallReadme } from "@/lib/readme";
+import { catalogDirForKind } from "./world-card.ts";
 import type { Stall } from "@/lib/packs";
 
 const seedReadmeCache = new Map<
@@ -25,7 +26,7 @@ export async function loadSeedStallReadme(
     process.cwd(),
     "public",
     "packs",
-    stall.kind === "team" ? "teams" : "agents",
+    catalogDirForKind(stall.kind),
     stall.slug,
     "README.md",
   );

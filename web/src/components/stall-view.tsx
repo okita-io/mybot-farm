@@ -7,11 +7,12 @@ import { StallDates, StallHeaderMeta, StallPackStats, StallRevisionHistory } fro
 import { StallComments } from "@/components/stall-comments";
 import { StallReadmeCard } from "@/components/stall-readme-card";
 import { StallSlugMeta } from "@/components/stall-slug-meta";
+import { StallWorldDetails } from "@/components/stall-world-details";
 import { Container } from "@/components/container";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
 import { installPrompt, shortInstallPrompt } from "@/lib/install-prompt";
-import { catalogStallCardStats } from "@/lib/catalog";
+import { catalogStallCardStats, getCatalogPack } from "@/lib/catalog";
 import { getStallEngagement } from "@/lib/engagement";
 import { hasUserFlaggedStall } from "@/lib/moderation";
 import { listStallRevisions } from "@/lib/stall-revisions";
@@ -21,9 +22,11 @@ import {
   packFileUrl,
   stallApiPaths,
   stallPageUrl,
+  listingNoun,
   stallToneClasses,
   type Stall,
 } from "@/lib/packs";
+import { worldStallSummary } from "@/lib/world-card";
 import { listStallComments } from "@/lib/comments";
 import { withSeedReadme } from "@/lib/seed-readme";
 import { isAdminEmail } from "@/lib/admin";
@@ -67,13 +70,16 @@ export async function StallView({
   const api = stallApiPaths(stall.slug);
   const viewer = await getCachedViewer();
   const stallWithReadme = await withSeedReadme(stall);
-  const [stats, engagement, flagged, revisions, comments] = await Promise.all([
+  const [stats, engagement, flagged, revisions, comments, pack] = await Promise.all([
     catalogStallCardStats(stall.slug),
     getStallEngagement(stall.slug, viewer?.id),
     viewer ? hasUserFlaggedStall(stall.slug, viewer.id) : Promise.resolve(false),
     listStallRevisions(stall.slug),
     listStallComments(stall.slug, viewer?.id),
+    stall.kind === "world" ? getCatalogPack(stall.slug) : Promise.resolve(undefined),
   ]);
+  const worldSummary =
+    stall.kind === "world" && pack ? worldStallSummary(pack) : null;
   const paid = (stall.priceCents ?? 0) > 0;
   const isOwner = Boolean(viewer && stall.sellerUserId === viewer.id);
   const isAdmin = isAdminEmail(viewer?.email);
@@ -86,7 +92,14 @@ export async function StallView({
           <Link href="/catalog" className="underline-offset-4 hover:underline">
             Catalog
           </Link>
-          {stall.kind === "team" ? (
+          {stall.kind === "world" ? (
+            <>
+              {" · "}
+              <Link href="/worlds" className="underline-offset-4 hover:underline">
+                Worlds
+              </Link>
+            </>
+          ) : stall.kind === "team" ? (
             <>
               {" · "}
               <Link
@@ -140,7 +153,7 @@ export async function StallView({
           ) : null}
           {checkout === "cancel" ? (
             <p className="mt-3 text-sm text-muted-foreground" role="status">
-              Checkout canceled. The bot is still here if you want it later.
+              Checkout canceled. The {listingNoun(stall.kind)} is still here if you want it later.
             </p>
           ) : null}
           {stats ? (
@@ -152,6 +165,7 @@ export async function StallView({
               />
             </div>
           ) : null}
+          {worldSummary ? <StallWorldDetails world={worldSummary} /> : null}
           <div className="mt-4 space-y-3">
             <StallDates listedAt={stall.listedAt} updatedAt={stall.updatedAt} />
             <StallRevisionHistory revisions={revisions} />
@@ -169,7 +183,7 @@ export async function StallView({
               <Button asChild variant="outline" size="lg" className="h-9 rounded-full px-4">
                 <Link href={`/sell?edit=${encodeURIComponent(stall.slug)}`}>
                   <Pencil data-icon="inline-start" />
-                  Update bot
+                  Update {listingNoun(stall.kind)}
                 </Link>
               </Button>
             ) : null}

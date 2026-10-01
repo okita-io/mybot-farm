@@ -1,7 +1,7 @@
 import { site } from "@/lib/site";
 
-export type StallKind = "agent" | "team";
-export type StallTone = "find" | "share" | "agent";
+export type StallKind = "agent" | "team" | "world";
+export type StallTone = "find" | "share" | "agent" | "world";
 
 export type StallAuthor = {
   username: string;
@@ -26,6 +26,10 @@ export type Stall = {
   seoTitle?: string;
   seoDescription?: string;
   members?: { name: string; href: string }[];
+  /** World card thumbnail (world listings): hosted image URL or site-relative path. */
+  thumbnail?: string;
+  /** Runtime-compatibility badges. Falls back to pack.runtime when unset. */
+  runtimes?: string[];
   priceCents?: number;
   currency?: string;
   listingId?: string;
@@ -54,17 +58,49 @@ export const stallToneClasses: Record<
     card: "clay-surface bg-agent-muted/80",
     label: "text-agent-foreground",
   },
+  world: {
+    card: "clay-surface bg-agent-muted/80",
+    label: "text-agent-foreground",
+  },
 };
 
 export function isStallKind(value: string | null | undefined): value is StallKind {
-  return value === "agent" || value === "team";
+  return value === "agent" || value === "team" || value === "world";
 }
 
-/** User-facing noun. Catalog listings are bots; a team listing stays a team. */
+/** Prefer a DB listing kind, then a seed stall, else agent. */
+export function resolveStallKind(
+  listing: { kind: string } | null | undefined,
+  seed?: Pick<Stall, "kind"> | null,
+): StallKind {
+  if (listing && isStallKind(listing.kind)) {
+    return listing.kind;
+  }
+  if (seed) {
+    return seed.kind;
+  }
+  return "agent";
+}
+
+export { catalogDirForKind, worldCardFields } from "@/lib/world-card";
+
+/** User-facing noun. Catalog listings are bots; a team is a team; a world is a world. */
 export function listingNoun(
   kind?: StallKind | null,
   form: "one" | "many" | "One" | "Many" = "one",
 ): string {
+  if (kind === "world") {
+    switch (form) {
+      case "many":
+        return "worlds";
+      case "One":
+        return "World";
+      case "Many":
+        return "Worlds";
+      default:
+        return "world";
+    }
+  }
   const isTeam = kind === "team";
   switch (form) {
     case "many":
@@ -79,6 +115,9 @@ export function listingNoun(
 }
 
 export function stallPagePath(stall: Pick<Stall, "kind" | "slug">): string {
+  if (stall.kind === "world") {
+    return `/worlds/${stall.slug}`;
+  }
   return stall.kind === "team" ? `/teams/${stall.slug}` : `/agents/${stall.slug}`;
 }
 
@@ -201,6 +240,8 @@ export function stallRecord(stall: Stall) {
     hermesHref: stall.hermesHref ?? null,
     hermesUrl: hermesPackUrl(stall) ?? null,
     members: stall.members,
+    thumbnail: stall.thumbnail ?? null,
+    runtimes: stall.runtimes ?? null,
     priceCents: stall.priceCents ?? 0,
     currency: stall.currency ?? "usd",
     author: stall.author ?? null,
@@ -324,6 +365,25 @@ export const stalls: Stall[] = [
     category: "Coding",
     tone: "agent",
     downloadHref: "/packs/teams/pair-bench.json",
+    members: [
+      { name: "Patch", href: "/packs/agents/patch.json" },
+      { name: "Probe", href: "/packs/agents/probe.json" },
+    ],
+  },
+  {
+    kind: "world",
+    slug: "neon-harbor",
+    name: "Neon Harbor",
+    title: "A cyberpunk-cozy harbor town your agents live in",
+    description:
+      "Step into Neon Harbor: Patch and Probe embodied as dockside characters in a shared scene. Installs as a Pair Bench team on any runtime; the world layer themes the room.",
+    seoDescription:
+      "Install Neon Harbor from mybot.farm: a world where the Pair Bench agents are embodied as characters in a cyberpunk-cozy harbor. Share once, plant into KiroCrew, Hermes, OpenClaw, or GrokBot.",
+    category: "Worlds",
+    tone: "world",
+    downloadHref: "/packs/worlds/neon-harbor.json",
+    thumbnail: "/packs/worlds/neon-harbor.webp",
+    runtimes: ["kirocrew", "hermes", "openclaw", "grok-bot"],
     members: [
       { name: "Patch", href: "/packs/agents/patch.json" },
       { name: "Probe", href: "/packs/agents/probe.json" },

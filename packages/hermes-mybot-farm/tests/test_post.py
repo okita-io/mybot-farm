@@ -37,6 +37,39 @@ SAMPLE_PACK = {
     "memory": [],
 }
 
+SAMPLE_WORLD_PACK = {
+    "format": "mybot.farm/world-pack",
+    "version": "0.1",
+    "runtime": ["grok-bot"],
+    "profile": {
+        "name": "Smoke Harbor",
+        "title": "Two-agent smoke world",
+        "description": "Minimal free world listing posted with a seller API key.",
+    },
+    "members": [
+        {
+            "role": "lead",
+            "summary": "First cast member.",
+            "pack": "agents/patch.json",
+        },
+        {
+            "role": "guide",
+            "summary": "Second cast member.",
+            "pack": "agents/probe.json",
+        },
+    ],
+    "shared": {
+        "gettingStarted": "Install the cast, then create one group named Smoke Harbor.",
+    },
+    "world": {
+        "schema": "worlds/v1",
+        "title": "Smoke Harbor",
+        "places": [{"id": "dock", "name": "The Docks", "present": ["lead", "guide"]}],
+        "entrypoint": {"place": "dock", "greeter": "guide"},
+        "rules": {"turnModel": "defer"},
+    },
+}
+
 SAMPLE_TEAM_PACK = {
     "format": "mybot.farm/team-pack",
     "version": "0.1",
@@ -426,6 +459,34 @@ class PostTests(unittest.TestCase):
         self.assertEqual(payload["payload"]["pack"]["memberCount"], 2)
         self.assertIn("programmer", payload["payload"]["pack"]["memberRoles"])
         self.assertIn("pack members: 2", payload["text"])
+        self.assertEqual(called["n"], 0)
+
+    def test_world_pack_dry_run(self) -> None:
+        called = {"n": 0}
+
+        def boom(*_a, **_k):
+            called["n"] += 1
+            raise AssertionError("dry-run must not POST")
+
+        with patch("hermes_mybot_farm.farm_api.urlopen", boom):
+            payload = json.loads(
+                farm_post(
+                    _listing_args(
+                        kind="world",
+                        name="Smoke Harbor",
+                        title="Two-agent smoke world",
+                        description="Minimal free world listing posted with a seller API key.",
+                        category="Worlds",
+                        pack=dict(SAMPLE_WORLD_PACK),
+                        dryRun=True,
+                    )
+                )
+            )
+        self.assertTrue(payload["ok"])
+        self.assertTrue(payload["dryRun"])
+        self.assertEqual(payload["payload"]["kind"], "world")
+        self.assertEqual(payload["payload"]["pack"]["format"], "mybot.farm/world-pack")
+        self.assertEqual(payload["payload"]["pack"]["memberCount"], 2)
         self.assertEqual(called["n"], 0)
 
     def test_team_listing_201_uses_teams_page(self) -> None:

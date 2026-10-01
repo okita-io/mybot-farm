@@ -22,14 +22,17 @@ export const CATEGORY_LABELS = Object.freeze([
   "Education",
   "Ops / admin",
   "Experimental",
+  "Worlds",
 ]);
 
 const CATEGORY_SET = new Set(CATEGORY_LABELS);
-export const LISTING_KINDS = Object.freeze(["agent", "team"]);
+export const LISTING_KINDS = Object.freeze(["agent", "team", "world"]);
 const LISTING_KIND_SET = new Set(LISTING_KINDS);
 export const AGENT_PACK_FORMAT = "mybot.farm/agent-pack";
 export const TEAM_PACK_FORMAT = "mybot.farm/team-pack";
+export const WORLD_PACK_FORMAT = "mybot.farm/world-pack";
 export const MIN_TEAM_MEMBERS = 2;
+export const MIN_WORLD_CAST = 2;
 export const MIN_PAID_PRICE_CENTS = 200;
 export const MAX_PRICE_CENTS = 999_900;
 export const MAX_PACK_CHARS = 500_000;
@@ -248,49 +251,74 @@ function memberPackError(index, pack) {
   if (pack.format === TEAM_PACK_FORMAT) {
     return `members[${index}].pack nested object cannot be a team-pack`;
   }
+  if (pack.format === WORLD_PACK_FORMAT) {
+    return `members[${index}].pack nested object cannot be a world-pack`;
+  }
   return null;
+}
+
+function validateGroupMembers(members, minCount, label) {
+  if (!Array.isArray(members) || members.length < minCount) {
+    throw new FarmError(
+      `kind "${label}" requires members[] with at least ${minCount} agents`,
+    );
+  }
+  for (let i = 0; i < members.length; i += 1) {
+    const member = members[i];
+    if (!member || typeof member !== "object" || Array.isArray(member)) {
+      throw new FarmError(`members[${i}] must be an object with role, summary, and pack`);
+    }
+    const role = typeof member.role === "string" ? member.role.trim() : "";
+    const summary = typeof member.summary === "string" ? member.summary.trim() : "";
+    if (!role) throw new FarmError(`members[${i}].role is required`);
+    if (!summary) throw new FarmError(`members[${i}].summary is required`);
+    const packError = memberPackError(i, member.pack);
+    if (packError) throw new FarmError(packError);
+  }
+}
+
+function validateSharedBlock(shared) {
+  if (shared === undefined) {
+    return;
+  }
+  if (!shared || typeof shared !== "object" || Array.isArray(shared)) {
+    throw new FarmError("shared must be an object.");
+  }
+  if (
+    shared.gettingStarted !== undefined &&
+    typeof shared.gettingStarted !== "string"
+  ) {
+    throw new FarmError("shared.gettingStarted must be a string (Hermes install steps).");
+  }
 }
 
 /** Match web/src/lib/gaf-pack.ts validateListingPack for farm_post dry-run. */
 export function validateListingPack(kind, pack) {
   const fmt = typeof pack?.format === "string" ? pack.format.trim() : "";
+  if (kind === "world") {
+    if (fmt !== WORLD_PACK_FORMAT) {
+      throw new FarmError(`kind "world" requires pack.format "${WORLD_PACK_FORMAT}"`);
+    }
+    validateGroupMembers(pack.members, MIN_WORLD_CAST, "world");
+    if (!pack.world || typeof pack.world !== "object" || Array.isArray(pack.world)) {
+      throw new FarmError('kind "world" requires a world{} block.');
+    }
+    validateSharedBlock(pack.shared);
+    return;
+  }
   if (kind === "team") {
     if (fmt !== TEAM_PACK_FORMAT) {
       throw new FarmError(`kind "team" requires pack.format "${TEAM_PACK_FORMAT}"`);
     }
-    const members = pack.members;
-    if (!Array.isArray(members) || members.length < MIN_TEAM_MEMBERS) {
-      throw new FarmError(
-        `kind "team" requires members[] with at least ${MIN_TEAM_MEMBERS} agents`,
-      );
-    }
-    for (let i = 0; i < members.length; i += 1) {
-      const member = members[i];
-      if (!member || typeof member !== "object" || Array.isArray(member)) {
-        throw new FarmError(`members[${i}] must be an object with role, summary, and pack`);
-      }
-      const role = typeof member.role === "string" ? member.role.trim() : "";
-      const summary = typeof member.summary === "string" ? member.summary.trim() : "";
-      if (!role) throw new FarmError(`members[${i}].role is required`);
-      if (!summary) throw new FarmError(`members[${i}].summary is required`);
-      const packError = memberPackError(i, member.pack);
-      if (packError) throw new FarmError(packError);
-    }
-    if (pack.shared !== undefined) {
-      if (!pack.shared || typeof pack.shared !== "object" || Array.isArray(pack.shared)) {
-        throw new FarmError("shared must be an object.");
-      }
-      if (
-        pack.shared.gettingStarted !== undefined &&
-        typeof pack.shared.gettingStarted !== "string"
-      ) {
-        throw new FarmError("shared.gettingStarted must be a string (Hermes install steps).");
-      }
-    }
+    validateGroupMembers(pack.members, MIN_TEAM_MEMBERS, "team");
+    validateSharedBlock(pack.shared);
     return;
   }
   if (fmt === TEAM_PACK_FORMAT) {
     throw new FarmError(`kind "agent" cannot use pack.format "${TEAM_PACK_FORMAT}"`);
+  }
+  if (fmt === WORLD_PACK_FORMAT) {
+    throw new FarmError(`kind "agent" cannot use pack.format "${WORLD_PACK_FORMAT}"`);
   }
   if (Array.isArray(pack.members) && pack.members.length > 0) {
     throw new FarmError('kind "agent" listings cannot include members[] — use kind "team"');
@@ -310,7 +338,7 @@ export function buildListingPayload({
 }) {
   const parsedKind = parseListingKind(kind);
   if (!parsedKind) {
-    throw new FarmError('kind must be "agent" or "team"');
+    throw new FarmError('kind must be "agent", "team", or "world"');
   }
 
   const parsedName = typeof name === "string" ? name.trim() : "";

@@ -18,7 +18,7 @@ import {
 } from "@/lib/db/schema";
 import type { CommentFlagReasonId } from "@/lib/flag-reasons";
 import { getListingBySlug } from "@/lib/listings";
-import { getStall, stallPagePath } from "@/lib/packs";
+import { getStall, resolveStallKind, stallPagePath } from "@/lib/packs";
 import { authorHref } from "@/lib/users";
 
 export type { StallComment };
@@ -506,7 +506,7 @@ export async function listOpenCommentFlagGroups(): Promise<AdminCommentFlagGroup
     if (!comment) continue;
     const listing = listingBySlug.get(comment.slug);
     const seed = getStall(comment.slug);
-    const kind = listing?.kind === "team" || seed?.kind === "team" ? "team" : "agent";
+    const kind = resolveStallKind(listing, seed);
     const name = listing?.name ?? seed?.name ?? comment.slug;
     const author = userById.get(comment.authorId);
     const reporter = userById.get(flag.reporterId);
@@ -567,7 +567,7 @@ export async function listRecentPrunedComments(limit = 20) {
 
   return rows.map((row) => {
     const seed = getStall(row.slug);
-    const kind = seed?.kind === "team" ? "team" : "agent";
+    const kind = resolveStallKind(null, seed);
     return {
       id: row.id,
       slug: row.slug,

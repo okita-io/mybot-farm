@@ -18,7 +18,7 @@ describe("validateGafPack", () => {
     });
 
     const packsRoot = join(dirname(fileURLToPath(import.meta.url)), "../../public/packs");
-    for (const kind of ["agents", "teams"]) {
+    for (const kind of ["agents", "teams", "worlds"]) {
       const dir = join(packsRoot, kind);
       for (const name of readdirSync(dir).filter((file) => file.endsWith(".json"))) {
         const pack = JSON.parse(readFileSync(join(dir, name), "utf8"));
@@ -26,6 +26,14 @@ describe("validateGafPack", () => {
         assert.equal(result.ok, true, `${kind}/${name}: ${result.ok ? "" : result.error}`);
         if (kind === "teams") {
           const listing = validateListingPack("team", pack);
+          assert.equal(
+            listing.ok,
+            true,
+            `${kind}/${name} listing: ${listing.ok ? "" : listing.error}`,
+          );
+        }
+        if (kind === "worlds") {
+          const listing = validateListingPack("world", pack);
           assert.equal(
             listing.ok,
             true,
@@ -177,5 +185,299 @@ describe("validateListingPack", () => {
     if (!result.ok) {
       assert.match(result.error, /kind "team"/);
     }
+  });
+});
+
+const worldsDir = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "../../public/packs/worlds",
+);
+const neonHarbor = JSON.parse(
+  readFileSync(join(worldsDir, "neon-harbor.json"), "utf8"),
+);
+
+const WORLD_PACK = {
+  format: "mybot.farm/world-pack",
+  version: "0.1",
+  runtime: ["kirocrew", "hermes"],
+  members: [
+    { role: "harbor-engineer", summary: "Builds.", pack: "agents/patch.json" },
+    { role: "night-watch", summary: "Verifies.", pack: "agents/probe.json" },
+  ],
+  world: {
+    schema: "worlds/v1",
+    title: "Neon Harbor",
+    thumbnail: "assets/neon-harbor.webp",
+    places: [
+      { id: "dock", name: "The Docks", present: ["harbor-engineer", "night-watch"] },
+    ],
+    cast: [
+      { role: "harbor-engineer", capabilities: ["web", "files"] },
+      { role: "night-watch", capabilities: ["web"] },
+    ],
+    rules: { turnModel: "defer" },
+    entrypoint: { place: "dock", greeter: "night-watch" },
+  },
+};
+
+function worldPack(overrides: Record<string, unknown> = {}) {
+  const world = {
+    ...WORLD_PACK.world,
+    ...(overrides.world as Record<string, unknown> | undefined),
+  };
+  const { world: _worldOverride, ...rest } = overrides;
+  return { ...WORLD_PACK, ...rest, world };
+}
+
+describe("validateListingPack world kind", () => {
+  it("accepts the Neon Harbor seed world-pack", () => {
+    assert.deepEqual(validateListingPack("world", neonHarbor), { ok: true });
+  });
+
+  it("accepts a minimal world-pack", () => {
+    assert.deepEqual(validateListingPack("world", WORLD_PACK), { ok: true });
+  });
+
+  it("still accepts a plain team-pack (team kind unchanged)", () => {
+    assert.deepEqual(validateListingPack("team", TEAM_PACK), { ok: true });
+  });
+
+  it("rejects a world without the world-pack format", () => {
+    const result = validateListingPack("world", {
+      ...WORLD_PACK,
+      format: "mybot.farm/team-pack",
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /world-pack/);
+    }
+  });
+
+  it("rejects a world-pack with no world block", () => {
+    const { world: _world, ...noWorld } = WORLD_PACK;
+    const result = validateListingPack("world", noWorld);
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /world\{\} block/);
+    }
+  });
+
+  it("rejects a place.present referencing an unknown role", () => {
+    const result = validateListingPack("world", {
+      ...WORLD_PACK,
+      world: {
+        ...WORLD_PACK.world,
+        places: [{ id: "dock", name: "The Docks", present: ["stranger"] }],
+      },
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /not a member role/);
+    }
+  });
+
+  it("rejects an unknown capability", () => {
+    const result = validateListingPack("world", {
+      ...WORLD_PACK,
+      world: {
+        ...WORLD_PACK.world,
+        cast: [{ role: "harbor-engineer", capabilities: ["shell"] }],
+      },
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /web, files, schedule/);
+    }
+  });
+
+  it("rejects an agent listing that uses world-pack format", () => {
+    const result = validateListingPack("agent", WORLD_PACK);
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /world-pack/);
+    }
+  });
+
+  it("rejects a world block without schema worlds/v1", () => {
+    const result = validateListingPack(
+      "world",
+      worldPack({ world: { ...WORLD_PACK.world, schema: "worlds/v0" } }),
+    );
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /worlds\/v1/);
+    }
+  });
+
+  it("rejects a world block with no places", () => {
+    const result = validateListingPack(
+      "world",
+      worldPack({ world: { ...WORLD_PACK.world, places: [] } }),
+    );
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /at least one place/);
+    }
+  });
+
+  it("rejects an entrypoint place that does not exist", () => {
+    const result = validateListingPack(
+      "world",
+      worldPack({
+        world: {
+          ...WORLD_PACK.world,
+          entrypoint: { place: "nowhere", greeter: "night-watch" },
+        },
+      }),
+    );
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /entrypoint\.place/);
+    }
+  });
+
+  it("rejects an entrypoint greeter that is not a member role", () => {
+    const result = validateListingPack(
+      "world",
+      worldPack({
+        world: {
+          ...WORLD_PACK.world,
+          entrypoint: { place: "dock", greeter: "stranger" },
+        },
+      }),
+    );
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /entrypoint\.greeter/);
+    }
+  });
+
+  it("rejects duplicate cast roles", () => {
+    const result = validateListingPack(
+      "world",
+      worldPack({
+        world: {
+          ...WORLD_PACK.world,
+          cast: [
+            { role: "harbor-engineer", capabilities: ["web"] },
+            { role: "harbor-engineer", capabilities: ["files"] },
+          ],
+        },
+      }),
+    );
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /duplicated/);
+    }
+  });
+
+  it("rejects unknown place connects", () => {
+    const result = validateListingPack(
+      "world",
+      worldPack({
+        world: {
+          ...WORLD_PACK.world,
+          places: [{ id: "dock", name: "The Docks", connects: ["tower"] }],
+        },
+      }),
+    );
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /connects references/);
+    }
+  });
+
+  it("rejects a cast home that is not a place id", () => {
+    const result = validateListingPack(
+      "world",
+      worldPack({
+        world: {
+          ...WORLD_PACK.world,
+          cast: [{ role: "harbor-engineer", home: "tower" }],
+        },
+      }),
+    );
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /home/);
+    }
+  });
+
+  it("rejects an invalid memoryScope", () => {
+    const result = validateListingPack(
+      "world",
+      worldPack({
+        world: {
+          ...WORLD_PACK.world,
+          cast: [{ role: "harbor-engineer", memoryScope: "public" }],
+        },
+      }),
+    );
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /memoryScope/);
+    }
+  });
+
+  it("rejects present longer than maxPresent (default 6)", () => {
+    const roles = Array.from({ length: 7 }, (_, i) => `role-${i}`);
+    const members = roles.map((role) => ({
+      role,
+      summary: "x",
+      pack: "agents/patch.json",
+    }));
+    const result = validateListingPack("world", {
+      ...WORLD_PACK,
+      members,
+      world: {
+        ...WORLD_PACK.world,
+        places: [{ id: "dock", name: "The Docks", present: roles }],
+        cast: roles.map((role) => ({ role })),
+        entrypoint: { place: "dock", greeter: "role-0" },
+      },
+    });
+    assert.equal(result.ok, false);
+    if (!result.ok) {
+      assert.match(result.error, /max is 6/);
+    }
+  });
+
+  it("rejects thumbnails with .. or a non-https scheme", () => {
+    const parentTraversal = validateListingPack(
+      "world",
+      worldPack({ world: { ...WORLD_PACK.world, thumbnail: "../secret.webp" } }),
+    );
+    assert.equal(parentTraversal.ok, false);
+    if (!parentTraversal.ok) {
+      assert.match(parentTraversal.error, /\.\./);
+    }
+
+    const httpUrl = validateListingPack(
+      "world",
+      worldPack({
+        world: { ...WORLD_PACK.world, thumbnail: "http://example.com/x.webp" },
+      }),
+    );
+    assert.equal(httpUrl.ok, false);
+    if (!httpUrl.ok) {
+      assert.match(httpUrl.error, /https/);
+    }
+  });
+
+  it("accepts a public site-path thumbnail and a bundle-relative path", () => {
+    assert.deepEqual(
+      validateListingPack(
+        "world",
+        worldPack({ world: { ...WORLD_PACK.world, thumbnail: "/packs/worlds/x.webp" } }),
+      ),
+      { ok: true },
+    );
+    assert.deepEqual(
+      validateListingPack(
+        "world",
+        worldPack({ world: { ...WORLD_PACK.world, thumbnail: "assets/x.webp" } }),
+      ),
+      { ok: true },
+    );
   });
 });

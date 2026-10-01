@@ -1,9 +1,10 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { catalogDirForKind } from "./world-card.ts";
 import type { StallKind } from "@/lib/packs";
 
 export function hermesArchivePublicHref(kind: StallKind, slug: string): string {
-  const dir = kind === "team" ? "teams" : "agents";
+  const dir = catalogDirForKind(kind);
   return `/packs/${dir}/${slug}.hermes.tar.gz`;
 }
 

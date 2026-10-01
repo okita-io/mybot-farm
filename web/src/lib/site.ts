@@ -28,6 +28,7 @@ export const site = {
 
 export const navLinks = [
   { href: "/catalog", label: "Catalog", emphasis: true },
+  { href: "/worlds", label: "Worlds" },
   { href: "/sell", label: "Sell" },
   { href: "/about", label: "About" },
   { href: "/press", label: "Press" },
@@ -44,6 +45,7 @@ export const siteOgImage = {
 
 export const footerLinks = [
   { href: "/catalog", label: "Catalog" },
+  { href: "/worlds", label: "Worlds" },
   { href: "/about", label: "About" },
   { href: "/press", label: "Press" },
   { href: "/sell", label: "Sell" },
@@ -86,6 +88,12 @@ export const contentRoutes = [
     title: "Catalog",
     changeFrequency: "weekly" as const,
     priority: 0.9,
+  },
+  {
+    path: "/worlds",
+    title: "Worlds",
+    changeFrequency: "weekly" as const,
+    priority: 0.85,
   },
   {
     path: "/about",
@@ -220,6 +228,7 @@ export const categories = [
   { slug: "education", label: "Education", tone: "find" },
   { slug: "ops", label: "Ops / admin", tone: "share" },
   { slug: "experimental", label: "Experimental", tone: "agent" },
+  { slug: "worlds", label: "Worlds", tone: "agent" },
 ] as const;
 
 export const webmcp = {

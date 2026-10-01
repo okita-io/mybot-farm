@@ -21,7 +21,7 @@ export function usage() {
   return `Usage:
   farm-plant search <query> [--limit N]
   farm-plant get <slug>
-  farm-plant plant <slug> [--agent-id ID] [--workspace DIR] [--force]
+  farm-plant plant <slug> [--agent-id ID] [--workspace DIR] [--force] [--dry-run]
   farm-plant post --kind agent|team --name NAME --title TITLE --description DESC
                  --category LABEL --price-cents N --pack pack.json
                  [--slug SLUG] [--pack-version N] [--api-key KEY] [--dry-run] [--json]
@@ -49,6 +49,7 @@ function parseArgs(argv) {
     else if (a === "--agent-id") args.agentId = argv[++i];
     else if (a === "--workspace") args.workspace = argv[++i];
     else if (a === "--force") args.force = true;
+    else if (a === "--dry-run" || a === "--dry_run") args.dryRun = true;
     else if (a === "--help" || a === "-h") args.help = true;
     else if (a === "--kind") args.kind = argv[++i];
     else if (a === "--name") args.name = argv[++i];
@@ -122,6 +123,7 @@ export async function run(argv, { stdout = console.log, stderr = console.error }
       agentId: args.agentId,
       workspace: args.workspace,
       force: Boolean(args.force),
+      dryRun: Boolean(args.dryRun),
       config: farm,
     });
     stdout(JSON.stringify(result, null, 2));

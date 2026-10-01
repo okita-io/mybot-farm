@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { dollarsToCents, formatUsd } from "@/lib/money";
+import type { StallKind } from "@/lib/packs";
 import { categories } from "@/lib/site";
 
 const SAMPLE_PACK = `{
@@ -18,6 +19,55 @@ const SAMPLE_PACK = `{
   },
   "skills": [],
   "memory": []
+}`;
+
+const SAMPLE_WORLD_PACK = `{
+  "format": "mybot.farm/world-pack",
+  "version": "0.1",
+  "runtime": ["grok-bot"],
+  "profile": {
+    "name": "",
+    "title": "",
+    "description": ""
+  },
+  "members": [
+    {
+      "role": "lead",
+      "summary": "First cast member.",
+      "pack": "agents/member-one.json"
+    },
+    {
+      "role": "guide",
+      "summary": "Second cast member.",
+      "pack": "agents/member-two.json"
+    }
+  ],
+  "shared": {
+    "memory": [
+      {
+        "kind": "profile",
+        "content": "One-line world invariant. The cast waits for the harbor-master before acting."
+      }
+    ],
+    "gettingStarted": "Install each cast member, then create one group named after the world."
+  },
+  "world": {
+    "schema": "worlds/v1",
+    "title": "",
+    "places": [
+      {
+        "id": "start",
+        "name": "Starting place",
+        "present": ["lead", "guide"]
+      }
+    ],
+    "cast": [
+      { "role": "lead", "name": "Lead", "home": "start" },
+      { "role": "guide", "name": "Guide", "home": "start" }
+    ],
+    "rules": { "turnModel": "defer" },
+    "entrypoint": { "place": "start", "greeter": "guide" }
+  }
 }`;
 
 const SAMPLE_TEAM_PACK = `{
@@ -61,7 +111,7 @@ const PRICE_SUGGESTIONS = ["2.00", "5.00", "8.00", "10.00"] as const;
 export type EditableListing = {
   id: string;
   slug: string;
-  kind: "agent" | "team";
+  kind: StallKind;
   name: string;
   title: string;
   description: string;
@@ -90,7 +140,7 @@ export function SellForm({
   listing?: EditableListing;
 }) {
   const router = useRouter();
-  const [kind, setKind] = useState<"agent" | "team">(listing?.kind ?? "agent");
+  const [kind, setKind] = useState<StallKind>(listing?.kind ?? "agent");
   const [name, setName] = useState(listing?.name ?? "");
   const [title, setTitle] = useState(listing?.title ?? "");
   const [description, setDescription] = useState(listing?.description ?? "");
@@ -200,21 +250,32 @@ export function SellForm({
             className="mt-2 h-11 w-full rounded-full border border-border bg-background px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             value={kind}
             onChange={(event) => {
-              const next = event.target.value as "agent" | "team";
+              const next = event.target.value as StallKind;
               setKind(next);
               setPackText((current) => {
-                if (current.trim() === SAMPLE_PACK.trim() && next === "team") {
-                  return SAMPLE_TEAM_PACK;
+                const trimmed = current.trim();
+                if (trimmed === SAMPLE_PACK.trim()) {
+                  if (next === "team") return SAMPLE_TEAM_PACK;
+                  if (next === "world") return SAMPLE_WORLD_PACK;
                 }
-                if (current.trim() === SAMPLE_TEAM_PACK.trim() && next === "agent") {
-                  return SAMPLE_PACK;
+                if (trimmed === SAMPLE_TEAM_PACK.trim()) {
+                  if (next === "agent") return SAMPLE_PACK;
+                  if (next === "world") return SAMPLE_WORLD_PACK;
+                }
+                if (trimmed === SAMPLE_WORLD_PACK.trim()) {
+                  if (next === "agent") return SAMPLE_PACK;
+                  if (next === "team") return SAMPLE_TEAM_PACK;
                 }
                 return current;
               });
+              if (next === "world" && category !== "Worlds") {
+                setCategory("Worlds");
+              }
             }}
           >
             <option value="agent">Agent</option>
             <option value="team">Team</option>
+            <option value="world">World</option>
           </select>
         </label>
         <label className="block text-sm font-medium text-foreground">
@@ -337,9 +398,11 @@ export function SellForm({
         />
       </label>
       <p className="text-sm font-normal text-muted-foreground">
-        {kind === "team"
-          ? "Teams use format mybot.farm/team-pack with at least two members[]. Each member needs role, summary, and pack (a catalog path like agents/patch.json, a slug, a .hermes.tar.gz, or a nested agent-pack). farm_post does not upload tarballs."
-          : "Agents use format mybot.farm/agent-pack. Switch Kind to Team for a crew of agents."}
+        {kind === "world"
+          ? "Worlds use format mybot.farm/world-pack: a team-pack superset with members[] (the cast) plus a world{} block (title, places, entrypoint, rules). Each member needs role, summary, and pack. farm_post does not upload tarballs."
+          : kind === "team"
+            ? "Teams use format mybot.farm/team-pack with at least two members[]. Each member needs role, summary, and pack (a catalog path like agents/patch.json, a slug, a .hermes.tar.gz, or a nested agent-pack). farm_post does not upload tarballs."
+            : "Agents use format mybot.farm/agent-pack. Switch Kind to Team or World for a multi-agent listing."}
       </p>
       {error ? (
         <p className="text-sm text-destructive" role="alert">

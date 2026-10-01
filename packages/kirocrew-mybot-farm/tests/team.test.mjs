@@ -52,6 +52,41 @@ test("unresolved member is noted, not silently dropped", () => {
   assert.ok(crew.notes.some((n) => n.includes("probe")));
 });
 
+const neonHarbor = {
+  format: "mybot.farm/world-pack",
+  slug: "neon-harbor",
+  profile: { name: "Neon Harbor", title: "Harbor world", description: "Patch and Probe in a dock scene." },
+  members: [
+    { role: "harbor-engineer", summary: "Patch", pack: "agents/patch.json" },
+    { role: "night-watch", summary: "Probe", pack: "agents/probe.json" },
+  ],
+  shared: {
+    memory: [{ kind: "profile", content: "Neon Harbor shared memory." }],
+    gettingStarted: "Install Patch and Probe into one group named Neon Harbor.",
+  },
+  world: {
+    schema: "worlds/v1",
+    title: "Neon Harbor",
+    places: [{ id: "dock", name: "The Docks", present: ["harbor-engineer", "night-watch"] }],
+    entrypoint: { place: "dock", greeter: "night-watch" },
+    rules: { turnModel: "defer" },
+  },
+};
+
+test("plantTeam dry-run for a world-pack lists two members and a world.json path", async () => {
+  const home = await mkdtemp(join(tmpdir(), "kiro-world-"));
+  try {
+    process.env.KIRO_HOME = home;
+    const dry = await plantTeam(neonHarbor, memberPacks, { dryRun: true });
+    assert.equal(dry.memberNames.length, 2);
+    assert.ok(dry.worldJsonPath?.endsWith("/world.json"));
+    assert.ok(dry.worldJsonPath?.includes("neon-harbor"));
+  } finally {
+    delete process.env.KIRO_HOME;
+    await rm(home, { recursive: true, force: true });
+  }
+});
+
 test("plantTeam writes member templates + shared + topology into KIRO_HOME", async () => {
   const home = await mkdtemp(join(tmpdir(), "kiro-team-"));
   try {
@@ -68,6 +103,21 @@ test("plantTeam writes member templates + shared + topology into KIRO_HOME", asy
     assert.ok(shared.includes("not done until Probe"));
     const topo = await readFile(res.topologyDocPath, "utf8");
     assert.ok(topo.includes("pair"));
+  } finally {
+    delete process.env.KIRO_HOME;
+    await rm(home, { recursive: true, force: true });
+  }
+});
+
+test("plantTeam writes world.json for a world-pack", async () => {
+  const home = await mkdtemp(join(tmpdir(), "kiro-world-"));
+  try {
+    process.env.KIRO_HOME = home;
+    const res = await plantTeam(neonHarbor, memberPacks, {});
+    assert.equal(res.wrote, true);
+    const world = JSON.parse(await readFile(res.worldJsonPath, "utf8"));
+    assert.equal(world.title, "Neon Harbor");
+    assert.equal(world.entrypoint.greeter, "night-watch");
   } finally {
     delete process.env.KIRO_HOME;
     await rm(home, { recursive: true, force: true });

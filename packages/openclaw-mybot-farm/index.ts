@@ -149,12 +149,21 @@ export default defineToolPlugin({
           force: Boolean(params.force),
           config: farm,
         });
-        const lines = [
-          `Planted \`${result.packSlug}\` as agent \`${result.agentId}\``,
-          `Workspace: ${result.workspace}`,
-          `Skills: ${result.skillsInstalled.join(", ") || "(none)"}`,
-          result.attribution ? `Attribution: ${result.attribution}` : "",
-        ].filter(Boolean);
+        const lines = Array.isArray(result.members)
+          ? [
+              `Planted \`${result.packSlug}\` as ${result.kind ?? "team"} (${result.members.length} members)`,
+              ...result.members.map(
+                (member: { packSlug?: string; agentId?: string; workspace?: string }) =>
+                  `- ${member.packSlug ?? member.agentId}: ${member.workspace ?? "(workspace)"}`,
+              ),
+              result.worldJsonPath ? `World file: ${result.worldJsonPath}` : "",
+            ].filter(Boolean)
+          : [
+              `Planted \`${result.packSlug}\` as agent \`${result.agentId}\``,
+              `Workspace: ${result.workspace}`,
+              `Skills: ${result.skillsInstalled?.join(", ") || "(none)"}`,
+              result.attribution ? `Attribution: ${result.attribution}` : "",
+            ].filter(Boolean);
         return textResult(lines.join("\n"), result);
       },
     }),
@@ -170,6 +179,7 @@ export default defineToolPlugin({
         "to a .json file). OpenClaw already plants GAF; posting publishes GAF (no tarball translator). " +
         'kind "team" requires format mybot.farm/team-pack and members[] (at least two): each member ' +
         "needs role, summary, and pack (catalog path, slug, tarball URL, or nested agent-pack). " +
+        'kind "world" requires format mybot.farm/world-pack with members[] plus a world{} block. ' +
         'kind "agent" uses mybot.farm/agent-pack and cannot include members[]. ' +
         "category is an exact farm label (Lifestyle, Coding, Experimental, …). " +
         "priceCents is 0 (free) or 200–999900. Paid listings need Stripe Connect on the seller " +
@@ -178,7 +188,7 @@ export default defineToolPlugin({
       parameters: Type.Object({
         kind: Type.String({
           description:
-            'Listing kind: "agent" or "team". Teams land on /teams/{slug} and need a team-pack with members[].',
+            'Listing kind: "agent", "team", or "world". Teams land on /teams/{slug}; worlds on /worlds/{slug}.',
         }),
         name: Type.String({ description: "Listing name. Used to derive the slug on first publish." }),
         title: Type.String({ description: "Short stall title shown on the farm." }),
@@ -195,7 +205,7 @@ export default defineToolPlugin({
         pack: Type.Optional(
           Type.Unknown({
             description:
-              "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack). OpenClaw plants GAF; this posts GAF.",
+              "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack). Worlds: mybot.farm/world-pack with members[] plus world{}. OpenClaw plants GAF; this posts GAF.",
           }),
         ),
         packPath: Type.Optional(
@@ -242,7 +252,7 @@ export default defineToolPlugin({
       parameters: Type.Object({
         kind: Type.String({
           description:
-            'Listing kind: "agent" or "team". Teams land on /teams/{slug} and need a team-pack with members[].',
+            'Listing kind: "agent", "team", or "world". Teams land on /teams/{slug}; worlds on /worlds/{slug}.',
         }),
         name: Type.String({ description: "Listing name." }),
         title: Type.String({ description: "Short stall title shown on the farm." }),
@@ -260,7 +270,7 @@ export default defineToolPlugin({
         pack: Type.Optional(
           Type.Unknown({
             description:
-              "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack). OpenClaw plants GAF; this posts GAF.",
+              "GAF JSON object. Agents: mybot.farm/agent-pack. Teams: mybot.farm/team-pack with members[] (role, summary, pack). Worlds: mybot.farm/world-pack with members[] plus world{}. OpenClaw plants GAF; this posts GAF.",
           }),
         ),
         packPath: Type.Optional(

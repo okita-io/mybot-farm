@@ -371,6 +371,8 @@ def _plant_text(result) -> str:
         lines.append(f"Kanban board: {result.kanban}")
     if result.room:
         lines.append(f"Room: {result.room}")
+    if result.world_file:
+        lines.append(f"World file: {result.world_file}")
     if result.recruited:
         lines.append(f"Recruited into the Bots roster: {', '.join(result.recruited)}")
     if result.endpoint_note:

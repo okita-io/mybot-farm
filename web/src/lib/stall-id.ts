@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { catalogDirForKind } from "./world-card.ts";
 import type { StallKind } from "@/lib/packs";
 
 /** RFC 4122 URL namespace as used by Python/libuuid (`uuid.NAMESPACE_URL`). */
@@ -27,8 +28,8 @@ export function uuidv5(
   return bytesToUuid(bytes);
 }
 
-/** Stable stall id for catalog/seed agents and teams (not seller listings). */
+/** Stable stall id for catalog/seed agents, teams, and worlds (not seller listings). */
 export function catalogStallId(kind: StallKind, slug: string): string {
-  const path = kind === "team" ? "teams" : "agents";
+  const path = catalogDirForKind(kind);
   return uuidv5(`https://mybot.farm/${path}/${slug}`);
 }

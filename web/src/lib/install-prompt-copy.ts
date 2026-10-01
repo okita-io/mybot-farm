@@ -2,7 +2,7 @@ export type InstallPromptInput = {
   url: string;
   slug: string;
   name: string;
-  kind: "agent" | "team";
+  kind: "agent" | "team" | "world";
   stallId?: string | null;
   packVersion?: number | null;
   hermesOnly?: boolean;
@@ -66,4 +66,50 @@ export function shortGrokAgentInstallPrompt(input: InstallPromptInput): string {
 export function shortGrokTeamInstallPrompt(input: InstallPromptInput): string {
   const provenance = shortProvenance(input);
   return `Install ${input.name} from ${input.url} (${provenance}). Team pack: download GAF JSON and create a Grok Bot per members[] agent pack. Apply pack.shared.memory. Do not treat shared.gettingStarted as a Grok skill. Confirm members, skills, and needs_review. Do not send emails or spend money.`;
+}
+
+export function grokWorldInstallPrompt(input: InstallPromptInput): string {
+  const provenance = catalogProvenanceLine(input);
+  return `Install the mybot.farm world pack at this URL:
+${input.url}
+
+${provenance}
+
+1. Open that page (or call mybot.farm WebMCP / API: get_stall / download_pack for slug "${input.slug}").
+2. Download the Generic Agent Format (GAF) JSON pack.
+3. This is a world pack (format world-pack, members[] plus world{}). There is no 1:1 create_bot_share_json recipe for the world. Create a Grok Bot from each member's agent pack — the same per-member checklist you would use for a team.
+4. Apply shared teammate memory from pack.shared.memory. Do not treat pack.shared.gettingStarted as a Grok skill name (it is a Hermes-oriented install string).
+5. The world block travels with the pack: read world.places, world.entrypoint (greeter and starting place), and world.rules.turnModel (often "defer" — the room protocol picks the speaker later). You are not installing a rendered scene yet; the block is data for a future pane.
+6. In Grok, create one group chat per place listed in world.places (between 2 and 6 places). Add only the cast members whose role appears in that place's present[] list. Do not create a single bot or group named after the world slug.
+7. Confirm: each member created, one group per place, skills/memory/routines applied, anything needs_review.
+
+Do not send emails or spend money. Do not invent fields missing from the pack. The farm cannot call create_bot_share_json.`;
+}
+
+export function formatWorldCastLines(
+  members: Array<{ role?: string; summary?: string }> | undefined,
+): string {
+  if (!Array.isArray(members) || members.length === 0) {
+    return "";
+  }
+
+  const lines = members
+    .map((member) => {
+      const role = typeof member.role === "string" ? member.role.trim() : "";
+      const summary = typeof member.summary === "string" ? member.summary.trim() : "";
+      if (!role && !summary) return "";
+      return summary ? `- ${summary}` : `- ${role}`;
+    })
+    .filter(Boolean);
+
+  if (!lines.length) {
+    return "";
+  }
+
+  return `\nCast (members[]):\n${lines.join("\n")}\n`;
+}
+
+export function shortGrokWorldInstallPrompt(input: InstallPromptInput): string {
+  const provenance = shortProvenance(input);
+  return `Install ${input.name} from ${input.url} (${provenance}). World pack: download GAF JSON and create a Grok Bot per members[] agent pack (no single-bot recipe). Apply pack.shared.memory. Read world.places, entrypoint greeter, and rules.turnModel defer; create one Grok group per place (2–6) with present[] cast only. Confirm members, groups, and needs_review. Do not send emails or spend money.`;
 }

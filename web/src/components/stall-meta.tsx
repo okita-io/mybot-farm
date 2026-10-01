@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { User, Users } from "lucide-react";
+import { Globe, User, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatPriceLabel } from "@/lib/money";
 import { type StallAuthor, type StallKind } from "@/lib/packs";
@@ -70,8 +70,8 @@ export function StallHeaderMeta({
   priceCents?: number | null;
   extra?: ReactNode;
 }) {
-  const KindIcon = kind === "team" ? Users : User;
-  const kindLabel = kind === "team" ? "Team" : "Bot";
+  const KindIcon = kind === "world" ? Globe : kind === "team" ? Users : User;
+  const kindLabel = kind === "world" ? "World" : kind === "team" ? "Team" : "Bot";
   const showPrice = typeof priceCents === "number";
 
   return (
@@ -114,7 +114,7 @@ export function StallHeaderMeta({
       <span
         className={cn(
           "clay-chip inline-flex size-8 items-center justify-center rounded-full border border-foreground/10 bg-background/80 text-foreground",
-          kind === "team" ? "bg-agent/15" : undefined,
+          kind === "team" || kind === "world" ? "bg-agent/15" : undefined,
         )}
         title={kindLabel}
         aria-label={kindLabel}

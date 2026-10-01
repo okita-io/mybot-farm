@@ -3,7 +3,7 @@ import { cache } from "react";
 import { getDb, hasDatabase } from "@/lib/db";
 import { listings, stallFlags, stallTakedowns, users } from "@/lib/db/schema";
 import { getListingBySlug } from "@/lib/listings";
-import { getStall } from "@/lib/packs";
+import { getStall, resolveStallKind } from "@/lib/packs";
 import { type FlagReasonId } from "@/lib/flag-reasons";
 
 export type { FlagReasonId };
@@ -120,7 +120,7 @@ export type AdminFlagRow = {
 export type AdminFlagGroup = {
   slug: string;
   name: string;
-  kind: "agent" | "team";
+  kind: "agent" | "team" | "world";
   listingId: string | null;
   removable: boolean;
   takenDown: boolean;
@@ -132,7 +132,7 @@ function stallPreview(slug: string, listing: typeof listings.$inferSelect | null
   if (listing) {
     return {
       name: listing.name,
-      kind: listing.kind === "team" ? ("team" as const) : ("agent" as const),
+      kind: resolveStallKind(listing),
       listingId: listing.id,
     };
   }

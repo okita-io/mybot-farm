@@ -353,7 +353,7 @@ export function listingWriteResponse(
     slug: listing.slug,
     kind: listing.kind,
     pagePath: stallPagePath({
-      kind: listing.kind === "team" ? "team" : "agent",
+      kind: isStallKind(listing.kind) ? listing.kind : "agent",
       slug: listing.slug,
     }),
     packVersion: packVersionOf(pack),

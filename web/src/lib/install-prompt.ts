@@ -5,8 +5,11 @@ import {
   catalogProvenanceLine,
   grokAgentInstallPrompt,
   grokTeamInstallPrompt,
+  formatWorldCastLines,
+  grokWorldInstallPrompt,
   shortGrokAgentInstallPrompt,
   shortGrokTeamInstallPrompt,
+  shortGrokWorldInstallPrompt,
   type InstallPromptInput,
 } from "@/lib/install-prompt-copy";
 
@@ -48,10 +51,33 @@ function shortHermesFollowUp(stall: Stall): string {
   return ` Hermes: download the .hermes.tar.gz and ${hermesImportLine(stall)}.`;
 }
 
+function worldCastLines(stall: Stall): string {
+  return formatWorldCastLines(getPack(stall.slug)?.members);
+}
+
 export function installPrompt(stall: Stall): string {
   const input = promptInput(stall);
 
   if (isHermesOnly(stall)) {
+    if (stall.kind === "world") {
+      const gettingStarted = getPack(stall.slug)?.shared?.gettingStarted?.trim();
+
+      return `Install the mybot.farm world pack at this URL:
+${input.url}
+
+${catalogProvenanceLine(input)}
+
+1. Open that page (or call mybot.farm WebMCP / API: get_stall / download_pack for slug "${stall.slug}").
+2. This is a Hermes world. Download each cast member's scrubbed profile .tar.gz from the bot page.
+3. Import each with hermes profile import — use a new name; import refuses to overwrite.
+4. ${gettingStarted || "Follow pack.shared.gettingStarted for the group chat step."}
+5. The world block (places, greeter, turnModel defer) travels with the pack as ~/.hermes/worlds/${stall.slug}/world.json after farm_plant. No scene pane ships yet.
+6. Add your own API keys. auth.json and .env never ship.
+7. Confirm: each member imported, world.json present, anything needs_review.
+
+Do not send emails or spend money. Do not invent fields missing from the pack.`;
+    }
+
     if (stall.kind === "team") {
       const gettingStarted = getPack(stall.slug)?.shared?.gettingStarted?.trim();
 
@@ -84,6 +110,10 @@ ${catalogProvenanceLine(input)}
 Do not send emails or spend money. Do not invent fields missing from the pack.`;
   }
 
+  if (stall.kind === "world") {
+    return grokWorldInstallPrompt(input) + worldCastLines(stall) + hermesFollowUp(stall);
+  }
+
   if (stall.kind === "team") {
     return grokTeamInstallPrompt(input) + hermesFollowUp(stall);
   }
@@ -96,11 +126,19 @@ export function shortInstallPrompt(stall: Stall): string {
   const provenance = `slug "${input.slug}"${input.stallId ? `, stallId ${input.stallId}` : ""}, packVersion ${input.packVersion ?? 1}`;
 
   if (isHermesOnly(stall)) {
+    if (stall.kind === "world") {
+      return `Install ${stall.name} from ${input.url} (${provenance}). Hermes world: download each cast member .tar.gz, hermes profile import each one, then follow pack.shared.gettingStarted for the group step. farm_plant writes ~/.hermes/worlds/${stall.slug}/world.json (places, greeter, turnModel defer). Add your own API keys. Confirm members imported and needs_review. Do not send emails or spend money.`;
+    }
+
     if (stall.kind === "team") {
       return `Install ${stall.name} from ${input.url} (${provenance}). Hermes team: download each member .tar.gz, hermes profile import each one, then follow pack.shared.gettingStarted for workspace and cron. Add your own API keys. Confirm members imported and needs_review. Do not send emails or spend money.`;
     }
 
     return `Install ${stall.name} from ${input.url} (${provenance}). Hermes agent: download the scrubbed .tar.gz, then ${hermesImportLine(stall)}. Add your own API keys. Confirm name and needs_review. Do not send emails or spend money.`;
+  }
+
+  if (stall.kind === "world") {
+    return shortGrokWorldInstallPrompt(input) + shortHermesFollowUp(stall);
   }
 
   if (stall.kind === "team") {

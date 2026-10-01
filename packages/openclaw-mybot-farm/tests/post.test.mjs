@@ -23,6 +23,39 @@ const SAMPLE_PACK = {
   memory: [],
 };
 
+const SAMPLE_WORLD_PACK = {
+  format: "mybot.farm/world-pack",
+  version: "0.1",
+  runtime: ["grok-bot"],
+  profile: {
+    name: "Smoke Harbor",
+    title: "Two-agent smoke world",
+    description: "Minimal free world listing posted with a seller API key.",
+  },
+  members: [
+    {
+      role: "lead",
+      summary: "First cast member.",
+      pack: "agents/patch.json",
+    },
+    {
+      role: "guide",
+      summary: "Second cast member.",
+      pack: "agents/probe.json",
+    },
+  ],
+  shared: {
+    gettingStarted: "Install the cast, then create one group named Smoke Harbor.",
+  },
+  world: {
+    schema: "worlds/v1",
+    title: "Smoke Harbor",
+    places: [{ id: "dock", name: "The Docks", present: ["lead", "guide"] }],
+    entrypoint: { place: "dock", greeter: "guide" },
+    rules: { turnModel: "defer" },
+  },
+};
+
 const SAMPLE_TEAM_PACK = {
   format: "mybot.farm/team-pack",
   version: "0.1",
@@ -432,6 +465,37 @@ test("team pack dry-run", async () => {
     assert.equal(payload.dryRun, true);
     assert.equal(payload.payload.kind, "team");
     assert.equal(payload.payload.pack.format, "mybot.farm/team-pack");
+    assert.equal(payload.payload.pack.memberCount, 2);
+    assert.equal(called, 0);
+  } finally {
+    globalThis.fetch = prev;
+  }
+});
+
+test("world pack dry-run", async () => {
+  let called = 0;
+  const prev = globalThis.fetch;
+  globalThis.fetch = async () => {
+    called += 1;
+    throw new Error("dry-run must not POST");
+  };
+  try {
+    const payload = await postListing({
+      args: listingArgs({
+        kind: "world",
+        name: "Smoke Harbor",
+        title: "Two-agent smoke world",
+        description: "Minimal free world listing posted with a seller API key.",
+        category: "Worlds",
+        pack: { ...SAMPLE_WORLD_PACK },
+        dryRun: true,
+      }),
+      pluginConfig: { apiKey: TEST_KEY },
+    });
+    assert.equal(payload.ok, true);
+    assert.equal(payload.dryRun, true);
+    assert.equal(payload.payload.kind, "world");
+    assert.equal(payload.payload.pack.format, "mybot.farm/world-pack");
     assert.equal(payload.payload.pack.memberCount, 2);
     assert.equal(called, 0);
   } finally {

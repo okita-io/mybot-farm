@@ -10,7 +10,7 @@ import { listSellerApiKeys } from "@/lib/api-keys";
 import { refreshConnectStatus } from "@/lib/connect";
 import { listSellerListings } from "@/lib/listings";
 import { formatPriceLabel } from "@/lib/money";
-import { stallPagePath } from "@/lib/packs";
+import { resolveStallKind, stallPagePath } from "@/lib/packs";
 import { site, siteOgImage } from "@/lib/site";
 import { authorHref, getUserByClerkId, requireAppUser } from "@/lib/users";
 
@@ -130,7 +130,7 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
                   <>
                     <Link
                       href={stallPagePath({
-                        kind: listing.kind === "team" ? "team" : "agent",
+                        kind: resolveStallKind(listing),
                         slug: listing.slug,
                       })}
                     >
@@ -194,7 +194,7 @@ export default async function SellPage({ searchParams }: PageProps<"/sell">) {
               ? {
                   id: editing.id,
                   slug: editing.slug,
-                  kind: editing.kind === "team" ? "team" : "agent",
+                  kind: resolveStallKind(editing),
                   name: editing.name,
                   title: editing.title,
                   description: editing.description,

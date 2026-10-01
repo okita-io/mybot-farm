@@ -30,7 +30,7 @@ const API_KEY = process.env.MOCK_API_KEY ?? "mbf_mocktoken";
 const CATEGORY_LABELS = new Set([
   "Lifestyle", "Productivity", "Coding", "Writing", "Marketing", "Sales",
   "Research", "Personal finance", "Creative", "Music", "Education",
-  "Ops / admin", "Experimental",
+  "Ops / admin", "Experimental", "Worlds",
 ]);
 
 const CORS = {
@@ -70,7 +70,11 @@ function soulOneLiner(text) {
 }
 
 function stallRecord(s) {
-  const pagePath = s.kind === "team" ? `/teams/${s.slug}` : `/agents/${s.slug}`;
+  const pagePath = s.kind === "world"
+    ? `/worlds/${s.slug}`
+    : s.kind === "team"
+      ? `/teams/${s.slug}`
+      : `/agents/${s.slug}`;
   return {
     kind: s.kind, slug: s.slug, stallId: s.slug, packVersion: s.packVersion,
     name: s.name, title: s.title, description: s.description, category: s.category,
@@ -126,14 +130,29 @@ const notFound = (res, slug) => send(res, 404, { error: "stall_not_found", ...(s
 
 // ---- seed ------------------------------------------------------------------
 async function seed() {
-  for (const [kind, sub] of [["agent", "agents"], ["team", "teams"]]) {
+  const worldDirs = [
+    join(SEED_DIR, "worlds"),
+    join(__dirname, "..", "web", "public", "packs", "worlds"),
+  ];
+  for (const [kind, sub] of [["agent", "agents"], ["team", "teams"], ["world", worldDirs]]) {
     let files = [];
-    try { files = await readdir(join(SEED_DIR, sub)); } catch { continue; }
-    for (const f of files) {
+    if (kind === "world") {
+      for (const dir of sub) {
+        try {
+          const found = await readdir(dir);
+          files.push(...found.map((f) => ({ file: f, dir })));
+        } catch { /* try next */ }
+      }
+    } else {
+      try { files = (await readdir(join(SEED_DIR, sub))).map((f) => ({ file: f, dir: join(SEED_DIR, sub) })); } catch { continue; }
+    }
+    for (const entry of files) {
+      const f = typeof entry === "string" ? entry : entry.file;
+      const dir = typeof entry === "string" ? join(SEED_DIR, sub) : entry.dir;
       if (!f.endsWith(".json")) continue;
       const slug = f.replace(/\.json$/, "");
       try {
-        const pack = JSON.parse(await readFile(join(SEED_DIR, sub, f), "utf8"));
+        const pack = JSON.parse(await readFile(join(dir, f), "utf8"));
         catalog.set(slug, {
           kind, slug, pack,
           name: pack.profile?.name ?? slug,
@@ -154,7 +173,9 @@ async function seed() {
 function validateListing(body) {
   if (!body || typeof body !== "object") return { error: "invalid_body", message: "JSON object required", status: 400 };
   const { kind, name, title, description, category, priceCents, pack } = body;
-  if (kind !== "agent" && kind !== "team") return { error: "invalid_kind", message: 'kind must be "agent" or "team"', status: 400 };
+  if (kind !== "agent" && kind !== "team" && kind !== "world") {
+    return { error: "invalid_kind", message: 'kind must be "agent", "team", or "world"', status: 400 };
+  }
   for (const [k, v] of Object.entries({ name, title, description })) {
     if (typeof v !== "string" || !v.trim()) return { error: "invalid_field", message: `${k} must be a non-empty string`, status: 400 };
   }
@@ -166,6 +187,10 @@ function validateListing(body) {
   if (kind === "team") {
     if (pack.format !== "mybot.farm/team-pack") return { error: "invalid_pack", message: 'team requires format "mybot.farm/team-pack"', status: 400 };
     if (!Array.isArray(pack.members) || pack.members.length < 2) return { error: "invalid_pack", message: "team requires members[] >= 2", status: 400 };
+  } else if (kind === "world") {
+    if (pack.format !== "mybot.farm/world-pack") return { error: "invalid_pack", message: 'world requires format "mybot.farm/world-pack"', status: 400 };
+    if (!Array.isArray(pack.members) || pack.members.length < 2) return { error: "invalid_pack", message: "world requires members[] >= 2", status: 400 };
+    if (!pack.world || typeof pack.world !== "object") return { error: "invalid_pack", message: "world requires a world{} block", status: 400 };
   } else if (Array.isArray(pack.members) && pack.members.length) {
     return { error: "invalid_pack", message: 'agent cannot include members[]', status: 400 };
   }
@@ -209,8 +234,8 @@ const server = createServer(async (req, res) => {
   if (method === "GET" && path === "/api/stalls") {
     const q = (url.searchParams.get("q") ?? url.searchParams.get("query") ?? "").trim().toLowerCase();
     const kindParam = url.searchParams.get("kind");
-    if (kindParam && kindParam !== "agent" && kindParam !== "team")
-      return send(res, 400, { error: "invalid_kind", kind: kindParam, allowed: ["agent", "team"] });
+    if (kindParam && kindParam !== "agent" && kindParam !== "team" && kindParam !== "world")
+      return send(res, 400, { error: "invalid_kind", kind: kindParam, allowed: ["agent", "team", "world"] });
     let list = [...catalog.values()];
     if (kindParam) list = list.filter((s) => s.kind === kindParam);
     if (q) list = list.filter((s) =>
@@ -283,7 +308,9 @@ const server = createServer(async (req, res) => {
     if (!s) return notFound(res, m[1]);
     if ((s.priceCents ?? 0) > 0) return send(res, 402, { error: "purchase_required", slug: s.slug, priceCents: s.priceCents });
     const short = url.searchParams.get("short") === "1";
-    const url_ = `http://localhost:${PORT}${s.kind === "team" ? "/teams/" : "/agents/"}${s.slug}`;
+    const url_ = `http://localhost:${PORT}${
+      s.kind === "world" ? "/worlds/" : s.kind === "team" ? "/teams/" : "/agents/"
+    }${s.slug}`;
     const prompt = short
       ? `Install ${s.name} from ${url_}`
       : `Create a new agent named "${s.name}". ${s.description}\nSource: ${url_}`;
@@ -324,7 +351,11 @@ const server = createServer(async (req, res) => {
     catalog.set(slug, rec);
     owners.set(slug, key);
 
-    const pagePath = body.kind === "team" ? `/teams/${slug}` : `/agents/${slug}`;
+    const pagePath = body.kind === "world"
+      ? `/worlds/${slug}`
+      : body.kind === "team"
+        ? `/teams/${slug}`
+        : `/agents/${slug}`;
     return send(res, created ? 201 : 200, {
       ok: true, id: slug, stallId: slug, slug, kind: body.kind,
       packVersion: nextVersion, created, updated: !created,

@@ -2,10 +2,11 @@ import { installPromptPayload } from "@/lib/install-prompt";
 import { packSummaryFields } from "@/lib/pack-files";
 import { findStall, getCatalogPack, requireCatalogStallAndPack } from "@/lib/catalog";
 import { stallPageUrl, stallRecord, type StallKind, type StallTone } from "@/lib/packs";
+import { parseSharePath, SLUG_PATTERN } from "@/lib/share-paths";
 import { site } from "@/lib/site";
 
 export const MAX_SHARE_URL_LENGTH = 2048;
-export const SLUG_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
+export { SLUG_PATTERN, parseSharePath } from "@/lib/share-paths";
 
 export const ALLOWED_SHARE_HOSTS = [
   "mybot.farm",
@@ -79,7 +80,7 @@ export type UserLibraryItem = {
   gafSnapshotRef?: string;
 };
 
-type PathKind = "agent" | "team" | "pack" | "api" | "install-prompt";
+type PathKind = "agent" | "team" | "world" | "pack" | "api" | "install-prompt";
 
 function normalizeHost(host: string): string {
   return host.toLowerCase().replace(/\.$/, "").split(":")[0] ?? host;
@@ -101,44 +102,6 @@ function looksLikeJsonPack(pathname: string): boolean {
 
 function isValidSlug(value: string): boolean {
   return SLUG_PATTERN.test(value);
-}
-
-function stripSlugExt(value: string): string {
-  return value.replace(/\.json$/i, "");
-}
-
-function parsePath(pathname: string):
-  | { slug: string; pathKind: PathKind }
-  | { error: ResolveShareErrorCode } {
-  const path = pathname.replace(/\/+$/, "") || "/";
-
-  const patterns: { re: RegExp; pathKind: PathKind }[] = [
-    { re: /^\/agents\/([^/]+)$/, pathKind: "agent" },
-    { re: /^\/teams\/([^/]+)$/, pathKind: "team" },
-    { re: /^\/packs\/agents\/([^/]+)$/, pathKind: "pack" },
-    { re: /^\/packs\/teams\/([^/]+)$/, pathKind: "pack" },
-    { re: /^\/api\/stalls\/([^/]+)$/, pathKind: "api" },
-    { re: /^\/api\/packs\/([^/]+)\/skills$/, pathKind: "api" },
-    { re: /^\/api\/packs\/([^/]+)\/grok-template$/, pathKind: "api" },
-    { re: /^\/api\/packs\/([^/]+)$/, pathKind: "api" },
-    { re: /^\/api\/install-prompt\/([^/]+)$/, pathKind: "install-prompt" },
-  ];
-
-  for (const { re, pathKind } of patterns) {
-    const match = path.match(re);
-    if (!match?.[1]) {
-      continue;
-    }
-
-    const slug = stripSlugExt(match[1]);
-    if (!isValidSlug(slug)) {
-      return { error: "unsupported_path" };
-    }
-
-    return { slug, pathKind };
-  }
-
-  return { error: "unsupported_path" };
 }
 
 function coerceToUrl(raw: string): URL | { slug: string } | { error: ResolveShareErrorCode } {
@@ -205,6 +168,10 @@ async function resolveFromSlug(
 
   if (pathKind === "team" && stall.kind !== "team") {
     warnings.push(`Path says /teams/ but "${slug}" is a ${stall.kind}.`);
+  }
+
+  if (pathKind === "world" && stall.kind !== "world") {
+    warnings.push(`Path says /worlds/ but "${slug}" is a ${stall.kind}.`);
   }
 
   if (pathKind === "install-prompt") {
@@ -286,7 +253,7 @@ async function resolveParsedUrl(
     };
   }
 
-  const match = parsePath(parsed.pathname);
+  const match = parseSharePath(parsed.pathname);
 
   if ("error" in match) {
     return { ok: false, error: match.error, warnings: [] };

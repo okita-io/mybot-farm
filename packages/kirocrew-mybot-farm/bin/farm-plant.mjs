@@ -64,7 +64,7 @@ switch (cmd) {
       clean: Boolean(flags.clean) || isReinstall,
       dryRun: Boolean(flags["dry-run"]),
     };
-    if (body.format === "mybot.farm/team-pack") {
+    if (body.format === "mybot.farm/team-pack" || body.format === "mybot.farm/world-pack") {
       const memberPacks = {};
       for (const ref of body.members ?? []) {
         const memberSlug = typeof ref.pack === "string"
@@ -81,7 +81,7 @@ switch (cmd) {
         teamSlug: plan.teamSlug, workspace: plan.workspace, members: plan.memberNames,
         agentPaths: plan.agentPaths, steeringPaths: plan.steeringPaths,
         sharedSteeringPath: plan.sharedSteeringPath, topologyDocPath: plan.topologyDocPath,
-        bindCommands: plan.bindCommands, notes: plan.notes,
+        worldJsonPath: plan.worldJsonPath, bindCommands: plan.bindCommands, notes: plan.notes,
       });
       break;
     }

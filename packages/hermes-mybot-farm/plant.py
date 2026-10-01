@@ -13,6 +13,7 @@ team dir or board unless clean=True.
 
 from __future__ import annotations
 
+import json
 import re
 import shutil
 from dataclasses import dataclass, field
@@ -100,7 +101,7 @@ class KanbanPlan:
 @dataclass
 class PlantPlan:
     slug: str
-    kind: str  # "agent" | "team"
+    kind: str  # "agent" | "team" | "world"
     profile_name: str | None
     members: list[MemberPlan]
     team_dirs: list[str]
@@ -118,6 +119,8 @@ class PlantPlan:
     topology_kind: str = ""
     handoffs: list[str] = field(default_factory=list)
     skills: list[dict[str, Any]] = field(default_factory=list)
+    world_block: dict[str, Any] | None = None
+    world_file: str | None = None
 
 
 @dataclass
@@ -132,6 +135,7 @@ class PlantResult:
     team_files: list[str] = field(default_factory=list)
     kanban: str | None = None
     room: str | None = None
+    world_file: str | None = None
     recruited: list[str] = field(default_factory=list)
     endpoint_note: str = ""
     notes: list[str] = field(default_factory=list)
@@ -150,6 +154,7 @@ class PlantResult:
             "team_files": self.team_files,
             "kanban": self.kanban,
             "room": self.room,
+            "world_file": self.world_file,
             "recruited": self.recruited,
             "endpoint_note": self.endpoint_note,
             "notes": self.notes,
@@ -392,16 +397,23 @@ def build_plant_plan(
     members = _merge_member_plans(stall_members, pack_members)
     download_href = str(stall.get("downloadHref") or stall.get("packUrl") or "")
     archive_href = resolve_agent_archive_href(stall, pack) or download_href
+    pack_format = str(pack.get("format") or "")
+    is_world = stall.get("kind") == "world" or pack_format.endswith("world-pack")
     is_team = (
-        stall.get("kind") == "team"
-        or str(pack.get("format") or "").endswith("team-pack")
+        stall.get("kind") in ("team", "world")
+        or pack_format.endswith("team-pack")
+        or pack_format.endswith("world-pack")
         or bool(members)
     )
+    world_block = pack.get("world") if isinstance(pack.get("world"), dict) else None
+    world_file = None
+    if is_world and world_block:
+        world_file = str(confined_path(hermes_home() / "worlds", slug, "world.json"))
 
     if is_team and members:
         return PlantPlan(
             slug=slug,
-            kind="team",
+            kind="world" if is_world else "team",
             profile_name=None,
             members=members,
             team_dirs=parse_team_dirs(getting, slug),
@@ -421,6 +433,8 @@ def build_plant_plan(
             topology_kind=pack_topology_kind(pack),
             handoffs=pack_handoffs(pack),
             skills=pack_skills(pack),
+            world_block=world_block,
+            world_file=world_file,
         )
 
     if is_team:
@@ -599,12 +613,15 @@ def plant(
                 f"dry-run: would clear tombstones: {', '.join(existing_tombstones)}"
             )
         result.notes.append(pack_summary(pack).get("homepage") or plan.homepage)
-        if plan.kind == "team":
+        if plan.kind in ("team", "world"):
             result.notes.append(
                 "dry-run: would mark members as Bots, write TEAM.md, install team-rules, "
                 "and create a group chat if HERMES_GATEWAY_RPC_URL is set"
             )
-        elif recruit:
+        if plan.world_file and plan.world_block:
+            result.world_file = plan.world_file
+            result.notes.append(f"dry-run: would write world block to {plan.world_file}")
+        if recruit and plan.kind == "agent":
             result.notes.append(
                 "dry-run: would stamp ui_meta.hermes-bots so the agent lands in the "
                 "Desktop Bots roster (Recruit)"
@@ -704,7 +721,7 @@ def plant(
             )
             return result
 
-    if plan.kind == "team":
+    if plan.kind in ("team", "world"):
         team_root = _ensure_team_dirs(plan, home)
         result.team_dir = str(team_root)
         result.team_files = _fetch_team_files(plan, team_root, base_url=origin)
@@ -725,6 +742,16 @@ def plant(
             result.kanban = plan.kanban.slug
         notes.append("seller cron/shell scripts are not installed; schedule them yourself if the listing documents them")
         result.room = configure_planted_team(plan, home, team_root=team_root, notes=notes)
+
+    if plan.world_file and plan.world_block:
+        world_path = Path(plan.world_file)
+        world_path.parent.mkdir(parents=True, exist_ok=True)
+        world_path.write_text(
+            json.dumps(plan.world_block, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        result.world_file = str(world_path)
+        notes.append(f"wrote world block to {world_path}")
 
     result.notes = notes
     result.ok = True

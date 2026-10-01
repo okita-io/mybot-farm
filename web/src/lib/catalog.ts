@@ -18,8 +18,10 @@ import { getTakenDownSlugSet } from "@/lib/moderation";
 import {
   FARM_SEED_LISTED_AT,
   getStall,
+  isStallKind,
   packPathStem,
   stalls,
+  worldCardFields,
   type Stall,
   type StallKind,
 } from "@/lib/packs";
@@ -47,6 +49,7 @@ export function listingToStall(
   author?: Stall["author"],
 ): Stall {
   const pack = listing.pack as FarmPack;
+  const kind: StallKind = isStallKind(listing.kind) ? listing.kind : "agent";
   const members = (pack.members ?? [])
     .map((member) => {
       const href = listingMemberHref(member.pack);
@@ -60,8 +63,13 @@ export function listingToStall(
     })
     .filter((member): member is { name: string; href: string } => Boolean(member));
 
+  const tone: Stall["tone"] =
+    kind === "world" ? "world" : kind === "team" ? "agent" : "share";
+
+  const world = worldCardFields(pack);
+
   return {
-    kind: listing.kind === "team" ? "team" : "agent",
+    kind,
     slug: listing.slug,
     stallId: listing.id,
     packVersion: packVersionOf(pack),
@@ -69,13 +77,12 @@ export function listingToStall(
     title: listing.title,
     description: listing.description,
     category: listing.category,
-    tone: listing.kind === "team" ? "agent" : "share",
+    tone,
     downloadHref: `/api/packs/${listing.slug}?download=1`,
-    hermesHref: existingHermesArchiveHref(
-      listing.kind === "team" ? "team" : "agent",
-      listing.slug,
-    ),
+    hermesHref: existingHermesArchiveHref(kind, listing.slug),
     members: members.length ? members : undefined,
+    thumbnail: world.thumbnail,
+    runtimes: world.runtimes,
     priceCents: listing.priceCents,
     currency: listing.currency,
     listingId: listing.id,
@@ -184,7 +191,7 @@ export async function getCatalogPack(slug: string): Promise<FarmPack | undefined
     return undefined;
   }
 
-  const kind = listing.kind === "team" ? "team" : "agent";
+  const kind: StallKind = isStallKind(listing.kind) ? listing.kind : "agent";
   return withHermesRuntime(listing.pack as FarmPack, kind, slug);
 }
 
@@ -365,7 +372,7 @@ export async function resolvePackAccess(
   const [stall] = await hydrateListingStalls([listing]);
   const pack = withHermesRuntime(
     listing.pack as FarmPack,
-    listing.kind === "team" ? "team" : "agent",
+    isStallKind(listing.kind) ? listing.kind : "agent",
     slug,
   );
 

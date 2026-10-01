@@ -51,10 +51,11 @@ async function farm_plant(args = {}) {
   if (status !== 200) return { ok: false, status, error: body?.error ?? "not_found" };
 
   const opts = { name: args.name, workspace: args.workspace, force: Boolean(args.force), reinstall: Boolean(args.reinstall), clean: Boolean(args.clean), dryRun: Boolean(args.dryRun) };
-  if (body.format === "mybot.farm/team-pack") {
+  if (body.format === "mybot.farm/team-pack" || body.format === "mybot.farm/world-pack") {
     const memberPacks = await resolveMembers(body);
     const plan = await plantTeam(body, memberPacks, opts);
-    return { ok: true, kind: "team", kiroHome: kiroHome(), members: plan.memberNames, ...plan };
+    const kind = body.format === "mybot.farm/world-pack" ? "world" : "team";
+    return { ok: true, kind, kiroHome: kiroHome(), members: plan.memberNames, ...plan };
   }
   const plan = await plantAgent(body, opts);
   return { ok: true, kind: "agent", kiroHome: kiroHome(), ...plan };

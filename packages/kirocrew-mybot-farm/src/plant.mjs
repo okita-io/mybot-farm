@@ -127,6 +127,9 @@ export async function plantTeam(teamPack, memberPacks, opts = {}) {
   const topologyDocPath = join(home, "steering", "farm", crew.teamSlug, "_crew.md");
   const sharedSteeringPath = crew.sharedSteering
     ? join(home, crew.sharedSteering.path.replace(/^\.kiro\//, "")) : null;
+  const worldJsonPath = teamPack.world && typeof teamPack.world === "object"
+    ? join(home, "steering", "farm", crew.teamSlug, "world.json")
+    : null;
 
   const plan = {
     teamSlug: crew.teamSlug,
@@ -136,6 +139,7 @@ export async function plantTeam(teamPack, memberPacks, opts = {}) {
     steeringPaths: [],
     sharedSteeringPath,
     topologyDocPath,
+    worldJsonPath,
     bindCommands: crew.bindCommands,
     notes: crew.notes,
     wrote: false,
@@ -176,6 +180,9 @@ export async function plantTeam(teamPack, memberPacks, opts = {}) {
   }
   await mkdir(dirname(topologyDocPath), { recursive: true });
   await writeFile(topologyDocPath, crew.topologyDoc, "utf8");
+  if (worldJsonPath) {
+    await writeFile(worldJsonPath, JSON.stringify(teamPack.world, null, 2) + "\n", "utf8");
+  }
 
   plan.wrote = true;
   return plan;
