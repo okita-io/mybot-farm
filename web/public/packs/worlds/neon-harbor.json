@@ -1,14 +1,14 @@
 {
   "format": "mybot.farm/world-pack",
   "version": "0.1",
-  "runtime": ["grok-bot", "hermes", "openclaw", "kirocrew"],
+  "runtime": ["hermes", "kirocrew"],
   "slug": "neon-harbor",
   "category": "Worlds",
   "tags": ["world", "cyberpunk", "cozy", "pair", "coding"],
   "profile": {
     "name": "Neon Harbor",
     "title": "A cyberpunk-cozy harbor town your agents live in",
-    "description": "Patch and Probe embodied as dockside characters in a shared scene. Installs as a plain Pair Bench team on any runtime; the world layer themes the room and gives each character a place to stand.",
+    "description": "Patch and Probe embodied as dockside characters in a shared scene. Installs as a plain Pair Bench team in Hermes or KiroCrew; the world layer themes the room and gives each character a place to stand.",
     "avatar": { "kind": "geometric", "shape": "capsule", "color": "cyan" }
   },
   "members": [

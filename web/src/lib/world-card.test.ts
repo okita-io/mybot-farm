@@ -32,12 +32,7 @@ describe("world listing persistence round-trip", () => {
     // worldCardFields is exactly what listingToStall reads back.
     const fields = worldCardFields(neonHarbor);
     assert.equal(fields.thumbnail, "/packs/worlds/neon-harbor.webp");
-    assert.deepEqual(fields.runtimes, [
-      "grok-bot",
-      "hermes",
-      "openclaw",
-      "kirocrew",
-    ]);
+    assert.deepEqual(fields.runtimes, ["hermes", "kirocrew"]);
   });
 
   it("routes a world listing to the worlds catalog directory", () => {
