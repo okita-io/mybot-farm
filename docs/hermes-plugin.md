@@ -187,6 +187,12 @@ hermes plugins validate ./packages/hermes-mybot-farm
 
 PyPI 0.19.0: skip that; the unittest probe above is the admission check (`register(ctx)` plus declared tools).
 
+## Worlds scene
+
+`packages/hermes-worlds` draws a planted world. It is not part of the `mybot-farm` tool plugin and has no `plugin.yaml`. `farm_plant` writes `~/.hermes/worlds/<slug>/world.json`; this package reads it.
+
+Zip: `https://mybot.farm/downloads/hermes-worlds-1.1.0.zip`. Unzip into `~/.hermes/plugins/hermes-worlds`, rescan dashboard plugins, and copy `desktop/plugin.js` to `~/.hermes/desktop-plugins/hermes-worlds/plugin.js`. Steps: [`packages/hermes-worlds/INSTALL.md`](../packages/hermes-worlds/INSTALL.md).
+
 ## Notes
 
 - Source: [`packages/hermes-mybot-farm`](../packages/hermes-mybot-farm).

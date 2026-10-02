@@ -67,6 +67,13 @@ export const hermesPlugin = {
   gitInstall: "okita-io/mybot-farm/packages/hermes-mybot-farm",
 } as const;
 
+export const hermesWorldsPlugin = {
+  id: "hermes-worlds",
+  version: "1.1.0",
+  downloadPath: "/downloads/hermes-worlds-1.1.0.zip",
+  downloadUrl: "https://mybot.farm/downloads/hermes-worlds-1.1.0.zip",
+} as const;
+
 export const openclawPlugin = {
   id: "mybot-farm",
   packageName: "@okita-io/openclaw-mybot-farm",

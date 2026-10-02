@@ -10,7 +10,7 @@ import {
   howToOpenClawLd,
   howToPostListingLd,
 } from "@/lib/schema";
-import { hermesPlugin, openclawPlugin, site, siteOgImage } from "@/lib/site";
+import { hermesPlugin, hermesWorldsPlugin, openclawPlugin, site, siteOgImage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "How-To",
@@ -219,6 +219,20 @@ curl -LO ${hermesPlugin.downloadUrl}
 mkdir -p ~/.hermes/plugins/mybot-farm
 unzip hermes-mybot-farm-${hermesPlugin.version}.zip -d ~/.hermes/plugins/mybot-farm
 hermes plugins enable mybot-farm`}</pre>
+          <p>
+            The worlds scene is a second download,{" "}
+            <code>{hermesWorldsPlugin.id}</code> {hermesWorldsPlugin.version}.
+            It draws <code>~/.hermes/worlds</code> after <code>farm_plant</code>.
+            It is not a tool plugin, so leave <code>hermes plugins install</code>{" "}
+            for <code>mybot-farm</code> and unzip this one beside it:
+          </p>
+          <pre>{`curl -LO ${hermesWorldsPlugin.downloadUrl}
+mkdir -p ~/.hermes/plugins/hermes-worlds
+unzip hermes-worlds-${hermesWorldsPlugin.version}.zip -d ~/.hermes/plugins/hermes-worlds
+curl -X POST http://127.0.0.1:9119/api/dashboard/plugins/rescan
+mkdir -p ~/.hermes/desktop-plugins/hermes-worlds
+cp ~/.hermes/plugins/hermes-worlds/desktop/plugin.js \\
+  ~/.hermes/desktop-plugins/hermes-worlds/plugin.js`}</pre>
           <p>
             CLI smoke (secondary):{" "}
             <code>

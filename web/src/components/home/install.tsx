@@ -95,8 +95,10 @@ export function HomeInstall() {
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
           Running Hermes? Enable the mybot-farm plugin, open Desktop{" "}
           <strong>Farm</strong>, browse a stall, and{" "}
-          <strong>Recruit</strong> into the Bots roster. CLI still plants
-          scrubbed profiles and clears delete-tombstones on reinstall.{" "}
+          <strong>Recruit</strong> into the Bots roster. The worlds plugin is a
+          second download on that page: it draws a planted world in the
+          dashboard and in Desktop. CLI still plants scrubbed profiles and
+          clears delete-tombstones on reinstall.{" "}
           <Link
             href="/install/hermes"
             className="font-medium text-foreground underline-offset-4 hover:underline"

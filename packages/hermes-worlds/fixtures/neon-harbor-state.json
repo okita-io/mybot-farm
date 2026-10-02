@@ -1,0 +1,10 @@
+{
+  "schema": "worlds/state/v1",
+  "worldId": "neon-harbor",
+  "place": "dock",
+  "where": {
+    "harbor-engineer": "workshop",
+    "night-watch": "dock"
+  },
+  "recent": []
+}

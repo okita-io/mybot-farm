@@ -5,7 +5,7 @@ import { ContentPage, ContentSection } from "@/components/content-page";
 import { JsonLd } from "@/components/json-ld";
 import { Button } from "@/components/ui/button";
 import { howToHermesPluginLd } from "@/lib/schema";
-import { hermesPlugin, site, siteOgImage } from "@/lib/site";
+import { hermesPlugin, hermesWorldsPlugin, site, siteOgImage } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Install in Hermes",
@@ -38,6 +38,15 @@ export default function HermesInstallPage() {
             >
               <Download data-icon="inline-start" />
               Download plugin {hermesPlugin.version}
+            </a>
+          </Button>
+          <Button asChild variant="outline" size="lg" className="h-9 rounded-full px-4">
+            <a
+              href={hermesWorldsPlugin.downloadPath}
+              download={`hermes-worlds-${hermesWorldsPlugin.version}.zip`}
+            >
+              <Download data-icon="inline-start" />
+              Download worlds {hermesWorldsPlugin.version}
             </a>
           </Button>
           <Button asChild variant="outline" size="lg" className="h-9 rounded-full px-4">
@@ -164,6 +173,31 @@ hermes plugins enable mybot-farm`}</pre>
             does not appear after a symlink install, copy{" "}
             <code>desktop/plugin.js</code> to{" "}
             <code>~/.hermes/desktop-plugins/mybot-farm/plugin.js</code>.
+          </p>
+        </ContentSection>
+
+        <ContentSection id="worlds" title="Show a planted world">
+          <p>
+            The worlds plugin (<code>{hermesWorldsPlugin.id}</code>{" "}
+            {hermesWorldsPlugin.version}) is separate from the agent tools.{" "}
+            <code>farm_plant</code> writes{" "}
+            <code>~/.hermes/worlds/{"{slug}"}/world.json</code>. This plugin
+            draws that scene: a dashboard tab and a Desktop page. It has no{" "}
+            <code>plugin.yaml</code>, so <code>hermes plugins install</code>{" "}
+            does not apply. Unzip it beside the tools plugin:
+          </p>
+          <pre>{`curl -LO ${hermesWorldsPlugin.downloadUrl}
+mkdir -p ~/.hermes/plugins/hermes-worlds
+unzip hermes-worlds-${hermesWorldsPlugin.version}.zip -d ~/.hermes/plugins/hermes-worlds
+curl -X POST http://127.0.0.1:9119/api/dashboard/plugins/rescan
+
+mkdir -p ~/.hermes/desktop-plugins/hermes-worlds
+cp ~/.hermes/plugins/hermes-worlds/desktop/plugin.js ~/.hermes/desktop-plugins/hermes-worlds/plugin.js`}</pre>
+          <p>
+            Dashboard tab <strong>Crew Worlds</strong>. In Hermes Desktop, sidebar{" "}
+            <strong>Worlds</strong> (or ⌘K → <code>Worlds: Open planted world</code>
+            ). Reload desktop plugins if the page is missing. Source:{" "}
+            <code>packages/hermes-worlds</code>.
           </p>
         </ContentSection>
 

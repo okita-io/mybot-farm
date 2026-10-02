@@ -1,0 +1,14 @@
+{
+  "name": "hermes-worlds",
+  "label": "Crew Worlds",
+  "description": "Scene pane for planted GAF worlds (places, cast, theme) with an optional session pulse on cast profiles.",
+  "icon": "Sparkles",
+  "version": "1.1.0",
+  "tab": {
+    "path": "/hermes-worlds",
+    "position": "after:sessions"
+  },
+  "entry": "dist/index.js",
+  "css": "dist/style.css",
+  "api": "plugin_api.py"
+}

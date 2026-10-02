@@ -1,0 +1,57 @@
+{
+  "schema": "worlds/v1",
+  "title": "Neon Harbor",
+  "thumbnail": "/packs/worlds/neon-harbor.webp",
+  "theme": {
+    "palette": { "bg": "#0b1020", "fg": "#e6f1ff", "accent": "#36e0c0" },
+    "backdrop": "assets/harbor-night.webp",
+    "mood": "cyberpunk-cozy"
+  },
+  "places": [
+    {
+      "id": "dock",
+      "name": "The Docks",
+      "art": "assets/dock.webp",
+      "connects": ["workshop"],
+      "present": ["harbor-engineer", "night-watch"]
+    },
+    {
+      "id": "workshop",
+      "name": "The Workshop",
+      "art": "assets/workshop.webp",
+      "connects": ["dock"],
+      "present": ["harbor-engineer"]
+    }
+  ],
+  "cast": [
+    {
+      "role": "harbor-engineer",
+      "name": "Patch",
+      "home": "workshop",
+      "avatar": "assets/patch-harbor.webp",
+      "memoryScope": "private",
+      "capabilities": ["web", "files"],
+      "relationships": { "night-watch": "trusted partner", "user": "harbor-master" }
+    },
+    {
+      "role": "night-watch",
+      "name": "Probe",
+      "home": "dock",
+      "avatar": "assets/probe-harbor.webp",
+      "memoryScope": "private",
+      "capabilities": ["web", "files"],
+      "relationships": { "harbor-engineer": "trusted partner", "user": "harbor-master" }
+    }
+  ],
+  "rules": {
+    "turnModel": "defer",
+    "handoff": "mention",
+    "ambient": false,
+    "maxPresent": 6
+  },
+  "entrypoint": { "place": "dock", "greeter": "night-watch" },
+  "render": {
+    "theme": "cyberpunk-cozy",
+    "widgetHints": { "scenePanel": true, "showBackdrop": true }
+  }
+}
