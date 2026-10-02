@@ -425,7 +425,7 @@ export type AdminCommentFlagGroup = {
   commentId: string;
   slug: string;
   name: string;
-  kind: "agent" | "team";
+  kind: "agent" | "team" | "world";
   href: string;
   body: string;
   createdAt: string;

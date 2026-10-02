@@ -104,6 +104,8 @@ export type FarmPack = {
   exports?: PackExports;
   members?: PackMemberRef[];
   team?: unknown;
+  /** worlds/v1 block on a world-pack. Absent on agent and team packs. */
+  world?: unknown;
   shared?: {
     memory?: PackMemory[];
     gettingStarted?: string;
