@@ -37,9 +37,97 @@ V1_CAPABILITIES = ("web", "files", "schedule")
 
 RECENT_CAP = 20
 
+# exchange-spec loss table: Hermes MEMORY.md keeps the newest entries up to
+# ~2,200 chars and USER.md up to ~1,375; the SOUL/persona travels in FULL in
+# the GAF pack (only a source that was already clipped is ledgered). We keep
+# the full persona and only ledger the memory/user clips.
+MEMORY_CHAR_CAP = 2200
+USER_CHAR_CAP = 1375
+
 
 class ExportError(Exception):
     pass
+
+
+def _read_text(path: Path) -> str:
+    try:
+        return path.read_text(encoding="utf-8") if path.is_file() else ""
+    except OSError:
+        return ""
+
+
+def _clip_newest(text: str, cap: int) -> tuple[str, bool]:
+    """Keep the NEWEST entries that fit under `cap` chars. MEMORY/USER grow by
+    appending, so 'newest' is the tail. Returns (kept, was_clipped)."""
+    if len(text) <= cap:
+        return text, False
+    return text[-cap:], True
+
+
+def build_character_pack(cid: str, profile_dir: Path | None) -> tuple[dict, list[dict]]:
+    """Compose a GAF agent-pack capturing the character's FULL identity so it
+    round-trips between runtimes (exchange-spec §2.2 + lossless subset):
+
+      profile.name        — the character id
+      profile.description — the persona an importer drops into a system prompt:
+                            SOUL.md (full) + profile.yaml `description`, joined
+      memory[]            — MEMORY.md (private notes) + USER.md (operator model),
+                            each clipped newest-first per the loss table
+
+    Returns (pack, loss_entries). A missing profile yields a minimal pack + a
+    loss entry so the importer knows the persona was not captured.
+    """
+    loss: list[dict] = []
+    if profile_dir is None or not profile_dir.is_dir():
+        loss.append({
+            "path": f"characters.{cid}.profile",
+            "action": "missing",
+            "detail": "no local profile dir found; persona not captured, importer must supply it",
+        })
+        return ({"schema": "mybot.farm/agent-pack",
+                 "profile": {"name": cid, "description": ""}, "memory": []}, loss)
+
+    # Persona = SOUL.md (identity, full) + profile.yaml description. The persona
+    # travels in full; we do NOT clip it (only a source already clipped is a
+    # loss, which Hermes SOUL is not).
+    soul = _read_text(profile_dir / "SOUL.md").strip()
+    yaml_desc = ""
+    pdata = _read_text(profile_dir / "profile.yaml")
+    for line in pdata.splitlines():
+        m = line.strip()
+        if m.startswith("description:") and not m.startswith("description_auto:"):
+            yaml_desc = m[len("description:"):].strip().strip("'\"")
+            break
+    parts = [p for p in (soul, yaml_desc) if p]
+    description = "\n\n".join(parts)
+
+    # Memory = MEMORY.md + USER.md, each clipped newest-first and ledgered.
+    memory: list[dict] = []
+    mem_text = _read_text(profile_dir / "memories" / "MEMORY.md").strip()
+    if mem_text:
+        kept, clipped = _clip_newest(mem_text, MEMORY_CHAR_CAP)
+        memory.append({"scope": "private", "source": "MEMORY.md", "text": kept})
+        if clipped:
+            loss.append({"path": f"characters.{cid}.memory",
+                         "action": "clipped",
+                         "detail": f"MEMORY.md over {MEMORY_CHAR_CAP} chars; newest kept, older omitted"})
+    user_text = _read_text(profile_dir / "memories" / "USER.md").strip()
+    if user_text:
+        kept, clipped = _clip_newest(user_text, USER_CHAR_CAP)
+        memory.append({"scope": "operator", "source": "USER.md", "text": kept})
+        if clipped:
+            loss.append({"path": f"characters.{cid}.user",
+                         "action": "clipped",
+                         "detail": f"USER.md over {USER_CHAR_CAP} chars; newest kept, older omitted"})
+
+    if not description and not memory:
+        loss.append({"path": f"characters.{cid}.profile",
+                     "action": "empty",
+                     "detail": "profile had no SOUL.md/description/memory to capture"})
+
+    return ({"schema": "mybot.farm/agent-pack",
+             "profile": {"name": cid, "description": description},
+             "memory": memory}, loss)
 
 
 def _utc_now() -> str:
@@ -174,29 +262,38 @@ def export_world(world_id: str, worlds_root: Path, out_dir: Path,
     if assets_src.is_dir():
         shutil.copytree(assets_src, bundle / "assets", dirs_exist_ok=True)
 
-    # Character packs: a minimal GAF agent-pack per character from its profile
-    # description, so the bundle is self-contained. Missing profile -> a slug
-    # reference is kept in world.json and a loss entry is added.
+    # Roster maps a character ROLE to the actual profile dir name (they differ:
+    # role "harbor-engineer" may be profile "cydonia"). Prefer that; fall back
+    # to a profile whose dir name equals the character id.
+    roster_map: dict[str, str] = {}
+    rpath = world_dir / "roster.json"
+    if rpath.is_file():
+        try:
+            rdata = json.loads(rpath.read_text(encoding="utf-8"))
+            for m in (rdata.get("members") or []):
+                if isinstance(m, dict) and m.get("role") and m.get("profile"):
+                    roster_map[str(m["role"])] = str(m["profile"])
+        except (OSError, json.JSONDecodeError):
+            pass
+
+    # Character packs: a GAF agent-pack per character capturing its FULL
+    # identity (SOUL + description + memory), so the bundle round-trips.
     for char in portable["characters"]:
         cid = char["id"]
         pack_path = bundle / "characters" / f"{cid}.json"
-        desc = ""
+        profile_dir: Path | None = None
         if profiles_root is not None:
-            # Profile dir name is the member slug; the planted roster maps role->profile,
-            # but at minimum a profile matching the character id is used when present.
+            # Resolve the profile dir name: roster role->profile, else the id.
+            prof_name = roster_map.get(cid, cid)
             try:
-                profile_slug = safe_slug(cid, what="character id")
-                pdir = confined_path(profiles_root.expanduser().resolve(), profile_slug)
+                profile_slug = safe_slug(prof_name, what="profile name")
+                profile_dir = confined_path(profiles_root.expanduser().resolve(), profile_slug)
             except PlantError:
-                pdir = None
-            soul = (pdir / "SOUL.md") if pdir is not None else None
-            if soul is not None and soul.is_file():
-                desc = soul.read_text(encoding="utf-8")[:2000]
-        pack = {
-            "schema": "mybot.farm/agent-pack",
-            "profile": {"name": cid, "description": desc},
-            "memory": [],
-        }
+                profile_dir = None
+            if profile_dir is not None and not profile_dir.is_dir():
+                profile_dir = None
+        pack, pack_loss = build_character_pack(cid, profile_dir)
+        loss.extend(pack_loss)
         pack_path.write_text(json.dumps(pack, indent=2) + "\n", encoding="utf-8")
 
     # Scrubbed snapshot.
