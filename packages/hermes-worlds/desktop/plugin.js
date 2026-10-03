@@ -944,6 +944,96 @@ async function submitBotChatLine(sessionId, profile, text) {
 }
 
 // ---------------------------------------------------------------------------
+// Ambient life (todo 6) — opt-in, one tagged cron per cast member.
+//
+// `rules.ambient` is NOT a cron and the plant deliberately schedules nothing
+// (todo 8 locks that). This is the ONLY place a world's ambient routines are
+// created, and only on an explicit user click. The gateway has no native cron
+// tag, so the `world:<id>` tag lives in the job NAME (`world:<id>:<profile>`);
+// disable lists and removes exactly those names and nothing else.
+// ---------------------------------------------------------------------------
+
+function ambientJobName(worldId, profile) {
+  return `world:${worldId}:${profile}`
+}
+function ambientPrefix(worldId) {
+  return `world:${worldId}:`
+}
+
+async function listAmbientJobs(worldId, profile) {
+  // Scope the list to the member's profile store; filter by our name prefix so
+  // we never touch a job we did not create.
+  const res = await host.request('cron.manage', { action: 'list', profile, include_disabled: true })
+  const jobs = (res && res.jobs) || []
+  const pfx = ambientPrefix(worldId)
+  return jobs.filter(j => typeof j.name === 'string' && j.name.indexOf(pfx) === 0)
+}
+
+async function enableAmbient(worldId, cast, schedule) {
+  // One routine per joined cast member. Idempotent: skip a member that already
+  // has its tagged job. Returns { created, skipped, errors }.
+  const out = { created: 0, skipped: 0, errors: [] }
+  for (const c of cast) {
+    const profile = c.profileName || c.id
+    if (!profile) continue
+    try {
+      const existing = await listAmbientJobs(worldId, profile)
+      if (existing.some(j => j.name === ambientJobName(worldId, profile))) {
+        out.skipped++
+        continue
+      }
+      await host.request('cron.manage', {
+        action: 'add',
+        profile,
+        name: ambientJobName(worldId, profile),
+        schedule,
+        // Ambient nudge — a gentle, in-character wake. Kept generic; the
+        // member's own world skin (MEMORY.md) supplies the scene context.
+        prompt: `Ambient world beat for ${worldId}: take one small in-character action in your current place, then wait.`
+      })
+      out.created++
+    } catch (err) {
+      out.errors.push(`${profile}: ${(err && err.message) || err}`)
+    }
+  }
+  return out
+}
+
+async function disableAmbient(worldId, cast) {
+  // Remove ONLY our tagged jobs (name prefix world:<id>:), per member store.
+  const out = { removed: 0, errors: [] }
+  for (const c of cast) {
+    const profile = c.profileName || c.id
+    if (!profile) continue
+    try {
+      const ours = await listAmbientJobs(worldId, profile)
+      for (const job of ours) {
+        await host.request('cron.manage', { action: 'remove', profile, name: job.name })
+        out.removed++
+      }
+    } catch (err) {
+      out.errors.push(`${profile}: ${(err && err.message) || err}`)
+    }
+  }
+  return out
+}
+
+async function ambientActive(worldId, cast) {
+  // Active when any joined member has a tagged job.
+  for (const c of cast) {
+    const profile = c.profileName || c.id
+    if (!profile) continue
+    try {
+      const ours = await listAmbientJobs(worldId, profile)
+      if (ours.length) return true
+    } catch {
+      // ignore; treat as unknown/off
+    }
+  }
+  return false
+}
+
+// ---------------------------------------------------------------------------
 // Sprite
 // ---------------------------------------------------------------------------
 
@@ -997,6 +1087,9 @@ function WorldsPage() {
   const [pick, setPick] = useState('')
   const [moveTarget, setMoveTarget] = useState('')
   const [rosterNote, setRosterNote] = useState(null)
+  const [ambientOn, setAmbientOn] = useState(null) // null = unknown/checking
+  const [ambientBusy, setAmbientBusy] = useState(false)
+  const [ambientNote, setAmbientNote] = useState(null)
   const [chat, setChat] = useState(null)
   const [chatDraft, setChatDraft] = useState('')
   const selRef = useRef(null)
@@ -1306,6 +1399,56 @@ function WorldsPage() {
       loadView(world.id, null)
     } catch (err) {
       setRosterNote(String((err && err.message) || err))
+    }
+  }
+
+  // Reflect whether ambient life is currently scheduled for this world's cast.
+  // Checked whenever the world or its joined cast changes. Only meaningful for
+  // a roster-owned world with members that have a profile.
+  useEffect(() => {
+    let alive = true
+    const joined = cast.filter(c => c.profileName || c.id)
+    if (!world || !joined.length || typeof host.request !== 'function') {
+      setAmbientOn(null)
+      return
+    }
+    setAmbientOn(null) // checking
+    ambientActive(world.id, joined)
+      .then(on => { if (alive) setAmbientOn(on) })
+      .catch(() => { if (alive) setAmbientOn(null) })
+    return () => { alive = false }
+    // eslint-disable-next-line
+  }, [world && world.id, cast.map(c => c.profileName || c.id).join(',')])
+
+  async function toggleAmbient() {
+    if (!world || ambientBusy) return
+    const joined = cast.filter(c => c.profileName || c.id)
+    if (!joined.length) {
+      setAmbientNote('Add agents to this world first.')
+      return
+    }
+    setAmbientBusy(true)
+    setAmbientNote(null)
+    try {
+      if (ambientOn) {
+        const res = await disableAmbient(world.id, joined)
+        setAmbientOn(false)
+        setAmbientNote(res.errors.length
+          ? `Disabled with issues: ${res.errors.join('; ')}`
+          : `Ambient life off — removed ${res.removed} routine(s).`)
+      } else {
+        // Hourly cadence by default — ambient, not chatty. One tagged routine
+        // per member; the plant never creates these (todo 8).
+        const res = await enableAmbient(world.id, joined, '0 * * * *')
+        setAmbientOn(true)
+        setAmbientNote(res.errors.length
+          ? `Enabled with issues: ${res.errors.join('; ')}`
+          : `Ambient life on — ${res.created} new, ${res.skipped} already running.`)
+      }
+    } catch (err) {
+      setAmbientNote(String((err && err.message) || err))
+    } finally {
+      setAmbientBusy(false)
     }
   }
 
@@ -1659,6 +1802,43 @@ function WorldsPage() {
             style: NOTE,
             children:
               'turnModel: defer \u2014 Bot Mode owns turns in this world; this pane only draws.'
+          })
+        : null,
+
+      // Ambient life (todo 6): opt-in only. The plant schedules nothing; this
+      // button is the ONLY way routines are created, and off is the default.
+      world && world.rosterOwned && cast.length
+        ? jsxs('div', {
+            style: NOTE,
+            children: [
+              jsxs('div', {
+                style: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' },
+                children: [
+                  jsx('button', {
+                    type: 'button',
+                    style: ambientOn ? CHIP_ACTIVE : CHIP,
+                    disabled: ambientBusy || ambientOn === null,
+                    onClick: toggleAmbient,
+                    children: ambientBusy
+                      ? 'Working\u2026'
+                      : ambientOn === null
+                        ? 'Ambient life\u2026'
+                        : ambientOn
+                          ? 'Disable ambient life'
+                          : 'Enable ambient life'
+                  }),
+                  jsx('span', {
+                    style: MUTED,
+                    children: ambientOn === null
+                      ? 'checking\u2026'
+                      : ambientOn
+                        ? 'on \u2014 one hourly routine per agent'
+                        : 'off \u2014 agents act only when you message them'
+                  })
+                ]
+              }),
+              ambientNote ? jsx('div', { style: { marginTop: 6, fontSize: 11 }, children: ambientNote }) : null
+            ]
           })
         : null,
 

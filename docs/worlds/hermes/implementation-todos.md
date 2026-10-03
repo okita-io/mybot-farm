@@ -134,10 +134,23 @@ source, not from a live click in Desktop.
   send a probe post into the world room while a Bot-Mode turn is live and
   confirm ordering before wiring round-robin/director/@mention.
 
-- [ ] **6. Ambient life stays off until the user opts in.** `rules.ambient`
+- [x] **6. Ambient life stays off until the user opts in.** `rules.ambient`
   is not a cron. Add one control, “Enable ambient life”, that schedules one
   tagged routine per cast member and a matching disable that removes only
   those tags (`world:<id>`). Plant must not schedule them.
+  **DONE (2026-10-03):** probed the real scheduling API — the gateway exposes
+  `cron.manage` (`action: list|add|remove|pause|resume`, scoped by `profile`,
+  keyed by `name`; no native tag field). So the `world:<id>` tag lives in the
+  job NAME (`world:<id>:<profile>`). Added `enableAmbient` / `disableAmbient`
+  / `listAmbientJobs` / `ambientActive` to `plugin.js` and an "Enable/Disable
+  ambient life" control (roster-owned worlds only) that reflects current
+  state. Enable adds one hourly tagged routine per joined member (idempotent);
+  disable lists each member's store, filters to the `world:<id>:` name prefix,
+  and removes ONLY those — never an unrelated cron. The plant still schedules
+  nothing (todo 8). Name/prefix/filter logic unit-tested (the disable filter
+  must match only our jobs). **Live-verify still pending:** the cron.manage
+  add/remove round-trip hasn't been clicked through on the desktop yet — the
+  contract is confirmed from source but not exercised end-to-end.
 
 - [ ] **7. Shared scene text stays in files.** Each member already gets a
   private skin in `MEMORY.md`. Do not create a second profile and expect

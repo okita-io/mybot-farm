@@ -328,3 +328,33 @@ test('replyLandedByCount: needs +2 (user turn + reply) and an assistant tail', (
   assert.equal(replyLandedByCount(42, 40, 'assistant'), true) // turn + reply
   assert.equal(replyLandedByCount(42, 40, 'user'), false)   // grew but tail not a reply
 })
+
+// --- ambient life name/tag helpers (task 6) -------------------------------
+// The gateway cron has no native tag, so the `world:<id>` tag lives in the job
+// NAME. These mirror ambientJobName/ambientPrefix and the list filter — the
+// safety-critical part is that disable only ever matches OUR names.
+
+function ambientJobName(worldId, profile) { return `world:${worldId}:${profile}` }
+function ambientPrefix(worldId) { return `world:${worldId}:` }
+function filterOurs(jobs, worldId) {
+  const pfx = ambientPrefix(worldId)
+  return jobs.filter(j => typeof j.name === 'string' && j.name.indexOf(pfx) === 0)
+}
+
+test('ambientJobName / prefix: one tagged name per member', () => {
+  assert.equal(ambientJobName('neon-harbor', 'cydonia'), 'world:neon-harbor:cydonia')
+  assert.equal(ambientPrefix('neon-harbor'), 'world:neon-harbor:')
+})
+
+test('ambient filter: disable matches ONLY this world\'s tagged jobs', () => {
+  const jobs = [
+    { name: 'world:neon-harbor:cydonia' },
+    { name: 'world:neon-harbor:probe' },
+    { name: 'world:other-world:x' },   // different world — must not match
+    { name: 'nightly-backup' },         // unrelated user cron — must not match
+    { name: 'Bot Chat' },
+    {}                                   // nameless — ignored
+  ]
+  const ours = filterOurs(jobs, 'neon-harbor')
+  assert.deepEqual(ours.map(j => j.name), ['world:neon-harbor:cydonia', 'world:neon-harbor:probe'])
+})
