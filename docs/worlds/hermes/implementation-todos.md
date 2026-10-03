@@ -376,3 +376,14 @@ aid, not a contract — confirm against the file before editing.
   RAW `count >= base + 2` with an assistant tail, not preview length. The send
   path (task 2) is now proven end-to-end live. Covered by a count-based
   reply-detection unit test.
+  **FOURTH live round — the real reply-poll bug (2026-10-03).** The decisive
+  clue: the echo + "Sending…" PERSISTED through the whole LM Studio stream,
+  then reverted to "No messages yet." the instant the stream FINISHED. Cause:
+  the reply poll's final iteration (`i === delays.length - 1`) wrote whatever
+  it last read — an empty/unchanged history read — over the optimistic echo,
+  and the budget (~15s) often expired right as the stream completed. **FIXED:**
+  the poll now (a) NEVER regresses — it only replaces the view on a real reply
+  (raw count grew by ≥2 AND an assistant tail AND non-empty), and (b) on
+  timeout keeps the echo and just clears the spinner, never overwriting with
+  empty; (c) the budget is widened to ~45s across backoff steps for local
+  models whose reply only appears in model-history after the stream ends.

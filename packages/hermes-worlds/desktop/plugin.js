@@ -1115,7 +1115,9 @@ function WorldsPage() {
     // G4: bounded reply poll. Re-read history until the RAW count grows by at
     // least 2 (our user turn + the assistant reply) with an assistant tail, or
     // the budget runs out. Same host.request path — never the 9119 port.
-    const delays = [400, 800, 1500, 2500, 4000, 6000]
+    // Budget is generous: a local model (LM Studio) can stream for a while, and
+    // the reply only appears in model-history AFTER the stream finishes.
+    const delays = [500, 1000, 1500, 2500, 4000, 6000, 8000, 10000, 12000]
     for (let i = 0; i < delays.length; i++) {
       if (!stillHere()) return
       await new Promise(r => setTimeout(r, delays[i]))
@@ -1129,8 +1131,9 @@ function WorldsPage() {
       const messages = res.messages
       const grew = res.count >= baseCount + 2 // our turn + a reply
       const last = messages[messages.length - 1]
-      const gotReply = grew && last && last.role === 'assistant'
-      if (gotReply || i === delays.length - 1) {
+      const gotReply = grew && last && last.role === 'assistant' && messages.length > 0
+      if (gotReply) {
+        // Real reply landed — show the fresh transcript.
         setChat(prev =>
           prev && prev.sessionId === sessionId
             ? { ...prev, messages, sending: false, messageCount: res.count }
@@ -1138,7 +1141,17 @@ function WorldsPage() {
         )
         return
       }
+      // NEVER regress: a read that is empty or hasn't grown must not overwrite
+      // the optimistic echo (the "reverted to No messages yet" bug — the final
+      // poll was writing an empty read over the user's turn).
     }
+    // Budget spent with no visible reply: keep the echo, just stop the spinner.
+    // The reply exists in the agent's own session; the bubble simply did not
+    // see it land within the window.
+    if (!stillHere()) return
+    setChat(prev =>
+      prev && prev.sessionId === sessionId ? { ...prev, sending: false } : prev
+    )
   }
 
   useEffect(() => {
