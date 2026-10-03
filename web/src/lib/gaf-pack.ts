@@ -390,6 +390,33 @@ export function validateWorldThumbnail(
 }
 
 /**
+ * Optional `cast[].sprite` path to a sheet manifest (`assets/<role>.sheet.json`).
+ * Relative or site path only — no `..`, no URL scheme. Avatar stays the still
+ * (idle frame 0) for runtimes that ignore this field.
+ */
+export function validateWorldSprite(
+  sprite: string,
+): { ok: true } | { ok: false; error: string } {
+  const value = sprite.trim();
+  if (!value) {
+    return {
+      ok: false,
+      error: "world.cast sprite must be a non-empty string path to a sheet manifest.",
+    };
+  }
+  if (value.includes("..")) {
+    return { ok: false, error: "world.cast sprite must not contain .." };
+  }
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(value)) {
+    return {
+      ok: false,
+      error: "world.cast sprite must be a relative path or site path without a URL scheme.",
+    };
+  }
+  return { ok: true };
+}
+
+/**
  * Validate the `world` block of a world-pack. Additive and tolerant: unknown
  * keys are allowed so the block can grow, but the fields the Worlds tab and the
  * importers rely on (thumbnail, cast role refs, place/scene ids, turn model,
@@ -570,6 +597,18 @@ export function validateWorldBlock(
               error: `world.cast[${i}].capabilities "${cap}" must be one of ${WORLD_CAPABILITIES.join(", ")}.`,
             };
           }
+        }
+      }
+      if (member.sprite !== undefined) {
+        if (typeof member.sprite !== "string") {
+          return {
+            ok: false,
+            error: `world.cast[${i}].sprite must be a non-empty string path to a sheet manifest.`,
+          };
+        }
+        const spriteResult = validateWorldSprite(member.sprite);
+        if (!spriteResult.ok) {
+          return spriteResult;
         }
       }
     }

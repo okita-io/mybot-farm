@@ -96,3 +96,4 @@ See [data-contract.md](../../docs/worlds/hermes/data-contract.md) for the `World
 
 - **mybot-farm** — GAF world-pack, validation, catalog
 - **hermes-mybot-farm** — `farm_plant`, `WORLD.md`, assets, roster-friendly empty world plant
+- **agent-sprites** — `packages/agent-sprites` procedural 32×32 sprite sheets (`cast[].sprite`)
