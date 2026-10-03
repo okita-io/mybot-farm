@@ -323,3 +323,21 @@ aid, not a contract — confirm against the file before editing.
   **DONE (2026-10-03) via todo 4.** `_write_world_state` now persists
   `PlantResult.room` into `state.json.chatId` at plant time, with exactly the
   guard this gap asked for (no room id → no write). See todo 4.
+
+- [x] **G9. "session not found" opening Bot Chat on a fresh-planted bot
+  (live, 2026-10-03).** First live test on HermesDesktop: added agent
+  `cydonia` (title "TheDrummer") to Neon Harbor, clicked the sprite — the
+  bubble opened and showed **"session not found"**. Root cause: `openChat`
+  called `loadBotChatHistory` on the session `ensureBotChatSession` had just
+  **created**. A freshly-minted hidden session has no persisted row yet, so
+  the gateway's resume/history path 4007s ("session not found",
+  `methods_session.py::_resume_locate`) until the first turn flushes it.
+  **FIXED:** `ensureBotChatSession` now returns `{ sessionId, created }`, and
+  `openChat` skips the history read when `created` is true (an empty bubble
+  is correct — there is no history yet). The G4 reply poll already tolerates
+  a transient 4007 (its `catch` continues), so the first reply still
+  populates the bubble. Confirmed useful side-finding: the sprite correctly
+  shows "TheDrummer" (title) for the `cydonia` profile dir — **G1 verified
+  live** against a real `profile.yaml` whose `hermes-bots.title` sits among
+  sibling keys with a nested `groups:` mapping below it. Awaiting a reload to
+  confirm the bubble now opens clean.

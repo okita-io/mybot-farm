@@ -834,7 +834,7 @@ async function ensureBotChatSession(profile) {
       throw new Error('Bot Chat lookup returned an unexpected session')
     }
     const id = row.resolved_id || row.id
-    if (id) return id
+    if (id) return { sessionId: id, created: false }
   }
   const created = await host.request('session.create', {
     profile,
@@ -844,7 +844,10 @@ async function ensureBotChatSession(profile) {
   if (!created || !created.session_id) {
     throw new Error('Could not open Bot Chat for this agent')
   }
-  return created.session_id
+  // A freshly minted hidden session has no persisted row yet, so a
+  // session.history/resume on it 4007s ("session not found") until the first
+  // turn flushes it. Signal `created` so the caller skips that empty read.
+  return { sessionId: created.session_id, created: true }
 }
 
 async function loadBotChatHistory(sessionId, profile) {
@@ -963,8 +966,10 @@ function WorldsPage() {
     })
     setChatDraft('')
     try {
-      const sessionId = await ensureBotChatSession(profile)
-      const messages = await loadBotChatHistory(sessionId, profile)
+      const { sessionId, created } = await ensureBotChatSession(profile)
+      // A just-created hidden session has no persisted history yet; reading it
+      // would 4007. Start empty and let the first reply populate the bubble.
+      const messages = created ? [] : await loadBotChatHistory(sessionId, profile)
       setChat({
         castId: c.id,
         profile,
