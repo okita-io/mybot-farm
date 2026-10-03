@@ -145,11 +145,22 @@ source, not from a live click in Desktop.
   that file is small and frozen until the next session). Shared text is
   `WORLD.md` and `state.json`.
 
-- [ ] **8. Assert plant does not add tools from `cast[].capabilities`.**
+- [x] **8. Assert plant does not add tools from `cast[].capabilities`.**
   Hermes has no KiroCrew `DEFAULT_TOOLS` list. A planted profile keeps the
   tools in its tarball. The test is: planting a world does not grant
   `execute_bash` or file-write because the manifest listed `files`.
   `WORLD.md` already calls those capabilities advisory.
+  **DONE (2026-10-03):** verified by reading the plant that `cast[].capabilities`
+  has exactly one consumer — `world_doc.py`, which renders them as advisory
+  text ("does not add tools, shell access, or file-write access"); no plant
+  path writes `tools`/`allowed_tools`. Locked with `test_plan.py::
+  test_world_cast_capabilities_grant_no_tools`: a world whose cast lists
+  `["files","execute_bash","fs_write","web","schedule"]` builds a plan whose
+  `MemberPlan`s carry NO tool field and whose serialized member surface
+  contains no `execute_bash`/`fs_write`/`allowed_tools` — while the dangerous
+  caps ARE preserved on `world_block.cast` (proving the real path ran, not a
+  stripped one). `test_world_doc.py` already asserts `WORLD.md` keeps them
+  advisory and omits `execute_bash`.
 
 - [ ] **9. Export the planted world back to a bundle.** Read
   `~/.hermes/worlds/<id>/{world.json,state.json}` plus member profiles and
