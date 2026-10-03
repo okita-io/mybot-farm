@@ -124,6 +124,15 @@ source, not from a live click in Desktop.
   room from todo 4 only after a measured check that an external post does
   not race `agent.bot_mode_protocol`. Until that measurement, do not add a
   second messaging stack.
+  **BLOCKED (2026-10-03) — needs a running Hermes.** The task's own gate (a
+  *measured* check that an external post does not race
+  `agent.bot_mode_protocol`) cannot be satisfied offline: no gateway is up
+  and `HERMES_GATEWAY_RPC_URL` is unset here, and the task forbids adding a
+  second messaging stack until the race is measured. `defer` already stays
+  hands-off (the pane shows the Bot-Mode note), so nothing regresses by
+  leaving the active router unbuilt. Resume when a gateway is reachable:
+  send a probe post into the world room while a Bot-Mode turn is live and
+  confirm ordering before wiring round-robin/director/@mention.
 
 - [ ] **6. Ambient life stays off until the user opts in.** `rules.ambient`
   is not a cron. Add one control, “Enable ambient life”, that schedules one
@@ -245,7 +254,7 @@ aid, not a contract — confirm against the file before editing.
   shown cast, not just the roster). The dashboard never writes, so this is a
   desktop-only fix.
 
-- [ ] **G4. `prompt.submit` has no optimistic echo and no reply poll.** Todo
+- [x] **G4. `prompt.submit` has no optimistic echo and no reply poll.** Todo
   2 is done for the round trip, but `sendChatLine` (`plugin.js`) submits,
   then re-reads `session.history` **once**. The user's own line and the
   agent's reply do not appear until something re-reads later (the 15s world
@@ -253,6 +262,14 @@ aid, not a contract — confirm against the file before editing.
   submitted user line, then a short bounded poll of `session.history`
   (a few tries, backing off, capped) so a reply lands in the bubble without
   a manual resend. Keep it off the 9119 port — same `host.request` path.
+  **DONE (2026-10-03):** `sendChatLine` now appends the user's line to the
+  bubble immediately (optimistic echo, keyed to the live `sessionId`), then
+  runs a bounded `session.history` poll with backoff `[400,800,1500,2500,
+  4000]ms`, stopping as soon as a NEW assistant message appears past the echo
+  or the budget is spent. A `chatRef` mirror lets the async poll read live
+  state and abort cleanly if the user closes the bubble or switches
+  characters mid-poll. Still only `host.request` — no 9119 fetch. The
+  reply-landed predicate is unit-tested in `desktop/plugin.test.mjs`.
 
 - [ ] **G5. Built artifacts are committed with no source-match check.** The
   tree ships `dashboard/dist/` and a `hermes-worlds-1.1.0.zip` binary

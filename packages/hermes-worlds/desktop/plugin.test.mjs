@@ -260,3 +260,43 @@ test('applyMove: caps recent[] at RECENT_MAX', () => {
   assert.equal(next.recent[RECENT_MAX - 1].who, 'patch')
   assert.equal(next.recent[0].i, 1)
 })
+
+// --- G4 reply-landed predicate --------------------------------------------
+// The bounded poll in sendChatLine stops when a NEW assistant message appears
+// past the optimistic echo. baseCount is the message count BEFORE the echo, so
+// the poll looks for length > baseCount + 1 with an assistant tail.
+
+function replyLanded(messages, baseCount) {
+  const grew = messages.length > baseCount + 1
+  const last = messages[messages.length - 1]
+  return grew && !!last && last.role === 'assistant'
+}
+
+test('replyLanded: false while only the echoed user line is present', () => {
+  // baseCount 2, after echo the history is 3 with a trailing user line.
+  const msgs = [
+    { role: 'user', text: 'a' },
+    { role: 'assistant', text: 'b' },
+    { role: 'user', text: 'c' }
+  ]
+  assert.equal(replyLanded(msgs, 2), false)
+})
+
+test('replyLanded: true once an assistant reply arrives past the echo', () => {
+  const msgs = [
+    { role: 'user', text: 'a' },
+    { role: 'assistant', text: 'b' },
+    { role: 'user', text: 'c' },
+    { role: 'assistant', text: 'reply' }
+  ]
+  assert.equal(replyLanded(msgs, 2), true)
+})
+
+test('replyLanded: false when the tail is still a user turn', () => {
+  const msgs = [
+    { role: 'user', text: 'a' },
+    { role: 'user', text: 'c' },
+    { role: 'user', text: 'd' }
+  ]
+  assert.equal(replyLanded(msgs, 1), false)
+})

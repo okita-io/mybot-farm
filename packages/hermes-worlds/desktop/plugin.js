@@ -920,6 +920,11 @@ function WorldsPage() {
   const [chat, setChat] = useState(null)
   const [chatDraft, setChatDraft] = useState('')
   const selRef = useRef(null)
+  // Mirror of `chat` for async callbacks (the reply poll) that must read the
+  // LIVE bubble, not the stale closure value — otherwise it can't tell the
+  // user closed the bubble or switched characters mid-poll.
+  const chatRef = useRef(null)
+  chatRef.current = chat
 
   function loadView(target, freshList) {
     readWorld(target).then(v => {
@@ -988,18 +993,58 @@ function WorldsPage() {
     if (!chat || !chat.sessionId || chat.sending) return
     const text = chatDraft.trim()
     if (!text) return
-    setChat(prev => ({ ...prev, sending: true, error: null }))
+    const sessionId = chat.sessionId
+    const profile = chat.profile
+    // G4: optimistic echo — show the user's line immediately so it never
+    // vanishes while the submit + reply are in flight. Captured here so the
+    // reply poll below can tell when something NEW arrived.
+    const baseCount = chat.messages.length
+    const optimistic = chat.messages.concat([{ role: 'user', text }])
+    setChat(prev =>
+      prev && prev.sessionId === sessionId
+        ? { ...prev, messages: optimistic, sending: true, error: null }
+        : prev
+    )
+    setChatDraft('')
+    // True when the user is still looking at this same bubble.
+    const stillHere = () => selRef.current === selectedId && chatRef.current &&
+      chatRef.current.sessionId === sessionId
     try {
-      await submitBotChatLine(chat.sessionId, chat.profile, text)
-      const messages = await loadBotChatHistory(chat.sessionId, chat.profile)
-      setChat(prev => ({ ...prev, messages, sending: false }))
-      setChatDraft('')
+      await submitBotChatLine(sessionId, profile, text)
     } catch (err) {
-      setChat(prev => ({
-        ...prev,
-        sending: false,
-        error: String((err && err.message) || err)
-      }))
+      setChat(prev =>
+        prev && prev.sessionId === sessionId
+          ? { ...prev, sending: false, error: String((err && err.message) || err) }
+          : prev
+      )
+      return
+    }
+    // G4: bounded reply poll. Re-read history a few times with backoff until
+    // the message count grows past the echo (a reply landed) or we hit the
+    // cap. Same host.request path — never the 9119 port. Aborts if the user
+    // closed the bubble or switched characters.
+    const delays = [400, 800, 1500, 2500, 4000]
+    for (let i = 0; i < delays.length; i++) {
+      if (!stillHere()) return
+      await new Promise(r => setTimeout(r, delays[i]))
+      if (!stillHere()) return
+      let messages
+      try {
+        messages = await loadBotChatHistory(sessionId, profile)
+      } catch {
+        continue // transient; keep trying within the budget
+      }
+      const grew = messages.length > baseCount + 1 // past our echoed line
+      const last = messages[messages.length - 1]
+      const gotReply = grew && last && last.role === 'assistant'
+      if (gotReply || i === delays.length - 1) {
+        setChat(prev =>
+          prev && prev.sessionId === sessionId
+            ? { ...prev, messages, sending: false }
+            : prev
+        )
+        return
+      }
     }
   }
 
