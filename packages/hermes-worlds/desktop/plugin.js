@@ -818,13 +818,22 @@ function previewMessages(messages) {
  * canonical hidden chat — the one title the Bot Mode protocol is injected into.
  */
 async function ensureBotChatSession(profile) {
-  if (typeof host.ensureAgent === 'function') {
-    await host.ensureAgent(null, profile)
+  // Each step is labeled so a failure in the bubble names the exact RPC that
+  // failed (the earlier generic "session not found" hid which call it was).
+  const step = async (label, p) => {
+    try {
+      return await p
+    } catch (err) {
+      throw new Error(`${label}: ${(err && err.message) || err}`)
+    }
   }
-  const listed = await host.request('session.list', {
+  if (typeof host.ensureAgent === 'function') {
+    await step('ensureAgent', host.ensureAgent(null, profile))
+  }
+  const listed = await step('session.list', host.request('session.list', {
     profile,
     title: BOT_CHAT_TITLE
-  })
+  }))
   const sessions = (listed && listed.sessions) || []
   const row = sessions[0]
   if (row) {
@@ -836,13 +845,13 @@ async function ensureBotChatSession(profile) {
     const id = row.resolved_id || row.id
     if (id) return { sessionId: id, created: false }
   }
-  const created = await host.request('session.create', {
+  const created = await step('session.create', host.request('session.create', {
     profile,
     title: BOT_CHAT_TITLE,
     hidden: true
-  })
+  }))
   if (!created || !created.session_id) {
-    throw new Error('Could not open Bot Chat for this agent')
+    throw new Error('session.create returned no session_id')
   }
   // A freshly minted hidden session has no persisted row yet, so a
   // session.history/resume on it 4007s ("session not found") until the first
@@ -851,19 +860,46 @@ async function ensureBotChatSession(profile) {
 }
 
 async function loadBotChatHistory(sessionId, profile) {
-  const hist = await host.request('session.history', {
-    session_id: sessionId,
-    profile
-  })
+  // IMPORTANT: session.history is a `_sess_nowait` RPC — it resolves the
+  // session from LIVE memory and 4007s ("session not found") on a stored but
+  // not-yet-loaded session (e.g. a hidden Bot Chat with history that no
+  // running agent currently holds). session.resume loads the stored session
+  // into memory AND returns its messages in one call, so we resume first and
+  // use what it returns; a later submit then works because the session is now
+  // live. Falls back to a direct history read only if resume yields nothing.
+  let resumed
+  try {
+    resumed = await host.request('session.resume', { session_id: sessionId, profile })
+  } catch (err) {
+    throw new Error(`session.resume: ${(err && err.message) || err}`)
+  }
+  if (resumed && Array.isArray(resumed.messages)) {
+    return previewMessages(resumed.messages)
+  }
+  let hist
+  try {
+    hist = await host.request('session.history', { session_id: sessionId, profile })
+  } catch (err) {
+    throw new Error(`session.history: ${(err && err.message) || err}`)
+  }
   return previewMessages((hist && hist.messages) || [])
 }
 
+/** Resume a session into memory without caring about its history payload. */
+async function resumeBotChatSession(sessionId, profile) {
+  try {
+    await host.request('session.resume', { session_id: sessionId, profile })
+  } catch (err) {
+    throw new Error(`session.resume: ${(err && err.message) || err}`)
+  }
+}
+
 async function submitBotChatLine(sessionId, profile, text) {
-  await host.request('prompt.submit', {
-    session_id: sessionId,
-    profile,
-    text
-  })
+  try {
+    await host.request('prompt.submit', { session_id: sessionId, profile, text })
+  } catch (err) {
+    throw new Error(`prompt.submit: ${(err && err.message) || err}`)
+  }
 }
 
 // ---------------------------------------------------------------------------

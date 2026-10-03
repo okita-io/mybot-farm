@@ -324,20 +324,31 @@ aid, not a contract — confirm against the file before editing.
   `PlantResult.room` into `state.json.chatId` at plant time, with exactly the
   guard this gap asked for (no room id → no write). See todo 4.
 
-- [x] **G9. "session not found" opening Bot Chat on a fresh-planted bot
-  (live, 2026-10-03).** First live test on HermesDesktop: added agent
-  `cydonia` (title "TheDrummer") to Neon Harbor, clicked the sprite — the
-  bubble opened and showed **"session not found"**. Root cause: `openChat`
-  called `loadBotChatHistory` on the session `ensureBotChatSession` had just
-  **created**. A freshly-minted hidden session has no persisted row yet, so
-  the gateway's resume/history path 4007s ("session not found",
-  `methods_session.py::_resume_locate`) until the first turn flushes it.
-  **FIXED:** `ensureBotChatSession` now returns `{ sessionId, created }`, and
-  `openChat` skips the history read when `created` is true (an empty bubble
-  is correct — there is no history yet). The G4 reply poll already tolerates
-  a transient 4007 (its `catch` continues), so the first reply still
-  populates the bubble. Confirmed useful side-finding: the sprite correctly
-  shows "TheDrummer" (title) for the `cydonia` profile dir — **G1 verified
-  live** against a real `profile.yaml` whose `hermes-bots.title` sits among
+- [x] **G9. "session not found" opening Bot Chat (live, 2026-10-03).** Live
+  test on HermesDesktop: added `cydonia` (title "TheDrummer") and later
+  `News-Agent` to Neon Harbor, clicked a sprite — bubble showed **"session
+  not found"** for BOTH, consistently.
+  **First hypothesis (WRONG):** that `openChat` read history on a
+  just-*created* session. Returned `{ sessionId, created }` and skipped the
+  read on create — reload still failed, so the guess was wrong (recorded here
+  so no one re-walks it).
+  **Real root cause (confirmed against the gateway source + the on-disk DB):**
+  `cydonia`'s Bot Chat already EXISTS — `state.db` has it (id
+  `20260913_205530_e13c8f`, archived=0, hidden=1, 88 messages) — so
+  `session.list` finds it and `created` is false. The failure is that
+  `session.history` is a `_sess_nowait` RPC (`methods_session.py`: `_with_session`
+  = "no agent-build wait"): it resolves the session from LIVE memory and
+  4007s on a stored-but-not-loaded session. The hidden Bot Chat is on disk but
+  not held by any running agent, so the history read can't find it.
+  **FIXED:** `loadBotChatHistory` now calls **`session.resume`** first — which
+  loads the stored session into memory AND returns its messages in one call
+  (same path `_create_session` reuses) — and only falls back to
+  `session.history` if resume returns no messages. A later `prompt.submit`
+  then works because the session is now live. Added a `resumeBotChatSession`
+  helper and per-step error labels (`ensureAgent:` / `session.list:` /
+  `session.create:` / `session.resume:` / `prompt.submit:`) so any future
+  failure names the exact RPC instead of a bare "session not found".
+  **G1 verified live** either way: the sprite shows "TheDrummer" for the
+  `cydonia` dir, whose real `profile.yaml` has `hermes-bots.title` among
   sibling keys with a nested `groups:` mapping below it. Awaiting a reload to
-  confirm the bubble now opens clean.
+  confirm the resume fix opens the bubble with history.
