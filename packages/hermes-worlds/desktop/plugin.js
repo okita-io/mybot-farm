@@ -1046,16 +1046,26 @@ function WorldsPage() {
         count = res.count || count
       }
       if (!live()) return
-      setChat({
-        castId: c.id,
-        profile,
-        name: c.name || c.id,
-        sessionId,
-        messages,
-        messageCount: count,
-        loading: false,
-        sending: false,
-        error: null
+      // Merge, don't replace: the hydration poll above can take seconds, and
+      // the user may have already typed + sent in that window (optimistic echo
+      // + sending=true). Overwriting with a fresh object clobbered that echo
+      // (the "message went away" bug). Only fill history/sessionId; never
+      // stomp an in-flight send or messages the send already appended.
+      setChat(prev => {
+        if (!prev || prev.castId !== c.id || prev.profile !== profile) return prev
+        if (prev.sending || prev.messages.length > messages.length) {
+          // A send is in flight or already added rows — keep the user's view,
+          // just make sure the live sessionId/count are set for the poll.
+          return { ...prev, sessionId, messageCount: count, loading: false, error: null }
+        }
+        return {
+          ...prev,
+          sessionId,
+          messages,
+          messageCount: count,
+          loading: false,
+          error: null
+        }
       })
     } catch (err) {
       setChat({
