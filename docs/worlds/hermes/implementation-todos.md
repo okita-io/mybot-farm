@@ -387,3 +387,18 @@ aid, not a contract — confirm against the file before editing.
   timeout keeps the echo and just clears the spinner, never overwriting with
   empty; (c) the budget is widened to ~45s across backoff steps for local
   models whose reply only appears in model-history after the stream ends.
+
+  **FIFTH live round — THE root cause of the empty bubble (2026-10-03).**
+  Goal clarified: mimic KiroCrew worlds, where clicking an agent loads the
+  last session's history into the bubble. History never loaded because
+  `session.resume` was taking the DEFERRED path. The desktop app's own resume
+  calls pass `source:"desktop"` + `omit_messages:true` (confirmed in the app
+  bundle), which returns `messages:[]` and hydrates the transcript over REST
+  pages the plugin host (JSON-RPC only) cannot read. `_resume_response`
+  ALWAYS returns history inline under `messages` on the COLD path
+  (`_resume_cold`, taken when `defer_history`/`omit_messages` are false).
+  **FIXED:** the resume call now passes `omit_messages:false` +
+  `defer_history:false` (and does NOT send `source:"desktop"`), so the gateway
+  restores the full transcript inline under `messages` — exactly what the
+  bubble reads. The hydrate-poll + wider reply budget stay as belt-and-braces.
+  This is the behavior parity the user asked for.

@@ -851,14 +851,25 @@ async function ensureBotChatSession(profile) {
       // (compression tip / freshly-bound id) plus its history. Everything
       // after must use THAT id, not foundId, or the submit misses the live
       // session (the "prompt.submit: session not found" we saw).
+      //
+      // CRITICAL: the desktop app's own resume calls pass `source:"desktop"` +
+      // `omit_messages:true`, which take the DEFERRED path — messages:[] while
+      // the transcript hydrates over REST pages the plugin host cannot read.
+      // That is why the bubble stayed empty. We want the COLD path instead,
+      // which restores the full transcript INLINE under `messages`. So pass
+      // omit_messages:false + defer_history:false explicitly and DO NOT send
+      // source:"desktop".
       const resumed = await step('session.resume', host.request('session.resume', {
         session_id: foundId,
-        profile
+        profile,
+        omit_messages: false,
+        defer_history: false
       }))
       const liveId = (resumed && (resumed.session_id || resumed.resolved_id)) || foundId
-      // A DESKTOP/deferred resume returns `messages: []` with `hydrating: true`
-      // and the real `message_count` — the transcript hydrates in the
-      // background and is read back through session.history. So only trust a
+      // Cold resume returns the full transcript inline under `messages`. (A
+      // deferred resume would return [] + hydrating; we keep the messageCount
+      // fallback + hydrate poll below as a belt-and-braces path in case a
+      // future gateway still defers.)
       // NON-empty messages array here; otherwise signal the caller to poll
       // session.history up to `messageCount` until it populates.
       const msgs = resumed && Array.isArray(resumed.messages) ? resumed.messages : []
