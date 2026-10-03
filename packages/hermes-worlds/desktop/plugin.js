@@ -162,26 +162,69 @@ async function readRoster(worldDir) {
   return data.members
 }
 
-/** Minimal profile.yaml parse — ui_meta.hermes-bots.title only (no PyYAML). */
+/**
+ * Minimal profile.yaml parse — `ui_meta.hermes-bots.title` only (no PyYAML).
+ *
+ * This MUST agree with the dashboard's PyYAML read (`_hermes_bots_titles` in
+ * dashboard/plugin_api.py), which resolves the full `ui_meta: -> hermes-bots:
+ * -> title:` path. So this walker is path-aware, not a flat "last title: wins"
+ * scan (G1): it enters `hermes-bots:` only while already inside `ui_meta:`, and
+ * accepts `title:` ONLY as a direct child of `hermes-bots:` (exactly one indent
+ * step in). A deeper nested mapping that carries its own `title:` — e.g.
+ * `hermes-bots.theme.title` — is ignored, so it can no longer clobber the real
+ * bot title. First direct-child `title:` wins; later siblings do not override.
+ */
+function indentOf(line) {
+  return (line.match(/^(\s*)/) || ['', ''])[1].length
+}
+
 function parseProfileYaml(text) {
   if (!text || typeof text !== 'string') return { botTitle: null }
   let botTitle = null
+  let inUiMeta = false
+  let uiMetaIndent = -1
   let inBots = false
-  let botsIndent = 0
+  let botsIndent = -1
+  let botsChildIndent = -1 // the one indent level whose title: we accept
   for (const line of text.split('\n')) {
-    if (/^\s*hermes-bots:\s*(\{\}|)?\s*$/.test(line)) {
+    if (!line.trim() || line.trim().startsWith('#')) continue
+    const indent = indentOf(line)
+
+    // Leaving a block the moment a line de-indents to or past its key.
+    if (inBots && indent <= botsIndent) {
+      inBots = false
+      botsChildIndent = -1
+    }
+    if (inUiMeta && indent <= uiMetaIndent) {
+      inUiMeta = false
+    }
+
+    if (!inUiMeta && /^\s*ui_meta:\s*(\{\}|)?\s*$/.test(line)) {
+      inUiMeta = true
+      uiMetaIndent = indent
+      inBots = false
+      botsChildIndent = -1
+      continue
+    }
+    if (inUiMeta && !inBots && indent > uiMetaIndent &&
+        /^\s*hermes-bots:\s*(\{\}|)?\s*$/.test(line)) {
       inBots = true
-      botsIndent = (line.match(/^(\s*)/) || ['', ''])[1].length
+      botsIndent = indent
+      botsChildIndent = -1
       continue
     }
     if (!inBots) continue
-    const indent = (line.match(/^(\s*)/) || ['', ''])[1].length
-    if (line.trim() && !line.trim().startsWith('#') && indent <= botsIndent) {
-      inBots = false
-      continue
+
+    // Pin the direct-child indent on the first key seen inside hermes-bots;
+    // only that depth's `title:` counts. Deeper keys (a nested mapping) are
+    // skipped so they cannot overwrite the real title.
+    if (botsChildIndent === -1 && indent > botsIndent) {
+      botsChildIndent = indent
     }
+    if (indent !== botsChildIndent) continue
+
     const tm = line.match(/^\s*title:\s*(.+?)\s*$/)
-    if (tm) {
+    if (tm && botTitle === null) {
       botTitle = tm[1].replace(/^['"]|['"]$/g, '').trim()
     }
   }
@@ -684,6 +727,23 @@ function previewMessages(messages) {
   return rows.slice(-6)
 }
 
+/**
+ * Resolve (or mint) the ONE canonical "Bot Chat" session for a profile.
+ *
+ * Gateway contract (tui_gateway/methods_session.py `_session_list_by_title`):
+ * a `session.list` call carrying `title` is an EXACT-title identity lookup. It
+ * returns at most ONE row — the canonical chat — already resurrecting a
+ * recoverable archived Bot Chat and following the compression tip into
+ * `resolved_id`. An empty `sessions` array means there is no usable canonical
+ * row (none exists, or it was deliberately archived).
+ *
+ * So we never index into a list of candidates (G2): we take the single row,
+ * and defensively confirm its title really is "Bot Chat" before adopting it,
+ * so a future change that made the by-title lookup fuzzy could not silently
+ * hand us an unrelated session to submit into. Prefer `resolved_id` (the live
+ * tip) over `id`. Only when the lookup yields nothing do we create the
+ * canonical hidden chat — the one title the Bot Mode protocol is injected into.
+ */
 async function ensureBotChatSession(profile) {
   if (typeof host.ensureAgent === 'function') {
     await host.ensureAgent(null, profile)
@@ -693,9 +753,15 @@ async function ensureBotChatSession(profile) {
     title: BOT_CHAT_TITLE
   })
   const sessions = (listed && listed.sessions) || []
-  if (sessions.length) {
-    const row = sessions[0]
-    return row.resolved_id || row.id
+  const row = sessions[0]
+  if (row) {
+    // Title lookup is exact server-side; verify client-side anyway so a
+    // relaxed future contract can't redirect the user's line elsewhere.
+    if (row.title != null && row.title !== BOT_CHAT_TITLE) {
+      throw new Error('Bot Chat lookup returned an unexpected session')
+    }
+    const id = row.resolved_id || row.id
+    if (id) return id
   }
   const created = await host.request('session.create', {
     profile,

@@ -147,3 +147,121 @@ The dashboard pane reads the same file. It does not add or remove.
 - Dashboard activity pulse is cosmetic and uses `/api/sessions` for joined
   cast profiles only. Desktop has no pulse. Do not add one from
   `/api/profiles`.
+
+---
+
+## Gaps & risks found on scan (2026-10-02)
+
+Read against the live tree: `packages/hermes-worlds/desktop/plugin.js`,
+`packages/hermes-worlds/dashboard/plugin_api.py`,
+`packages/hermes-mybot-farm/plant.py`, `team_plant.py`, `world_doc.py`. These
+are defects and hazards the numbered todos above do not already name. Each is
+a `- [ ]` so it can be checked off like the rest. Line numbers are a reading
+aid, not a contract — confirm against the file before editing.
+
+- [x] **G1. The two `profile.yaml` parsers can disagree on a name.** The
+  dashboard reads the file with PyYAML (`_hermes_bots_titles`,
+  `plugin_api.py`) and so honours full nesting under
+  `ui_meta.hermes-bots.title`. The desktop pane re-implements the parse by
+  hand (`parseProfileYaml`, `plugin.js`): it enters on a line matching
+  `hermes-bots:` and then takes the **last** `title:` it sees before the
+  block de-indents — it does **not** require the key to sit under
+  `ui_meta:`, and a nested mapping inside the block that carries its own
+  `title:` clobbers the real one. Result: a profile the dashboard labels
+  "Patch" the Desktop pane can label something else, so the same cast joins
+  under two different names on the two surfaces. Fix: make the hand parser
+  honour the `ui_meta:` -> `hermes-bots:` -> `title:` path at the expected
+  indent only, and accept `title:` only one step inside the `hermes-bots:`
+  block. Lock it with G6's test using the real planted `profile.yaml` shape.
+  **DONE (2026-10-02):** `parseProfileYaml` rewritten to be path-aware —
+  enters `hermes-bots:` only while inside `ui_meta:`, pins the direct-child
+  indent, and accepts `title:` only at that depth (first wins). A nested
+  `hermes-bots.theme.title` can no longer clobber the bot title, and a
+  top-level or stray `hermes-bots:` is ignored. Covered by
+  `desktop/plugin.test.mjs` (G6), incl. a regression case the old parser
+  failed (returned `"Dark"` instead of `"Patch"`).
+
+- [x] **G2. `ensureBotChatSession` adopts ANY session titled "Bot Chat".**
+  `plugin.js` does `session.list({ profile, title: 'Bot Chat' })` then takes
+  `sessions[0]` with no further check. If that profile already has an
+  unrelated session a human titled "Bot Chat", the pane sends the user's
+  line into it. The gateway contract says the canonical hidden chat is the
+  one the Bot Mode protocol is injected into — confirm `session.list` by
+  title returns the canonical row first (or carries a flag that marks it),
+  and select on that, not on array position. Until confirmed, this is a
+  wrong-session send waiting to happen. Probe a running gateway; do not
+  assume ordering.
+  **DONE (2026-10-02) — hypothesis corrected after probing the contract.**
+  Read `tui_gateway/methods_session.py` `_session_list_by_title` in the
+  installed Hermes tree: a `session.list` call carrying `title` is an
+  EXACT-title identity lookup that returns AT MOST ONE row — the canonical
+  chat — already resurrecting a recoverable archived Bot Chat and following
+  the compression tip into `resolved_id`. So the "adopts one of several"
+  framing was wrong; the gateway never returns multiple rows for a title
+  lookup. The real client hardening applied: take the single row, assert its
+  `title` is actually `Bot Chat` before adopting it (so a future relaxed
+  contract can't redirect the send), prefer `resolved_id` over `id`, and
+  create the hidden canonical chat only when the lookup returns nothing.
+
+- [ ] **G3. The place-full guard is bypassed on a pack-sample scene.**
+  `addAgent` (`plugin.js`) builds `existing` from the current cast **only
+  when `world.rosterOwned`** is true; on a scene still showing the pack
+  sample `existing` is `[]`, so the first add never counts the sample
+  members already standing in the place and can exceed `rules.maxPresent`.
+  Decide the intended rule — either the sample does not count toward the cap
+  (then say so and drop the note), or it does (then seed `existing` from the
+  shown cast, not just the roster). The dashboard never writes, so this is a
+  desktop-only fix.
+
+- [ ] **G4. `prompt.submit` has no optimistic echo and no reply poll.** Todo
+  2 is done for the round trip, but `sendChatLine` (`plugin.js`) submits,
+  then re-reads `session.history` **once**. The user's own line and the
+  agent's reply do not appear until something re-reads later (the 15s world
+  poll does not refresh an open bubble). Add an optimistic append of the
+  submitted user line, then a short bounded poll of `session.history`
+  (a few tries, backing off, capped) so a reply lands in the bubble without
+  a manual resend. Keep it off the 9119 port — same `host.request` path.
+
+- [ ] **G5. Built artifacts are committed with no source-match check.** The
+  tree ships `dashboard/dist/` and a `hermes-worlds-1.1.0.zip` binary
+  (commit `7c2eef4`). Nothing verifies the built output matches the source
+  it was built from, so they can silently drift. Either stop committing the
+  build and build on publish, or add a CI check that rebuilds and diffs the
+  committed artifact. Pick one and write it down here.
+
+- [x] **G6. No test for the desktop pure helpers.** `plugin_api_test.py`
+  covers the dashboard join, but `parseProfileYaml`, `resolveProfileName`,
+  `displayNameFor`, `previewMessages`, and `resolveAssetPath` in `plugin.js`
+  are untested — and G1 lives in one of them. They are pure functions. Add a
+  `desktop/plugin.test.mjs` (node --test, no bundler) that exercises them,
+  including a nested-`title` fixture that would catch G1 and an asset path
+  with a `..` segment that `resolveAssetPath` must reject.
+  **DONE (2026-10-02):** `desktop/plugin.test.mjs` added — 11 cases over
+  `parseProfileYaml` (incl. the G1 nested-`title` regression),
+  `resolveAssetPath` (traversal / absolute / null-byte rejection), and
+  `previewMessages`. Run `node --test packages/hermes-worlds/desktop/plugin.test.mjs`.
+  The helpers are mirrored from `plugin.js` (uncompiled plugin, SDK-only
+  imports can't be imported under node) — keep the twins in sync.
+  Still untested: `resolveProfileName` / `displayNameFor` (need an index
+  fixture) — left for a follow-up.
+
+- [ ] **G7. The `state.json` writer (todo 3) must preserve fields it does
+  not own.** `plant.py` writes `world.json`, assets, `WORLD.md`, and the
+  `MEMORY.md` skin, but **never writes `state.json`** — presence is only
+  ever derived (`_default_state`/`_load_state` on both panes). When todo 3
+  adds the first writer it must read-modify-write: a move changes `where`
+  only, and must keep `place`, `recent[]`, and the `chatId` todo 4 adds.
+  A writer that emits `{schema, where}` alone silently drops the room id and
+  the event log. Make the atomic tmp+rename writer merge onto the existing
+  file, and cover it in the Director state test (todo 3's own test).
+
+- [ ] **G8. `groups.create` already returns a room id that nothing persists.**
+  `configure_planted_team` (via `team_plant.py`) calls `groups.create` when
+  `HERMES_GATEWAY_RPC_URL` is set and the result is surfaced as
+  `PlantResult.room` in `plant.py`, but it is written **nowhere on disk** —
+  not into `world.json`, not into `state.json`. Todo 4 is the home for it:
+  stamp that same id as `state.json.chatId` from the farm plugin at plant
+  time (not from the pane), so the Director (todo 5) and any later router
+  address one known room instead of re-deriving it. Guard the
+  no-`HERMES_GATEWAY_RPC_URL` case: no room created means no `chatId`, and
+  the pane must stay a pure viewer, not invent one.
