@@ -1,0 +1,57 @@
+{
+  "name": "@okita-io/agent-sprites",
+  "version": "0.1.0",
+  "description": "Deterministic, no-AI pixel sprite sheets for mybot.farm cast members",
+  "type": "module",
+  "license": "MIT",
+  "author": "okita-io",
+  "homepage": "https://github.com/okita-io/mybot-farm/tree/main/packages/agent-sprites",
+  "bugs": {
+    "url": "https://github.com/okita-io/mybot-farm/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okita-io/mybot-farm.git",
+    "directory": "packages/agent-sprites"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "LICENSE",
+    "NOTICE.md",
+    "README.md",
+    "bin",
+    "dist",
+    "examples",
+    "src"
+  ],
+  "bin": {
+    "agent-sprites": "./bin/agent-sprites.mjs"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts src/cli.ts --outdir=dist --bundle --platform=node --format=esm --target=node22 --packages=external --sourcemap",
+    "lint": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/pngjs": "^6.0.5",
+    "esbuild": "^0.28.2",
+    "typescript": "^5"
+  },
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "keywords": [
+    "sprite",
+    "pixel",
+    "mybot.farm",
+    "hermes-worlds"
+  ]
+}
