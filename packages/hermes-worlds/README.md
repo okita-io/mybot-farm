@@ -141,6 +141,7 @@ This file is the **portable world manifest**. Required shape:
       "name": "Patch",
       "home": "workshop",
       "avatar": "assets/patch-harbor.webp",
+      "sprite": "assets/harbor-engineer.sheet.json",
       "memoryScope": "private",
       "capabilities": ["web", "files"],
       "relationships": { "night-watch": "trusted partner", "user": "harbor-master" }
@@ -181,7 +182,8 @@ This file is the **portable world manifest**. Required shape:
 | `cast[].role` | yes | string | **Join key** → `members[].role`, `entrypoint.greeter`, `present[]` |
 | `cast[].name` | no | string | Display name; usually matches Hermes profile dir (`Patch`) |
 | `cast[].home` | no | place id | Default location when offstage |
-| `cast[].avatar` | no | relative path | Tile image |
+| `cast[].avatar` | no | relative path | Still tile (idle frame 0). Keep this for runtimes that do not read `sprite` |
+| `cast[].sprite` | no | relative path | Sheet manifest (`assets/<role>.sheet.json`) from `@okita-io/agent-sprites`. Same `{frameW,frameH,states}` shape as aldegad/sprite-gen so an AI sheet can replace the PNG later |
 | `cast[].memoryScope` | no | `private` \| `shared` \| `substrate` | Export/metadata; not rendered in v1 |
 | `cast[].capabilities` | no | `web` \| `files` \| `schedule` | Closed set |
 | `cast[].relationships` | no | object | Export / persona addendum |
@@ -204,7 +206,7 @@ This file is the **portable world manifest**. Required shape:
 Plugin code must accept **either** array. Normalized internal shape:
 
 ```javascript
-{ id: string, name: string, role: string, home?, avatar?, ... }
+{ id: string, name: string, role: string, home?, avatar?, sprite?, ... }
 // id = cast.role || characters.id
 ```
 
@@ -216,6 +218,46 @@ assets/dock.webp  →  $HERMES_HOME/worlds/neon-harbor/assets/dock.webp
 ```
 
 Farm plant does not copy assets yet; missing files → placeholder UI (not a hard error).
+Copying `assets/` on plant is still TBD.
+
+#### Sprite sheets (`cast[].sprite`)
+
+Optional path to a `<role>.sheet.json` manifest produced by
+`packages/agent-sprites` (or an AI-made sheet with the same shape). The
+companion PNG is a grid of 32×32 frames.
+
+```json
+{
+  "frameW": 32,
+  "frameH": 32,
+  "sheet": "harbor-engineer.sheet.png",
+  "states": {
+    "idle": { "row": 0, "frames": 4, "fps": 4, "loop": true }
+  }
+}
+```
+
+Procedural states: `idle`, `working`, `thinking`, `done`, `error`, `sleeping`.
+They overlay Hermes' four session-pulse states (display-only):
+
+| Pulse | Sprite state |
+|-------|--------------|
+| working | `working` |
+| fresh | `thinking` |
+| idle | `idle` |
+| asleep | `sleeping` |
+
+`done` and `error` are task-outcome rows, not pulse states.
+
+**How a runtime would consume the sheet** (documentation only — this plugin
+does not wire live status yet):
+
+- Hermes Desktop (`desktop/plugin.js`) samples a cell with CSS
+  `background-image` + `background-position: calc(-1 * frame * frameW) calc(-1 * row * frameH)`
+  on a 32×32 box (`image-rendering: pixelated`).
+- KiroCrew `<mcwidget>` iframes inline the PNG (or one frame) as a `data:` URI.
+
+Until that lands, keep `cast[].avatar` as the idle still (frame 0).
 
 ---
 
@@ -465,6 +507,7 @@ characters: cast.map(c => ({
   pack: `characters/${slugify(c.name)}.json`,
   home: c.home,
   avatar: c.avatar,
+  sprite: c.sprite,
   memoryScope: c.memoryScope,
   capabilities: c.capabilities,
   relationships: c.relationships,
@@ -711,3 +754,4 @@ Exact paths follow Hermes `plugin_api.py` conventions when implemented.
 
 - **mybot-farm** — GAF world-pack, validation, catalog
 - **mybot-farm Hermes plugin** — `farm_plant`, `team_plant`, profile import
+- **agent-sprites** — `packages/agent-sprites` procedural 32×32 sheets (`cast[].sprite`)

@@ -464,6 +464,58 @@ describe("validateListingPack world kind", () => {
     }
   });
 
+  it("accepts optional cast[].sprite pointing at a sheet manifest", () => {
+    assert.deepEqual(
+      validateListingPack(
+        "world",
+        worldPack({
+          world: {
+            ...WORLD_PACK.world,
+            cast: [
+              {
+                role: "harbor-engineer",
+                avatar: "assets/patch-harbor.webp",
+                sprite: "assets/harbor-engineer.sheet.json",
+              },
+              { role: "night-watch", sprite: "assets/night-watch.sheet.json" },
+            ],
+          },
+        }),
+      ),
+      { ok: true },
+    );
+  });
+
+  it("rejects cast[].sprite with parent traversal or a URL scheme", () => {
+    const parentTraversal = validateListingPack(
+      "world",
+      worldPack({
+        world: {
+          ...WORLD_PACK.world,
+          cast: [{ role: "harbor-engineer", sprite: "../secret.sheet.json" }],
+        },
+      }),
+    );
+    assert.equal(parentTraversal.ok, false);
+    if (!parentTraversal.ok) {
+      assert.match(parentTraversal.error, /\.\./);
+    }
+
+    const withScheme = validateListingPack(
+      "world",
+      worldPack({
+        world: {
+          ...WORLD_PACK.world,
+          cast: [{ role: "harbor-engineer", sprite: "https://example.com/x.sheet.json" }],
+        },
+      }),
+    );
+    assert.equal(withScheme.ok, false);
+    if (!withScheme.ok) {
+      assert.match(withScheme.error, /scheme/);
+    }
+  });
+
   it("accepts a public site-path thumbnail and a bundle-relative path", () => {
     assert.deepEqual(
       validateListingPack(
