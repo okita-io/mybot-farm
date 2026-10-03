@@ -195,10 +195,24 @@ source, not from a live click in Desktop.
   stripped one). `test_world_doc.py` already asserts `WORLD.md` keeps them
   advisory and omits `execute_bash`.
 
-- [ ] **9. Export the planted world back to a bundle.** Read
+- [x] **9. Export the planted world back to a bundle.** Read
   `~/.hermes/worlds/<id>/{world.json,state.json}` plus member profiles and
   emit a world-exchange bundle from the farm plugin. The viewer only links
   to it.
+  **DONE (2026-10-03):** `export_world.py` emits a `mybot.farm/world-exchange`
+  bundle per exchange-spec §2 — `<id>.world/{exchange.json, world.json,
+  characters/<id>.json, assets/…, state.json}`. The planted `cast[]` (role-
+  keyed) maps to exchange `characters[]` (id=role, `pack: characters/<id>.json`,
+  carrying name/avatar/home/memoryScope/relationships and the agent-sprites
+  `sprite` pointer); `render`/`thumbnail` are dropped; `theme`/`places`/`rules`/
+  `entrypoint` carried. Capabilities are scrubbed to the closed v1 set
+  (`web`/`files`/`schedule`) with every dropped raw tool ledgered in
+  `exchange.loss[]`; `state.json` is a scrubbed snapshot with `recent[]` capped
+  at 20; a minimal GAF agent-pack is written per character. Declarative — no
+  absolute paths, API calls, or credentials. Covered by `tests/test_export_world.py`
+  (8 cases: mapping, cap-scrub+loss, portable shape, state cap, full bundle).
+  **Not yet wired:** a CLI/tool entry point and the pane's "export" link are a
+  thin follow-up on top of this module.
 
 ---
 
