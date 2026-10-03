@@ -2,10 +2,11 @@
 # Twin of packages/hermes-mybot-farm / packages/openclaw-mybot-farm, targeting
 # KiroCrew's native agent templates (~/.kiro/agents/*.json) + crew bindings.
 name: mybot-farm
-version: 0.1.0
+version: 0.2.0
 description: >-
-  Plant mybot.farm agents and teams into KiroCrew (~/.kiro/agents + crew
-  workspaces) and post GAF listings back with a seller API key.
+  Plant mybot.farm agents, teams, and worlds into KiroCrew (~/.kiro/agents +
+  crew workspaces) and post GAF listings back with a seller API key. A world
+  installs as a crew plus a world layer (world.json + a _world.md scene doc).
 runtime: node
 entry: src/tools.mjs
 config:
@@ -17,20 +18,26 @@ config:
     secret: true
 tools:
   - name: farm_search
-    description: Search mybot.farm bots (agents and teams). Args: query?, kind? (agent|team). Read-only.
+    description: >-
+      Search mybot.farm bots (agents, teams, and worlds). Args: query?, kind?
+      (agent|team|world). Worlds live under the farm /worlds catalog. Read-only.
   - name: farm_get_stall
     description: Get one bot's metadata + pack summary by slug. Read-only.
   - name: farm_get_pack
-    description: Download the GAF pack for a slug. Paid packs return 402. Read-only.
+    description: Download the GAF pack for a slug (agent, team, or world). Paid packs return 402. Read-only.
   - name: farm_plant
     description: >-
       Plant a bot into KiroCrew. Agent → writes ~/.kiro/agents/<name>.json +
       steering files with a deny-by-default tool allow-list (no bash/write).
       Team → writes each member template + shared steering + topology doc and
-      returns the workspace/agent bind commands. Args: slug, name?, workspace?,
-      force?, dryRun?.
+      returns the workspace/agent bind commands. World → same crew as a team
+      PLUS a world layer: a _world.md scene doc (places, cast skins, turn
+      model, greeter), world.json, and a per-character world skin on each
+      member — cast capabilities are advisory only and never widen the
+      allow-list. Args: slug, name?, workspace?, force?, reinstall?, clean?,
+      dryRun?.
   - name: farm_reinstall
-    description: Re-plant a bot, overwriting an existing template when force is set. Args: slug, force?, dryRun?.
+    description: Re-plant a bot (agent, team, or world), overwriting an existing template when force is set. Args: slug, force?, dryRun?.
   - name: farm_post
     description: >-
       Publish a GAF listing to mybot.farm with the seller key. Args: kind, name,

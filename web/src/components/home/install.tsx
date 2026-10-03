@@ -123,7 +123,7 @@ export function HomeInstall() {
           <code className="font-mono text-[0.9em] text-foreground">
             packages/kirocrew-mybot-farm
           </code>{" "}
-          (plugin v0.1.0).{" "}
+          (plugin v0.2.0).{" "}
           <Link
             href="/install/kirocrew"
             className="font-medium text-foreground underline-offset-4 hover:underline"

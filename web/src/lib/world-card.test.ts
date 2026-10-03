@@ -55,7 +55,8 @@ describe("world listing persistence round-trip", () => {
     const stored = JSON.parse(JSON.stringify(neonHarbor));
     assert.deepEqual(validateListingPack("world", stored), { ok: true });
     assert.equal(stored.world.title, "Neon Harbor");
-    assert.equal(stored.world.entrypoint.greeter, "night-watch");
+    assert.equal(stored.world.entrypoint.place, "dock");
+    assert.equal(stored.world.entrypoint.greeter, undefined);
     assert.equal(stored.world.places.length, 2);
     const fields = worldCardFields(stored);
     assert.equal(fields.thumbnail, "/packs/worlds/neon-harbor.webp");
@@ -80,10 +81,10 @@ describe("worldStallSummary", () => {
     assert.ok(summary);
     assert.equal(summary.title, "Neon Harbor");
     assert.equal(summary.places.length, 2);
-    assert.equal(summary.greeterRole, "night-watch");
-    assert.equal(summary.greeterName, "Probe");
+    assert.equal(summary.greeterRole, undefined);
+    assert.equal(summary.greeterName, undefined);
     assert.equal(summary.turnModel, "defer");
-    assert.equal(summary.cast.length, 2);
+    assert.equal(summary.cast.length, 0);
   });
 });
 

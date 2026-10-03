@@ -54,8 +54,9 @@ async function farm_plant(args = {}) {
   if (body.format === "mybot.farm/team-pack" || body.format === "mybot.farm/world-pack") {
     const memberPacks = await resolveMembers(body);
     const plan = await plantTeam(body, memberPacks, opts);
-    const kind = body.format === "mybot.farm/world-pack" ? "world" : "team";
-    return { ok: true, kind, kiroHome: kiroHome(), members: plan.memberNames, ...plan };
+    // plantTeam detects a `world` block and routes through the world mapper,
+    // writing _world.md + world.json and skinning each member as a character.
+    return { ok: true, kind: plan.kind, kiroHome: kiroHome(), members: plan.memberNames, ...plan };
   }
   const plan = await plantAgent(body, opts);
   return { ok: true, kind: "agent", kiroHome: kiroHome(), ...plan };

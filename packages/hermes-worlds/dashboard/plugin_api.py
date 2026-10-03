@@ -9,6 +9,7 @@ docs/worlds-portability-spec.md).
 Reads (Layer 2 on disk, written by farm_plant):
     $HERMES_HOME/worlds/<id>/world.json   (worlds/v1)
     $HERMES_HOME/worlds/<id>/state.json   (worlds/state/v1, optional)
+    $HERMES_HOME/worlds/<id>/roster.json  (worlds/roster/v1, optional; the user's cast)
     $HERMES_HOME/worlds/<id>/assets/...   (bundle images, optional)
     $HERMES_HOME/profiles/<name>/         (cast -> profile join)
 
@@ -378,7 +379,59 @@ async def read_world(world_id: str) -> Dict[str, Any]:
 
     # Load/derive state, then overwrite the placeholder.
     view["state"] = _load_state(world_dir, world_id, view["state"])
+    _apply_roster(view, world_dir)
     return view
+
+
+ROSTER_SCHEMA = "worlds/roster/v1"
+
+
+def _apply_roster(view: Dict[str, Any], world_dir: Path) -> None:
+    """When roster.json exists, it is the cast. The pack sample is not shown."""
+    path = world_dir / "roster.json"
+    if not path.is_file():
+        return
+    try:
+        data = _load_json(path)
+    except (OSError, json.JSONDecodeError):
+        return
+    if not isinstance(data, dict) or data.get("schema") != ROSTER_SCHEMA:
+        return
+    members = data.get("members")
+    if not isinstance(members, list):
+        return
+    place_ids = {p.get("id") for p in view.get("places") or [] if isinstance(p, dict)}
+    cast_view: List[Dict[str, Any]] = []
+    where: Dict[str, str] = {}
+    seen: set = set()
+    for item in members:
+        if not isinstance(item, dict):
+            continue
+        profile = item.get("profile")
+        place = item.get("place")
+        if not isinstance(profile, str) or not profile.strip():
+            continue
+        profile = profile.strip()
+        if profile in seen or not isinstance(place, str) or place not in place_ids:
+            continue
+        seen.add(profile)
+        cast_view.append({
+            "id": profile,
+            "name": profile,
+            "home": place,
+            "avatarUrl": None,
+            "profileName": profile,
+            "isGreeter": False,
+            "memoryScope": None,
+            "capabilities": [],
+            "relationships": {},
+        })
+        where[profile] = place
+    view["cast"] = cast_view
+    state = view.get("state") if isinstance(view.get("state"), dict) else {}
+    state["where"] = where
+    view["state"] = state
+    view["rosterOwned"] = True
 
 
 @router.get("/worlds/{world_id}/asset/{rel_path:path}")

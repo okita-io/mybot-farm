@@ -9,12 +9,12 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Worlds",
   description:
-    "Browse Worlds on mybot.farm: shareable settings where a cast of agents is embodied as characters. Install a world into Hermes or KiroCrew.",
+    "Browse Worlds on mybot.farm: empty stages of places, art, and mood. Plant one into Hermes or KiroCrew, then add agents you already have.",
   alternates: { canonical: "/worlds" },
   openGraph: {
     title: `Worlds | ${site.name}`,
     description:
-      "Shareable agent worlds — a cast embodied as characters in a themed setting. Install into Hermes or KiroCrew.",
+      "Shareable agent worlds — an empty stage you fill with agents you already have. Install into Hermes or KiroCrew.",
     url: "/worlds",
     images: [siteOgImage],
   },
@@ -33,11 +33,9 @@ export default async function WorldsPage() {
           Step into a world
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
-          A world is a cast of agents embodied as characters in a shared,
-          themed setting. Install a world and you get your own copy of the
-          cast — it plants as a team in Hermes or KiroCrew. The world block (places,
-          greeter, turn model) travels with the pack as data for a later pane;
-          setting up the group chat is still a manual step in the install prompt.
+          A world is an empty stage: places, art, and a mood. It does not
+          bring a cast. Plant it into Hermes or KiroCrew, then add agents you
+          already have — including ones you create after the world is installed.
         </p>
 
         {worlds.length ? (

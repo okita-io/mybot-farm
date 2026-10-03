@@ -68,10 +68,9 @@ describe("install prompt copy", () => {
     assert.match(prompt, /Do not create a single bot or group named after the world slug/);
   });
 
-  it("lists Neon Harbor cast names in the world cast appendix", () => {
+  it("ships Neon Harbor with no cast appendix", () => {
     const cast = formatWorldCastLines(neonHarbor.members);
-    assert.match(cast, /Patch/);
-    assert.match(cast, /Probe/);
+    assert.equal(cast, "");
   });
 
   it("cites Finders catalog stallId and avatar fallbacks in the short prompt", () => {

@@ -1,6 +1,7 @@
 # kirocrew-mybot-farm
 
-Plant mybot.farm agents and teams into **KiroCrew**, and post GAF listings back.
+Plant mybot.farm agents, teams, and **worlds** into **KiroCrew**, and post GAF
+listings back.
 The KiroCrew twin of `packages/hermes-mybot-farm` and `packages/openclaw-mybot-farm`
 (system #14 Track B — see [`../../docs/kirocrew-plugin-spec.md`](../../docs/kirocrew-plugin-spec.md)).
 
@@ -14,6 +15,12 @@ The KiroCrew twin of `packages/hermes-mybot-farm` and `packages/openclaw-mybot-f
   a crew/topology doc, and returns the `kirocrew workspace create` / `agent create`
   **bind commands** to wire the crew (the CLI binds members; the plugin writes
   templates — see D1 in the spec).
+- **Plant a world** → everything a team install does, PLUS a world layer: a
+  `_world.md` scene doc (places, cast skins, turn model, greeter), the raw
+  `world.json` manifest, and a per-character **world skin** on each member's
+  prompt. A runtime that ignores the `world` block still gets a valid crew —
+  graceful degradation. Cast `capabilities` are advisory only and never widen
+  the deny-by-default allow-list. Contract: [`docs/world-install-contract.md`](./docs/world-install-contract.md).
 - **Post / update** → publishes a GAF listing to the farm with a seller key.
 
 Design decisions (D2 steering files, D3 deny-by-default tools, D4 routines not
@@ -36,6 +43,8 @@ node bin/farm-plant.mjs get patch
 node bin/farm-plant.mjs plant patch --dry-run
 node bin/farm-plant.mjs plant patch
 node bin/farm-plant.mjs plant pair-bench      # team → crew + bind commands
+node bin/farm-plant.mjs plant neon-harbor     # world → crew + world.json + _world.md
+node bin/farm-plant.mjs world neon-harbor --dry-run   # 'world' is an alias for 'plant'
 node bin/farm-plant.mjs post --kind agent --name "My Bot" --title T \
   --description D --category Experimental --price-cents 0 --pack ./bot.gaf.json
 ```

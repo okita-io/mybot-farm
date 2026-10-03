@@ -21,6 +21,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from .world_doc import append_world_memory, compose_world_doc, world_skin_block
 from .farm_api import (
     FarmError,
     absolute_url,
@@ -75,6 +76,59 @@ def safe_slug(value: str, *, what: str = "slug") -> str:
     return text
 
 
+def world_asset_rels(world: dict[str, Any]) -> list[str]:
+    """Relative scene files a worlds/v1 block points at."""
+    refs: list[str] = []
+
+    def push(value: object) -> None:
+        if not isinstance(value, str):
+            return
+        rel = value.strip().replace("\\", "/")
+        if not rel or rel.startswith("/") or "://" in rel or "\x00" in rel:
+            return
+        if ".." in rel.split("/"):
+            return
+        if rel not in refs:
+            refs.append(rel)
+
+    theme = world.get("theme") if isinstance(world.get("theme"), dict) else {}
+    push(theme.get("backdrop"))
+    for place in world.get("places") or []:
+        if isinstance(place, dict):
+            push(place.get("art"))
+    for member in world.get("cast") or []:
+        if isinstance(member, dict):
+            push(member.get("avatar"))
+    return refs
+
+
+def _install_world_assets(
+    world: dict[str, Any],
+    world_path: Path,
+    *,
+    base_url: str,
+    slug: str,
+) -> list[str]:
+    """Copy backdrop, place art, and avatars next to world.json. Missing files are notes, not failures."""
+    notes: list[str] = []
+    root = world_path.parent
+    for rel in world_asset_rels(world):
+        url = f"{base_url.rstrip('/')}/packs/worlds/{slug}/{rel}"
+        if not url_same_origin(url, base_url):
+            notes.append(f"skipped off-origin world asset {rel}")
+            continue
+        try:
+            dest = confined_path(root, *rel.split("/"))
+            data = farm_fetch_bytes(url)
+        except (PlantError, FarmError) as exc:
+            notes.append(f"world asset not fetched ({rel}): {exc}")
+            continue
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(data)
+        notes.append(f"wrote world asset {dest}")
+    return notes
+
+
 def confined_path(root: Path, *parts: str) -> Path:
     """Join parts under root; raise if the result escapes root."""
     root_res = root.resolve()
@@ -121,6 +175,7 @@ class PlantPlan:
     skills: list[dict[str, Any]] = field(default_factory=list)
     world_block: dict[str, Any] | None = None
     world_file: str | None = None
+    world_doc: str | None = None
 
 
 @dataclass
@@ -136,6 +191,7 @@ class PlantResult:
     kanban: str | None = None
     room: str | None = None
     world_file: str | None = None
+    world_doc: str | None = None
     recruited: list[str] = field(default_factory=list)
     endpoint_note: str = ""
     notes: list[str] = field(default_factory=list)
@@ -155,6 +211,7 @@ class PlantResult:
             "kanban": self.kanban,
             "room": self.room,
             "world_file": self.world_file,
+            "world_doc": self.world_doc,
             "recruited": self.recruited,
             "endpoint_note": self.endpoint_note,
             "notes": self.notes,
@@ -407,8 +464,11 @@ def build_plant_plan(
     )
     world_block = pack.get("world") if isinstance(pack.get("world"), dict) else None
     world_file = None
+    world_doc = None
     if is_world and world_block:
-        world_file = str(confined_path(hermes_home() / "worlds", slug, "world.json"))
+        world_root = hermes_home() / "worlds"
+        world_file = str(confined_path(world_root, slug, "world.json"))
+        world_doc = str(confined_path(world_root, slug, "WORLD.md"))
 
     if is_team and members:
         return PlantPlan(
@@ -435,6 +495,32 @@ def build_plant_plan(
             skills=pack_skills(pack),
             world_block=world_block,
             world_file=world_file,
+            world_doc=world_doc,
+        )
+
+    if is_world and world_block and not members:
+        return PlantPlan(
+            slug=slug,
+            kind="world",
+            profile_name=None,
+            members=[],
+            team_dirs=[],
+            team_files=[],
+            pack_dir_url=None,
+            kanban=None,
+            getting_started=getting,
+            endpoint_note="",
+            homepage=str((pack.get("manifest") or {}).get("homepage") or stall.get("pageUrl") or ""),
+            stall_id=stall_id,
+            pack_version=pack_version,
+            title=pack_title(pack),
+            sample_request="",
+            topology_kind="",
+            handoffs=[],
+            skills=[],
+            world_block=world_block,
+            world_file=world_file,
+            world_doc=world_doc,
         )
 
     if is_team:
@@ -620,7 +706,14 @@ def plant(
             )
         if plan.world_file and plan.world_block:
             result.world_file = plan.world_file
+            result.world_doc = plan.world_doc
             result.notes.append(f"dry-run: would write world block to {plan.world_file}")
+            if plan.world_doc:
+                result.notes.append(
+                    f"dry-run: would write the readable scene to {plan.world_doc} "
+                    "and a character skin into each member MEMORY.md. "
+                    "Cast capabilities stay advisory; ambient routines are not scheduled."
+                )
         if recruit and plan.kind == "agent":
             result.notes.append(
                 "dry-run: would stamp ui_meta.hermes-bots so the agent lands in the "
@@ -676,7 +769,10 @@ def plant(
         _download(member.href, archive, base_url=origin)
         import_profile(str(archive), member_name)
 
-    present, missing = _verify_profiles(names)
+    if not names:
+        present, missing = [], []
+    else:
+        present, missing = _verify_profiles(names)
     if missing:
         # Retry once: import sometimes writes files without clearing a racey tombstone.
         extra = clear_tombstones(missing, home)
@@ -721,11 +817,11 @@ def plant(
             )
             return result
 
-    if plan.kind in ("team", "world"):
+    if plan.members and plan.kind in ("team", "world"):
         team_root = _ensure_team_dirs(plan, home)
         result.team_dir = str(team_root)
         result.team_files = _fetch_team_files(plan, team_root, base_url=origin)
-        from .team_plant import configure_planted_team, ensure_team_md
+        from .team_plant import configure_planted_team, ensure_team_md, profile_dir
 
         result.team_files = ensure_team_md(plan, team_root, result.team_files)
         _write_farm_md(team_root / "FARM.md", plan, date.today().isoformat())
@@ -752,6 +848,39 @@ def plant(
         )
         result.world_file = str(world_path)
         notes.append(f"wrote world block to {world_path}")
+        notes.extend(
+            _install_world_assets(
+                plan.world_block,
+                world_path,
+                base_url=origin,
+                slug=plan.slug,
+            )
+        )
+        if plan.world_doc:
+            doc_path = Path(plan.world_doc)
+            doc_path.write_text(compose_world_doc(plan.world_block, plan.slug), encoding="utf-8")
+            result.world_doc = str(doc_path)
+            notes.append(f"wrote world scene to {doc_path}")
+            skinned = 0
+            for member in plan.members:
+                block = world_skin_block(
+                    plan.world_block,
+                    plan.slug,
+                    role=member.role,
+                    profile_name=member.name,
+                    world_doc_path=str(doc_path),
+                )
+                if append_world_memory(profile_dir(home, member.name), plan.slug, block):
+                    skinned += 1
+            if plan.members:
+                notes.append(
+                    f"world skin written to {skinned}/{len(plan.members)} member MEMORY.md file(s). "
+                    "Cast capabilities stayed advisory; no ambient routines were scheduled."
+                )
+            else:
+                notes.append(
+                    "world has no cast. Add agents you already have from the Worlds page."
+                )
 
     result.notes = notes
     result.ok = True

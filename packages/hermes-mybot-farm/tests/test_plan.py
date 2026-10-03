@@ -14,6 +14,7 @@ from hermes_mybot_farm.plant import (  # noqa: E402
     _fetch_team_files,
     build_plant_plan,
     confined_path,
+    world_asset_rels,
     expand_braces,
     member_archive_href,
     parse_kanban,
@@ -235,6 +236,38 @@ class PlanTests(unittest.TestCase):
         self.assertIsNotNone(plan.world_file)
         self.assertTrue(str(plan.world_file).endswith("/worlds/neon-harbor/world.json"))
         self.assertEqual(plan.world_block["title"], "Neon Harbor")
+
+    def test_empty_world_plans_the_scene_without_profiles(self) -> None:
+        stall = {"kind": "world", "slug": "neon-harbor"}
+        pack = {
+            "format": "mybot.farm/world-pack",
+            "slug": "neon-harbor",
+            "members": [],
+            "world": {
+                "schema": "worlds/v1",
+                "title": "Neon Harbor",
+                "places": [{"id": "dock", "name": "The Docks"}],
+                "entrypoint": {"place": "dock"},
+            },
+        }
+        plan = build_plant_plan(stall, pack, "https://mybot.farm")
+        self.assertEqual(plan.kind, "world")
+        self.assertEqual(plan.members, [])
+        self.assertTrue(str(plan.world_file).endswith("/worlds/neon-harbor/world.json"))
+
+    def test_world_asset_rels_skip_site_and_remote_paths(self) -> None:
+        refs = world_asset_rels(
+            {
+                "thumbnail": "/packs/worlds/neon-harbor.webp",
+                "theme": {"backdrop": "assets/harbor-night.webp"},
+                "places": [{"art": "assets/dock.webp"}, {"art": "https://evil.example/x.webp"}],
+                "cast": [{"avatar": "assets/../secret.webp"}, {"avatar": "assets/probe-harbor.webp"}],
+            }
+        )
+        self.assertEqual(
+            refs,
+            ["assets/harbor-night.webp", "assets/dock.webp", "assets/probe-harbor.webp"],
+        )
 
     def test_team_without_archives_explains_gap(self) -> None:
         stall = {"kind": "team", "slug": "paper-crew", "downloadHref": "/api/packs/paper-crew"}

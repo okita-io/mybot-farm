@@ -1,0 +1,6 @@
+name: hermes-worlds
+version: 1.1.0
+description: Draw planted mybot.farm worlds as a scene in the Hermes dashboard and Desktop.
+author: mybot.farm
+homepage: https://mybot.farm/install/hermes
+provides_tools: []

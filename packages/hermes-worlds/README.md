@@ -4,8 +4,9 @@ Hermes plugin that renders **world-pack** listings as a living scene in the web
 dashboard and in Hermes Desktop. Characters are embodied cast members in themed
 **places**, with optional **activity pulse** from the sessions API.
 
-Install: [INSTALL.md](INSTALL.md). This tree is the snapshot published from
-mybot.farm next to the `mybot-farm` agent tools.
+Install: [INSTALL.md](INSTALL.md). This tree is the plugin Hermes loads.
+`~/.hermes/plugins/hermes-worlds` is a symlink to it. Catalog draft:
+[catalog/](catalog/).
 
 **Status:** Dashboard scene pane and Desktop page both read planted
 `$HERMES_HOME/worlds/<id>/`. The Desktop page loads backdrop, place art, and
@@ -38,6 +39,7 @@ repo (paths below are typical local clones):
 | GAF world-pack | `web/public/packs/worlds/neon-harbor.json` | Reference listing + `world` block |
 | GAF validation | `web/src/lib/gaf-pack.ts` | `validateWorldBlock`, seller POST rules |
 | Farm plant | `packages/hermes-mybot-farm/plant.py` | What `farm_plant` writes under `~/.hermes/` |
+| Implementation todos | `packages/hermes-worlds/docs/hermes-implementation-todos.md` | Remaining KiroCrew parity gaps, including click-to-chat |
 
 ---
 
@@ -59,8 +61,10 @@ it **may** read layer 1 only when implementing export back to a bundle.
 │ 2. Hermes on-disk (what this plugin reads)                              │
 │    ~/.hermes/worlds/<id>/world.json   ← worlds/v1 block only            │
 │    ~/.hermes/worlds/<id>/state.json   ← worlds/state/v1 (plant: TBD)    │
-│    ~/.hermes/worlds/<id>/assets/…      ← bundle images (plant: TBD)      │
-│    ~/.hermes/profiles/<name>/           ← one GAF agent-pack per cast     │
+│    ~/.hermes/worlds/<id>/roster.json  ← worlds/roster/v1 (Desktop page) │
+│    ~/.hermes/worlds/<id>/assets/…      ← bundle images (plant writes)   │
+│    ~/.hermes/worlds/<id>/WORLD.md      ← readable scene doc (plant)     │
+│    ~/.hermes/profiles/<name>/           ← the owner's agents            │
 └───────────────────────────────┬─────────────────────────────────────────┘
                                 │ world-export hermes (future CLI)
                                 ▼
@@ -259,6 +263,45 @@ If `state.json` is absent, derive defaults:
 - `place` = `world.entrypoint.place`
 - `where` = each cast member’s `home`, or first place that lists them in `present`
 - `recent` = `[]`
+
+---
+
+### Layer 2b+ — `roster.json` on disk (`worlds/roster/v1`)
+
+**Path:** `$HERMES_HOME/worlds/<id>/roster.json`
+
+**Written by:** The Hermes Desktop Worlds page (via the Electron
+`writeTextFile` bridge), not by `farm_plant`. The dashboard is read-only
+for it.
+
+**Semantics:** Worlds ship **unpopulated** — the pack declares places and
+art but no cast. `roster.json` is the owner's cast: which of their existing
+agents stand in which place. When the file exists and is valid, it is
+authoritative: the pack cast (if any) is not shown, and `state.where` is
+derived from it. The Desktop page offers Add/Remove per place, capped at
+`rules.maxPresent`.
+
+```json
+{
+  "schema": "worlds/roster/v1",
+  "members": [
+    { "profile": "my-agent", "place": "dock" }
+  ]
+}
+```
+
+| Field | Purpose |
+|-------|---------|
+| `members[].profile` | Profile directory name under `$HERMES_HOME/profiles/` (the owner's existing agent) |
+| `members[].place` | Place id from `world.json` (validated against the place set) |
+
+Both surfaces mirror this: the dashboard `plugin_api.py` applies the roster
+in `_apply_roster` and sets `rosterOwned: true`; the desktop `plugin.js`
+applies the same rule and writes the file on Add/Remove/Clear.
+
+**Caveat:** re-planting the world pack overwrites `world.json` but does not
+touch `roster.json` — the owner's roster survives a re-plant. A fresh world
+directory starts empty.
 
 ---
 

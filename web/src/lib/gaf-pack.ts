@@ -44,16 +44,16 @@ export const GROK_BOT_MARK_COLOR_SET = new Set<string>(GROK_BOT_MARK_COLORS);
 export const AGENT_PACK_FORMAT = "mybot.farm/agent-pack";
 export const TEAM_PACK_FORMAT = "mybot.farm/team-pack";
 /**
- * World pack: a team-pack superset. The cast (members[]) and their handoffs
- * (topology) install as a plain team on any runtime; the extra `world` block
- * (setting, scenes, cast skins, thumbnail, render hints) is what embodies them
- * as characters. Runtimes that do not understand `world` ignore it and plant
- * the team — graceful degradation, matching worlds-exchange-spec.md.
+ * World pack: a team-pack superset. The world block (setting, places, mood,
+ * art) installs as an empty stage: the pack ships no cast, and MIN_WORLD_CAST
+ * is 0. The downloader populates it with their own agents (roster.json in
+ * Hermes). Runtimes that do not understand `world` ignore it — graceful
+ * degradation, matching worlds-exchange-spec.md.
  */
 export const WORLD_PACK_FORMAT = "mybot.farm/world-pack";
 export const MIN_TEAM_MEMBERS = 2;
-/** Minimum cast for a world. One character is a solo agent, not a world. */
-export const MIN_WORLD_CAST = 2;
+/** Minimum cast for a world. Worlds ship unpopulated: the owner fills the stage. */
+export const MIN_WORLD_CAST = 0;
 /** Closed capability set shared with the world-exchange bundle (worlds/v1). */
 export const WORLD_CAPABILITIES = ["web", "files", "schedule"] as const;
 /** Turn models a world scene can declare. `defer` = runtime's own room protocol picks the speaker. */
@@ -588,6 +588,15 @@ export function validateWorldBlock(
   }
   const greeter =
     typeof world.entrypoint.greeter === "string" ? world.entrypoint.greeter.trim() : "";
+  if (memberRoles.size === 0) {
+    if (greeter) {
+      return {
+        ok: false,
+        error: "world.entrypoint.greeter must be omitted when the world has no members.",
+      };
+    }
+    return { ok: true };
+  }
   if (!greeter || !memberRoles.has(greeter)) {
     return {
       ok: false,

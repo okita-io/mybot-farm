@@ -118,8 +118,58 @@ async function listWorlds() {
 /**
  * One world: the same object read_world returns, with art / backdrop /
  * avatar kept as relative path strings (no /api/plugins/... URLs).
- * No profile join — this plugin never scans profiles/.
+ * Occupancy is roster.json when that file exists. Otherwise the pack cast
+ * is shown (older plants). The page lists ~/.hermes/profiles so the user
+ * can add agents they already have.
  */
+const ROSTER_SCHEMA = 'worlds/roster/v1'
+
+function profilesRootFromWorlds(worldsRoot) {
+  const norm = String(worldsRoot || '').replace(/\/+$/, '')
+  if (!norm.endsWith('/worlds')) return null
+  return norm.slice(0, -'/worlds'.length) + '/profiles'
+}
+
+async function listProfiles(worldsRoot) {
+  const root = profilesRootFromWorlds(worldsRoot)
+  if (!root) return []
+  const dir = await bridge().readDir(root)
+  const entries = (dir && dir.entries) || []
+  const names = []
+  for (const entry of entries) {
+    if (!entry.isDirectory) continue
+    const name = entry.name
+    if (!name || name.charAt(0) === '.' || name.indexOf('/') !== -1) continue
+    names.push(name)
+  }
+  names.sort()
+  return names
+}
+
+async function readRoster(worldDir) {
+  const res = await bridge().readFileText(worldDir + '/roster.json')
+  if (!res || res.ok === false) return null
+  if (res.truncated) return null
+  let data
+  try {
+    data = JSON.parse(res.text)
+  } catch {
+    return null
+  }
+  if (!data || data.schema !== ROSTER_SCHEMA || !Array.isArray(data.members)) return null
+  return data.members
+}
+
+async function writeRoster(worldDir, members) {
+  const b = bridge()
+  if (!b || typeof b.writeTextFile !== 'function') {
+    throw new Error('This Desktop build cannot save the roster')
+  }
+  const body =
+    JSON.stringify({ schema: ROSTER_SCHEMA, members: members }, null, 2) + '\n'
+  await b.writeTextFile(worldDir + '/roster.json', body)
+}
+
 async function readWorld(id) {
   if (!isValidWorldId(id)) throw new Error('invalid world id')
   const worldDir = (await getWorldsRoot()) + '/' + id
@@ -220,17 +270,52 @@ async function readWorld(id) {
   const rules = world.rules || {}
   const render = world.render || {}
 
+  const rosterMembers = await readRoster(worldDir)
+  let shownCast = cast
+  let rosterOwned = false
+  if (rosterMembers) {
+    rosterOwned = true
+    const placeIds = places.map(p => p.id)
+    shownCast = []
+    const where = {}
+    const seen = {}
+    for (const item of rosterMembers) {
+      if (!item || typeof item.profile !== 'string') continue
+      const profile = item.profile.trim()
+      if (!profile || seen[profile] || placeIds.indexOf(item.place) === -1) continue
+      seen[profile] = true
+      shownCast.push({
+        id: profile,
+        name: profile,
+        home: item.place,
+        avatar: null,
+        isGreeter: false,
+        memoryScope: null,
+        capabilities: [],
+        relationships: {}
+      })
+      where[profile] = item.place
+    }
+    state = {
+      place: state.place,
+      where: where,
+      recent: state.recent || []
+    }
+  }
+
   return {
     id: world.id || id,
     title: title,
-    entrypoint: { place: entrypoint.place, greeter: greeter },
+    worldDir: worldDir,
+    rosterOwned: rosterOwned,
+    entrypoint: { place: entrypoint.place, greeter: rosterOwned ? null : greeter },
     theme: {
       palette: theme.palette,
       backdrop: theme.backdrop || null,
       mood: theme.mood
     },
     places: places,
-    cast: cast,
+    cast: shownCast,
     state: state,
     rules: {
       turnModel: rules.turnModel,
@@ -496,6 +581,9 @@ function WorldsPage() {
   const [selectedId, setSelectedId] = useState(null)
   const [viewPlace, setViewPlace] = useState(null)
   const [rootDir, setRootDir] = useState(null)
+  const [profiles, setProfiles] = useState([])
+  const [pick, setPick] = useState('')
+  const [rosterNote, setRosterNote] = useState(null)
   const selRef = useRef(null)
 
   function loadView(target, freshList) {
@@ -554,7 +642,10 @@ function WorldsPage() {
     poll()
     timer = setInterval(poll, POLL_MS)
     // Resolve the worlds root once, for joining asset paths.
-    getWorldsRoot().then(setRootDir).catch(() => {})
+    getWorldsRoot().then(root => {
+      setRootDir(root)
+      listProfiles(root).then(setProfiles).catch(() => setProfiles([]))
+    }).catch(() => {})
     return () => clearInterval(timer)
   }, [])
 
@@ -613,6 +704,42 @@ function WorldsPage() {
   const overflow = onStage.slice(maxPresent)
   const offstage = cast.filter(c => onStage.indexOf(c) === -1).concat(overflow)
   const capNote = overflow.length ? `+${overflow.length} offstage` : null
+
+  const taken = {}
+  cast.forEach(c => {
+    taken[c.id] = true
+  })
+  const available = profiles.filter(name => !taken[name])
+  const here = cur
+    ? cast.filter(c => (state.where || {})[c.id] === cur.id || (!Object.keys(state.where || {}).length && c.home === cur.id))
+    : []
+
+  async function commitRoster(next) {
+    const dir = world && world.worldDir
+    if (!dir || !world) return
+    try {
+      await writeRoster(dir, next)
+      setRosterNote(null)
+      loadView(world.id, null)
+    } catch (err) {
+      setRosterNote(String((err && err.message) || err))
+    }
+  }
+
+  function addAgent() {
+    const place = cur && cur.id
+    if (!pick || !place) return
+    const existing = world && world.rosterOwned
+      ? cast.map(c => ({ profile: c.id, place: (state.where && state.where[c.id]) || c.home }))
+      : []
+    let max = Number(rules.maxPresent)
+    if (!Number.isInteger(max) || max <= 0) max = 6
+    if (existing.filter(m => m.place === place).length >= max) {
+      setRosterNote('This place is full.')
+      return
+    }
+    commitRoster(existing.concat([{ profile: pick, place: place }]))
+  }
 
   const palette = theme.palette || {}
   const stageStyle = {
@@ -741,6 +868,78 @@ function WorldsPage() {
             ]
           })
         : null,
+
+      jsxs('div', {
+        style: NOTE,
+        children: [
+          jsx('div', {
+            style: { fontWeight: 600, marginBottom: 6 },
+            children: cur ? `Agents in ${cur.name || cur.id}` : 'Agents'
+          }),
+          world && !world.rosterOwned && cast.length
+            ? jsx('div', {
+                style: { marginBottom: 6 },
+                children:
+                  'This scene still shows the pack sample. Adding an agent, or clearing the stage, replaces that sample with your own roster.'
+              })
+            : null,
+          here.map(c =>
+            jsxs('div', {
+              key: c.id,
+              style: { display: 'flex', gap: 8, alignItems: 'center', marginBottom: 4 },
+              children: [
+                jsx('span', { children: c.name || c.id }),
+                world && world.rosterOwned
+                  ? jsx('button', {
+                      type: 'button',
+                      style: CHIP,
+                      onClick: () =>
+                        commitRoster(
+                          cast
+                            .filter(other => other.id !== c.id)
+                            .map(other => ({
+                              profile: other.id,
+                              place: (state.where && state.where[other.id]) || other.home
+                            }))
+                        ),
+                      children: 'Remove'
+                    })
+                  : null
+              ]
+            })
+          ),
+          !here.length ? jsx('div', { style: MUTED, children: 'No agents in this place.' }) : null,
+          jsxs('div', {
+            style: { display: 'flex', gap: 8, alignItems: 'center', marginTop: 8, flexWrap: 'wrap' },
+            children: [
+              jsx('select', {
+                value: pick,
+                onChange: e => setPick(e.target.value),
+                style: { ...CHIP, background: 'transparent' },
+                children: [
+                  jsx('option', { value: '', children: 'Add an agent you already have' }),
+                  available.map(name => jsx('option', { key: name, value: name, children: name }))
+                ]
+              }),
+              jsx('button', {
+                type: 'button',
+                style: CHIP_ACTIVE,
+                onClick: addAgent,
+                children: 'Add'
+              }),
+              world && !world.rosterOwned && cast.length
+                ? jsx('button', {
+                    type: 'button',
+                    style: CHIP,
+                    onClick: () => commitRoster([]),
+                    children: 'Clear stage'
+                  })
+                : null
+            ]
+          }),
+          rosterNote ? jsx('div', { style: { marginTop: 6 }, children: rosterNote }) : null
+        ]
+      }),
 
       rules.turnModel === 'defer'
         ? jsx('div', {
