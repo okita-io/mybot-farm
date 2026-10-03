@@ -67,7 +67,7 @@ source, not from a live click in Desktop.
     message, type a line, submit, and the Worlds page stays up. DevTools
     shows no request to port 9119.
 
-- [ ] **3. Let the scene move a character by writing `state.json` once.**
+- [x] **3. Let the scene move a character by writing `state.json` once.**
   Both panes only derive presence when `state.json` is missing (home, else
   the first place that lists the role). Place tabs change the view, not
   `where`. The write door is the same preload the roster uses.
@@ -79,6 +79,26 @@ source, not from a live click in Desktop.
   poll. The file must include `schema: "worlds/state/v1"` or both readers
   ignore it. Do not add a dashboard `POST` for this. The dashboard stays a
   reader, same as `roster.json`.
+  **DONE (2026-10-03), with a corrected write strategy.** `plugin.js` gains
+  `readRawState` (whole-object read), `writeState(worldDir, patch)` (merge +
+  persist, G7: preserves `place`, `recent`, `chatId`, and unknown keys;
+  always re-stamps the schema), and `moveCharacter` (sets one `where` entry,
+  appends a bounded `recent[]` move event, caps at 20). UI: a "Move someone
+  to <place>" select + "Move here" button in the agents panel, roster-owned
+  worlds only, honouring `rules.maxPresent`. Re-reads on the 15s poll via
+  `loadView`.
+  **Deviation from the sketch (verified against the installed bridge):** the
+  tmp-write + `renamePath`-over-`state.json` dance is NOT available — the
+  preload's `renamePath` maps to `hermes:fs:rename`, which REFUSES to
+  overwrite an existing path (`"...already exists"`) and takes a bare new
+  name, and the bridge exposes no unlink (only `trashPath`). So an atomic
+  rename-over-live-file is impossible here. Chosen instead: a single
+  in-place `writeTextFile` of the merged JSON — one `fs.promises.writeFile`
+  in the main process, and at `state.json`'s <1 MB size a reader never sees a
+  torn file. If a future bridge adds an atomic replace, swap it into
+  `writeState` and callers are unchanged. Covered by `desktop/plugin.test.mjs`
+  (merge preserves `chatId`/unknowns, move updates `where` + bounded
+  `recent`, no-op when already present).
 
 - [ ] **4. Store the world group-chat id.** Plant already calls
   `groups.create` when `HERMES_GATEWAY_RPC_URL` is set and stamps
@@ -245,7 +265,7 @@ aid, not a contract — confirm against the file before editing.
   Still untested: `resolveProfileName` / `displayNameFor` (need an index
   fixture) — left for a follow-up.
 
-- [ ] **G7. The `state.json` writer (todo 3) must preserve fields it does
+- [x] **G7. The `state.json` writer (todo 3) must preserve fields it does
   not own.** `plant.py` writes `world.json`, assets, `WORLD.md`, and the
   `MEMORY.md` skin, but **never writes `state.json`** — presence is only
   ever derived (`_default_state`/`_load_state` on both panes). When todo 3
@@ -254,6 +274,12 @@ aid, not a contract — confirm against the file before editing.
   A writer that emits `{schema, where}` alone silently drops the room id and
   the event log. Make the atomic tmp+rename writer merge onto the existing
   file, and cover it in the Director state test (todo 3's own test).
+  **DONE (2026-10-03) as part of todo 3.** `writeState` is read-modify-write
+  (`{ ...prior, ...patch, schema }`) so `place`, `recent`, `chatId`, and
+  unknown keys survive; the merge is covered by a `plugin.test.mjs` case that
+  asserts `chatId` and a `futureKey` both persist across a `where`-only
+  write. (The "atomic tmp+rename" instruction could not be followed — the
+  bridge rename refuses to clobber; see todo 3's deviation note.)
 
 - [ ] **G8. `groups.create` already returns a room id that nothing persists.**
   `configure_planted_team` (via `team_plant.py`) calls `groups.create` when

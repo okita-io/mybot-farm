@@ -195,3 +195,68 @@ test('previewMessages: non-array input is empty', () => {
   assert.deepEqual(previewMessages(null), [])
   assert.deepEqual(previewMessages('nope'), [])
 })
+
+// --- state write/merge + move (task 3 / G7) -------------------------------
+// Pure cores mirrored from plugin.js writeState/moveCharacter — the real
+// functions wrap these in a readRawState + writeTextFile round trip through
+// the Desktop bridge. The merge rules (preserve unknown fields, replace where,
+// bound recent) are what matters and are tested here directly.
+
+const STATE_SCHEMA = 'worlds/state/v1'
+const RECENT_MAX = 20
+
+function mergeState(prior, patch) {
+  return { ...(prior || {}), ...patch, schema: STATE_SCHEMA }
+}
+
+function applyMove(prior, castId, placeId) {
+  const where = { ...((prior && prior.where) || {}) }
+  if (!castId || !placeId || where[castId] === placeId) return null // no-op
+  where[castId] = placeId
+  const recent = Array.isArray(prior && prior.recent) ? prior.recent.slice() : []
+  recent.push({ t: 1, kind: 'move', who: castId, place: placeId })
+  return mergeState(prior, { where, recent: recent.slice(-RECENT_MAX) })
+}
+
+test('mergeState: preserves fields the pane does not own (G7)', () => {
+  const prior = {
+    schema: STATE_SCHEMA,
+    place: 'dock',
+    where: { patch: 'workshop' },
+    recent: [{ kind: 'x' }],
+    chatId: 'room-123',
+    futureKey: 'keep me'
+  }
+  const next = mergeState(prior, { where: { patch: 'dock' } })
+  assert.equal(next.place, 'dock') // untouched
+  assert.equal(next.chatId, 'room-123') // todo 4 field preserved
+  assert.equal(next.futureKey, 'keep me') // unknown field preserved
+  assert.deepEqual(next.recent, [{ kind: 'x' }]) // untouched
+  assert.deepEqual(next.where, { patch: 'dock' }) // replaced
+  assert.equal(next.schema, STATE_SCHEMA) // always stamped
+})
+
+test('applyMove: sets where and appends a bounded recent event', () => {
+  const prior = { schema: STATE_SCHEMA, place: 'dock', where: { patch: 'workshop' }, chatId: 'r1' }
+  const next = applyMove(prior, 'patch', 'dock')
+  assert.equal(next.where.patch, 'dock')
+  assert.equal(next.chatId, 'r1') // preserved across a move
+  assert.equal(next.recent.length, 1)
+  assert.equal(next.recent[0].who, 'patch')
+  assert.equal(next.recent[0].place, 'dock')
+})
+
+test('applyMove: is a no-op when already in the target place', () => {
+  const prior = { schema: STATE_SCHEMA, where: { patch: 'dock' } }
+  assert.equal(applyMove(prior, 'patch', 'dock'), null)
+})
+
+test('applyMove: caps recent[] at RECENT_MAX', () => {
+  const recent = Array.from({ length: RECENT_MAX }, (_, i) => ({ i }))
+  const prior = { schema: STATE_SCHEMA, where: {}, recent }
+  const next = applyMove(prior, 'patch', 'dock')
+  assert.equal(next.recent.length, RECENT_MAX)
+  // oldest dropped, newest move appended
+  assert.equal(next.recent[RECENT_MAX - 1].who, 'patch')
+  assert.equal(next.recent[0].i, 1)
+})

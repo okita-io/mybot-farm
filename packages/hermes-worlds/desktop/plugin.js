@@ -298,6 +298,79 @@ async function writeRoster(worldDir, members) {
   await b.writeTextFile(worldDir + '/roster.json', body)
 }
 
+/**
+ * Read the raw state.json for a world, or null when it is absent / unreadable
+ * / the wrong schema. This returns the WHOLE parsed object (not the reshaped
+ * `state` view readWorld builds), so a writer can merge onto it and preserve
+ * fields this pane does not own — `recent`, the `chatId` todo 4 adds, and any
+ * future key (G7). A read failure returns null so the writer starts from a
+ * clean default rather than throwing.
+ */
+async function readRawState(worldDir) {
+  const b = bridge()
+  if (!b) return null
+  const sres = await b.readFileText(worldDir + '/state.json')
+  if (!sres || sres.ok === false || sres.truncated || sres.text == null) return null
+  let data
+  try {
+    data = JSON.parse(sres.text)
+  } catch {
+    return null
+  }
+  if (!data || typeof data !== 'object' || data.schema !== STATE_SCHEMA) return null
+  return data
+}
+
+/**
+ * Merge `patch` onto the current state.json and persist it (todo 3 + G7).
+ *
+ * Read-modify-write: start from the existing file (readRawState) so `place`,
+ * `recent`, `chatId`, and any key this pane does not know are preserved; only
+ * the keys in `patch` change. `where` is replaced wholesale by the caller
+ * (it hands a complete map), everything else is kept.
+ *
+ * Write door: the desktop preload exposes `writeTextFile` (in-place) and a
+ * `renamePath` that REFUSES to overwrite an existing file (hermes:fs:rename
+ * throws "...already exists"), and no unlink. So the tmp-write + rename-over
+ * dance the handoff sketched is not actually available through this bridge —
+ * rename cannot clobber the live state.json. We therefore write in place with
+ * a single `writeTextFile` call: state.json is a small (<1 MB) document and
+ * the main process writes it with one `fs.promises.writeFile`, so a reader
+ * never sees a half-file at this size. If a future bridge adds an atomic
+ * replace, swap it in here — callers do not change.
+ */
+async function writeState(worldDir, patch) {
+  const b = bridge()
+  if (!b || typeof b.writeTextFile !== 'function') {
+    throw new Error('This Desktop build cannot save world state')
+  }
+  const prior = (await readRawState(worldDir)) || {}
+  const next = { ...prior, ...patch, schema: STATE_SCHEMA }
+  const body = JSON.stringify(next, null, 2) + '\n'
+  await b.writeTextFile(worldDir + '/state.json', body)
+  return next
+}
+
+const RECENT_MAX = 20
+
+/**
+ * Move one character to a place and persist it (todo 3). `where` is the
+ * authoritative presence map the scene reads; we rewrite it with the single
+ * changed entry and append a bounded `recent[]` event so the move shows in the
+ * world's own log. `place` (the active view), `chatId`, and other fields are
+ * preserved by writeState. No-op when the character is already there.
+ */
+async function moveCharacter(worldDir, currentWhere, castId, placeId) {
+  if (!castId || !placeId) return null
+  const where = { ...(currentWhere || {}) }
+  if (where[castId] === placeId) return null
+  where[castId] = placeId
+  const prior = (await readRawState(worldDir)) || {}
+  const recent = Array.isArray(prior.recent) ? prior.recent.slice() : []
+  recent.push({ t: Date.now(), kind: 'move', who: castId, place: placeId })
+  return writeState(worldDir, { where, recent: recent.slice(-RECENT_MAX) })
+}
+
 async function readWorld(id) {
   if (!isValidWorldId(id)) throw new Error('invalid world id')
   const worldDir = (await getWorldsRoot()) + '/' + id
@@ -842,6 +915,7 @@ function WorldsPage() {
   const [rootDir, setRootDir] = useState(null)
   const [profiles, setProfiles] = useState([])
   const [pick, setPick] = useState('')
+  const [moveTarget, setMoveTarget] = useState('')
   const [rosterNote, setRosterNote] = useState(null)
   const [chat, setChat] = useState(null)
   const [chatDraft, setChatDraft] = useState('')
@@ -1042,6 +1116,30 @@ function WorldsPage() {
     if (!dir || !world) return
     try {
       await writeRoster(dir, next)
+      setRosterNote(null)
+      loadView(world.id, null)
+    } catch (err) {
+      setRosterNote(String((err && err.message) || err))
+    }
+  }
+
+  // Move a character into the active place and persist it (todo 3). Honours
+  // rules.maxPresent against who is already standing there, so a move cannot
+  // overfill a place any more than an add can.
+  async function commitMove(castId, placeId) {
+    const dir = world && world.worldDir
+    if (!dir || !world || !castId || !placeId) return
+    const w = state.where || {}
+    if (w[castId] === placeId) return
+    let max = Number(rules.maxPresent)
+    if (!Number.isInteger(max) || max <= 0) max = Infinity
+    const occupancy = cast.filter(c => c.id !== castId && w[c.id] === placeId).length
+    if (occupancy >= max) {
+      setRosterNote('This place is full.')
+      return
+    }
+    try {
+      await moveCharacter(dir, w, castId, placeId)
       setRosterNote(null)
       loadView(world.id, null)
     } catch (err) {
@@ -1338,6 +1436,43 @@ function WorldsPage() {
                 : null
             ]
           }),
+          // Move an agent who is in another place into this one (todo 3).
+          // Roster-owned worlds only; the pack sample is view-only.
+          world && world.rosterOwned && cur
+            ? (() => {
+                const elsewhere = cast.filter(
+                  c => ((state.where || {})[c.id] || c.home) !== cur.id
+                )
+                if (!elsewhere.length) return null
+                return jsxs('div', {
+                  style: { display: 'flex', gap: 8, alignItems: 'center', marginTop: 8, flexWrap: 'wrap' },
+                  children: [
+                    jsx('select', {
+                      value: moveTarget,
+                      onChange: e => setMoveTarget(e.target.value),
+                      style: { ...CHIP, background: 'transparent' },
+                      children: [
+                        jsx('option', { value: '', children: `Move someone to ${cur.name || cur.id}` }),
+                        elsewhere.map(c =>
+                          jsx('option', { key: c.id, value: c.id, children: c.name || c.id })
+                        )
+                      ]
+                    }),
+                    jsx('button', {
+                      type: 'button',
+                      style: CHIP_ACTIVE,
+                      onClick: () => {
+                        if (moveTarget) {
+                          commitMove(moveTarget, cur.id)
+                          setMoveTarget('')
+                        }
+                      },
+                      children: 'Move here'
+                    })
+                  ]
+                })
+              })()
+            : null,
           rosterNote ? jsx('div', { style: { marginTop: 6 }, children: rosterNote }) : null
         ]
       }),
