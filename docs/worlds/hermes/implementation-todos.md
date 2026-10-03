@@ -229,6 +229,23 @@ source, not from a live click in Desktop.
   **Live-verify pending:** needs a world whose `cast[].sprite` points at a
   planted sheet to see the animation on the desktop.
 
+- [x] **10b. Sprite-pack palette — assign a pack when adding an agent.**
+  8 deterministic packs (`aqua-capsule`, `ember-gem`, `rose-teardrop`,
+  `violet-shield`, `lime-leaf`, `sky-circle`, `gold-triangle`,
+  `magenta-diamond`) generated with the `agent-sprites` CLI and vendored under
+  `packages/hermes-mybot-farm/sprite-packs/`. **DONE (2026-10-03):** because
+  the Desktop bridge can only WRITE TEXT (no binary copy), packs are
+  **pre-staged at plant** — `stage_sprite_packs(world_path)` copies the library
+  into `<world>/assets/sprite-packs/` (idempotent, confined), called from the
+  world-write block. Assignment is then a pure text write: the pane lists
+  staged packs (`listSpritePacks`), the Add-agent control gains a "Sprite:
+  default / <pack>" picker, and the chosen pack's world-relative manifest path
+  is written as the roster member's `sprite`. `readWorld`'s roster path carries
+  `sprite`, Remove preserves it, and `AnimatedSprite` (10) renders it. Tested:
+  `stage_sprite_packs` (plant, idempotent + sibling PNGs) and the pane's
+  pack-list/path helpers. Keeps world-dir confinement and bundle portability
+  (export already carries `sprite`).
+
 ---
 
 ## Roster (done)

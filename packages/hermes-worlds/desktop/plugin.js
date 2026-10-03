@@ -148,6 +148,27 @@ async function listProfiles(worldsRoot) {
   return names
 }
 
+/**
+ * List the sprite packs staged in a world (`assets/sprite-packs/*.sheet.json`,
+ * put there by the plant). Returns [{ name, path }] where `path` is the
+ * world-relative manifest path to write as a roster member's `sprite`.
+ */
+async function listSpritePacks(worldDir) {
+  const b = bridge()
+  if (!b) return []
+  const dir = await b.readDir(worldDir + '/assets/sprite-packs')
+  const entries = (dir && dir.entries) || []
+  const packs = []
+  for (const entry of entries) {
+    if (entry.isDirectory) continue
+    const n = entry.name
+    if (typeof n !== 'string' || !n.endsWith('.sheet.json')) continue
+    packs.push({ name: n.replace(/\.sheet\.json$/, ''), path: 'assets/sprite-packs/' + n })
+  }
+  packs.sort((a, b2) => (a.name < b2.name ? -1 : a.name > b2.name ? 1 : 0))
+  return packs
+}
+
 async function readRoster(worldDir) {
   const res = await bridge().readFileText(worldDir + '/roster.json')
   if (!res || res.ok === false) return null
@@ -492,6 +513,7 @@ async function readWorld(id) {
         name: profile,
         home: item.place,
         avatar: null,
+        sprite: typeof item.sprite === 'string' ? item.sprite : null,
         isGreeter: false,
         memoryScope: null,
         capabilities: [],
@@ -1210,6 +1232,8 @@ function WorldsPage() {
   const [profiles, setProfiles] = useState([])
   const [pick, setPick] = useState('')
   const [moveTarget, setMoveTarget] = useState('')
+  const [spritePacks, setSpritePacks] = useState([])
+  const [spritePick, setSpritePick] = useState('')
   const [rosterNote, setRosterNote] = useState(null)
   const [ambientOn, setAmbientOn] = useState(null) // null = unknown/checking
   const [ambientBusy, setAmbientBusy] = useState(false)
@@ -1544,6 +1568,16 @@ function WorldsPage() {
     // eslint-disable-next-line
   }, [world && world.id, cast.map(c => c.profileName || c.id).join(',')])
 
+  // Load the sprite packs the plant staged into this world, for the picker.
+  useEffect(() => {
+    let alive = true
+    if (!rootDir || !world) { setSpritePacks([]); return () => { alive = false } }
+    listSpritePacks(rootDir + '/' + world.id)
+      .then(ps => { if (alive) setSpritePacks(ps) })
+      .catch(() => { if (alive) setSpritePacks([]) })
+    return () => { alive = false }
+  }, [rootDir, world && world.id])
+
   async function toggleAmbient() {
     if (!world || ambientBusy) return
     const joined = cast.filter(c => c.profileName || c.id)
@@ -1589,10 +1623,12 @@ function WorldsPage() {
       .map(c => ({
         profile: c.profileName || c.id,
         place: (state.where && state.where[c.id]) || c.home,
+        sprite: c.sprite || null,
         joined: !!(c.profileName || world.rosterOwned)
       }))
       .filter(m => m.joined && m.profile)
-      .map(({ profile, place }) => ({ profile, place }))
+      .map(({ profile, place, sprite }) =>
+        sprite ? { profile, place, sprite } : { profile, place })
     if (existing.some(m => m.profile === pick)) {
       setRosterNote('That agent is already in this world.')
       return
@@ -1603,7 +1639,13 @@ function WorldsPage() {
       setRosterNote('This place is full.')
       return
     }
-    commitRoster(existing.concat([{ profile: pick, place: place }]))
+    // Attach the chosen sprite pack (a world-relative manifest path) if picked.
+    const chosen = spritePacks.find(p => p.name === spritePick)
+    const member = chosen
+      ? { profile: pick, place: place, sprite: chosen.path }
+      : { profile: pick, place: place }
+    commitRoster(existing.concat([member]))
+    setSpritePick('')
   }
 
   const palette = theme.palette || {}
@@ -1840,10 +1882,14 @@ function WorldsPage() {
                         commitRoster(
                           cast
                             .filter(other => other.id !== c.id)
-                            .map(other => ({
-                              profile: other.id,
-                              place: (state.where && state.where[other.id]) || other.home
-                            }))
+                            .map(other => {
+                              const m = {
+                                profile: other.id,
+                                place: (state.where && state.where[other.id]) || other.home
+                              }
+                              if (other.sprite) m.sprite = other.sprite
+                              return m
+                            })
                         ),
                       children: 'Remove'
                     })
@@ -1864,6 +1910,20 @@ function WorldsPage() {
                   available.map(name => jsx('option', { key: name, value: name, children: name }))
                 ]
               }),
+              spritePacks.length
+                ? jsx('select', {
+                    value: spritePick,
+                    onChange: e => setSpritePick(e.target.value),
+                    title: 'Optional sprite pack for this agent',
+                    style: { ...CHIP, background: 'transparent' },
+                    children: [
+                      jsx('option', { value: '', children: 'Sprite: default' }),
+                      spritePacks.map(p =>
+                        jsx('option', { key: p.name, value: p.name, children: p.name })
+                      )
+                    ]
+                  })
+                : null,
               jsx('button', {
                 type: 'button',
                 style: CHIP_ACTIVE,

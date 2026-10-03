@@ -84,5 +84,33 @@ class WriteWorldStateTests(unittest.TestCase):
             self.assertEqual(data["schema"], STATE_SCHEMA)
 
 
+class StageSpritePacksTests(unittest.TestCase):
+    def test_stages_bundled_packs_into_world_assets(self) -> None:
+        from hermes_mybot_farm.plant import stage_sprite_packs, SPRITE_PACKS_DIR
+        # The vendored library ships with the plugin.
+        self.assertTrue(SPRITE_PACKS_DIR.is_dir(), "sprite-packs library missing from the plugin")
+        n_packs = len(list(SPRITE_PACKS_DIR.glob("*.sheet.json")))
+        self.assertGreaterEqual(n_packs, 8)
+        with tempfile.TemporaryDirectory() as tmp:
+            wdir = Path(tmp) / "worlds" / "neon-harbor"
+            wdir.mkdir(parents=True)
+            wp = wdir / "world.json"
+            notes = stage_sprite_packs(wp)
+            dest = wdir / "assets" / "sprite-packs"
+            staged = sorted(p.name for p in dest.glob("*.sheet.json"))
+            self.assertEqual(len(staged), n_packs)
+            # Each manifest has a sibling PNG staged too.
+            for man in staged:
+                png = dest / man.replace(".sheet.json", ".sheet.png")
+                self.assertTrue(png.is_file(), f"missing sibling PNG for {man}")
+            self.assertTrue(any("sprite-pack" in n for n in notes))
+            # Idempotent: a second run copies nothing new.
+            notes2 = stage_sprite_packs(wp)
+            self.assertEqual(notes2, [])
+
+
 if __name__ == "__main__":
     unittest.main()
+
+
+

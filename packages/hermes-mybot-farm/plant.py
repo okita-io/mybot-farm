@@ -139,6 +139,41 @@ def _write_world_state(world_path: Path, chat_id: str | None) -> str | None:
     return str(state_path)
 
 
+# The vendored sprite-pack library shipped with this plugin. Staged into each
+# planted world so the Desktop pane (which can only WRITE TEXT, not copy binary)
+# can assign a pack by writing a text path into roster.json.
+SPRITE_PACKS_DIR = Path(__file__).resolve().parent / "sprite-packs"
+
+
+def stage_sprite_packs(world_path: Path) -> list[str]:
+    """Copy the bundled sprite packs into ``<world>/assets/sprite-packs/``.
+
+    Idempotent (copies only missing/newer by size); confined to the world's
+    assets dir; a missing library is a note, not a failure. Returns note lines.
+    The pane assigns a pack by writing ``assets/sprite-packs/<name>.sheet.json``
+    as a roster member's ``sprite`` — a pure text write it is allowed to do.
+    """
+    notes: list[str] = []
+    if not SPRITE_PACKS_DIR.is_dir():
+        return notes
+    dest = world_path.parent / "assets" / "sprite-packs"
+    dest.mkdir(parents=True, exist_ok=True)
+    staged = 0
+    for src in sorted(SPRITE_PACKS_DIR.glob("*.sheet.*")):
+        target = dest / src.name
+        if target.exists() and target.stat().st_size == src.stat().st_size:
+            continue
+        shutil.copy2(src, target)
+        staged += 1
+    if staged:
+        n_packs = len(list(SPRITE_PACKS_DIR.glob("*.sheet.json")))
+        notes.append(
+            f"staged {staged} sprite-pack file(s) into assets/sprite-packs/ "
+            f"({n_packs} packs available to assign from the Worlds pane)"
+        )
+    return notes
+
+
 def _install_world_assets(
     world: dict[str, Any],
     world_path: Path,
@@ -899,6 +934,8 @@ def plant(
         state_written = _write_world_state(world_path, result.room)
         if state_written:
             notes.append(f"stamped group-chat id into {state_written} (chatId={result.room})")
+        # Stage the sprite-pack library so the pane can assign a pack by text.
+        notes.extend(stage_sprite_packs(world_path))
         if plan.world_doc:
             doc_path = Path(plan.world_doc)
             doc_path.write_text(compose_world_doc(plan.world_block, plan.slug), encoding="utf-8")
