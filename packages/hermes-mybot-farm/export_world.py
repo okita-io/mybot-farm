@@ -24,6 +24,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from .plant import PlantError, confined_path, safe_slug
+
 EXCHANGE_SCHEMA = "mybot.farm/world-exchange"
 WORLD_SCHEMA = "worlds/v1"
 STATE_SCHEMA = "worlds/state/v1"
@@ -146,16 +148,24 @@ def export_world(world_id: str, worlds_root: Path, out_dir: Path,
                  *, profiles_root: Path | None = None) -> dict[str, Any]:
     """Write a world-exchange bundle for ``world_id`` under ``out_dir``.
 
-    Returns the exchange.json envelope dict. Does not zip (caller/CLI may).
+    Returns the exchange.json envelope dict with ``bundlePath`` set.
+    Does not zip (caller/CLI may).
     """
-    world_dir = (worlds_root / world_id)
+    try:
+        slug = safe_slug(world_id, what="world id")
+        worlds_root_res = worlds_root.expanduser().resolve()
+        out_dir_res = out_dir.expanduser().resolve()
+        world_dir = confined_path(worlds_root_res, slug)
+        bundle = confined_path(out_dir_res, f"{slug}.world")
+    except PlantError as exc:
+        raise ExportError(str(exc)) from exc
+
     wpath = world_dir / "world.json"
     if not wpath.is_file():
         raise ExportError(f"no planted world at {wpath}")
     world = json.loads(wpath.read_text(encoding="utf-8"))
 
     portable, loss = build_portable_world(world)
-    bundle = out_dir / f"{world_id}.world"
     (bundle / "characters").mkdir(parents=True, exist_ok=True)
     (bundle / "world.json").write_text(json.dumps(portable, indent=2) + "\n", encoding="utf-8")
 
@@ -174,9 +184,13 @@ def export_world(world_id: str, worlds_root: Path, out_dir: Path,
         if profiles_root is not None:
             # Profile dir name is the member slug; the planted roster maps role->profile,
             # but at minimum a profile matching the character id is used when present.
-            pdir = profiles_root / cid
-            soul = pdir / "SOUL.md"
-            if soul.is_file():
+            try:
+                profile_slug = safe_slug(cid, what="character id")
+                pdir = confined_path(profiles_root.expanduser().resolve(), profile_slug)
+            except PlantError:
+                pdir = None
+            soul = (pdir / "SOUL.md") if pdir is not None else None
+            if soul is not None and soul.is_file():
                 desc = soul.read_text(encoding="utf-8")[:2000]
         pack = {
             "schema": "mybot.farm/agent-pack",
@@ -208,4 +222,5 @@ def export_world(world_id: str, worlds_root: Path, out_dir: Path,
         "loss": loss,
     }
     (bundle / "exchange.json").write_text(json.dumps(envelope, indent=2) + "\n", encoding="utf-8")
+    envelope["bundlePath"] = str(bundle)
     return envelope

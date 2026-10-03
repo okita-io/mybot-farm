@@ -25,6 +25,7 @@ from .farm_api import (
     search_stalls,
     stall_summary,
 )
+from .export_world import ExportError, export_world
 from .hermes_bin import HermesCliError
 from .plant import PlantError, plant, reinstall
 from .tombstones import clear_tombstones, hermes_home, list_tombstones
@@ -73,6 +74,44 @@ def _pack_path_roots() -> list[Path]:
     if extra:
         roots.append(Path(extra).expanduser())
     return roots
+
+
+def _export_out_roots() -> list[Path]:
+    """Directories farm_export_world may write bundles under."""
+    home = hermes_home()
+    roots = [
+        home / "farm" / "exports",
+        home / "farm",
+    ]
+    extra = (os.environ.get("MYBOT_FARM_EXPORT_DIR") or "").strip()
+    if extra:
+        roots.append(Path(extra).expanduser())
+    return roots
+
+
+def _resolve_export_out_dir(path: str | None) -> Path:
+    default = hermes_home() / "farm" / "exports"
+    if not path or not str(path).strip():
+        default.mkdir(parents=True, exist_ok=True)
+        return default
+    raw = Path(str(path).strip()).expanduser()
+    try:
+        resolved = raw.resolve()
+    except OSError as exc:
+        raise FarmError(f"cannot resolve outPath: {exc}") from exc
+    for root in _export_out_roots():
+        try:
+            root_res = root.resolve()
+        except OSError:
+            continue
+        root_res.mkdir(parents=True, exist_ok=True)
+        if resolved == root_res or root_res in resolved.parents:
+            resolved.mkdir(parents=True, exist_ok=True)
+            return resolved
+    raise FarmError(
+        "outPath must be under ~/.hermes/farm/exports, ~/.hermes/farm, "
+        "or MYBOT_FARM_EXPORT_DIR — not an arbitrary filesystem path"
+    )
 
 
 def _resolve_safe_pack_path(path: str) -> Path:
@@ -338,6 +377,49 @@ def farm_update(args: dict, **kwargs) -> str:
     if not slug:
         return _err("slug required")
     return farm_post({**args, "slug": slug}, **kwargs)
+
+
+def farm_export_world(args: dict, **kwargs) -> str:
+    world_id = str(
+        args.get("worldId")
+        or args.get("world_id")
+        or args.get("slug")
+        or ""
+    ).strip()
+    if not world_id:
+        return _err("worldId required")
+    out_path = args.get("outPath") if "outPath" in args else args.get("out_path")
+    try:
+        out_dir = _resolve_export_out_dir(out_path if isinstance(out_path, str) else None)
+        home = hermes_home()
+        envelope = export_world(
+            world_id,
+            home / "worlds",
+            out_dir,
+            profiles_root=home / "profiles",
+        )
+    except (ExportError, FarmError) as exc:
+        return _err(str(exc), worldId=world_id)
+
+    bundle = str(envelope.get("bundlePath") or "")
+    loss = envelope.get("loss") or []
+    lines = [
+        f"Exported world `{envelope.get('id')}` to {bundle}",
+        f"title: {envelope.get('title')}",
+        f"characters: {', '.join(envelope.get('characters') or []) or '(none)'}",
+        f"lossy: {bool(envelope.get('lossy'))}",
+    ]
+    if loss:
+        lines.append(f"loss entries: {len(loss)}")
+    return _ok(
+        {
+            "ok": True,
+            "text": "\n".join(lines),
+            "worldId": envelope.get("id"),
+            "bundlePath": bundle,
+            "exchange": envelope,
+        }
+    )
 
 
 def farm_reinstall(args: dict, **kwargs) -> str:

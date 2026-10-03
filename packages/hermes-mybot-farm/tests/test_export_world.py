@@ -7,6 +7,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import plugin_import  # noqa: F401
 
@@ -18,6 +19,7 @@ from hermes_mybot_farm.export_world import (  # noqa: E402
     scrub_state,
     world_to_exchange_characters,
 )
+from hermes_mybot_farm.farm_tools import farm_export_world  # noqa: E402
 
 WORLD = {
     "schema": "worlds/v1",
@@ -114,6 +116,7 @@ class ExportTests(unittest.TestCase):
             self.assertEqual(env["exportedFrom"], "hermes")
             self.assertEqual(sorted(env["characters"]), ["harbor-engineer", "night-watch"])
             self.assertTrue(env["lossy"])  # execute_bash dropped
+            self.assertEqual(Path(env["bundlePath"]).resolve(), bundle.resolve())
             # state snapshot carried + scrubbed
             snap = json.loads((bundle / "state.json").read_text())
             self.assertEqual(snap["chatId"], "r1")
@@ -122,6 +125,33 @@ class ExportTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with self.assertRaises(ExportError):
                 export_world("ghost", Path(tmp) / "worlds", Path(tmp) / "out")
+
+    def test_export_rejects_traversal_world_id(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            with self.assertRaises(ExportError):
+                export_world("../etc", root / "worlds", root / "out")
+
+class ExportToolTests(unittest.TestCase):
+    def test_farm_export_world_writes_bundle(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp) / "hermes"
+            worlds = home / "worlds" / "neon-harbor"
+            worlds.mkdir(parents=True)
+            worlds.joinpath("world.json").write_text(json.dumps(WORLD))
+            with patch("hermes_mybot_farm.farm_tools.hermes_home", return_value=home):
+                raw = farm_export_world({"worldId": "neon-harbor"})
+            payload = json.loads(raw)
+            self.assertTrue(payload["ok"])
+            bundle = Path(payload["bundlePath"])
+            self.assertTrue(bundle.is_dir())
+            self.assertTrue((bundle / "exchange.json").is_file())
+            self.assertEqual(bundle.parent.resolve(), (home / "farm" / "exports").resolve())
+
+    def test_farm_export_world_requires_id(self) -> None:
+        payload = json.loads(farm_export_world({}))
+        self.assertFalse(payload["ok"])
+        self.assertIn("worldId required", payload["error"])
 
 
 if __name__ == "__main__":

@@ -271,6 +271,38 @@ FARM_POST = {
     },
 }
 
+FARM_EXPORT_WORLD = {
+    "name": "farm_export_world",
+    "description": (
+        "Export a planted Hermes world from ~/.hermes/worlds/<worldId>/ to a "
+        "portable mybot.farm/world-exchange bundle under ~/.hermes/farm/exports "
+        "(or outPath under ~/.hermes/farm or MYBOT_FARM_EXPORT_DIR). Reads "
+        "world.json, state.json, assets/, and member SOUL.md snippets; scrubs "
+        "capabilities to the closed v1 set and records dropped raw tool names in "
+        "exchange.loss. "
+        "Declarative only — no API calls, credentials, or absolute paths in the "
+        "bundle. Does not zip the result."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "worldId": {
+                "type": "string",
+                "description": "Planted world id / slug (e.g. neon-harbor).",
+            },
+            "outPath": {
+                "type": "string",
+                "description": (
+                    "Optional output directory. Defaults to ~/.hermes/farm/exports. "
+                    "Must be under ~/.hermes/farm/exports, ~/.hermes/farm, or "
+                    "MYBOT_FARM_EXPORT_DIR."
+                ),
+            },
+        },
+        "required": ["worldId"],
+    },
+}
+
 FARM_UPDATE = {
     "name": "farm_update",
     "description": (

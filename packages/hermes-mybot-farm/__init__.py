@@ -50,6 +50,12 @@ def register(ctx):
         schema=schemas.FARM_UPDATE,
         handler=farm_tools.farm_update,
     )
+    ctx.register_tool(
+        name="farm_export_world",
+        toolset=toolset,
+        schema=schemas.FARM_EXPORT_WORLD,
+        handler=farm_tools.farm_export_world,
+    )
     ctx.register_cli_command(
         name="farm",
         help="Search, plant, or post mybot.farm stalls from Hermes",
@@ -59,8 +65,8 @@ def register(ctx):
     ctx.register_command(
         "farm",
         _slash_farm,
-        description="Search, plant, or post mybot.farm stalls (search <q> | plant <slug> | reinstall <slug> | post … | update --slug …)",
-        args_hint="search <query> | plant <slug> | reinstall <slug> | post --kind agent --name … --pack file.json | update --slug …",
+        description="Search, plant, export worlds, or post mybot.farm stalls (search <q> | plant <slug> | export <worldId> | post … | update --slug …)",
+        args_hint="search <query> | plant <slug> | reinstall <slug> | export <worldId> [--out PATH] | post --kind agent --name … --pack file.json | update --slug …",
     )
 
 
@@ -71,7 +77,7 @@ def _slash_farm(raw_args: str) -> str:
     if not parts:
         return (
             "Usage: /farm search <query> | /farm plant <slug> | /farm reinstall <slug> "
-            "[--force] [--clean] | /farm post --kind agent --name NAME --title TITLE "
+            "[--force] [--clean] | /farm export <worldId> [--out PATH] | /farm post --kind agent --name NAME --title TITLE "
             "--description DESC --category LABEL --price-cents 0 --pack pack.json [--slug SLUG] [--dry-run] "
             "| /farm update --slug SLUG --kind agent --name NAME --title TITLE "
             "--description DESC --category LABEL --price-cents 0 --pack pack.json [--dry-run]"

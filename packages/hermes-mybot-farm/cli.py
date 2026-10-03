@@ -12,6 +12,7 @@ from .hermes_bin import HermesCliError
 from .plant import PlantError
 from .farm_tools import (
     clear_named_tombstones,
+    farm_export_world,
     farm_get_pack,
     farm_get_stall,
     farm_plant,
@@ -42,7 +43,7 @@ def setup_farm_cli(subparser) -> None:
     subparser.add_argument(
         "farm_command",
         nargs="?",
-        choices=["search", "get", "stall", "plant", "reinstall", "post", "update", "clear-tombstones"],
+        choices=["search", "get", "stall", "plant", "reinstall", "export", "post", "update", "clear-tombstones"],
         help="farm subcommand",
     )
     subparser.add_argument("rest", nargs=argparse.REMAINDER, help="command arguments")
@@ -65,7 +66,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "command",
-        choices=["search", "get", "stall", "plant", "reinstall", "post", "update", "clear-tombstones"],
+        choices=["search", "get", "stall", "plant", "reinstall", "export", "post", "update", "clear-tombstones"],
         nargs="?",
     )
     parser.add_argument("rest", nargs=argparse.REMAINDER)
@@ -95,6 +96,9 @@ _VALUE_FLAGS = {
     "--slug": ("slug", str),
     "--pack-version": ("packVersion", int),
     "--packVersion": ("packVersion", int),
+    "--out": ("outPath", str),
+    "--out-path": ("outPath", str),
+    "--outPath": ("outPath", str),
 }
 
 
@@ -132,6 +136,7 @@ def usage() -> str:
   farm-plant stall <slug>
   farm-plant plant <slug> [--name NAME] [--force] [--clean] [--recruit] [--dry-run]
   farm-plant reinstall <slug> [--force] [--clean] [--recruit] [--dry-run]
+  farm-plant export <worldId> [--out PATH]
   farm-plant post --kind agent|team --name NAME --title TITLE --description DESC
                  --category LABEL --price-cents N --pack pack.json
                  [--slug SLUG] [--pack-version N] [--dry-run] [--json]
@@ -211,6 +216,15 @@ def _dispatch(argv: list[str], *, as_text: bool) -> int:
             **{k: flags[k] for k in ("force", "clean", "dry_run", "recruit", "name") if k in flags},
         }
         return printer(farm_reinstall(args))
+
+    if cmd == "export":
+        if not rest:
+            print("export requires a world id", file=sys.stderr)
+            return 1
+        args = {"worldId": rest[0]}
+        if "outPath" in flags:
+            args["outPath"] = flags["outPath"]
+        return printer(farm_export_world(args))
 
     if cmd in {"post", "update"}:
         missing = [
