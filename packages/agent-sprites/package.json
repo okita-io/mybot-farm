@@ -23,6 +23,7 @@
     "README.md",
     "bin",
     "dist",
+    "examples",
     "src"
   ],
   "bin": {

@@ -114,3 +114,5 @@ npm run build
 ```
 
 Tests cover determinism (identical PNG bytes) and the manifest shape.
+
+Sample sheets from that CLI (harbor-engineer / cyan / capsule, and night-watch / orange / gem) live in [`examples/`](./examples/).

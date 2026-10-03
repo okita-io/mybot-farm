@@ -19,9 +19,25 @@ import {
 } from "./types.ts";
 
 const GLYPHS: Record<string, readonly string[]> = {
-  "!": [".#.", ".#.", ".#.", "...", ".#."],
-  Z: ["###", "..#", ".#.", "#..", "###"],
-  z: ["##", ".#", "#."],
+  "!": [
+    ".##.",
+    ".##.",
+    ".##.",
+    ".##.",
+    "....",
+    ".##.",
+    ".##.",
+  ],
+  Z: [
+    "######",
+    "######",
+    "....##",
+    "..##..",
+    "##....",
+    "######",
+    "######",
+  ],
+  z: ["####", "..##", "##..", "####"],
 };
 
 function blankFrame(): Uint8Array {
@@ -89,17 +105,17 @@ function originFor(sprite: NativeSprite, dx: number, dy: number): { ox: number; 
 function frameOffsets(state: SpriteState, i: number): { dx: number; dy: number; dim: number } {
   switch (state) {
     case "idle":
-      return { dx: 0, dy: [0, -1, 0, -1][i] ?? 0, dim: 1 };
+      return { dx: 0, dy: [0, -2, 0, -2][i] ?? 0, dim: 1 };
     case "working":
-      return { dx: [0, 1, 0, -1][i] ?? 0, dy: [0, -2, 0, -1][i] ?? 0, dim: 1 };
+      return { dx: [0, 2, 0, -2][i] ?? 0, dy: [0, -3, 0, -2][i] ?? 0, dim: 1 };
     case "thinking":
-      return { dx: [0, 1, 0, -1][i] ?? 0, dy: [0, -1, 0, 0][i] ?? 0, dim: 1 };
+      return { dx: [0, 2, 0, -2][i] ?? 0, dy: [0, -1, 0, 0][i] ?? 0, dim: 1 };
     case "done":
-      return { dx: 0, dy: [0, -3, -1, 0][i] ?? 0, dim: 1 };
+      return { dx: 0, dy: [0, -4, -2, 0][i] ?? 0, dim: 1 };
     case "error":
-      return { dx: [0, -1, 1, 0][i] ?? 0, dy: 0, dim: 1 };
+      return { dx: [0, -2, 2, 0][i] ?? 0, dy: 0, dim: 1 };
     case "sleeping":
-      return { dx: 0, dy: [2, 2, 1, 2][i] ?? 2, dim: 0.72 };
+      return { dx: 0, dy: [3, 3, 2, 3][i] ?? 3, dim: 0.7 };
     default:
       return { dx: 0, dy: 0, dim: 1 };
   }
@@ -107,22 +123,22 @@ function frameOffsets(state: SpriteState, i: number): { dx: number; dy: number; 
 
 function paintOverlay(dest: Uint8Array, state: SpriteState, i: number): void {
   if (state === "error") {
-    drawGlyph(dest, "!", 24, 3, { r: 255, g: 220, b: 64, a: 255 });
+    drawGlyph(dest, "!", 26, 2, { r: 255, g: 220, b: 64, a: 255 });
     return;
   }
   if (state === "sleeping") {
-    const zColor = { r: 210, g: 230, b: 255, a: 230 };
+    const zColor = { r: 230, g: 240, b: 255, a: 240 };
     if (i === 0) {
-      drawGlyph(dest, "Z", 22, 2, zColor);
-    } else if (i === 1) {
-      drawGlyph(dest, "Z", 21, 2, zColor);
-      drawGlyph(dest, "z", 26, 6, zColor);
-    } else if (i === 2) {
       drawGlyph(dest, "Z", 20, 1, zColor);
-      drawGlyph(dest, "z", 25, 5, zColor);
-      drawGlyph(dest, "z", 28, 8, { ...zColor, a: 180 });
+    } else if (i === 1) {
+      drawGlyph(dest, "Z", 18, 0, zColor);
+      drawGlyph(dest, "z", 25, 6, zColor);
+    } else if (i === 2) {
+      drawGlyph(dest, "Z", 17, 0, zColor);
+      drawGlyph(dest, "z", 24, 5, zColor);
+      drawGlyph(dest, "z", 27, 9, { ...zColor, a: 190 });
     } else {
-      drawGlyph(dest, "z", 24, 4, zColor);
+      drawGlyph(dest, "z", 22, 3, zColor);
     }
   }
 }
