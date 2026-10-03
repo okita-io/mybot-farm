@@ -82,8 +82,9 @@ files. Do not add a `POST /state` the Desktop renderer cannot call.
 | Plant scene (`world.json`, `WORLD.md`, assets) | data-contract | yes |
 | Dashboard + Desktop scene panes | data-contract view model | yes |
 | User roster (`worlds/roster/v1`) | data-contract Layer 2b+ | yes |
+| Profile join + sprite titles (`profile.yaml`) | todo 1 | yes (Desktop) |
 | `state.json` moves | conformance row 2 | no — [todo 3](./hermes/implementation-todos.md) |
-| Click-to-chat bubble | todo 2 | no |
+| Click-to-chat bubble | todo 2 | yes (Desktop) |
 | `chatId` in state from plant | todo 4 | no |
 | Turn routing beyond `defer` | parity Phase 2 | no |
 | Ambient opt-in | parity Phase 4 | no |

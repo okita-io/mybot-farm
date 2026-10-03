@@ -30,7 +30,7 @@ source, not from a live click in Desktop.
 
 ## Todo
 
-- [ ] **1. Read `profile.yaml` for the sprite's title.** The roster already
+- [x] **1. Read `profile.yaml` for the sprite's title.** The roster already
   stores the profile directory name, and the page already lists
   `$HERMES_HOME/profiles` through `readDir`. It does not read
   `profile.yaml`. The dashboard join (`_resolve_profile`) still matters for
@@ -39,9 +39,10 @@ source, not from a live click in Desktop.
   title equals name. Read that file with `readFileText`. No match means the
   label stays the directory name. Do not call `/api/profiles`.
 
-- [ ] **2. Click a character, show the last chat in a bubble, send a new
-  line.** Sprites are not buttons today (`Sprite` in `desktop/plugin.js`
-  has no `onClick`). KiroCrew does not do this either.
+- [x] **2. Click a character, show the last chat in a bubble, send a new
+  line.** Implemented in `desktop/plugin.js` (`Sprite` `onClick`, stage
+  bubble, `session.list` / `history` / `prompt.submit`). KiroCrew does not
+  have this yet.
   - Build the bubble in the page. `host.openSession` navigates
     (`in-place`, `main`, `stack`, `tab`, `window`). It is not a bubble on
     the sprite. The bot forever-chat is hidden from `$sessions`;
@@ -128,6 +129,14 @@ The dashboard pane reads the same file. It does not add or remove.
 
 ## Already done (do not rebuild)
 
+- Desktop reads `profile.yaml` for `ui_meta.hermes-bots.title`, joins pack
+  cast to profiles (same order as the dashboard), and shows the title on
+  sprites. Roster members always use their profile directory name as
+  `profileName`.
+- Click a joined sprite opens a Bot Chat bubble on the stage (last messages +
+  send). Uses `host.ensureAgent`, `session.list` with `title: "Bot Chat"`,
+  `session.create` when missing, `session.history`, and `prompt.submit` with
+  `profile` on every call. No `fetch` to port 9119.
 - Desktop and dashboard draw places, backdrop, place art, avatars, and the
   greeter star from planted files.
 - Desktop reads through `window.hermesDesktop` (`readDir`, `readFileText`,

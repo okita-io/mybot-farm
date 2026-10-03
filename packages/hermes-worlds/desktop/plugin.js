@@ -18,7 +18,8 @@
  * readFileDataUrl). The dashboard at 127.0.0.1:9119 is cross-origin to this
  * renderer, so the page never fetches it. On bridge failure the page shows
  * an error, never a roster of profiles. Missing images are omitted.
- * No session pulse: the desktop SDK exposes no sessions query.
+ * Profile join reads profile.yaml through the file bridge. Click a sprite to
+ * open that agent's Bot Chat in a bubble (session.list / history / submit).
  */
 
 import {
@@ -35,6 +36,7 @@ const ROUTE = '/hermes-worlds'
 const POLL_MS = 15000
 const WORLD_SCHEMA = 'worlds/v1'
 const STATE_SCHEMA = 'worlds/state/v1'
+const BOT_CHAT_TITLE = 'Bot Chat'
 
 // ---------------------------------------------------------------------------
 // Data: the Desktop file bridge (window.hermesDesktop preload)
@@ -160,6 +162,89 @@ async function readRoster(worldDir) {
   return data.members
 }
 
+/** Minimal profile.yaml parse — ui_meta.hermes-bots.title only (no PyYAML). */
+function parseProfileYaml(text) {
+  if (!text || typeof text !== 'string') return { botTitle: null }
+  let botTitle = null
+  let inBots = false
+  let botsIndent = 0
+  for (const line of text.split('\n')) {
+    if (/^\s*hermes-bots:\s*(\{\}|)?\s*$/.test(line)) {
+      inBots = true
+      botsIndent = (line.match(/^(\s*)/) || ['', ''])[1].length
+      continue
+    }
+    if (!inBots) continue
+    const indent = (line.match(/^(\s*)/) || ['', ''])[1].length
+    if (line.trim() && !line.trim().startsWith('#') && indent <= botsIndent) {
+      inBots = false
+      continue
+    }
+    const tm = line.match(/^\s*title:\s*(.+?)\s*$/)
+    if (tm) {
+      botTitle = tm[1].replace(/^['"]|['"]$/g, '').trim()
+    }
+  }
+  return { botTitle: botTitle || null }
+}
+
+async function readProfileMeta(profileDir) {
+  const res = await bridge().readFileText(profileDir + '/profile.yaml')
+  if (!res || res.ok === false || res.truncated) return { botTitle: null }
+  return parseProfileYaml(res.text)
+}
+
+/**
+ * Index profile dirs + hermes-bots titles for cast join (mirrors
+ * dashboard/plugin_api.py _profile_names + _hermes_bots_titles).
+ */
+async function buildProfileIndex(profilesRoot) {
+  const byDir = {}
+  const byTitle = {}
+  const meta = {}
+  if (!profilesRoot) return { byDir, byTitle, meta }
+  const dir = await bridge().readDir(profilesRoot)
+  const entries = (dir && dir.entries) || []
+  for (const entry of entries) {
+    if (!entry.isDirectory) continue
+    const name = entry.name
+    if (!name || name.charAt(0) === '.' || name.indexOf('/') !== -1) continue
+    byDir[name.toLowerCase()] = name
+    const parsed = await readProfileMeta(entry.path)
+    meta[name] = parsed
+    if (parsed.botTitle) byTitle[parsed.botTitle.toLowerCase()] = name
+  }
+  return { byDir, byTitle, meta }
+}
+
+function resolveProfileName(castName, castRole, castId, index, rosterOwned) {
+  if (rosterOwned) return castId
+  const { byDir, byTitle } = index
+  if (castName && byDir[castName.toLowerCase()]) return byDir[castName.toLowerCase()]
+  for (const key of [castRole, castName, castId]) {
+    if (key && byTitle[key.toLowerCase()]) return byTitle[key.toLowerCase()]
+  }
+  return null
+}
+
+function displayNameFor(profileName, fallbackName, index) {
+  if (profileName && index.meta[profileName] && index.meta[profileName].botTitle) {
+    return index.meta[profileName].botTitle
+  }
+  return fallbackName || profileName || ''
+}
+
+async function enrichCast(cast, profilesRoot, rosterOwned) {
+  const index = await buildProfileIndex(profilesRoot)
+  return cast.map(c => {
+    const profileName =
+      c.profileName ||
+      resolveProfileName(c.name, c.role || c.id, c.id, index, rosterOwned)
+    const name = displayNameFor(profileName, c.name || c.id, index)
+    return { ...c, name, profileName: profileName || null }
+  })
+}
+
 async function writeRoster(worldDir, members) {
   const b = bridge()
   if (!b || typeof b.writeTextFile !== 'function') {
@@ -204,6 +289,7 @@ async function readWorld(id) {
     const charId = item.id || role
     cast.push({
       id: role || charId,
+      role: role || charId,
       name: item.name || charId,
       home: item.home,
       avatar: item.avatar || null,
@@ -292,7 +378,8 @@ async function readWorld(id) {
         isGreeter: false,
         memoryScope: null,
         capabilities: [],
-        relationships: {}
+        relationships: {},
+        profileName: profile
       })
       where[profile] = item.place
     }
@@ -302,6 +389,9 @@ async function readWorld(id) {
       recent: state.recent || []
     }
   }
+
+  const profilesRoot = profilesRootFromWorlds(await getWorldsRoot())
+  shownCast = await enrichCast(shownCast, profilesRoot, rosterOwned)
 
   return {
     id: world.id || id,
@@ -541,17 +631,120 @@ const NOTE = {
   borderRadius: 8,
   padding: '6px 10px'
 }
+const BUBBLE = {
+  position: 'absolute',
+  left: 12,
+  right: 12,
+  bottom: 88,
+  maxHeight: 160,
+  overflow: 'auto',
+  borderRadius: 10,
+  border: '1px solid var(--color-border, #444)',
+  background: 'rgba(8, 12, 24, 0.92)',
+  padding: '10px 12px',
+  fontSize: 12,
+  zIndex: 4,
+  boxShadow: '0 8px 24px rgba(0,0,0,0.45)'
+}
+const BUBBLE_MSG = { marginBottom: 6, lineHeight: 1.35, whiteSpace: 'pre-wrap' }
+const BUBBLE_INPUT = {
+  width: '100%',
+  marginTop: 8,
+  padding: '6px 8px',
+  borderRadius: 6,
+  border: '1px solid var(--color-border, #444)',
+  background: 'rgba(0,0,0,0.35)',
+  color: 'inherit',
+  fontFamily: 'inherit',
+  fontSize: 12
+}
+
+function messageText(msg) {
+  if (!msg || typeof msg !== 'object') return ''
+  const c = msg.content
+  if (typeof c === 'string') return c
+  if (Array.isArray(c)) {
+    return c
+      .map(part => (part && typeof part === 'object' && typeof part.text === 'string' ? part.text : ''))
+      .join('')
+  }
+  return ''
+}
+
+function previewMessages(messages) {
+  if (!Array.isArray(messages)) return []
+  const rows = []
+  for (const msg of messages) {
+    const role = msg && msg.role
+    if (role !== 'user' && role !== 'assistant') continue
+    const text = messageText(msg).trim()
+    if (!text) continue
+    rows.push({ role, text })
+  }
+  return rows.slice(-6)
+}
+
+async function ensureBotChatSession(profile) {
+  if (typeof host.ensureAgent === 'function') {
+    await host.ensureAgent(null, profile)
+  }
+  const listed = await host.request('session.list', {
+    profile,
+    title: BOT_CHAT_TITLE
+  })
+  const sessions = (listed && listed.sessions) || []
+  if (sessions.length) {
+    const row = sessions[0]
+    return row.resolved_id || row.id
+  }
+  const created = await host.request('session.create', {
+    profile,
+    title: BOT_CHAT_TITLE,
+    hidden: true
+  })
+  if (!created || !created.session_id) {
+    throw new Error('Could not open Bot Chat for this agent')
+  }
+  return created.session_id
+}
+
+async function loadBotChatHistory(sessionId, profile) {
+  const hist = await host.request('session.history', {
+    session_id: sessionId,
+    profile
+  })
+  return previewMessages((hist && hist.messages) || [])
+}
+
+async function submitBotChatLine(sessionId, profile, text) {
+  await host.request('prompt.submit', {
+    session_id: sessionId,
+    profile,
+    text
+  })
+}
 
 // ---------------------------------------------------------------------------
 // Sprite
 // ---------------------------------------------------------------------------
 
-function Sprite({ c, worldDir }) {
+function Sprite({ c, worldDir, selected, onSelect }) {
   const avatar = useAsset(c.avatar, worldDir)
   const name = c.name || c.id
+  const canChat = !!(c.profileName && typeof host.request === 'function')
+  const spriteStyle = {
+    ...SPRITE,
+    pointerEvents: canChat ? 'auto' : 'none',
+    cursor: canChat ? 'pointer' : 'default',
+    opacity: selected ? 1 : canChat ? 0.95 : 1,
+    transform: selected ? 'translateY(-4px)' : undefined
+  }
   return jsxs('div', {
-    style: SPRITE,
-    title: `${name} (role: ${c.id})`,
+    style: spriteStyle,
+    title: canChat
+      ? `${name} — click to chat`
+      : `${name} (no profile join)`,
+    onClick: canChat ? () => onSelect(c) : undefined,
     children: [
       jsxs('div', {
         style: SPRITE_CIRCLE,
@@ -584,6 +777,8 @@ function WorldsPage() {
   const [profiles, setProfiles] = useState([])
   const [pick, setPick] = useState('')
   const [rosterNote, setRosterNote] = useState(null)
+  const [chat, setChat] = useState(null)
+  const [chatDraft, setChatDraft] = useState('')
   const selRef = useRef(null)
 
   function loadView(target, freshList) {
@@ -603,7 +798,69 @@ function WorldsPage() {
     selRef.current = id
     setSelectedId(id)
     setViewPlace(null) // a place tab from world A must not stick on world B
+    setChat(null)
+    setChatDraft('')
     loadView(id, null)
+  }
+
+  async function openChat(c) {
+    const profile = c.profileName
+    if (!profile || typeof host.request !== 'function') return
+    setChat({
+      castId: c.id,
+      profile,
+      name: c.name || c.id,
+      sessionId: null,
+      messages: [],
+      loading: true,
+      sending: false,
+      error: null
+    })
+    setChatDraft('')
+    try {
+      const sessionId = await ensureBotChatSession(profile)
+      const messages = await loadBotChatHistory(sessionId, profile)
+      setChat({
+        castId: c.id,
+        profile,
+        name: c.name || c.id,
+        sessionId,
+        messages,
+        loading: false,
+        sending: false,
+        error: null
+      })
+    } catch (err) {
+      setChat({
+        castId: c.id,
+        profile,
+        name: c.name || c.id,
+        sessionId: null,
+        messages: [],
+        loading: false,
+        sending: false,
+        error: String((err && err.message) || err)
+      })
+    }
+  }
+
+  async function sendChatLine() {
+    if (!chat || !chat.sessionId || chat.sending) return
+    const text = chatDraft.trim()
+    if (!text) return
+    setChat(prev => ({ ...prev, sending: true, error: null }))
+    try {
+      await submitBotChatLine(chat.sessionId, chat.profile, text)
+      const messages = await loadBotChatHistory(chat.sessionId, chat.profile)
+      setChat(prev => ({ ...prev, messages, sending: false }))
+      setChatDraft('')
+    } catch (err) {
+      setChat(prev => ({
+        ...prev,
+        sending: false,
+        error: String((err && err.message) || err)
+      }))
+    }
   }
 
   useEffect(() => {
@@ -846,9 +1103,87 @@ function WorldsPage() {
           backdrop ? jsx('img', { src: backdrop, alt: '', style: COVER_IMG }) : null,
           placeArt ? jsx('img', { src: placeArt, alt: 'place', style: COVER_IMG }) : null,
           capNote ? jsx('div', { style: CAP_NOTE, children: capNote }) : null,
+          chat
+            ? jsxs('div', {
+                style: BUBBLE,
+                children: [
+                  jsxs('div', {
+                    style: {
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: 6
+                    },
+                    children: [
+                      jsx('strong', { children: chat.name }),
+                      jsx('button', {
+                        type: 'button',
+                        style: CHIP,
+                        onClick: () => {
+                          setChat(null)
+                          setChatDraft('')
+                        },
+                        children: 'Close'
+                      })
+                    ]
+                  }),
+                  chat.loading
+                    ? jsx('div', { style: MUTED, children: 'Loading chat…' })
+                    : null,
+                  chat.error
+                    ? jsx('div', { style: { color: '#f88', marginBottom: 6 }, children: chat.error })
+                    : null,
+                  !chat.loading && !chat.messages.length && !chat.error
+                    ? jsx('div', { style: MUTED, children: 'No messages yet.' })
+                    : null,
+                  chat.messages.map((m, i) =>
+                    jsx('div', {
+                      key: i,
+                      style: BUBBLE_MSG,
+                      children: `${m.role === 'user' ? 'You' : chat.name}: ${m.text}`
+                    })
+                  ),
+                  chat.sessionId
+                    ? jsxs('div', {
+                        children: [
+                          jsx('input', {
+                            type: 'text',
+                            value: chatDraft,
+                            disabled: chat.sending,
+                            placeholder: 'Say something…',
+                            style: BUBBLE_INPUT,
+                            onChange: e => setChatDraft(e.target.value),
+                            onKeyDown: e => {
+                              if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault()
+                                sendChatLine()
+                              }
+                            }
+                          }),
+                          jsx('button', {
+                            type: 'button',
+                            style: { ...CHIP_ACTIVE, marginTop: 6 },
+                            disabled: chat.sending || !chatDraft.trim(),
+                            onClick: sendChatLine,
+                            children: chat.sending ? 'Sending…' : 'Send'
+                          })
+                        ]
+                      })
+                    : null
+                ]
+              })
+            : null,
           jsx('div', {
             style: SPRITE_ROW,
-            children: visible.map(c => jsx(Sprite, { key: c.id, c: c, worldDir: worldDir }))
+            children: visible.map(c =>
+              jsx(Sprite, {
+                key: c.id,
+                c: c,
+                worldDir: worldDir,
+                selected: chat && chat.castId === c.id,
+                onSelect: openChat
+              })
+            )
           })
         ]
       }),

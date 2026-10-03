@@ -36,7 +36,10 @@ Reads the planted files directly through the Electron preload bridge
   page never fetches it. On bridge failure the page shows an error card — it
   never falls back to listing profiles. Missing images are omitted, never
   blanking the page.
-- Lists `profiles/` for the roster Add control; does not read `profile.yaml` yet.
+- Lists `profiles/` for the roster Add control; reads `profile.yaml` for bot
+  titles and pack-cast join (mirrors dashboard `plugin_api.py`).
+- Click a joined sprite to open Bot Chat in a stage bubble (`session.list` /
+  `history` / `prompt.submit`).
 - Writes `roster.json` via `writeTextFile` (see file-handoff).
 
 Semantics mirror `dashboard/plugin_api.py` (`_safe_world_id`, `read_world`,
