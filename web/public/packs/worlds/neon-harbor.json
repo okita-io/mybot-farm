@@ -8,21 +8,10 @@
   "profile": {
     "name": "Neon Harbor",
     "title": "A cyberpunk-cozy harbor town your agents live in",
-    "description": "Patch and Probe embodied as dockside characters in a shared scene. Installs as a plain Pair Bench team in Hermes or KiroCrew; the world layer themes the room and gives each character a place to stand.",
+    "description": "An empty harbor you fill with agents you already have. The docks and the workshop are the stage; nothing stands there until you add someone.",
     "avatar": { "kind": "geometric", "shape": "capsule", "color": "cyan" }
   },
-  "members": [
-    {
-      "role": "harbor-engineer",
-      "summary": "Patch, embodied as the harbor's fix-it engineer. Writes small diffs and lands them.",
-      "pack": "agents/patch.json"
-    },
-    {
-      "role": "night-watch",
-      "summary": "Probe, embodied as the night-watch who reproduces faults and verifies the fix before the tide turns.",
-      "pack": "agents/probe.json"
-    }
-  ],
+  "members": [],
   "topology": {
     "kind": "pair",
     "handoffs": [
@@ -34,10 +23,10 @@
     "memory": [
       {
         "kind": "profile",
-        "content": "Neon Harbor: nothing ships until the Night Watch (or the harbor-master, i.e. the user) confirms the verify path. Characters speak in the shared dock scene; wait for an @mention unless you are the greeter."
+        "content": "Neon Harbor is an empty stage. Add agents you already have. They speak in the place you assign; the harbor does not ship a cast."
       }
     ],
-    "gettingStarted": "Install the Harbor Engineer and Night Watch into one group named Neon Harbor. Start fault reports with the Night Watch; start new builds with the Harbor Engineer."
+    "gettingStarted": "Plant the harbor, then add agents you already have from the Worlds page. The pack does not import a cast."
   },
   "world": {
     "schema": "worlds/v1",
@@ -54,43 +43,24 @@
         "name": "The Docks",
         "art": "assets/dock.webp",
         "connects": ["workshop"],
-        "present": ["harbor-engineer", "night-watch"]
+        "present": []
       },
       {
         "id": "workshop",
         "name": "The Workshop",
         "art": "assets/workshop.webp",
         "connects": ["dock"],
-        "present": ["harbor-engineer"]
+        "present": []
       }
     ],
-    "cast": [
-      {
-        "role": "harbor-engineer",
-        "name": "Patch",
-        "home": "workshop",
-        "avatar": "assets/patch-harbor.webp",
-        "memoryScope": "private",
-        "capabilities": ["web", "files"],
-        "relationships": { "night-watch": "trusted partner", "user": "harbor-master" }
-      },
-      {
-        "role": "night-watch",
-        "name": "Probe",
-        "home": "dock",
-        "avatar": "assets/probe-harbor.webp",
-        "memoryScope": "private",
-        "capabilities": ["web", "files"],
-        "relationships": { "harbor-engineer": "trusted partner", "user": "harbor-master" }
-      }
-    ],
+    "cast": [],
     "rules": {
       "turnModel": "defer",
       "handoff": "mention",
       "ambient": false,
       "maxPresent": 6
     },
-    "entrypoint": { "place": "dock", "greeter": "night-watch" },
+    "entrypoint": { "place": "dock" },
     "render": {
       "theme": "cyberpunk-cozy",
       "widgetHints": { "scenePanel": true, "showBackdrop": true }

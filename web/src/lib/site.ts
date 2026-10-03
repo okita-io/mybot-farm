@@ -85,7 +85,7 @@ export const openclawPlugin = {
 export const kirocrewPlugin = {
   id: "mybot-farm",
   packageName: "@okita-io/kirocrew-mybot-farm",
-  version: "0.1.0",
+  version: "0.2.0",
   gitInstall: "okita-io/mybot-farm/packages/kirocrew-mybot-farm",
 } as const;
 
@@ -283,7 +283,7 @@ export const faqs = [
   {
     question: "How do I plant a pack in KiroCrew?",
     answer:
-      "Install the mybot-farm plugin from the repo checkout at packages/kirocrew-mybot-farm (v0.1.0; there is no npm package yet). Then node bin/farm-plant.mjs plant <slug> writes ~/.kiro/agents/<name>.json plus steering files. A team slug also prints kirocrew workspace create / kirocrew agent create bind commands. Planted third-party agents get read, search, and web tools only. Full steps: /install/kirocrew.",
+      "Install the mybot-farm plugin from the repo checkout at packages/kirocrew-mybot-farm (v0.2.0; there is no npm package yet). Then node bin/farm-plant.mjs plant <slug> writes ~/.kiro/agents/<name>.json plus steering files. A team slug also prints kirocrew workspace create / kirocrew agent create bind commands. Planted third-party agents get read, search, and web tools only. Full steps: /install/kirocrew.",
   },
   {
     question: "How do I share my Hermes agent?",

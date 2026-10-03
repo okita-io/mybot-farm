@@ -5,9 +5,10 @@
 
 import { mkdir, writeFile, access, readFile, rm, readdir } from "node:fs/promises";
 import { constants } from "node:fs";
-import { join, dirname } from "node:path";
+import { join, dirname, resolve, sep } from "node:path";
 import { homedir } from "node:os";
-import { gafToKirocrewAgent, gafTeamToKirocrewCrew, slugifyName } from "./gaf-to-kirocrew.mjs";
+import { gafToKirocrewAgent, gafTeamToKirocrewCrew, gafWorldToKirocrewCrew, slugifyName } from "./gaf-to-kirocrew.mjs";
+import { farmBase } from "./farm-api.mjs";
 
 export function kiroHome() {
   return process.env.KIRO_HOME ?? join(homedir(), ".kiro");
@@ -110,6 +111,53 @@ export async function plantAgent(pack, opts = {}) {
   return plan;
 }
 
+/** Relative scene files a worlds/v1 block points at (backdrop, place art, avatars). */
+export function worldAssetRefs(world) {
+  const refs = [];
+  const push = (value) => {
+    if (typeof value !== "string") return;
+    const rel = value.trim().replace(/\\/g, "/");
+    if (!rel || rel.startsWith("/") || rel.includes("://") || rel.includes("\0")) return;
+    if (rel.split("/").includes("..")) return;
+    if (!refs.includes(rel)) refs.push(rel);
+  };
+  const theme = world?.theme && typeof world.theme === "object" ? world.theme : {};
+  push(theme.backdrop);
+  for (const place of Array.isArray(world?.places) ? world.places : []) push(place?.art);
+  for (const member of Array.isArray(world?.cast) ? world.cast : []) push(member?.avatar);
+  return refs;
+}
+
+async function fetchWorldAssets(world, slug, worldDir) {
+  const written = [];
+  const missing = [];
+  const root = resolve(worldDir);
+  for (const rel of worldAssetRefs(world)) {
+    const abs = resolve(root, rel);
+    if (abs !== root && !abs.startsWith(root + sep)) {
+      missing.push(rel);
+      continue;
+    }
+    const url = `${farmBase()}/packs/worlds/${encodeURIComponent(slug)}/${rel
+      .split("/")
+      .map(encodeURIComponent)
+      .join("/")}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        missing.push(rel);
+        continue;
+      }
+      await mkdir(dirname(abs), { recursive: true });
+      await writeFile(abs, Buffer.from(await response.arrayBuffer()));
+      written.push(rel);
+    } catch {
+      missing.push(rel);
+    }
+  }
+  return { written, missing };
+}
+
 /**
  * Plant a GAF team-pack as a KiroCrew crew.
  * @param {object} teamPack   GAF team-pack (has members[])
@@ -120,25 +168,32 @@ export async function plantAgent(pack, opts = {}) {
  */
 export async function plantTeam(teamPack, memberPacks, opts = {}) {
   const home = kiroHome();
-  const crew = gafTeamToKirocrewCrew(teamPack, memberPacks, { workspace: opts.workspace });
+  const hasWorld = teamPack.world && typeof teamPack.world === "object";
+  const crew = hasWorld
+    ? gafWorldToKirocrewCrew(teamPack, memberPacks, { workspace: opts.workspace })
+    : gafTeamToKirocrewCrew(teamPack, memberPacks, { workspace: opts.workspace });
 
   const agentPaths = [];
   const steeringPaths = [];
   const topologyDocPath = join(home, "steering", "farm", crew.teamSlug, "_crew.md");
   const sharedSteeringPath = crew.sharedSteering
     ? join(home, crew.sharedSteering.path.replace(/^\.kiro\//, "")) : null;
-  const worldJsonPath = teamPack.world && typeof teamPack.world === "object"
+  const worldDocPath = crew.worldDoc
+    ? join(home, crew.worldDoc.path.replace(/^\.kiro\//, "")) : null;
+  const worldJsonPath = hasWorld
     ? join(home, "steering", "farm", crew.teamSlug, "world.json")
     : null;
 
   const plan = {
     teamSlug: crew.teamSlug,
     workspace: crew.workspace,
+    kind: hasWorld ? "world" : "team",
     memberNames: crew.members.map((m) => m.name),
     agentPaths: [],
     steeringPaths: [],
     sharedSteeringPath,
     topologyDocPath,
+    worldDocPath,
     worldJsonPath,
     bindCommands: crew.bindCommands,
     notes: crew.notes,
@@ -180,8 +235,15 @@ export async function plantTeam(teamPack, memberPacks, opts = {}) {
   }
   await mkdir(dirname(topologyDocPath), { recursive: true });
   await writeFile(topologyDocPath, crew.topologyDoc, "utf8");
+  if (crew.worldDoc && worldDocPath) {
+    await mkdir(dirname(worldDocPath), { recursive: true });
+    await writeFile(worldDocPath, crew.worldDoc.content, "utf8");
+  }
   if (worldJsonPath) {
     await writeFile(worldJsonPath, JSON.stringify(teamPack.world, null, 2) + "\n", "utf8");
+    const assets = await fetchWorldAssets(teamPack.world, crew.teamSlug, dirname(worldJsonPath));
+    if (assets.written.length) plan.notes.push(`wrote world assets: ${assets.written.join(", ")}`);
+    if (assets.missing.length) plan.notes.push(`world assets not on the farm: ${assets.missing.join(", ")}`);
   }
 
   plan.wrote = true;

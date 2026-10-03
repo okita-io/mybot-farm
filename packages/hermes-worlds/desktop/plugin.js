@@ -18,7 +18,8 @@
  * readFileDataUrl). The dashboard at 127.0.0.1:9119 is cross-origin to this
  * renderer, so the page never fetches it. On bridge failure the page shows
  * an error, never a roster of profiles. Missing images are omitted.
- * No session pulse: the desktop SDK exposes no sessions query.
+ * Profile join reads profile.yaml through the file bridge. Click a sprite to
+ * open that agent's Bot Chat in a bubble (session.list / history / submit).
  */
 
 import {
@@ -35,6 +36,7 @@ const ROUTE = '/hermes-worlds'
 const POLL_MS = 15000
 const WORLD_SCHEMA = 'worlds/v1'
 const STATE_SCHEMA = 'worlds/state/v1'
+const BOT_CHAT_TITLE = 'Bot Chat'
 
 // ---------------------------------------------------------------------------
 // Data: the Desktop file bridge (window.hermesDesktop preload)
@@ -118,8 +120,278 @@ async function listWorlds() {
 /**
  * One world: the same object read_world returns, with art / backdrop /
  * avatar kept as relative path strings (no /api/plugins/... URLs).
- * No profile join — this plugin never scans profiles/.
+ * Occupancy is roster.json when that file exists. Otherwise the pack cast
+ * is shown (older plants). The page lists ~/.hermes/profiles so the user
+ * can add agents they already have.
  */
+const ROSTER_SCHEMA = 'worlds/roster/v1'
+
+function profilesRootFromWorlds(worldsRoot) {
+  const norm = String(worldsRoot || '').replace(/\/+$/, '')
+  if (!norm.endsWith('/worlds')) return null
+  return norm.slice(0, -'/worlds'.length) + '/profiles'
+}
+
+async function listProfiles(worldsRoot) {
+  const root = profilesRootFromWorlds(worldsRoot)
+  if (!root) return []
+  const dir = await bridge().readDir(root)
+  const entries = (dir && dir.entries) || []
+  const names = []
+  for (const entry of entries) {
+    if (!entry.isDirectory) continue
+    const name = entry.name
+    if (!name || name.charAt(0) === '.' || name.indexOf('/') !== -1) continue
+    names.push(name)
+  }
+  names.sort()
+  return names
+}
+
+/**
+ * List the sprite packs staged in a world (`assets/sprite-packs/*.sheet.json`,
+ * put there by the plant). Returns [{ name, path }] where `path` is the
+ * world-relative manifest path to write as a roster member's `sprite`.
+ */
+async function listSpritePacks(worldDir) {
+  const b = bridge()
+  if (!b) return []
+  const dir = await b.readDir(worldDir + '/assets/sprite-packs')
+  const entries = (dir && dir.entries) || []
+  const packs = []
+  for (const entry of entries) {
+    if (entry.isDirectory) continue
+    const n = entry.name
+    if (typeof n !== 'string' || !n.endsWith('.sheet.json')) continue
+    packs.push({ name: n.replace(/\.sheet\.json$/, ''), path: 'assets/sprite-packs/' + n })
+  }
+  packs.sort((a, b2) => (a.name < b2.name ? -1 : a.name > b2.name ? 1 : 0))
+  return packs
+}
+
+async function readRoster(worldDir) {
+  const res = await bridge().readFileText(worldDir + '/roster.json')
+  if (!res || res.ok === false) return null
+  if (res.truncated) return null
+  let data
+  try {
+    data = JSON.parse(res.text)
+  } catch {
+    return null
+  }
+  if (!data || data.schema !== ROSTER_SCHEMA || !Array.isArray(data.members)) return null
+  return data.members
+}
+
+/**
+ * Minimal profile.yaml parse — `ui_meta.hermes-bots.title` only (no PyYAML).
+ *
+ * This MUST agree with the dashboard's PyYAML read (`_hermes_bots_titles` in
+ * dashboard/plugin_api.py), which resolves the full `ui_meta: -> hermes-bots:
+ * -> title:` path. So this walker is path-aware, not a flat "last title: wins"
+ * scan (G1): it enters `hermes-bots:` only while already inside `ui_meta:`, and
+ * accepts `title:` ONLY as a direct child of `hermes-bots:` (exactly one indent
+ * step in). A deeper nested mapping that carries its own `title:` — e.g.
+ * `hermes-bots.theme.title` — is ignored, so it can no longer clobber the real
+ * bot title. First direct-child `title:` wins; later siblings do not override.
+ */
+function indentOf(line) {
+  return (line.match(/^(\s*)/) || ['', ''])[1].length
+}
+
+function parseProfileYaml(text) {
+  if (!text || typeof text !== 'string') return { botTitle: null }
+  let botTitle = null
+  let inUiMeta = false
+  let uiMetaIndent = -1
+  let inBots = false
+  let botsIndent = -1
+  let botsChildIndent = -1 // the one indent level whose title: we accept
+  for (const line of text.split('\n')) {
+    if (!line.trim() || line.trim().startsWith('#')) continue
+    const indent = indentOf(line)
+
+    // Leaving a block the moment a line de-indents to or past its key.
+    if (inBots && indent <= botsIndent) {
+      inBots = false
+      botsChildIndent = -1
+    }
+    if (inUiMeta && indent <= uiMetaIndent) {
+      inUiMeta = false
+    }
+
+    if (!inUiMeta && /^\s*ui_meta:\s*(\{\}|)?\s*$/.test(line)) {
+      inUiMeta = true
+      uiMetaIndent = indent
+      inBots = false
+      botsChildIndent = -1
+      continue
+    }
+    if (inUiMeta && !inBots && indent > uiMetaIndent &&
+        /^\s*hermes-bots:\s*(\{\}|)?\s*$/.test(line)) {
+      inBots = true
+      botsIndent = indent
+      botsChildIndent = -1
+      continue
+    }
+    if (!inBots) continue
+
+    // Pin the direct-child indent on the first key seen inside hermes-bots;
+    // only that depth's `title:` counts. Deeper keys (a nested mapping) are
+    // skipped so they cannot overwrite the real title.
+    if (botsChildIndent === -1 && indent > botsIndent) {
+      botsChildIndent = indent
+    }
+    if (indent !== botsChildIndent) continue
+
+    const tm = line.match(/^\s*title:\s*(.+?)\s*$/)
+    if (tm && botTitle === null) {
+      botTitle = tm[1].replace(/^['"]|['"]$/g, '').trim()
+    }
+  }
+  return { botTitle: botTitle || null }
+}
+
+async function readProfileMeta(profileDir) {
+  const res = await bridge().readFileText(profileDir + '/profile.yaml')
+  if (!res || res.ok === false || res.truncated) return { botTitle: null }
+  return parseProfileYaml(res.text)
+}
+
+/**
+ * Index profile dirs + hermes-bots titles for cast join (mirrors
+ * dashboard/plugin_api.py _profile_names + _hermes_bots_titles).
+ */
+async function buildProfileIndex(profilesRoot) {
+  const byDir = {}
+  const byTitle = {}
+  const meta = {}
+  if (!profilesRoot) return { byDir, byTitle, meta }
+  const dir = await bridge().readDir(profilesRoot)
+  const entries = (dir && dir.entries) || []
+  for (const entry of entries) {
+    if (!entry.isDirectory) continue
+    const name = entry.name
+    if (!name || name.charAt(0) === '.' || name.indexOf('/') !== -1) continue
+    byDir[name.toLowerCase()] = name
+    const parsed = await readProfileMeta(entry.path)
+    meta[name] = parsed
+    if (parsed.botTitle) byTitle[parsed.botTitle.toLowerCase()] = name
+  }
+  return { byDir, byTitle, meta }
+}
+
+function resolveProfileName(castName, castRole, castId, index, rosterOwned) {
+  if (rosterOwned) return castId
+  const { byDir, byTitle } = index
+  if (castName && byDir[castName.toLowerCase()]) return byDir[castName.toLowerCase()]
+  for (const key of [castRole, castName, castId]) {
+    if (key && byTitle[key.toLowerCase()]) return byTitle[key.toLowerCase()]
+  }
+  return null
+}
+
+function displayNameFor(profileName, fallbackName, index) {
+  if (profileName && index.meta[profileName] && index.meta[profileName].botTitle) {
+    return index.meta[profileName].botTitle
+  }
+  return fallbackName || profileName || ''
+}
+
+async function enrichCast(cast, profilesRoot, rosterOwned) {
+  const index = await buildProfileIndex(profilesRoot)
+  return cast.map(c => {
+    const profileName =
+      c.profileName ||
+      resolveProfileName(c.name, c.role || c.id, c.id, index, rosterOwned)
+    const name = displayNameFor(profileName, c.name || c.id, index)
+    return { ...c, name, profileName: profileName || null }
+  })
+}
+
+async function writeRoster(worldDir, members) {
+  const b = bridge()
+  if (!b || typeof b.writeTextFile !== 'function') {
+    throw new Error('This Desktop build cannot save the roster')
+  }
+  const body =
+    JSON.stringify({ schema: ROSTER_SCHEMA, members: members }, null, 2) + '\n'
+  await b.writeTextFile(worldDir + '/roster.json', body)
+}
+
+/**
+ * Read the raw state.json for a world, or null when it is absent / unreadable
+ * / the wrong schema. This returns the WHOLE parsed object (not the reshaped
+ * `state` view readWorld builds), so a writer can merge onto it and preserve
+ * fields this pane does not own — `recent`, the `chatId` todo 4 adds, and any
+ * future key (G7). A read failure returns null so the writer starts from a
+ * clean default rather than throwing.
+ */
+async function readRawState(worldDir) {
+  const b = bridge()
+  if (!b) return null
+  const sres = await b.readFileText(worldDir + '/state.json')
+  if (!sres || sres.ok === false || sres.truncated || sres.text == null) return null
+  let data
+  try {
+    data = JSON.parse(sres.text)
+  } catch {
+    return null
+  }
+  if (!data || typeof data !== 'object' || data.schema !== STATE_SCHEMA) return null
+  return data
+}
+
+/**
+ * Merge `patch` onto the current state.json and persist it (todo 3 + G7).
+ *
+ * Read-modify-write: start from the existing file (readRawState) so `place`,
+ * `recent`, `chatId`, and any key this pane does not know are preserved; only
+ * the keys in `patch` change. `where` is replaced wholesale by the caller
+ * (it hands a complete map), everything else is kept.
+ *
+ * Write door: the desktop preload exposes `writeTextFile` (in-place) and a
+ * `renamePath` that REFUSES to overwrite an existing file (hermes:fs:rename
+ * throws "...already exists"), and no unlink. So the tmp-write + rename-over
+ * dance the handoff sketched is not actually available through this bridge —
+ * rename cannot clobber the live state.json. We therefore write in place with
+ * a single `writeTextFile` call: state.json is a small (<1 MB) document and
+ * the main process writes it with one `fs.promises.writeFile`, so a reader
+ * never sees a half-file at this size. If a future bridge adds an atomic
+ * replace, swap it in here — callers do not change.
+ */
+async function writeState(worldDir, patch) {
+  const b = bridge()
+  if (!b || typeof b.writeTextFile !== 'function') {
+    throw new Error('This Desktop build cannot save world state')
+  }
+  const prior = (await readRawState(worldDir)) || {}
+  const next = { ...prior, ...patch, schema: STATE_SCHEMA }
+  const body = JSON.stringify(next, null, 2) + '\n'
+  await b.writeTextFile(worldDir + '/state.json', body)
+  return next
+}
+
+const RECENT_MAX = 20
+
+/**
+ * Move one character to a place and persist it (todo 3). `where` is the
+ * authoritative presence map the scene reads; we rewrite it with the single
+ * changed entry and append a bounded `recent[]` event so the move shows in the
+ * world's own log. `place` (the active view), `chatId`, and other fields are
+ * preserved by writeState. No-op when the character is already there.
+ */
+async function moveCharacter(worldDir, currentWhere, castId, placeId) {
+  if (!castId || !placeId) return null
+  const where = { ...(currentWhere || {}) }
+  if (where[castId] === placeId) return null
+  where[castId] = placeId
+  const prior = (await readRawState(worldDir)) || {}
+  const recent = Array.isArray(prior.recent) ? prior.recent.slice() : []
+  recent.push({ t: Date.now(), kind: 'move', who: castId, place: placeId })
+  return writeState(worldDir, { where, recent: recent.slice(-RECENT_MAX) })
+}
+
 async function readWorld(id) {
   if (!isValidWorldId(id)) throw new Error('invalid world id')
   const worldDir = (await getWorldsRoot()) + '/' + id
@@ -154,9 +426,11 @@ async function readWorld(id) {
     const charId = item.id || role
     cast.push({
       id: role || charId,
+      role: role || charId,
       name: item.name || charId,
       home: item.home,
       avatar: item.avatar || null,
+      sprite: typeof item.sprite === 'string' ? item.sprite : null,
       isGreeter: !!(role && role === greeter),
       memoryScope: item.memoryScope,
       capabilities: item.capabilities || [],
@@ -220,17 +494,57 @@ async function readWorld(id) {
   const rules = world.rules || {}
   const render = world.render || {}
 
+  const rosterMembers = await readRoster(worldDir)
+  let shownCast = cast
+  let rosterOwned = false
+  if (rosterMembers) {
+    rosterOwned = true
+    const placeIds = places.map(p => p.id)
+    shownCast = []
+    const where = {}
+    const seen = {}
+    for (const item of rosterMembers) {
+      if (!item || typeof item.profile !== 'string') continue
+      const profile = item.profile.trim()
+      if (!profile || seen[profile] || placeIds.indexOf(item.place) === -1) continue
+      seen[profile] = true
+      shownCast.push({
+        id: profile,
+        name: profile,
+        home: item.place,
+        avatar: null,
+        sprite: typeof item.sprite === 'string' ? item.sprite : null,
+        isGreeter: false,
+        memoryScope: null,
+        capabilities: [],
+        relationships: {},
+        profileName: profile
+      })
+      where[profile] = item.place
+    }
+    state = {
+      place: state.place,
+      where: where,
+      recent: state.recent || []
+    }
+  }
+
+  const profilesRoot = profilesRootFromWorlds(await getWorldsRoot())
+  shownCast = await enrichCast(shownCast, profilesRoot, rosterOwned)
+
   return {
     id: world.id || id,
     title: title,
-    entrypoint: { place: entrypoint.place, greeter: greeter },
+    worldDir: worldDir,
+    rosterOwned: rosterOwned,
+    entrypoint: { place: entrypoint.place, greeter: rosterOwned ? null : greeter },
     theme: {
       palette: theme.palette,
       backdrop: theme.backdrop || null,
       mood: theme.mood
     },
     places: places,
-    cast: cast,
+    cast: shownCast,
     state: state,
     rules: {
       turnModel: rules.turnModel,
@@ -313,6 +627,59 @@ function useAsset(rel, worldDir) {
   }, [abs, remote])
 
   return src
+}
+
+// ---------------------------------------------------------------------------
+// Animated sprite sheet (agent-sprites): cast[].sprite -> a .sheet.json
+// manifest ({ frameW, frameH, sheet, states.{idle,…}.{row,frames,fps,loop} })
+// beside a strip PNG. We render the `idle` row as a CSS steps() animation over
+// background-position. Falls back (null) to the static avatar when absent.
+// ---------------------------------------------------------------------------
+
+const spriteManifestCache = new Map()
+
+function useSpriteSheet(rel, worldDir) {
+  const manifestAbs = !isRemoteUrl(rel) && worldDir ? resolveAssetPath(rel, worldDir) : null
+  const [manifest, setManifest] = useState(null)
+
+  useEffect(() => {
+    let alive = true
+    const b = bridge()
+    if (!b || !manifestAbs) {
+      setManifest(null)
+      return () => { alive = false }
+    }
+    const load = async () => {
+      let entry = spriteManifestCache.get(manifestAbs)
+      if (!entry) {
+        entry = Promise.resolve(b.readFileText(manifestAbs))
+          .then(r => {
+            if (!r || r.ok === false || r.truncated || r.text == null) return null
+            try {
+              const m = JSON.parse(r.text)
+              if (!m || typeof m !== 'object' || !m.sheet || !m.states) return null
+              return m
+            } catch { return null }
+          })
+          .catch(() => null)
+        spriteManifestCache.set(manifestAbs, entry)
+      }
+      const m = await entry
+      if (m == null) spriteManifestCache.delete(manifestAbs) // retry later (planted after)
+      if (alive) setManifest(m)
+    }
+    load()
+    return () => { alive = false }
+  }, [manifestAbs])
+
+  // The sheet PNG sits next to the manifest; resolve its path relative to the
+  // manifest's directory, then load it as a data URL through the normal asset
+  // path (same confinement + cache).
+  const sheetRel = manifest && typeof rel === 'string'
+    ? rel.replace(/[^/]+$/, '') + manifest.sheet
+    : null
+  const sheetUrl = useAsset(sheetRel, worldDir)
+  return manifest && sheetUrl ? { manifest, sheetUrl } : null
 }
 
 // ---------------------------------------------------------------------------
@@ -456,27 +823,393 @@ const NOTE = {
   borderRadius: 8,
   padding: '6px 10px'
 }
+const BUBBLE = {
+  position: 'absolute',
+  left: 12,
+  right: 12,
+  bottom: 88,
+  maxHeight: 160,
+  overflow: 'auto',
+  borderRadius: 10,
+  border: '1px solid var(--color-border, #444)',
+  background: 'rgba(8, 12, 24, 0.92)',
+  padding: '10px 12px',
+  fontSize: 12,
+  zIndex: 4,
+  boxShadow: '0 8px 24px rgba(0,0,0,0.45)'
+}
+const BUBBLE_MSG = { marginBottom: 6, lineHeight: 1.35, whiteSpace: 'pre-wrap' }
+const BUBBLE_INPUT = {
+  width: '100%',
+  marginTop: 8,
+  padding: '6px 8px',
+  borderRadius: 6,
+  border: '1px solid var(--color-border, #444)',
+  background: 'rgba(0,0,0,0.35)',
+  color: 'inherit',
+  fontFamily: 'inherit',
+  fontSize: 12
+}
+
+function messageText(msg) {
+  if (!msg || typeof msg !== 'object') return ''
+  // Hermes session.resume/history rows carry the text on a top-level `text`
+  // field ({ role, text }) — this was THE empty-bubble bug: messageText only
+  // read `content`, so every row flattened to '' and previewMessages dropped
+  // all 94 messages. Check `text` first, then fall back to `content` shapes
+  // (string, or an array of { text } parts) for other providers.
+  if (typeof msg.text === 'string') return msg.text
+  const c = msg.content
+  if (typeof c === 'string') return c
+  if (Array.isArray(c)) {
+    return c
+      .map(part => (part && typeof part === 'object' && typeof part.text === 'string' ? part.text : ''))
+      .join('')
+  }
+  return ''
+}
+
+function previewMessages(messages) {
+  if (!Array.isArray(messages)) return []
+  const rows = []
+  for (const msg of messages) {
+    const role = msg && msg.role
+    if (role !== 'user' && role !== 'assistant') continue
+    const text = messageText(msg).trim()
+    if (!text) continue
+    rows.push({ role, text })
+  }
+  return rows.slice(-6)
+}
+
+/**
+ * Resolve (or mint) the ONE canonical "Bot Chat" session for a profile.
+ *
+ * Gateway contract (tui_gateway/methods_session.py `_session_list_by_title`):
+ * a `session.list` call carrying `title` is an EXACT-title identity lookup. It
+ * returns at most ONE row — the canonical chat — already resurrecting a
+ * recoverable archived Bot Chat and following the compression tip into
+ * `resolved_id`. An empty `sessions` array means there is no usable canonical
+ * row (none exists, or it was deliberately archived).
+ *
+ * So we never index into a list of candidates (G2): we take the single row,
+ * and defensively confirm its title really is "Bot Chat" before adopting it,
+ * so a future change that made the by-title lookup fuzzy could not silently
+ * hand us an unrelated session to submit into. Prefer `resolved_id` (the live
+ * tip) over `id`. Only when the lookup yields nothing do we create the
+ * canonical hidden chat — the one title the Bot Mode protocol is injected into.
+ */
+async function ensureBotChatSession(profile) {
+  // Each step is labeled so a failure in the bubble names the exact RPC that
+  // failed (the earlier generic "session not found" hid which call it was).
+  const step = async (label, p) => {
+    try {
+      return await p
+    } catch (err) {
+      throw new Error(`${label}: ${(err && err.message) || err}`)
+    }
+  }
+  if (typeof host.ensureAgent === 'function') {
+    await step('ensureAgent', host.ensureAgent(null, profile))
+  }
+  const listed = await step('session.list', host.request('session.list', {
+    profile,
+    title: BOT_CHAT_TITLE
+  }))
+  const sessions = (listed && listed.sessions) || []
+  const row = sessions[0]
+  if (row) {
+    // Title lookup is exact server-side; verify client-side anyway so a
+    // relaxed future contract can't redirect the user's line elsewhere.
+    if (row.title != null && row.title !== BOT_CHAT_TITLE) {
+      throw new Error('Bot Chat lookup returned an unexpected session')
+    }
+    const foundId = row.resolved_id || row.id
+    if (foundId) {
+      // The row is on disk but NOT necessarily live in memory, and both
+      // session.history and prompt.submit resolve the session from live
+      // memory (`_sess` / `_sess_nowait`) — a stored-only session 4007s. So
+      // RESUME it, which loads it into memory AND returns the LIVE session id
+      // (compression tip / freshly-bound id) plus its history. Everything
+      // after must use THAT id, not foundId, or the submit misses the live
+      // session (the "prompt.submit: session not found" we saw).
+      //
+      // CRITICAL: the desktop app's own resume calls pass `source:"desktop"` +
+      // `omit_messages:true`, which take the DEFERRED path — messages:[] while
+      // the transcript hydrates over REST pages the plugin host cannot read.
+      // That is why the bubble stayed empty. We want the COLD path instead,
+      // which restores the full transcript INLINE under `messages`. So pass
+      // omit_messages:false + defer_history:false explicitly and DO NOT send
+      // source:"desktop".
+      const resumed = await step('session.resume', host.request('session.resume', {
+        session_id: foundId,
+        profile,
+        omit_messages: false,
+        defer_history: false
+      }))
+      const liveId = (resumed && (resumed.session_id || resumed.resolved_id)) || foundId
+      const msgs = resumed && Array.isArray(resumed.messages) ? resumed.messages : []
+      const messageCount = Number(resumed && resumed.message_count) || 0
+      return {
+        sessionId: liveId,
+        created: false,
+        messages: msgs.length ? previewMessages(msgs) : null,
+        messageCount
+      }
+    }
+  }
+  const created = await step('session.create', host.request('session.create', {
+    profile,
+    title: BOT_CHAT_TITLE,
+    hidden: true
+  }))
+  if (!created || !created.session_id) {
+    throw new Error('session.create returned no session_id')
+  }
+  // A freshly created session is already live in memory (session.create binds
+  // it), so a submit works directly; it has no history yet.
+  return { sessionId: created.session_id, created: true, messages: [] }
+}
+
+async function loadBotChatHistory(sessionId, profile) {
+  // One session.history read on a LIVE session. Returns the preview rows plus
+  // the raw total count (used to detect hydration / a new reply).
+  let hist
+  try {
+    hist = await host.request('session.history', { session_id: sessionId, profile })
+  } catch (err) {
+    throw new Error(`session.history: ${(err && err.message) || err}`)
+  }
+  const raw = (hist && hist.messages) || []
+  const count = Number(hist && hist.count)
+  return { messages: previewMessages(raw), count: Number.isFinite(count) ? count : raw.length }
+}
+
+/**
+ * A desktop/deferred resume returns messages:[] with the real message_count
+ * while the transcript hydrates in the background. Poll session.history until
+ * it reports at least `wantCount` rows (or the budget runs out), so the bubble
+ * fills in instead of showing "No messages yet." for a chat that has history.
+ * `alive()` lets the caller abort when the user closes/switches the bubble.
+ */
+async function hydrateHistory(sessionId, profile, wantCount, alive) {
+  const delays = [150, 300, 600, 1000, 1500, 2000]
+  let last = { messages: [], count: 0 }
+  for (let i = 0; i < delays.length; i++) {
+    if (alive && !alive()) return last
+    let res
+    try {
+      res = await loadBotChatHistory(sessionId, profile)
+    } catch {
+      await new Promise(r => setTimeout(r, delays[i]))
+      continue
+    }
+    last = res
+    if (res.count >= wantCount || res.messages.length) return res
+    await new Promise(r => setTimeout(r, delays[i]))
+  }
+  return last
+}
+
+async function submitBotChatLine(sessionId, profile, text) {
+  try {
+    await host.request('prompt.submit', { session_id: sessionId, profile, text })
+  } catch (err) {
+    throw new Error(`prompt.submit: ${(err && err.message) || err}`)
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Ambient life (todo 6) — opt-in, one tagged cron per cast member.
+//
+// `rules.ambient` is NOT a cron and the plant deliberately schedules nothing
+// (todo 8 locks that). This is the ONLY place a world's ambient routines are
+// created, and only on an explicit user click. The gateway has no native cron
+// tag, so the `world:<id>` tag lives in the job NAME (`world:<id>:<profile>`);
+// disable lists and removes exactly those names and nothing else.
+// ---------------------------------------------------------------------------
+
+function ambientJobName(worldId, profile) {
+  return `world:${worldId}:${profile}`
+}
+function ambientPrefix(worldId) {
+  return `world:${worldId}:`
+}
+
+async function listAmbientJobs(worldId, profile) {
+  // Scope the list to the member's profile store; filter by our name prefix so
+  // we never touch a job we did not create.
+  const res = await host.request('cron.manage', { action: 'list', profile, include_disabled: true })
+  const jobs = (res && res.jobs) || []
+  const pfx = ambientPrefix(worldId)
+  return jobs.filter(j => typeof j.name === 'string' && j.name.indexOf(pfx) === 0)
+}
+
+async function enableAmbient(worldId, cast, schedule) {
+  // One routine per joined cast member. Idempotent: skip a member that already
+  // has its tagged job. Returns { created, skipped, errors }.
+  const out = { created: 0, skipped: 0, errors: [] }
+  for (const c of cast) {
+    const profile = c.profileName || c.id
+    if (!profile) continue
+    try {
+      const existing = await listAmbientJobs(worldId, profile)
+      if (existing.some(j => j.name === ambientJobName(worldId, profile))) {
+        out.skipped++
+        continue
+      }
+      await host.request('cron.manage', {
+        action: 'add',
+        profile,
+        name: ambientJobName(worldId, profile),
+        schedule,
+        // Ambient nudge — a gentle, in-character wake. Kept generic; the
+        // member's own world skin (MEMORY.md) supplies the scene context.
+        prompt: `Ambient world beat for ${worldId}: take one small in-character action in your current place, then wait.`
+      })
+      out.created++
+    } catch (err) {
+      out.errors.push(`${profile}: ${(err && err.message) || err}`)
+    }
+  }
+  return out
+}
+
+async function disableAmbient(worldId, cast) {
+  // Remove ONLY our tagged jobs (name prefix world:<id>:), per member store.
+  const out = { removed: 0, errors: [] }
+  for (const c of cast) {
+    const profile = c.profileName || c.id
+    if (!profile) continue
+    try {
+      const ours = await listAmbientJobs(worldId, profile)
+      for (const job of ours) {
+        await host.request('cron.manage', { action: 'remove', profile, name: job.name })
+        out.removed++
+      }
+    } catch (err) {
+      out.errors.push(`${profile}: ${(err && err.message) || err}`)
+    }
+  }
+  return out
+}
+
+async function ambientActive(worldId, cast) {
+  // Active when any joined member has a tagged job.
+  for (const c of cast) {
+    const profile = c.profileName || c.id
+    if (!profile) continue
+    try {
+      const ours = await listAmbientJobs(worldId, profile)
+      if (ours.length) return true
+    } catch {
+      // ignore; treat as unknown/off
+    }
+  }
+  return false
+}
 
 // ---------------------------------------------------------------------------
 // Sprite
 // ---------------------------------------------------------------------------
 
-function Sprite({ c, worldDir }) {
+/**
+ * Animated 32×32 sprite from an agent-sprites sheet. Steps the `idle` row's
+ * frames with requestAnimationFrame (no global CSS/keyframes — desktop plugins
+ * ship none) by shifting background-position. Scaled up to the avatar circle.
+ */
+function AnimatedSprite({ sheet, name }) {
+  const { manifest, sheetUrl } = sheet
+  const idle = (manifest.states && (manifest.states.idle || Object.values(manifest.states)[0])) || {}
+  const frames = Math.max(1, Number(idle.frames) || 1)
+  const fps = Math.max(1, Number(idle.fps) || 4)
+  const row = Math.max(0, Number(idle.row) || 0)
+  const fw = Number(manifest.frameW) || 32
+  const fh = Number(manifest.frameH) || 32
+  const [frame, setFrame] = useState(0)
+
+  useEffect(() => {
+    if (frames <= 1) return
+    let raf = 0
+    let last = 0
+    const interval = 1000 / fps
+    const tick = (t) => {
+      if (!last) last = t
+      if (t - last >= interval) {
+        last = t
+        setFrame(f => (f + 1) % frames)
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [frames, fps])
+
+  const size = 50 // match AVATAR_IMG
+  const scale = size / fw
+  // Scale the WHOLE sheet uniformly so one frame fills the circle; one frame is
+  // fw*scale = size wide. backgroundSize uses 'auto' height to preserve the
+  // aspect of the full strip while width scales each frame to `size`.
+  return jsx('div', {
+    title: name,
+    style: {
+      width: size,
+      height: size,
+      borderRadius: '50%',
+      border: '2px solid rgba(255,255,255,0.35)',
+      overflow: 'hidden',
+      imageRendering: 'pixelated',
+      backgroundImage: `url(${sheetUrl})`,
+      backgroundRepeat: 'no-repeat',
+      // Each sheet cell is fw×fh; scaling by `scale` makes one cell = size×size.
+      backgroundSize: `auto ${Math.round(fh * scale * (rowCount(manifest)))}px`,
+      backgroundPosition: `-${Math.round(frame * fw * scale)}px -${Math.round(row * fh * scale)}px`
+    }
+  })
+}
+
+/** Number of state rows in a sheet manifest (for backgroundSize height). */
+function rowCount(manifest) {
+  const states = manifest && manifest.states
+  if (!states) return 1
+  let max = 0
+  for (const k of Object.keys(states)) {
+    const r = Number(states[k] && states[k].row) || 0
+    if (r > max) max = r
+  }
+  return max + 1
+}
+
+function Sprite({ c, worldDir, selected, onSelect }) {
   const avatar = useAsset(c.avatar, worldDir)
+  const sheet = useSpriteSheet(c.sprite, worldDir)
   const name = c.name || c.id
+  const canChat = !!(c.profileName && typeof host.request === 'function')
+  const spriteStyle = {
+    ...SPRITE,
+    pointerEvents: canChat ? 'auto' : 'none',
+    cursor: canChat ? 'pointer' : 'default',
+    opacity: selected ? 1 : canChat ? 0.95 : 1,
+    transform: selected ? 'translateY(-4px)' : undefined
+  }
   return jsxs('div', {
-    style: SPRITE,
-    title: `${name} (role: ${c.id})`,
+    style: spriteStyle,
+    title: canChat
+      ? `${name} — click to chat`
+      : `${name} (no profile join)`,
+    onClick: canChat ? () => onSelect(c) : undefined,
     children: [
       jsxs('div', {
         style: SPRITE_CIRCLE,
         children: [
-          avatar
-            ? jsx('img', { src: avatar, alt: name, style: AVATAR_IMG })
-            : jsx('div', {
-                style: INITIAL_CIRCLE,
-                children: name.slice(0, 1).toUpperCase()
-              }),
+          sheet
+            ? jsx(AnimatedSprite, { sheet: sheet, name: name })
+            : avatar
+              ? jsx('img', { src: avatar, alt: name, style: AVATAR_IMG })
+              : jsx('div', {
+                  style: INITIAL_CIRCLE,
+                  children: name.slice(0, 1).toUpperCase()
+                }),
           c.isGreeter ? jsx('span', { style: GREETER, children: '\u2605' }) : null
         ]
       }),
@@ -496,7 +1229,23 @@ function WorldsPage() {
   const [selectedId, setSelectedId] = useState(null)
   const [viewPlace, setViewPlace] = useState(null)
   const [rootDir, setRootDir] = useState(null)
+  const [profiles, setProfiles] = useState([])
+  const [pick, setPick] = useState('')
+  const [moveTarget, setMoveTarget] = useState('')
+  const [spritePacks, setSpritePacks] = useState([])
+  const [spritePick, setSpritePick] = useState('')
+  const [rosterNote, setRosterNote] = useState(null)
+  const [ambientOn, setAmbientOn] = useState(null) // null = unknown/checking
+  const [ambientBusy, setAmbientBusy] = useState(false)
+  const [ambientNote, setAmbientNote] = useState(null)
+  const [chat, setChat] = useState(null)
+  const [chatDraft, setChatDraft] = useState('')
   const selRef = useRef(null)
+  // Mirror of `chat` for async callbacks (the reply poll) that must read the
+  // LIVE bubble, not the stale closure value — otherwise it can't tell the
+  // user closed the bubble or switched characters mid-poll.
+  const chatRef = useRef(null)
+  chatRef.current = chat
 
   function loadView(target, freshList) {
     readWorld(target).then(v => {
@@ -515,7 +1264,146 @@ function WorldsPage() {
     selRef.current = id
     setSelectedId(id)
     setViewPlace(null) // a place tab from world A must not stick on world B
+    setChat(null)
+    setChatDraft('')
     loadView(id, null)
+  }
+
+  async function openChat(c) {
+    const profile = c.profileName
+    if (!profile || typeof host.request !== 'function') return
+    setChat({
+      castId: c.id,
+      profile,
+      name: c.name || c.id,
+      sessionId: null,
+      messages: [],
+      loading: true,
+      sending: false,
+      error: null
+    })
+    setChatDraft('')
+    try {
+      const { sessionId, messages: initial, messageCount } =
+        await ensureBotChatSession(profile)
+      const live = () => selRef.current === selectedId && chatRef.current &&
+        chatRef.current.profile === profile
+      let messages = Array.isArray(initial) ? initial : []
+      let count = messageCount || messages.length
+      // Resume returned no inline transcript (desktop/deferred hydration) but
+      // the session has history — poll session.history until it fills in.
+      if (!messages.length && messageCount > 0) {
+        const res = await hydrateHistory(sessionId, profile, messageCount, live)
+        messages = res.messages
+        count = res.count || count
+      }
+      if (!live()) return
+      // Merge, don't replace: the hydration poll above can take seconds, and
+      // the user may have already typed + sent in that window (optimistic echo
+      // + sending=true). Overwriting with a fresh object clobbered that echo
+      // (the "message went away" bug). Only fill history/sessionId; never
+      // stomp an in-flight send or messages the send already appended.
+      setChat(prev => {
+        if (!prev || prev.castId !== c.id || prev.profile !== profile) return prev
+        if (prev.sending || prev.messages.length > messages.length) {
+          // A send is in flight or already added rows — keep the user's view,
+          // just make sure the live sessionId/count are set for the poll.
+          return { ...prev, sessionId, messageCount: count, loading: false, error: null }
+        }
+        return {
+          ...prev,
+          sessionId,
+          messages,
+          messageCount: count,
+          loading: false,
+          error: null
+        }
+      })
+    } catch (err) {
+      setChat({
+        castId: c.id,
+        profile,
+        name: c.name || c.id,
+        sessionId: null,
+        messages: [],
+        loading: false,
+        sending: false,
+        error: String((err && err.message) || err)
+      })
+    }
+  }
+
+  async function sendChatLine() {
+    if (!chat || !chat.sessionId || chat.sending) return
+    const text = chatDraft.trim()
+    if (!text) return
+    const sessionId = chat.sessionId
+    const profile = chat.profile
+    // G4: optimistic echo — show the user's line immediately so it never
+    // vanishes while the submit + reply are in flight. `baseCount` is the
+    // RAW server message count before this send (preview rows are capped at 6,
+    // so comparing preview length can't detect growth on a long chat).
+    const baseCount = Number.isFinite(chat.messageCount) ? chat.messageCount : chat.messages.length
+    const optimistic = chat.messages.concat([{ role: 'user', text }])
+    setChat(prev =>
+      prev && prev.sessionId === sessionId
+        ? { ...prev, messages: optimistic, sending: true, error: null }
+        : prev
+    )
+    setChatDraft('')
+    // True when the user is still looking at this same bubble.
+    const stillHere = () => selRef.current === selectedId && chatRef.current &&
+      chatRef.current.sessionId === sessionId
+    try {
+      await submitBotChatLine(sessionId, profile, text)
+    } catch (err) {
+      setChat(prev =>
+        prev && prev.sessionId === sessionId
+          ? { ...prev, sending: false, error: String((err && err.message) || err) }
+          : prev
+      )
+      return
+    }
+    // G4: bounded reply poll. Re-read history until the RAW count grows by at
+    // least 2 (our user turn + the assistant reply) with an assistant tail, or
+    // the budget runs out. Same host.request path — never the 9119 port.
+    // Budget is generous: a local model (LM Studio) can stream for a while, and
+    // the reply only appears in model-history AFTER the stream finishes.
+    const delays = [500, 1000, 1500, 2500, 4000, 6000, 8000, 10000, 12000]
+    for (let i = 0; i < delays.length; i++) {
+      if (!stillHere()) return
+      await new Promise(r => setTimeout(r, delays[i]))
+      if (!stillHere()) return
+      let res
+      try {
+        res = await loadBotChatHistory(sessionId, profile)
+      } catch {
+        continue // transient; keep trying within the budget
+      }
+      const messages = res.messages
+      const grew = res.count >= baseCount + 2 // our turn + a reply
+      const last = messages[messages.length - 1]
+      const gotReply = grew && last && last.role === 'assistant' && messages.length > 0
+      if (gotReply) {
+        // Real reply landed — show the fresh transcript.
+        setChat(prev =>
+          prev && prev.sessionId === sessionId
+            ? { ...prev, messages, sending: false, messageCount: res.count }
+            : prev
+        )
+        return
+      }
+      // NEVER regress: a read that is empty or hasn't grown must not overwrite
+      // the optimistic echo (the "reverted to No messages yet" bug — the final
+      // poll was writing an empty read over the user's turn).
+    }
+    // Budget spent with no visible reply: keep the echo, just stop the spinner.
+    // The reply exists in the agent's own session; the bubble simply did not
+    // see it land within the window.
+    if (!stillHere()) return
+    setChat(prev =>
+      prev && prev.sessionId === sessionId ? { ...prev, sending: false } : prev
+    )
   }
 
   useEffect(() => {
@@ -554,7 +1442,10 @@ function WorldsPage() {
     poll()
     timer = setInterval(poll, POLL_MS)
     // Resolve the worlds root once, for joining asset paths.
-    getWorldsRoot().then(setRootDir).catch(() => {})
+    getWorldsRoot().then(root => {
+      setRootDir(root)
+      listProfiles(root).then(setProfiles).catch(() => setProfiles([]))
+    }).catch(() => {})
     return () => clearInterval(timer)
   }, [])
 
@@ -613,6 +1504,149 @@ function WorldsPage() {
   const overflow = onStage.slice(maxPresent)
   const offstage = cast.filter(c => onStage.indexOf(c) === -1).concat(overflow)
   const capNote = overflow.length ? `+${overflow.length} offstage` : null
+
+  const taken = {}
+  cast.forEach(c => {
+    taken[c.id] = true
+  })
+  const available = profiles.filter(name => !taken[name])
+  const here = cur
+    ? cast.filter(c => (state.where || {})[c.id] === cur.id || (!Object.keys(state.where || {}).length && c.home === cur.id))
+    : []
+
+  async function commitRoster(next) {
+    const dir = world && world.worldDir
+    if (!dir || !world) return
+    try {
+      await writeRoster(dir, next)
+      setRosterNote(null)
+      loadView(world.id, null)
+    } catch (err) {
+      setRosterNote(String((err && err.message) || err))
+    }
+  }
+
+  // Move a character into the active place and persist it (todo 3). Honours
+  // rules.maxPresent against who is already standing there, so a move cannot
+  // overfill a place any more than an add can.
+  async function commitMove(castId, placeId) {
+    const dir = world && world.worldDir
+    if (!dir || !world || !castId || !placeId) return
+    const w = state.where || {}
+    if (w[castId] === placeId) return
+    let max = Number(rules.maxPresent)
+    if (!Number.isInteger(max) || max <= 0) max = Infinity
+    const occupancy = cast.filter(c => c.id !== castId && w[c.id] === placeId).length
+    if (occupancy >= max) {
+      setRosterNote('This place is full.')
+      return
+    }
+    try {
+      await moveCharacter(dir, w, castId, placeId)
+      setRosterNote(null)
+      loadView(world.id, null)
+    } catch (err) {
+      setRosterNote(String((err && err.message) || err))
+    }
+  }
+
+  // Reflect whether ambient life is currently scheduled for this world's cast.
+  // Checked whenever the world or its joined cast changes. Only meaningful for
+  // a roster-owned world with members that have a profile.
+  useEffect(() => {
+    let alive = true
+    const joined = cast.filter(c => c.profileName || c.id)
+    if (!world || !joined.length || typeof host.request !== 'function') {
+      setAmbientOn(null)
+      return
+    }
+    setAmbientOn(null) // checking
+    ambientActive(world.id, joined)
+      .then(on => { if (alive) setAmbientOn(on) })
+      .catch(() => { if (alive) setAmbientOn(null) })
+    return () => { alive = false }
+    // eslint-disable-next-line
+  }, [world && world.id, cast.map(c => c.profileName || c.id).join(',')])
+
+  // Load the sprite packs the plant staged into this world, for the picker.
+  useEffect(() => {
+    let alive = true
+    if (!rootDir || !world) { setSpritePacks([]); return () => { alive = false } }
+    listSpritePacks(rootDir + '/' + world.id)
+      .then(ps => { if (alive) setSpritePacks(ps) })
+      .catch(() => { if (alive) setSpritePacks([]) })
+    return () => { alive = false }
+  }, [rootDir, world && world.id])
+
+  async function toggleAmbient() {
+    if (!world || ambientBusy) return
+    const joined = cast.filter(c => c.profileName || c.id)
+    if (!joined.length) {
+      setAmbientNote('Add agents to this world first.')
+      return
+    }
+    setAmbientBusy(true)
+    setAmbientNote(null)
+    try {
+      if (ambientOn) {
+        const res = await disableAmbient(world.id, joined)
+        setAmbientOn(false)
+        setAmbientNote(res.errors.length
+          ? `Disabled with issues: ${res.errors.join('; ')}`
+          : `Ambient life off — removed ${res.removed} routine(s).`)
+      } else {
+        // Hourly cadence by default — ambient, not chatty. One tagged routine
+        // per member; the plant never creates these (todo 8).
+        const res = await enableAmbient(world.id, joined, '0 * * * *')
+        setAmbientOn(true)
+        setAmbientNote(res.errors.length
+          ? `Enabled with issues: ${res.errors.join('; ')}`
+          : `Ambient life on — ${res.created} new, ${res.skipped} already running.`)
+      }
+    } catch (err) {
+      setAmbientNote(String((err && err.message) || err))
+    } finally {
+      setAmbientBusy(false)
+    }
+  }
+
+  function addAgent() {
+    const place = cur && cur.id
+    if (!pick || !place) return
+    // Seed the roster from whatever cast is CURRENTLY shown so the first add on
+    // a sample scene both carries those members forward AND counts them against
+    // maxPresent (G3: the guard used to see an empty list and let the first add
+    // exceed the cap). The roster stores PROFILE dir names, so use profileName
+    // (roster members set it to their own id); skip sample cast with no profile
+    // join — they can't be roster members.
+    const existing = cast
+      .map(c => ({
+        profile: c.profileName || c.id,
+        place: (state.where && state.where[c.id]) || c.home,
+        sprite: c.sprite || null,
+        joined: !!(c.profileName || world.rosterOwned)
+      }))
+      .filter(m => m.joined && m.profile)
+      .map(({ profile, place, sprite }) =>
+        sprite ? { profile, place, sprite } : { profile, place })
+    if (existing.some(m => m.profile === pick)) {
+      setRosterNote('That agent is already in this world.')
+      return
+    }
+    let max = Number(rules.maxPresent)
+    if (!Number.isInteger(max) || max <= 0) max = 6
+    if (existing.filter(m => m.place === place).length >= max) {
+      setRosterNote('This place is full.')
+      return
+    }
+    // Attach the chosen sprite pack (a world-relative manifest path) if picked.
+    const chosen = spritePacks.find(p => p.name === spritePick)
+    const member = chosen
+      ? { profile: pick, place: place, sprite: chosen.path }
+      : { profile: pick, place: place }
+    commitRoster(existing.concat([member]))
+    setSpritePick('')
+  }
 
   const palette = theme.palette || {}
   const stageStyle = {
@@ -719,9 +1753,87 @@ function WorldsPage() {
           backdrop ? jsx('img', { src: backdrop, alt: '', style: COVER_IMG }) : null,
           placeArt ? jsx('img', { src: placeArt, alt: 'place', style: COVER_IMG }) : null,
           capNote ? jsx('div', { style: CAP_NOTE, children: capNote }) : null,
+          chat
+            ? jsxs('div', {
+                style: BUBBLE,
+                children: [
+                  jsxs('div', {
+                    style: {
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      marginBottom: 6
+                    },
+                    children: [
+                      jsx('strong', { children: chat.name }),
+                      jsx('button', {
+                        type: 'button',
+                        style: CHIP,
+                        onClick: () => {
+                          setChat(null)
+                          setChatDraft('')
+                        },
+                        children: 'Close'
+                      })
+                    ]
+                  }),
+                  chat.loading
+                    ? jsx('div', { style: MUTED, children: 'Loading chat…' })
+                    : null,
+                  chat.error
+                    ? jsx('div', { style: { color: '#f88', marginBottom: 6 }, children: chat.error })
+                    : null,
+                  !chat.loading && !chat.messages.length && !chat.error
+                    ? jsx('div', { style: MUTED, children: 'No messages yet.' })
+                    : null,
+                  chat.messages.map((m, i) =>
+                    jsx('div', {
+                      key: i,
+                      style: BUBBLE_MSG,
+                      children: `${m.role === 'user' ? 'You' : chat.name}: ${m.text}`
+                    })
+                  ),
+                  chat.sessionId
+                    ? jsxs('div', {
+                        children: [
+                          jsx('input', {
+                            type: 'text',
+                            value: chatDraft,
+                            disabled: chat.sending,
+                            placeholder: 'Say something…',
+                            style: BUBBLE_INPUT,
+                            onChange: e => setChatDraft(e.target.value),
+                            onKeyDown: e => {
+                              if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault()
+                                sendChatLine()
+                              }
+                            }
+                          }),
+                          jsx('button', {
+                            type: 'button',
+                            style: { ...CHIP_ACTIVE, marginTop: 6 },
+                            disabled: chat.sending || !chatDraft.trim(),
+                            onClick: sendChatLine,
+                            children: chat.sending ? 'Sending…' : 'Send'
+                          })
+                        ]
+                      })
+                    : null
+                ]
+              })
+            : null,
           jsx('div', {
             style: SPRITE_ROW,
-            children: visible.map(c => jsx(Sprite, { key: c.id, c: c, worldDir: worldDir }))
+            children: visible.map(c =>
+              jsx(Sprite, {
+                key: c.id,
+                c: c,
+                worldDir: worldDir,
+                selected: chat && chat.castId === c.id,
+                onSelect: openChat
+              })
+            )
           })
         ]
       }),
@@ -742,11 +1854,192 @@ function WorldsPage() {
           })
         : null,
 
-      rules.turnModel === 'defer'
+      jsxs('div', {
+        style: NOTE,
+        children: [
+          jsx('div', {
+            style: { fontWeight: 600, marginBottom: 6 },
+            children: cur ? `Agents in ${cur.name || cur.id}` : 'Agents'
+          }),
+          world && !world.rosterOwned && cast.length
+            ? jsx('div', {
+                style: { marginBottom: 6 },
+                children:
+                  'This scene still shows the pack sample. Adding an agent, or clearing the stage, replaces that sample with your own roster.'
+              })
+            : null,
+          here.map(c =>
+            jsxs('div', {
+              key: c.id,
+              style: { display: 'flex', gap: 8, alignItems: 'center', marginBottom: 4 },
+              children: [
+                jsx('span', { children: c.name || c.id }),
+                world && world.rosterOwned
+                  ? jsx('button', {
+                      type: 'button',
+                      style: CHIP,
+                      onClick: () =>
+                        commitRoster(
+                          cast
+                            .filter(other => other.id !== c.id)
+                            .map(other => {
+                              const m = {
+                                profile: other.id,
+                                place: (state.where && state.where[other.id]) || other.home
+                              }
+                              if (other.sprite) m.sprite = other.sprite
+                              return m
+                            })
+                        ),
+                      children: 'Remove'
+                    })
+                  : null
+              ]
+            })
+          ),
+          !here.length ? jsx('div', { style: MUTED, children: 'No agents in this place.' }) : null,
+          jsxs('div', {
+            style: { display: 'flex', gap: 8, alignItems: 'center', marginTop: 8, flexWrap: 'wrap' },
+            children: [
+              jsx('select', {
+                value: pick,
+                onChange: e => setPick(e.target.value),
+                style: { ...CHIP, background: 'transparent' },
+                children: [
+                  jsx('option', { value: '', children: 'Add an agent you already have' }),
+                  available.map(name => jsx('option', { key: name, value: name, children: name }))
+                ]
+              }),
+              spritePacks.length
+                ? jsx('select', {
+                    value: spritePick,
+                    onChange: e => setSpritePick(e.target.value),
+                    title: 'Optional sprite pack for this agent',
+                    style: { ...CHIP, background: 'transparent' },
+                    children: [
+                      jsx('option', { value: '', children: 'Sprite: default' }),
+                      spritePacks.map(p =>
+                        jsx('option', { key: p.name, value: p.name, children: p.name })
+                      )
+                    ]
+                  })
+                : null,
+              jsx('button', {
+                type: 'button',
+                style: CHIP_ACTIVE,
+                onClick: addAgent,
+                children: 'Add'
+              }),
+              world && !world.rosterOwned && cast.length
+                ? jsx('button', {
+                    type: 'button',
+                    style: CHIP,
+                    onClick: () => commitRoster([]),
+                    children: 'Clear stage'
+                  })
+                : null
+            ]
+          }),
+          // Move an agent who is in another place into this one (todo 3).
+          // Roster-owned worlds only; the pack sample is view-only.
+          world && world.rosterOwned && cur
+            ? (() => {
+                const elsewhere = cast.filter(
+                  c => ((state.where || {})[c.id] || c.home) !== cur.id
+                )
+                if (!elsewhere.length) return null
+                return jsxs('div', {
+                  style: { display: 'flex', gap: 8, alignItems: 'center', marginTop: 8, flexWrap: 'wrap' },
+                  children: [
+                    jsx('select', {
+                      value: moveTarget,
+                      onChange: e => setMoveTarget(e.target.value),
+                      style: { ...CHIP, background: 'transparent' },
+                      children: [
+                        jsx('option', { value: '', children: `Move someone to ${cur.name || cur.id}` }),
+                        elsewhere.map(c =>
+                          jsx('option', { key: c.id, value: c.id, children: c.name || c.id })
+                        )
+                      ]
+                    }),
+                    jsx('button', {
+                      type: 'button',
+                      style: CHIP_ACTIVE,
+                      onClick: () => {
+                        if (moveTarget) {
+                          commitMove(moveTarget, cur.id)
+                          setMoveTarget('')
+                        }
+                      },
+                      children: 'Move here'
+                    })
+                  ]
+                })
+              })()
+            : null,
+          rosterNote ? jsx('div', { style: { marginTop: 6 }, children: rosterNote }) : null
+        ]
+      }),
+
+      // turnModel conformance (group-chat.md §5): Hermes runs `defer`
+      // natively; `director` imports as a LOSS (no Director process) and
+      // `round-robin`/`free-for-all` are not wired (posting is behind an
+      // unperformed measured-no-race gate). In every non-defer case we DO NOT
+      // drive turns — we fall back to defer and say so, rather than
+      // double-driving the room.
+      rules.turnModel
         ? jsx('div', {
             style: NOTE,
-            children:
-              'turnModel: defer \u2014 Bot Mode owns turns in this world; this pane only draws.'
+            children: (() => {
+              const tm = rules.turnModel
+              if (tm === 'defer') {
+                return 'turnModel: defer \u2014 Bot Mode owns turns in this world; this pane only draws.'
+              }
+              if (tm === 'director') {
+                return `turnModel: ${tm} \u2014 no Director process on Hermes; treated as defer (Bot Mode owns turns). This pane only records state and draws, it never picks the speaker.`
+              }
+              if (tm === 'round-robin' || tm === 'free-for-all') {
+                return `turnModel: ${tm} \u2014 not wired on Hermes (posting into the room is gated on a measured no-race check); treated as defer. Bot Mode owns turns.`
+              }
+              return `turnModel: ${tm} \u2014 unrecognized; treated as defer. Bot Mode owns turns; this pane only draws.`
+            })()
+          })
+        : null,
+
+      // Ambient life (todo 6): opt-in only. The plant schedules nothing; this
+      // button is the ONLY way routines are created, and off is the default.
+      world && world.rosterOwned && cast.length
+        ? jsxs('div', {
+            style: NOTE,
+            children: [
+              jsxs('div', {
+                style: { display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' },
+                children: [
+                  jsx('button', {
+                    type: 'button',
+                    style: ambientOn ? CHIP_ACTIVE : CHIP,
+                    disabled: ambientBusy || ambientOn === null,
+                    onClick: toggleAmbient,
+                    children: ambientBusy
+                      ? 'Working\u2026'
+                      : ambientOn === null
+                        ? 'Ambient life\u2026'
+                        : ambientOn
+                          ? 'Disable ambient life'
+                          : 'Enable ambient life'
+                  }),
+                  jsx('span', {
+                    style: MUTED,
+                    children: ambientOn === null
+                      ? 'checking\u2026'
+                      : ambientOn
+                        ? 'on \u2014 one hourly routine per agent'
+                        : 'off \u2014 agents act only when you message them'
+                  })
+                ]
+              }),
+              ambientNote ? jsx('div', { style: { marginTop: 6, fontSize: 11 }, children: ambientNote }) : null
+            ]
           })
         : null,
 

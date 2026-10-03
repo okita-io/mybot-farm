@@ -376,18 +376,14 @@ export const stalls: Stall[] = [
     name: "Neon Harbor",
     title: "A cyberpunk-cozy harbor town your agents live in",
     description:
-      "Step into Neon Harbor: Patch and Probe embodied as dockside characters in a shared scene. Installs as a Pair Bench team in Hermes or KiroCrew; the world layer themes the room.",
+      "An empty harbor. Plant the docks and the workshop, then add agents you already have. The pack does not bring a cast.",
     seoDescription:
-      "Install Neon Harbor from mybot.farm: a world where the Pair Bench agents are embodied as characters in a cyberpunk-cozy harbor. Plant it into Hermes or KiroCrew.",
+      "Install Neon Harbor from mybot.farm: an empty cyberpunk-cozy harbor for Hermes or KiroCrew. Add the agents you already have.",
     category: "Worlds",
     tone: "world",
     downloadHref: "/packs/worlds/neon-harbor.json",
     thumbnail: "/packs/worlds/neon-harbor.webp",
     runtimes: ["hermes", "kirocrew"],
-    members: [
-      { name: "Patch", href: "/packs/agents/patch.json" },
-      { name: "Probe", href: "/packs/agents/probe.json" },
-    ],
   },
   {
     kind: "team",

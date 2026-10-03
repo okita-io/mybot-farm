@@ -19,6 +19,7 @@ Install page: [https://mybot.farm/install/hermes](https://mybot.farm/install/her
 - Plugins are opt-in: `hermes plugins enable mybot-farm`
 - **GAP 2** (import looks successful, profile stays invisible): the plugin clears `~/.hermes/profiles/.deleted/<name>` before every import
 - **Post** publishes GAF JSON (not a Hermes tarball). Plant still imports `.tar.gz`. Seller key: `MYBOT_FARM_API_KEY` (see [api-keys.md](./api-keys.md)).
+- **Worlds ship unpopulated** (`MIN_WORLD_CAST = 0`): `farm_plant` installs a `world-pack` as an empty stage — places + art, no cast. The downloader populates it with their own agents via `roster.json` (`worlds/roster/v1`), written by the Hermes Desktop Worlds page; the dashboard is read-only for it. See [Worlds scene](#worlds-scene).
 
 ## Install from a checkout
 
@@ -189,9 +190,63 @@ PyPI 0.19.0: skip that; the unittest probe above is the admission check (`regist
 
 ## Worlds scene
 
-`packages/hermes-worlds` draws a planted world. It is not part of the `mybot-farm` tool plugin and has no `plugin.yaml`. `farm_plant` writes `~/.hermes/worlds/<slug>/world.json`; this package reads it.
+`packages/hermes-worlds` draws a planted world. It is not part of the `mybot-farm` tool plugin. `plugin.yaml` exists so the catalog can list it; `register()` adds no tools. `farm_plant` writes `~/.hermes/worlds/<slug>/world.json` + `WORLD.md` + same-origin `assets/**`; this package reads them.
+
+**Worlds ship unpopulated.** The reference pack (`neon-harbor`) has places + art but an empty cast; the downloader fills the stage with their own agents. Population is per-owner in `~/.hermes/worlds/<slug>/roster.json` (`worlds/roster/v1`), written only by the Hermes Desktop Worlds page (Electron `writeTextFile` bridge, capped at `rules.maxPresent`); the dashboard `plugin_api.py` applies it (`_apply_roster`, `rosterOwned: true`) but is read-only. When `roster.json` is valid it is authoritative — pack cast is not shown, `state.where` derives from the roster. Re-planting updates `world.json`/assets but never touches `roster.json`. See [docs/worlds/hermes/data-contract.md](./worlds/hermes/data-contract.md) (Layer 2b+) and the [Worlds hub](./worlds/README.md).
+
+A checkout stays live by linking the package into the Hermes plugins dir:
+
+```bash
+ln -sfn "$(pwd)/packages/hermes-worlds" ~/.hermes/plugins/hermes-worlds
+ln -sfn "$(pwd)/packages/hermes-worlds/desktop/plugin.js" \
+  ~/.hermes/desktop-plugins/hermes-worlds/plugin.js
+```
+
+Catalog draft (submit after tag `hermes-worlds-v1.1.0`): [`packages/hermes-worlds/catalog/`](../packages/hermes-worlds/catalog/).
 
 Zip: `https://mybot.farm/downloads/hermes-worlds-1.1.0.zip`. Unzip into `~/.hermes/plugins/hermes-worlds`, rescan dashboard plugins, and copy `desktop/plugin.js` to `~/.hermes/desktop-plugins/hermes-worlds/plugin.js`. Steps: [`packages/hermes-worlds/INSTALL.md`](../packages/hermes-worlds/INSTALL.md).
+
+## Review (0.3.0, 2026-10-02)
+
+Findings from a full pass over the world-pack work (commits `a3a7c89`,
+`70d64df`, `7c2eef4`, `ec058c4` + the uncommitted roster layer). All three
+items below are resolved in this commit.
+
+**Verified sound:**
+- World plant writes `world.json` + `WORLD.md` + same-origin `assets/**` into
+  `$HERMES_HOME/worlds/<slug>/`; remote / off-site asset URLs are skipped
+  (`test_world_asset_rels_skip_site_and_remote_paths`).
+- Desktop write-door is hardened: `writeTextFile` → Electron `fs-ipc.ts`
+  (resolved path + parent-must-exist + 1 MB cap) → `roster.json`;
+  `writeRoster` passes the absolute path the handler expects.
+- World pack ships **empty-cast** and validates: `validateGafPack(neon-harbor.json)`
+  → `{ok: true}`; `MIN_WORLD_CAST = 0`.
+- Test suites green: `hermes-mybot-farm` plan 26/26, post 24/24,
+  world-doc 4/4, `gaf-pack.test.ts` 31/31, dashboard `plugin_api_test` 15/15,
+  `node --check` on the desktop plugin clean.
+- `web/public/packs/worlds/neon-harbor.webp` is the generated `harbor-night`
+  backdrop, byte-identical.
+
+**Fixed:**
+1. `tests/test_world_doc.py` ran **0 tests** when executed directly — it had no
+   `if __name__ == "__main__": unittest.main()` block, so
+   `python tests/test_world_doc.py` exited 0 silently (green-but-empty). Added
+   the main block to match the other test files; now 4 tests run and pass.
+2. Stale doc in `web/src/lib/gaf-pack.ts`: the `WORLD_PACK_FORMAT` comment still
+   described the world as a cast-bearing team superset. Rewritten to describe
+   the unpopulated-world model (places + art, no cast, `MIN_WORLD_CAST = 0`).
+3. Roster re-plant caveat was undocumented. Now stated in
+   [docs/worlds/hermes/data-contract.md](./worlds/hermes/data-contract.md) and
+   `packages/hermes-mybot-farm/README.md`: re-planting updates `world.json`/assets
+   but never touches `roster.json`.
+
+**Open (not blockers):**
+- KiroCrew world plant claims parity with the Hermes `_world.md` + skins path
+  but is **unverified end-to-end** here (no `KIRO_HOME` fixture / CLI run).
+- `catalog/` draft defers the SHA until tag `hermes-worlds-v1.1.0` exists; the
+  zip URL `hermes-worlds-1.1.0.zip` is aspirational until that tag is cut.
+- Dashboard is read-only for `roster.json` — dashboard users see their roster
+  but can't edit it (intended; editing is a desktop action).
 
 ## Notes
 

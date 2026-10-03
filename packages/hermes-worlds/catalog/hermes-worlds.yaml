@@ -1,0 +1,32 @@
+# Ready-to-paste entry for NousResearch/hermes-agent `plugin-catalog/hermes-worlds.yaml`.
+#
+# `sha:` MUST become the 40-hex of tag `hermes-worlds-v1.1.0` after that tag
+# exists on origin/main. Do not submit this file with the placeholder. The
+# catalog loader rejects branches, tags, and short SHAs.
+#
+# https://github.com/okita-io/mybot-farm clones over https.
+# This plugin has no self-updating code. It reads planted files under
+# ~/.hermes/worlds and does not write them.
+#
+# Catalog key matches plugin.yaml `name`. capabilities stay empty: register()
+# registers nothing. The scene is dashboard/manifest.json plus desktop/plugin.js.
+#
+# Schema: https://github.com/NousResearch/hermes-agent/blob/main/plugin-catalog/README.md
+
+name: hermes-worlds
+repo: https://github.com/okita-io/mybot-farm
+sha: "0000000000000000000000000000000000000000"
+subdir: packages/hermes-worlds
+description: Draw planted mybot.farm worlds as a scene in the Hermes dashboard and Desktop.
+maintainer: badkangaroo
+tier: community
+category: desktop
+requires_hermes: ">=0.21"
+docs_url: https://mybot.farm/install/hermes
+version: "1.1.0"
+platforms: []
+capabilities:
+  provides_tools: []
+  provides_hooks: []
+  provides_middleware: []
+  requires_env: []

@@ -11,8 +11,8 @@ You need [Hermes Agent](https://hermes-agent.nousresearch.com/docs/getting-start
 
 ## 1. Dashboard scene
 
-`hermes plugins install` is for tool plugins that ship a `plugin.yaml`. This
-package does not. The dashboard finds it by scanning
+`plugin.yaml` is here so the Hermes plugin catalog can pin this package.
+`register()` adds no tools. The dashboard still finds the scene by scanning
 `~/.hermes/plugins/*/dashboard/manifest.json`.
 
 From the public zip:
@@ -37,13 +37,14 @@ dashboard process if the rescan does not pick up `plugin_api.py`.
 
 ## 2. Hermes Desktop page
 
-Copy the desktop file to the live door. A symlink of the package folder is
-not enough: Desktop skips materializing `desktop/plugin.js` when the package
-path is a symlink.
+Copy the desktop file to the live door, or link it so edits in this repo show
+up on reload. A symlink of the package folder is not enough: Desktop skips
+materializing `desktop/plugin.js` when the package path is a symlink.
 
 ```bash
 mkdir -p ~/.hermes/desktop-plugins/hermes-worlds
-cp packages/hermes-worlds/desktop/plugin.js ~/.hermes/desktop-plugins/hermes-worlds/plugin.js
+ln -sfn "$(pwd)/packages/hermes-worlds/desktop/plugin.js" \
+  ~/.hermes/desktop-plugins/hermes-worlds/plugin.js
 ```
 
 If you installed from the zip, `packages/hermes-worlds/` above is

@@ -1,0 +1,43 @@
+{
+  "frameW": 32,
+  "frameH": 32,
+  "sheet": "gold-triangle.sheet.png",
+  "states": {
+    "idle": {
+      "row": 0,
+      "frames": 4,
+      "fps": 4,
+      "loop": true
+    },
+    "working": {
+      "row": 1,
+      "frames": 4,
+      "fps": 8,
+      "loop": true
+    },
+    "thinking": {
+      "row": 2,
+      "frames": 4,
+      "fps": 3,
+      "loop": true
+    },
+    "done": {
+      "row": 3,
+      "frames": 4,
+      "fps": 6,
+      "loop": false
+    },
+    "error": {
+      "row": 4,
+      "frames": 4,
+      "fps": 4,
+      "loop": true
+    },
+    "sleeping": {
+      "row": 5,
+      "frames": 4,
+      "fps": 2,
+      "loop": true
+    }
+  }
+}

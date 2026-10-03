@@ -128,6 +128,32 @@ python3 packages/hermes-mybot-farm/bin/farm-plant post \
 
 Ask the agent to call `farm_post` with the same fields (`pack` object or `packPath`). Never pass a seller key in tool arguments — env `MYBOT_FARM_API_KEY` or plugin config `apiKey` only. `packPath` must be a `.json` file under the plugin packs dir, `~/.hermes/farm`, `~/.hermes/packs`, or `MYBOT_FARM_PACK_DIR`. For a team, pass `kind: "team"` and a `mybot.farm/team-pack` with `members[]` (at least two).
 
+## Worlds (`farm_plant` world packs)
+
+`farm_plant` plants `mybot.farm/world-pack` stalls into `$HERMES_HOME/worlds/<slug>/`:
+
+- `world.json` — the `world` block (setting, places, theme) plus `members`
+- `assets/` — any same-origin `assets/**` paths from the pack (backdrop, place art, avatars); remote or off-site URLs are skipped
+- `WORLD.md` — a human-readable scene doc: places, cast (if the pack ships one), mood, how to populate
+
+**Worlds ship unpopulated.** The reference pack (`neon-harbor`) declares places
+and art but no cast, so `MIN_WORLD_CAST = 0`: the downloader gets the stage and
+fills it with their own agents. Population is per-owner and lives in
+`$HERMES_HOME/worlds/<slug>/roster.json` (`worlds/roster/v1`):
+
+```json
+{ "schema": "worlds/roster/v1", "members": [ { "profile": "my-agent", "place": "dock" } ] }
+```
+
+The roster is written by the **Hermes Desktop** Worlds page (Add/Remove/Clear,
+via the Electron `writeTextFile` bridge, capped at `rules.maxPresent`), not by
+plant; the dashboard is read-only for it. When `roster.json` exists and is
+valid it is authoritative — the pack cast (if any) is not shown and
+`state.where` is derived from the roster. Re-planting a world pack updates
+`world.json`/assets but never touches `roster.json`, so an owner's cast
+survives re-planting. See `packages/hermes-worlds/README.md` (Layer 2b+) for
+the full data-model and validation rules.
+
 ## GAP 2
 
 After `hermes profile delete <name>`, Hermes leaves `~/.hermes/profiles/.deleted/<name>`. Import of the same name extracts files and prints success, but the profile stays off `hermes profile list` / non-spawnable. This plugin clears matching tombstones before every import (and after `force` deletes, which create new ones). Standalone:

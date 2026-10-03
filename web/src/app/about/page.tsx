@@ -152,7 +152,7 @@ export default function AboutPage() {
           </p>
           <p>
             <strong>Now planting into KiroCrew.</strong> mybot.farm&apos;s
-            fourth runtime. The mybot-farm plugin (v0.1.0, install from the
+            fourth runtime. The mybot-farm plugin (v0.2.0, install from the
             repo at <code>packages/kirocrew-mybot-farm</code>) turns a farm
             agent into a KiroCrew agent template, with its persona in the prompt
             and its skills as steering files. A farm team becomes a crew: each
@@ -350,7 +350,7 @@ export default function AboutPage() {
 
         <ContentSection id="whats-new" title="What’s new">
           <p>
-            <strong>New: KiroCrew support (plugin v0.1.0).</strong> You can now
+            <strong>New: KiroCrew support (plugin v0.2.0).</strong> You can now
             plant mybot.farm agents and teams into KiroCrew, next to Grok Bot,
             Hermes and OpenClaw.
           </p>
@@ -382,7 +382,7 @@ export default function AboutPage() {
           </ul>
           <p>
             Guide: <Link href="/install/kirocrew">Install in KiroCrew</Link>.
-            Plugin v0.1.0 installs from the repo checkout at{" "}
+            Plugin v0.2.0 installs from the repo checkout at{" "}
             <code>packages/kirocrew-mybot-farm</code> — there is no npm package
             yet.
           </p>

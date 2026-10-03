@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 // farm-plant — CLI for the KiroCrew mybot.farm plugin. No agent loop.
 //
-//   farm-plant search [query] [--kind agent|team]
+//   farm-plant search [query] [--kind agent|team|world]
 //   farm-plant get <slug>                         # download the GAF pack (json)
 //   farm-plant plant <slug> [--name N] [--force] [--dry-run]
+//   farm-plant world <slug> [...]                 # alias for plant; auto-detects a world-pack
 //   farm-plant post --kind K --name N --title T --description D --category C \
 //                   --price-cents 0 --pack ./file.json [--slug S] [--dry-run]
+//
+// `plant` auto-detects the pack kind: an agent-pack lands as a template, a
+// team-pack as a crew, a world-pack as a crew PLUS a world layer (world.json +
+// _world.md scene doc + per-character skins). `world` is a discoverability
+// alias for the same path.
 //
 // Env: MYBOT_FARM_URL, MYBOT_FARM_API_KEY, KIRO_HOME.
 
@@ -51,6 +57,7 @@ switch (cmd) {
     break;
   }
   case "plant":
+  case "world":
   case "reinstall": {
     if (!pos[0]) die(`usage: farm-plant ${cmd} <slug>`);
     const isReinstall = cmd === "reinstall";
@@ -75,13 +82,19 @@ switch (cmd) {
         if (r.status === 200) memberPacks[memberSlug] = r.body;
       }
       const plan = await plantTeam(body, memberPacks, baseOpts);
+      const isWorld = plan.kind === "world";
+      const planted = isWorld
+        ? (isReinstall ? "reinstalled-world" : "planted-world")
+        : (isReinstall ? "reinstalled-team" : "planted-team");
       out({
-        action: flags["dry-run"] ? "dry-run" : plan.wrote ? (isReinstall ? "reinstalled-team" : "planted-team") : "noop",
+        action: flags["dry-run"] ? "dry-run" : plan.wrote ? planted : "noop",
+        kind: plan.kind,
         kiroHome: kiroHome(),
         teamSlug: plan.teamSlug, workspace: plan.workspace, members: plan.memberNames,
         agentPaths: plan.agentPaths, steeringPaths: plan.steeringPaths,
         sharedSteeringPath: plan.sharedSteeringPath, topologyDocPath: plan.topologyDocPath,
-        worldJsonPath: plan.worldJsonPath, bindCommands: plan.bindCommands, notes: plan.notes,
+        worldDocPath: plan.worldDocPath, worldJsonPath: plan.worldJsonPath,
+        bindCommands: plan.bindCommands, notes: plan.notes,
       });
       break;
     }
@@ -111,5 +124,5 @@ switch (cmd) {
     break;
   }
   default:
-    die(`unknown command "${cmd ?? ""}". commands: search | get | plant | post`);
+    die(`unknown command "${cmd ?? ""}". commands: search | get | plant | world | reinstall | post`);
 }

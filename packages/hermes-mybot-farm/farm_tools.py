@@ -373,6 +373,8 @@ def _plant_text(result) -> str:
         lines.append(f"Room: {result.room}")
     if result.world_file:
         lines.append(f"World file: {result.world_file}")
+    if result.world_doc:
+        lines.append(f"World scene: {result.world_doc}")
     if result.recruited:
         lines.append(f"Recruited into the Bots roster: {', '.join(result.recruited)}")
     if result.endpoint_note:

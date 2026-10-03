@@ -189,6 +189,147 @@ export function gafTeamToKirocrewCrew(teamPack, memberPacks, opts = {}) {
   return { teamSlug, workspace, members, sharedSteering, bindCommands, topologyDoc, notes };
 }
 
+/** worlds/v1 cast capability names that are DOCUMENTATION ONLY (spec §11.3). */
+const WORLD_CAST_CAPABILITIES = new Set(["web", "files", "schedule"]);
+
+/** Pick the cast skin for a member by role (worlds key cast by role, not name). */
+function castSkinForRole(world, role) {
+  const cast = Array.isArray(world?.cast) ? world.cast : [];
+  return cast.find((c) => c && c.role === role) || null;
+}
+
+/** Place name for prose. Falls back to the id when the place has no name. */
+function placeName(world, placeId) {
+  const places = Array.isArray(world?.places) ? world.places : [];
+  const hit = places.find((p) => p && p.id === placeId);
+  return hit?.name || placeId;
+}
+
+/** Human-readable name of a place id for the world doc. */
+function placeLabel(world, placeId) {
+  const places = Array.isArray(world?.places) ? world.places : [];
+  const hit = places.find((p) => p && p.id === placeId);
+  return hit?.name ? `${hit.name} (${placeId})` : placeId;
+}
+
+/**
+ * Compose the `_world.md` steering doc from a worlds/v1 `world` block. Readable
+ * projection so the planted crew understands the setting (world-install-contract
+ * §3.1): title/mood, places, per-role cast skin, turn model + entrypoint.
+ */
+function composeWorldDoc(world, teamSlug) {
+  const title = world?.title || teamSlug;
+  const lines = [`# ${title} — world`];
+
+  const mood = world?.theme?.mood || world?.render?.theme;
+  if (mood) lines.push(`\n_Setting: ${mood}._`);
+  if (world?.thumbnail) lines.push(`\nThumbnail: \`${world.thumbnail}\``);
+
+  const rules = world?.rules ?? {};
+  const turnModel = rules.turnModel || "defer";
+  const handoff = rules.handoff ? `, handoff by ${rules.handoff}` : "";
+  lines.push(`\n**Turn model:** ${turnModel}${handoff}. Characters speak in the shared scene; wait for an @mention unless you are the greeter.`);
+  if (rules.ambient) {
+    lines.push(`\n_This world declares ambient life, but routines are NOT scheduled on install — ask to schedule them explicitly._`);
+  }
+
+  const entry = world?.entrypoint;
+  if (entry?.place) {
+    const greeter = entry.greeter ? ` — the **${entry.greeter}** greets first` : "";
+    lines.push(`\n**Entry:** scene opens in ${placeLabel(world, entry.place)}${greeter}.`);
+  }
+
+  const places = Array.isArray(world?.places) ? world.places : [];
+  if (places.length) {
+    lines.push(`\n## Places`);
+    for (const p of places) {
+      const present = Array.isArray(p?.present) && p.present.length ? ` — present: ${p.present.join(", ")}` : "";
+      const connects = Array.isArray(p?.connects) && p.connects.length ? ` — connects to ${p.connects.join(", ")}` : "";
+      lines.push(`- **${p?.name ?? p?.id}** (\`${p?.id}\`)${present}${connects}`);
+    }
+  }
+
+  const cast = Array.isArray(world?.cast) ? world.cast : [];
+  if (cast.length) {
+    lines.push(`\n## Cast`);
+    for (const c of cast) {
+      const parts = [`**${c?.name ?? c?.role}** plays the **${c?.role}**`];
+      if (c?.home) parts.push(`home: ${placeLabel(world, c.home)}`);
+      if (c?.memoryScope) parts.push(`memory: ${c.memoryScope}`);
+      if (Array.isArray(c?.capabilities) && c.capabilities.length) {
+        const known = c.capabilities.filter((cap) => WORLD_CAST_CAPABILITIES.has(cap));
+        if (known.length) parts.push(`capabilities (advisory only): ${known.join(", ")}`);
+      }
+      lines.push(`- ${parts.join(" — ")}`);
+      const rel = c?.relationships;
+      if (rel && typeof rel === "object") {
+        const relLines = Object.entries(rel).map(([who, how]) => `  - ${who}: ${how}`);
+        if (relLines.length) lines.push(relLines.join("\n"));
+      }
+    }
+  }
+
+  lines.push(
+    `\n## Safety`,
+    `Cast capabilities above are advisory documentation. Each character keeps KiroCrew's deny-by-default tool allow-list (read/search/web). A world never grants \`execute_bash\` or \`fs_write\`.`,
+  );
+
+  return lines.join("\n") + "\n";
+}
+
+/**
+ * Project a GAF world-pack onto a KiroCrew crew PLUS the world layer. A world is
+ * a team-pack superset: the base crew is produced by gafTeamToKirocrewCrew
+ * (byte-identical to a plain team install), then the `world` block adds:
+ *   - a `_world.md` steering doc (places, cast skins, turn model, entrypoint);
+ *   - a per-member "world skin" appended to each member's template prompt,
+ *     naming the character + home and pointing at `_world.md`;
+ *   - the raw worlds/v1 block carried through for `world.json`.
+ *
+ * Cast is keyed by `role`, matching `members[].role`. Safety: cast capabilities
+ * are documentation only — the deny-by-default allow-list is never widened.
+ *
+ * @returns {{ ...crew, world, worldDoc }}  worldDoc = { path, content } | null
+ */
+export function gafWorldToKirocrewCrew(worldPack, memberPacks, opts = {}) {
+  const crew = gafTeamToKirocrewCrew(worldPack, memberPacks, opts);
+  const world = worldPack?.world && typeof worldPack.world === "object" ? worldPack.world : null;
+
+  if (!world) {
+    crew.notes.push("world-pack has no `world` block — planted as a plain team.");
+    return { ...crew, world: null, worldDoc: null };
+  }
+
+  const worldDoc = {
+    path: `.kiro/steering/farm/${crew.teamSlug}/_world.md`,
+    content: composeWorldDoc(world, crew.teamSlug),
+  };
+
+  // Per-member world skin: name the character + home, point at _world.md. The
+  // member keeps its own GAF persona; the world overlays its role in the scene.
+  const worldDocRef = `.kiro/steering/farm/${crew.teamSlug}/_world.md`;
+  for (const m of crew.members) {
+    const skin = castSkinForRole(world, m.role);
+    const charName = skin?.name || m.role;
+    const homeLine = skin?.home
+      ? ` You live in **${placeName(world, skin.home)}**.`
+      : "";
+    const greeter = world?.entrypoint?.greeter === m.role ? " You greet newcomers when the scene opens." : "";
+    m.template.prompt +=
+      `\n## In the world: ${world.title || crew.teamSlug}\n` +
+      `You are **${charName}**, embodied as the **${m.role}** in this world.${homeLine}${greeter}\n` +
+      `The scene, places, cast, and turn model are described in \`${worldDocRef}\`. ` +
+      `Speak in character in the shared scene; wait for an @mention unless you are the greeter. ` +
+      `Your tool allow-list is unchanged by the world — any capabilities the world lists are advisory only.\n`;
+    // Ensure the member can read the world doc.
+    if (!m.template.resources.includes(`file://${worldDocRef}`)) {
+      m.template.resources.push(`file://${worldDocRef}`);
+    }
+  }
+
+  return { ...crew, world, worldDoc };
+}
+
 /**
  * Reverse: a KiroCrew agent template -> GAF agent-pack, scrubbed of machine-local
  * fields (mcpServers with absolute paths, hooks, keys). For farm_post export.

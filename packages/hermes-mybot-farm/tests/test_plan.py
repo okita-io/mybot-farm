@@ -14,6 +14,7 @@ from hermes_mybot_farm.plant import (  # noqa: E402
     _fetch_team_files,
     build_plant_plan,
     confined_path,
+    world_asset_rels,
     expand_braces,
     member_archive_href,
     parse_kanban,
@@ -235,6 +236,98 @@ class PlanTests(unittest.TestCase):
         self.assertIsNotNone(plan.world_file)
         self.assertTrue(str(plan.world_file).endswith("/worlds/neon-harbor/world.json"))
         self.assertEqual(plan.world_block["title"], "Neon Harbor")
+
+    def test_world_cast_capabilities_grant_no_tools(self) -> None:
+        # Task 8: a world's cast[].capabilities are advisory only. Planting a
+        # world must NOT widen any member's tools — no execute_bash / file-write
+        # grant appears anywhere in the plan or its carried world block, even
+        # when the cast lists dangerous capabilities. A planted profile keeps
+        # whatever tools shipped in its tarball; the plan adds none.
+        stall = {
+            "kind": "world",
+            "slug": "neon-harbor",
+            "members": [
+                {"name": "patch", "href": "/packs/agents/patch.hermes.tar.gz"},
+            ],
+        }
+        pack = {
+            "format": "mybot.farm/world-pack",
+            "slug": "neon-harbor",
+            "members": [
+                {"role": "harbor-engineer", "summary": "Patch", "pack": "agents/patch.json"},
+            ],
+            "world": {
+                "schema": "worlds/v1",
+                "title": "Neon Harbor",
+                "entrypoint": {"place": "dock", "greeter": "harbor-engineer"},
+                "cast": [
+                    {
+                        "role": "harbor-engineer",
+                        "name": "Patch",
+                        "home": "workshop",
+                        # Deliberately dangerous: must stay advisory, never granted.
+                        "capabilities": ["files", "execute_bash", "fs_write", "web", "schedule"],
+                    }
+                ],
+                "places": [{"id": "workshop", "name": "The Workshop", "present": ["harbor-engineer"]}],
+            },
+        }
+        plan = build_plant_plan(stall, pack, "https://mybot.farm")
+
+        # 1) No MemberPlan carries a tool-granting field at all.
+        for m in plan.members:
+            for banned in ("tools", "allowed_tools", "allowedTools"):
+                self.assertFalse(hasattr(m, banned),
+                                 f"MemberPlan unexpectedly has a {banned} field")
+
+        # 2) The plan surface, serialized, leaks no tool grant derived from
+        #    capabilities. (capabilities live inside world_block as data; no
+        #    execute_bash/fs_write/allowed-tools KEY should appear on members.)
+        import json as _json
+        plan_blob = _json.dumps({
+            "members": [vars(m) for m in plan.members],
+            "skills": plan.skills,
+        })
+        for banned in ("execute_bash", "fs_write", "allowed_tools", "allowedTools"):
+            self.assertNotIn(banned, plan_blob,
+                             f"plan member surface leaked a {banned} grant from capabilities")
+
+        # 3) The capabilities ARE preserved as advisory data on the world block
+        #    (so WORLD.md can render them) — proving we exercised the real path.
+        cast0 = (plan.world_block.get("cast") or [{}])[0]
+        self.assertIn("execute_bash", cast0.get("capabilities", []))
+
+    def test_empty_world_plans_the_scene_without_profiles(self) -> None:
+        stall = {"kind": "world", "slug": "neon-harbor"}
+        pack = {
+            "format": "mybot.farm/world-pack",
+            "slug": "neon-harbor",
+            "members": [],
+            "world": {
+                "schema": "worlds/v1",
+                "title": "Neon Harbor",
+                "places": [{"id": "dock", "name": "The Docks"}],
+                "entrypoint": {"place": "dock"},
+            },
+        }
+        plan = build_plant_plan(stall, pack, "https://mybot.farm")
+        self.assertEqual(plan.kind, "world")
+        self.assertEqual(plan.members, [])
+        self.assertTrue(str(plan.world_file).endswith("/worlds/neon-harbor/world.json"))
+
+    def test_world_asset_rels_skip_site_and_remote_paths(self) -> None:
+        refs = world_asset_rels(
+            {
+                "thumbnail": "/packs/worlds/neon-harbor.webp",
+                "theme": {"backdrop": "assets/harbor-night.webp"},
+                "places": [{"art": "assets/dock.webp"}, {"art": "https://evil.example/x.webp"}],
+                "cast": [{"avatar": "assets/../secret.webp"}, {"avatar": "assets/probe-harbor.webp"}],
+            }
+        )
+        self.assertEqual(
+            refs,
+            ["assets/harbor-night.webp", "assets/dock.webp", "assets/probe-harbor.webp"],
+        )
 
     def test_team_without_archives_explains_gap(self) -> None:
         stall = {"kind": "team", "slug": "paper-crew", "downloadHref": "/api/packs/paper-crew"}
