@@ -842,8 +842,25 @@ async function ensureBotChatSession(profile) {
     if (row.title != null && row.title !== BOT_CHAT_TITLE) {
       throw new Error('Bot Chat lookup returned an unexpected session')
     }
-    const id = row.resolved_id || row.id
-    if (id) return { sessionId: id, created: false }
+    const foundId = row.resolved_id || row.id
+    if (foundId) {
+      // The row is on disk but NOT necessarily live in memory, and both
+      // session.history and prompt.submit resolve the session from live
+      // memory (`_sess` / `_sess_nowait`) — a stored-only session 4007s. So
+      // RESUME it, which loads it into memory AND returns the LIVE session id
+      // (compression tip / freshly-bound id) plus its history. Everything
+      // after must use THAT id, not foundId, or the submit misses the live
+      // session (the "prompt.submit: session not found" we saw).
+      const resumed = await step('session.resume', host.request('session.resume', {
+        session_id: foundId,
+        profile
+      }))
+      const liveId = (resumed && (resumed.session_id || resumed.resolved_id)) || foundId
+      const messages = resumed && Array.isArray(resumed.messages)
+        ? previewMessages(resumed.messages)
+        : null
+      return { sessionId: liveId, created: false, messages }
+    }
   }
   const created = await step('session.create', host.request('session.create', {
     profile,
@@ -853,29 +870,14 @@ async function ensureBotChatSession(profile) {
   if (!created || !created.session_id) {
     throw new Error('session.create returned no session_id')
   }
-  // A freshly minted hidden session has no persisted row yet, so a
-  // session.history/resume on it 4007s ("session not found") until the first
-  // turn flushes it. Signal `created` so the caller skips that empty read.
-  return { sessionId: created.session_id, created: true }
+  // A freshly created session is already live in memory (session.create binds
+  // it), so a submit works directly; it has no history yet.
+  return { sessionId: created.session_id, created: true, messages: [] }
 }
 
 async function loadBotChatHistory(sessionId, profile) {
-  // IMPORTANT: session.history is a `_sess_nowait` RPC — it resolves the
-  // session from LIVE memory and 4007s ("session not found") on a stored but
-  // not-yet-loaded session (e.g. a hidden Bot Chat with history that no
-  // running agent currently holds). session.resume loads the stored session
-  // into memory AND returns its messages in one call, so we resume first and
-  // use what it returns; a later submit then works because the session is now
-  // live. Falls back to a direct history read only if resume yields nothing.
-  let resumed
-  try {
-    resumed = await host.request('session.resume', { session_id: sessionId, profile })
-  } catch (err) {
-    throw new Error(`session.resume: ${(err && err.message) || err}`)
-  }
-  if (resumed && Array.isArray(resumed.messages)) {
-    return previewMessages(resumed.messages)
-  }
+  // Used by the G4 reply poll AFTER the session is already live (resumed or
+  // just created), so a plain history read is correct here.
   let hist
   try {
     hist = await host.request('session.history', { session_id: sessionId, profile })
@@ -883,15 +885,6 @@ async function loadBotChatHistory(sessionId, profile) {
     throw new Error(`session.history: ${(err && err.message) || err}`)
   }
   return previewMessages((hist && hist.messages) || [])
-}
-
-/** Resume a session into memory without caring about its history payload. */
-async function resumeBotChatSession(sessionId, profile) {
-  try {
-    await host.request('session.resume', { session_id: sessionId, profile })
-  } catch (err) {
-    throw new Error(`session.resume: ${(err && err.message) || err}`)
-  }
 }
 
 async function submitBotChatLine(sessionId, profile, text) {
@@ -1002,10 +995,12 @@ function WorldsPage() {
     })
     setChatDraft('')
     try {
-      const { sessionId, created } = await ensureBotChatSession(profile)
-      // A just-created hidden session has no persisted history yet; reading it
-      // would 4007. Start empty and let the first reply populate the bubble.
-      const messages = created ? [] : await loadBotChatHistory(sessionId, profile)
+      const { sessionId, messages: initial } = await ensureBotChatSession(profile)
+      // ensureBotChatSession already resumed (and returned history) or created
+      // (empty). Use that; fall back to a history read only if it returned null.
+      const messages = Array.isArray(initial)
+        ? initial
+        : await loadBotChatHistory(sessionId, profile)
       setChat({
         castId: c.id,
         profile,

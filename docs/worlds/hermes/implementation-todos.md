@@ -348,6 +348,16 @@ aid, not a contract — confirm against the file before editing.
   helper and per-step error labels (`ensureAgent:` / `session.list:` /
   `session.create:` / `session.resume:` / `prompt.submit:`) so any future
   failure names the exact RPC instead of a bare "session not found".
+  **SECOND live round surfaced `prompt.submit: session not found`** (history
+  now loaded fine). Cause: `session.resume` binds the session under a LIVE id
+  (compression tip / freshly-bound) that can differ from the stored id we
+  looked up, and `prompt.submit` (`_sess`) resolves from live memory — so
+  submitting under the pre-resume id missed the live session. **FIXED:**
+  `ensureBotChatSession` now resumes internally and returns the LIVE
+  `session_id` from the resume response (plus its history); `openChat` stores
+  that id and every later history/submit uses it. The standalone
+  `resumeBotChatSession`/`loadBotChatHistory`-resume path was folded into
+  this; `loadBotChatHistory` is now the post-live poll read only.
   **G1 verified live** either way: the sprite shows "TheDrummer" for the
   `cydonia` dir, whose real `profile.yaml` has `hermes-bots.title` among
   sibling keys with a nested `groups:` mapping below it. Awaiting a reload to
