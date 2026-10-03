@@ -856,10 +856,19 @@ async function ensureBotChatSession(profile) {
         profile
       }))
       const liveId = (resumed && (resumed.session_id || resumed.resolved_id)) || foundId
-      const messages = resumed && Array.isArray(resumed.messages)
-        ? previewMessages(resumed.messages)
-        : null
-      return { sessionId: liveId, created: false, messages }
+      // A DESKTOP/deferred resume returns `messages: []` with `hydrating: true`
+      // and the real `message_count` — the transcript hydrates in the
+      // background and is read back through session.history. So only trust a
+      // NON-empty messages array here; otherwise signal the caller to poll
+      // session.history up to `messageCount` until it populates.
+      const msgs = resumed && Array.isArray(resumed.messages) ? resumed.messages : []
+      const messageCount = Number(resumed && resumed.message_count) || 0
+      return {
+        sessionId: liveId,
+        created: false,
+        messages: msgs.length ? previewMessages(msgs) : null,
+        messageCount
+      }
     }
   }
   const created = await step('session.create', host.request('session.create', {
@@ -876,15 +885,43 @@ async function ensureBotChatSession(profile) {
 }
 
 async function loadBotChatHistory(sessionId, profile) {
-  // Used by the G4 reply poll AFTER the session is already live (resumed or
-  // just created), so a plain history read is correct here.
+  // One session.history read on a LIVE session. Returns the preview rows plus
+  // the raw total count (used to detect hydration / a new reply).
   let hist
   try {
     hist = await host.request('session.history', { session_id: sessionId, profile })
   } catch (err) {
     throw new Error(`session.history: ${(err && err.message) || err}`)
   }
-  return previewMessages((hist && hist.messages) || [])
+  const raw = (hist && hist.messages) || []
+  const count = Number(hist && hist.count)
+  return { messages: previewMessages(raw), count: Number.isFinite(count) ? count : raw.length }
+}
+
+/**
+ * A desktop/deferred resume returns messages:[] with the real message_count
+ * while the transcript hydrates in the background. Poll session.history until
+ * it reports at least `wantCount` rows (or the budget runs out), so the bubble
+ * fills in instead of showing "No messages yet." for a chat that has history.
+ * `alive()` lets the caller abort when the user closes/switches the bubble.
+ */
+async function hydrateHistory(sessionId, profile, wantCount, alive) {
+  const delays = [150, 300, 600, 1000, 1500, 2000]
+  let last = { messages: [], count: 0 }
+  for (let i = 0; i < delays.length; i++) {
+    if (alive && !alive()) return last
+    let res
+    try {
+      res = await loadBotChatHistory(sessionId, profile)
+    } catch {
+      await new Promise(r => setTimeout(r, delays[i]))
+      continue
+    }
+    last = res
+    if (res.count >= wantCount || res.messages.length) return res
+    await new Promise(r => setTimeout(r, delays[i]))
+  }
+  return last
 }
 
 async function submitBotChatLine(sessionId, profile, text) {
@@ -995,18 +1032,27 @@ function WorldsPage() {
     })
     setChatDraft('')
     try {
-      const { sessionId, messages: initial } = await ensureBotChatSession(profile)
-      // ensureBotChatSession already resumed (and returned history) or created
-      // (empty). Use that; fall back to a history read only if it returned null.
-      const messages = Array.isArray(initial)
-        ? initial
-        : await loadBotChatHistory(sessionId, profile)
+      const { sessionId, messages: initial, messageCount } =
+        await ensureBotChatSession(profile)
+      const live = () => selRef.current === selectedId && chatRef.current &&
+        chatRef.current.profile === profile
+      let messages = Array.isArray(initial) ? initial : []
+      let count = messageCount || messages.length
+      // Resume returned no inline transcript (desktop/deferred hydration) but
+      // the session has history — poll session.history until it fills in.
+      if (!messages.length && messageCount > 0) {
+        const res = await hydrateHistory(sessionId, profile, messageCount, live)
+        messages = res.messages
+        count = res.count || count
+      }
+      if (!live()) return
       setChat({
         castId: c.id,
         profile,
         name: c.name || c.id,
         sessionId,
         messages,
+        messageCount: count,
         loading: false,
         sending: false,
         error: null
@@ -1032,9 +1078,10 @@ function WorldsPage() {
     const sessionId = chat.sessionId
     const profile = chat.profile
     // G4: optimistic echo — show the user's line immediately so it never
-    // vanishes while the submit + reply are in flight. Captured here so the
-    // reply poll below can tell when something NEW arrived.
-    const baseCount = chat.messages.length
+    // vanishes while the submit + reply are in flight. `baseCount` is the
+    // RAW server message count before this send (preview rows are capped at 6,
+    // so comparing preview length can't detect growth on a long chat).
+    const baseCount = Number.isFinite(chat.messageCount) ? chat.messageCount : chat.messages.length
     const optimistic = chat.messages.concat([{ role: 'user', text }])
     setChat(prev =>
       prev && prev.sessionId === sessionId
@@ -1055,28 +1102,28 @@ function WorldsPage() {
       )
       return
     }
-    // G4: bounded reply poll. Re-read history a few times with backoff until
-    // the message count grows past the echo (a reply landed) or we hit the
-    // cap. Same host.request path — never the 9119 port. Aborts if the user
-    // closed the bubble or switched characters.
-    const delays = [400, 800, 1500, 2500, 4000]
+    // G4: bounded reply poll. Re-read history until the RAW count grows by at
+    // least 2 (our user turn + the assistant reply) with an assistant tail, or
+    // the budget runs out. Same host.request path — never the 9119 port.
+    const delays = [400, 800, 1500, 2500, 4000, 6000]
     for (let i = 0; i < delays.length; i++) {
       if (!stillHere()) return
       await new Promise(r => setTimeout(r, delays[i]))
       if (!stillHere()) return
-      let messages
+      let res
       try {
-        messages = await loadBotChatHistory(sessionId, profile)
+        res = await loadBotChatHistory(sessionId, profile)
       } catch {
         continue // transient; keep trying within the budget
       }
-      const grew = messages.length > baseCount + 1 // past our echoed line
+      const messages = res.messages
+      const grew = res.count >= baseCount + 2 // our turn + a reply
       const last = messages[messages.length - 1]
       const gotReply = grew && last && last.role === 'assistant'
       if (gotReply || i === delays.length - 1) {
         setChat(prev =>
           prev && prev.sessionId === sessionId
-            ? { ...prev, messages, sending: false }
+            ? { ...prev, messages, sending: false, messageCount: res.count }
             : prev
         )
         return

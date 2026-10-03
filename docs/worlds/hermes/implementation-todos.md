@@ -360,5 +360,19 @@ aid, not a contract — confirm against the file before editing.
   this; `loadBotChatHistory` is now the post-live poll read only.
   **G1 verified live** either way: the sprite shows "TheDrummer" for the
   `cydonia` dir, whose real `profile.yaml` has `hermes-bots.title` among
-  sibling keys with a nested `groups:` mapping below it. Awaiting a reload to
-  confirm the resume fix opens the bubble with history.
+  sibling keys with a nested `groups:` mapping below it.
+  **THIRD live round: send SUCCEEDED** (the agent received the line and
+  replied in its own session view) **but the reply never reached the Worlds
+  bubble** ("No messages yet."). Two causes, both from the gateway's
+  desktop/deferred resume contract (`methods_session.py::_resume_deferred`:
+  *"Desktop owns the visible transcript ... not this model-history restore"*):
+  (a) a desktop resume returns `messages: []` with `hydrating: true` and the
+  real `message_count` — the transcript hydrates in the BACKGROUND and is read
+  back via `session.history`; and (b) `previewMessages` caps at 6 rows, so the
+  reply poll's length-based growth check could never fire on a long chat.
+  **FIXED:** `loadBotChatHistory` returns `{ messages, count }` (raw server
+  count); a new `hydrateHistory` polls `session.history` up to `message_count`
+  so the bubble fills in on open; and the G4 send poll now detects a reply by
+  RAW `count >= base + 2` with an assistant tail, not preview length. The send
+  path (task 2) is now proven end-to-end live. Covered by a count-based
+  reply-detection unit test.

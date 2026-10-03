@@ -300,3 +300,17 @@ test('replyLanded: false when the tail is still a user turn', () => {
   ]
   assert.equal(replyLanded(msgs, 1), false)
 })
+
+// Count-based reply detection (the live fix): preview rows cap at 6, so a long
+// chat can't use preview length to detect growth — use the RAW server count.
+function replyLandedByCount(rawCount, baseCount, lastRole) {
+  return rawCount >= baseCount + 2 && lastRole === 'assistant'
+}
+
+test('replyLandedByCount: needs +2 (user turn + reply) and an assistant tail', () => {
+  // Long chat already at 40 msgs; preview length would be stuck at 6.
+  assert.equal(replyLandedByCount(40, 40, 'user'), false)   // nothing yet
+  assert.equal(replyLandedByCount(41, 40, 'user'), false)   // only our turn landed
+  assert.equal(replyLandedByCount(42, 40, 'assistant'), true) // turn + reply
+  assert.equal(replyLandedByCount(42, 40, 'user'), false)   // grew but tail not a reply
+})
