@@ -387,3 +387,40 @@ test('turnModelNote: director/round-robin/free-for-all all fall back to defer', 
 test('turnModelNote: unknown value is treated as defer', () => {
   assert.match(turnModelNote('weird-mode'), /treated as defer/)
 })
+
+// --- animated sprite helpers (task 10) ------------------------------------
+// Mirrors rowCount + the sheet-sibling path resolution used by useSpriteSheet.
+function rowCount(manifest) {
+  const states = manifest && manifest.states
+  if (!states) return 1
+  let max = 0
+  for (const k of Object.keys(states)) {
+    const r = Number(states[k] && states[k].row) || 0
+    if (r > max) max = r
+  }
+  return max + 1
+}
+function sheetSibling(spriteRel, sheetName) {
+  return spriteRel.replace(/[^/]+$/, '') + sheetName
+}
+
+test('rowCount: counts distinct sheet rows (max row + 1)', () => {
+  // Shape of the real harbor-engineer.sheet.json (6 states, rows 0..5).
+  const manifest = {
+    states: {
+      idle: { row: 0 }, working: { row: 1 }, thinking: { row: 2 },
+      done: { row: 3 }, error: { row: 4 }, sleeping: { row: 5 }
+    }
+  }
+  assert.equal(rowCount(manifest), 6)
+  assert.equal(rowCount({}), 1)
+  assert.equal(rowCount(null), 1)
+})
+
+test('sheetSibling: resolves the PNG next to the manifest path', () => {
+  assert.equal(
+    sheetSibling('assets/harbor-engineer.sheet.json', 'harbor-engineer.sheet.png'),
+    'assets/harbor-engineer.sheet.png'
+  )
+  assert.equal(sheetSibling('x.sheet.json', 'x.sheet.png'), 'x.sheet.png')
+})

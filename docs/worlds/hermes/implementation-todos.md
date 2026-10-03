@@ -214,6 +214,21 @@ source, not from a live click in Desktop.
   **Not yet wired:** a CLI/tool entry point and the pane's "export" link are a
   thin follow-up on top of this module.
 
+- [x] **10. Animated sprites in the pane (parity with KiroCrew worlds).**
+  Landed from the merged `agent-sprites` PR (#39): `cast[].sprite` points at a
+  `.sheet.json` manifest (`frameW`/`frameH`/`sheet` + `states.{idle,…}.
+  {row,frames,fps,loop}`) beside a strip PNG. **DONE (2026-10-03):** the pane
+  now renders these. `readWorld` carries `cast[].sprite`; a `useSpriteSheet`
+  hook loads the manifest JSON (file bridge, world-dir confined) and the sheet
+  PNG (sibling path, via `useAsset`); a new `AnimatedSprite` component steps
+  the `idle` row's frames with `requestAnimationFrame` (no global CSS — desktop
+  plugins ship none), scaling one 32×32 cell to the avatar circle via
+  `backgroundSize`/`backgroundPosition`. Falls back to the static avatar, then
+  the initial, when no sprite. Pure helpers (`rowCount`, sheet-sibling path)
+  unit-tested against the real `harbor-engineer.sheet.json` shape (6 rows).
+  **Live-verify pending:** needs a world whose `cast[].sprite` points at a
+  planted sheet to see the animation on the desktop.
+
 ---
 
 ## Roster (done)

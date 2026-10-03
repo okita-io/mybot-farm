@@ -409,6 +409,7 @@ async function readWorld(id) {
       name: item.name || charId,
       home: item.home,
       avatar: item.avatar || null,
+      sprite: typeof item.sprite === 'string' ? item.sprite : null,
       isGreeter: !!(role && role === greeter),
       memoryScope: item.memoryScope,
       capabilities: item.capabilities || [],
@@ -604,6 +605,59 @@ function useAsset(rel, worldDir) {
   }, [abs, remote])
 
   return src
+}
+
+// ---------------------------------------------------------------------------
+// Animated sprite sheet (agent-sprites): cast[].sprite -> a .sheet.json
+// manifest ({ frameW, frameH, sheet, states.{idle,…}.{row,frames,fps,loop} })
+// beside a strip PNG. We render the `idle` row as a CSS steps() animation over
+// background-position. Falls back (null) to the static avatar when absent.
+// ---------------------------------------------------------------------------
+
+const spriteManifestCache = new Map()
+
+function useSpriteSheet(rel, worldDir) {
+  const manifestAbs = !isRemoteUrl(rel) && worldDir ? resolveAssetPath(rel, worldDir) : null
+  const [manifest, setManifest] = useState(null)
+
+  useEffect(() => {
+    let alive = true
+    const b = bridge()
+    if (!b || !manifestAbs) {
+      setManifest(null)
+      return () => { alive = false }
+    }
+    const load = async () => {
+      let entry = spriteManifestCache.get(manifestAbs)
+      if (!entry) {
+        entry = Promise.resolve(b.readFileText(manifestAbs))
+          .then(r => {
+            if (!r || r.ok === false || r.truncated || r.text == null) return null
+            try {
+              const m = JSON.parse(r.text)
+              if (!m || typeof m !== 'object' || !m.sheet || !m.states) return null
+              return m
+            } catch { return null }
+          })
+          .catch(() => null)
+        spriteManifestCache.set(manifestAbs, entry)
+      }
+      const m = await entry
+      if (m == null) spriteManifestCache.delete(manifestAbs) // retry later (planted after)
+      if (alive) setManifest(m)
+    }
+    load()
+    return () => { alive = false }
+  }, [manifestAbs])
+
+  // The sheet PNG sits next to the manifest; resolve its path relative to the
+  // manifest's directory, then load it as a data URL through the normal asset
+  // path (same confinement + cache).
+  const sheetRel = manifest && typeof rel === 'string'
+    ? rel.replace(/[^/]+$/, '') + manifest.sheet
+    : null
+  const sheetUrl = useAsset(sheetRel, worldDir)
+  return manifest && sheetUrl ? { manifest, sheetUrl } : null
 }
 
 // ---------------------------------------------------------------------------
@@ -1037,8 +1091,76 @@ async function ambientActive(worldId, cast) {
 // Sprite
 // ---------------------------------------------------------------------------
 
+/**
+ * Animated 32×32 sprite from an agent-sprites sheet. Steps the `idle` row's
+ * frames with requestAnimationFrame (no global CSS/keyframes — desktop plugins
+ * ship none) by shifting background-position. Scaled up to the avatar circle.
+ */
+function AnimatedSprite({ sheet, name }) {
+  const { manifest, sheetUrl } = sheet
+  const idle = (manifest.states && (manifest.states.idle || Object.values(manifest.states)[0])) || {}
+  const frames = Math.max(1, Number(idle.frames) || 1)
+  const fps = Math.max(1, Number(idle.fps) || 4)
+  const row = Math.max(0, Number(idle.row) || 0)
+  const fw = Number(manifest.frameW) || 32
+  const fh = Number(manifest.frameH) || 32
+  const [frame, setFrame] = useState(0)
+
+  useEffect(() => {
+    if (frames <= 1) return
+    let raf = 0
+    let last = 0
+    const interval = 1000 / fps
+    const tick = (t) => {
+      if (!last) last = t
+      if (t - last >= interval) {
+        last = t
+        setFrame(f => (f + 1) % frames)
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [frames, fps])
+
+  const size = 50 // match AVATAR_IMG
+  const scale = size / fw
+  // Scale the WHOLE sheet uniformly so one frame fills the circle; one frame is
+  // fw*scale = size wide. backgroundSize uses 'auto' height to preserve the
+  // aspect of the full strip while width scales each frame to `size`.
+  return jsx('div', {
+    title: name,
+    style: {
+      width: size,
+      height: size,
+      borderRadius: '50%',
+      border: '2px solid rgba(255,255,255,0.35)',
+      overflow: 'hidden',
+      imageRendering: 'pixelated',
+      backgroundImage: `url(${sheetUrl})`,
+      backgroundRepeat: 'no-repeat',
+      // Each sheet cell is fw×fh; scaling by `scale` makes one cell = size×size.
+      backgroundSize: `auto ${Math.round(fh * scale * (rowCount(manifest)))}px`,
+      backgroundPosition: `-${Math.round(frame * fw * scale)}px -${Math.round(row * fh * scale)}px`
+    }
+  })
+}
+
+/** Number of state rows in a sheet manifest (for backgroundSize height). */
+function rowCount(manifest) {
+  const states = manifest && manifest.states
+  if (!states) return 1
+  let max = 0
+  for (const k of Object.keys(states)) {
+    const r = Number(states[k] && states[k].row) || 0
+    if (r > max) max = r
+  }
+  return max + 1
+}
+
 function Sprite({ c, worldDir, selected, onSelect }) {
   const avatar = useAsset(c.avatar, worldDir)
+  const sheet = useSpriteSheet(c.sprite, worldDir)
   const name = c.name || c.id
   const canChat = !!(c.profileName && typeof host.request === 'function')
   const spriteStyle = {
@@ -1058,12 +1180,14 @@ function Sprite({ c, worldDir, selected, onSelect }) {
       jsxs('div', {
         style: SPRITE_CIRCLE,
         children: [
-          avatar
-            ? jsx('img', { src: avatar, alt: name, style: AVATAR_IMG })
-            : jsx('div', {
-                style: INITIAL_CIRCLE,
-                children: name.slice(0, 1).toUpperCase()
-              }),
+          sheet
+            ? jsx(AnimatedSprite, { sheet: sheet, name: name })
+            : avatar
+              ? jsx('img', { src: avatar, alt: name, style: AVATAR_IMG })
+              : jsx('div', {
+                  style: INITIAL_CIRCLE,
+                  children: name.slice(0, 1).toUpperCase()
+                }),
           c.isGreeter ? jsx('span', { style: GREETER, children: '\u2605' }) : null
         ]
       }),
