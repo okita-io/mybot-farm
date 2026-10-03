@@ -102,6 +102,43 @@ def world_asset_rels(world: dict[str, Any]) -> list[str]:
     return refs
 
 
+STATE_SCHEMA = "worlds/state/v1"
+
+
+def _write_world_state(world_path: Path, chat_id: str | None) -> str | None:
+    """Stamp the world group-chat id into state.json as ``chatId`` (todo 4).
+
+    The room id comes from ``groups.create`` (``PlantResult.room``), which only
+    runs when ``HERMES_GATEWAY_RPC_URL`` is set. When there is no room id there
+    is nothing to persist: we do NOT create a state.json just to hold an empty
+    field — the panes keep deriving presence, and a world without a gateway
+    room stays a pure read model. Returns the path written, or None.
+
+    When state.json already exists we read-modify-write it (same discipline as
+    the desktop pane's writeState, G7): ``chatId`` is set/updated and every
+    other field — ``place``, ``where``, ``recent`` — is preserved. The schema
+    is always stamped so both readers accept the file.
+    """
+    if not chat_id:
+        return None
+    state_path = world_path.parent / "state.json"
+    data: dict[str, Any] = {}
+    if state_path.is_file():
+        try:
+            with open(state_path, "r", encoding="utf-8") as fh:
+                loaded = json.load(fh)
+            if isinstance(loaded, dict):
+                data = loaded
+        except (OSError, json.JSONDecodeError):
+            data = {}
+    if data.get("chatId") == chat_id and data.get("schema") == STATE_SCHEMA:
+        return str(state_path)  # already current; no rewrite
+    data["chatId"] = chat_id
+    data["schema"] = STATE_SCHEMA
+    state_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    return str(state_path)
+
+
 def _install_world_assets(
     world: dict[str, Any],
     world_path: Path,
@@ -856,6 +893,12 @@ def plant(
                 slug=plan.slug,
             )
         )
+        # Persist the group-chat id (todo 4): the room from groups.create is on
+        # result.room (None when HERMES_GATEWAY_RPC_URL is unset). Stamp it as
+        # state.json.chatId so the Director/router addresses one known room.
+        state_written = _write_world_state(world_path, result.room)
+        if state_written:
+            notes.append(f"stamped group-chat id into {state_written} (chatId={result.room})")
         if plan.world_doc:
             doc_path = Path(plan.world_doc)
             doc_path.write_text(compose_world_doc(plan.world_block, plan.slug), encoding="utf-8")

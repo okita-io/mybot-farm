@@ -100,11 +100,23 @@ source, not from a live click in Desktop.
   (merge preserves `chatId`/unknowns, move updates `where` + bounded
   `recent`, no-op when already present).
 
-- [ ] **4. Store the world group-chat id.** Plant already calls
+- [x] **4. Store the world group-chat id.** Plant already calls
   `groups.create` when `HERMES_GATEWAY_RPC_URL` is set and stamps
   `ui_meta.hermes-bots.groups` with one group, the world slug, not one
   group per place (`team_plant.py`). Write that room id into `state.json`
   as `chatId` from the farm plugin, not from the pane.
+  **DONE (2026-10-03):** `plant.py` gains `_write_world_state(world_path,
+  chat_id)`, called in the world-write block with `result.room` (the id
+  `configure_planted_team` returns from `groups.create`). It stamps
+  `state.json.chatId` + the `worlds/state/v1` schema, read-modify-write so
+  an existing `place`/`where`/`recent` is preserved (G7 on the engine side
+  too). Guarded as the task requires: `result.room` is `None` when
+  `HERMES_GATEWAY_RPC_URL` is unset (or the world has no cast), and then
+  nothing is written — no empty state.json, the panes keep deriving, the
+  pane never invents a room. Idempotent (no rewrite when already current),
+  and a corrupt state.json is replaced rather than crashing the plant.
+  Covered by `tests/test_world_state.py` (6 cases). Written from the farm
+  plugin, not the pane, per the task.
 
 - [ ] **5. Keep `defer` hands-off. Probe before any other turn router.**
   The pane already says Bot Mode owns turns when `turnModel` is `defer`.
@@ -281,7 +293,7 @@ aid, not a contract — confirm against the file before editing.
   write. (The "atomic tmp+rename" instruction could not be followed — the
   bridge rename refuses to clobber; see todo 3's deviation note.)
 
-- [ ] **G8. `groups.create` already returns a room id that nothing persists.**
+- [x] **G8. `groups.create` already returns a room id that nothing persists.**
   `configure_planted_team` (via `team_plant.py`) calls `groups.create` when
   `HERMES_GATEWAY_RPC_URL` is set and the result is surfaced as
   `PlantResult.room` in `plant.py`, but it is written **nowhere on disk** —
@@ -291,3 +303,6 @@ aid, not a contract — confirm against the file before editing.
   address one known room instead of re-deriving it. Guard the
   no-`HERMES_GATEWAY_RPC_URL` case: no room created means no `chatId`, and
   the pane must stay a pure viewer, not invent one.
+  **DONE (2026-10-03) via todo 4.** `_write_world_state` now persists
+  `PlantResult.room` into `state.json.chatId` at plant time, with exactly the
+  guard this gap asked for (no room id → no write). See todo 4.
