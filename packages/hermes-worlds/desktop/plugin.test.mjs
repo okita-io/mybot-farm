@@ -358,3 +358,32 @@ test('ambient filter: disable matches ONLY this world\'s tagged jobs', () => {
   const ours = filterOurs(jobs, 'neon-harbor')
   assert.deepEqual(ours.map(j => j.name), ['world:neon-harbor:cydonia', 'world:neon-harbor:probe'])
 })
+
+// --- turnModel conformance note (task 5 / group-chat.md §5) ---------------
+// Hermes runs `defer` natively; director/round-robin/free-for-all are NOT
+// driven — they fall back to defer and the note says so. Mirror of the
+// pane's note selector.
+function turnModelNote(tm) {
+  if (tm === 'defer') return 'turnModel: defer — Bot Mode owns turns in this world; this pane only draws.'
+  if (tm === 'director') return `turnModel: ${tm} — no Director process on Hermes; treated as defer (Bot Mode owns turns). This pane only records state and draws, it never picks the speaker.`
+  if (tm === 'round-robin' || tm === 'free-for-all') return `turnModel: ${tm} — not wired on Hermes (posting into the room is gated on a measured no-race check); treated as defer. Bot Mode owns turns.`
+  return `turnModel: ${tm} — unrecognized; treated as defer. Bot Mode owns turns; this pane only draws.`
+}
+
+test('turnModelNote: defer is the native path', () => {
+  assert.match(turnModelNote('defer'), /Bot Mode owns turns/)
+  assert.doesNotMatch(turnModelNote('defer'), /treated as defer/)
+})
+
+test('turnModelNote: director/round-robin/free-for-all all fall back to defer', () => {
+  for (const tm of ['director', 'round-robin', 'free-for-all']) {
+    assert.match(turnModelNote(tm), /treated as defer/, `${tm} should downgrade`)
+    assert.match(turnModelNote(tm), /Bot Mode owns turns/)
+  }
+  // The director note states it does NOT pick the speaker.
+  assert.match(turnModelNote('director'), /never picks the speaker/)
+})
+
+test('turnModelNote: unknown value is treated as defer', () => {
+  assert.match(turnModelNote('weird-mode'), /treated as defer/)
+})

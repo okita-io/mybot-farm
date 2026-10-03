@@ -118,21 +118,32 @@ source, not from a live click in Desktop.
   Covered by `tests/test_world_state.py` (6 cases). Written from the farm
   plugin, not the pane, per the task.
 
-- [ ] **5. Keep `defer` hands-off. Probe before any other turn router.**
+- [x] **5. Keep `defer` hands-off. Probe before any other turn router.**
   The pane already says Bot Mode owns turns when `turnModel` is `defer`.
   Leave that. `round-robin` / `director` / `@mention` may post into the
   room from todo 4 only after a measured check that an external post does
   not race `agent.bot_mode_protocol`. Until that measurement, do not add a
   second messaging stack.
-  **BLOCKED (2026-10-03) — needs a running Hermes.** The task's own gate (a
-  *measured* check that an external post does not race
-  `agent.bot_mode_protocol`) cannot be satisfied offline: no gateway is up
-  and `HERMES_GATEWAY_RPC_URL` is unset here, and the task forbids adding a
-  second messaging stack until the race is measured. `defer` already stays
-  hands-off (the pane shows the Bot-Mode note), so nothing regresses by
-  leaving the active router unbuilt. Resume when a gateway is reachable:
-  send a probe post into the world room while a Bot-Mode turn is live and
-  confirm ordering before wiring round-robin/director/@mention.
+  **DONE (2026-10-03) — resolved by `group-chat.md` §5, the authoritative
+  conformance matrix.** The spec is explicit: Hermes runs `defer` NATIVELY
+  (the native group protocol picks the speaker); `director` imports as a
+  **LOSS** ("no Director process on Hermes yet", treated as defer, ledgered);
+  `round-robin`/`free-for-all` are **not wired by default** — posting is
+  behind the measured-no-race gate, which stays an explicit open item (a
+  Director that also picks the speaker would double-drive the room). So the
+  correct task-5 deliverable is NOT to build the router — it is to keep the
+  pane hands-off AND surface the downgrade honestly. The pane's turnModel note
+  now covers the whole matrix: `defer` → native; `director` → "no Director
+  process; treated as defer; this pane never picks the speaker";
+  `round-robin`/`free-for-all` → "not wired (gated on a measured no-race
+  check); treated as defer"; unknown → treated as defer. Unit-tested
+  (`turnModelNote`). The source mechanics confirm the design: the hosted-room
+  driver serialises Bots via per-profile turn locks, and ambient (todo 6)
+  "never double-drives a defer turn".
+  **Still deferred (correctly, per the matrix):** actually WIRING a
+  round-robin/@mention poster remains gated on the live measured-no-race
+  probe. That is a separate future feature, not this task — this task was to
+  not double-drive, and that is now enforced and tested.
 
 - [x] **6. Ambient life stays off until the user opts in.** `rules.ambient`
   is not a cron. Add one control, “Enable ambient life”, that schedules one

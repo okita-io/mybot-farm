@@ -1797,11 +1797,28 @@ function WorldsPage() {
         ]
       }),
 
-      rules.turnModel === 'defer'
+      // turnModel conformance (group-chat.md §5): Hermes runs `defer`
+      // natively; `director` imports as a LOSS (no Director process) and
+      // `round-robin`/`free-for-all` are not wired (posting is behind an
+      // unperformed measured-no-race gate). In every non-defer case we DO NOT
+      // drive turns — we fall back to defer and say so, rather than
+      // double-driving the room.
+      rules.turnModel
         ? jsx('div', {
             style: NOTE,
-            children:
-              'turnModel: defer \u2014 Bot Mode owns turns in this world; this pane only draws.'
+            children: (() => {
+              const tm = rules.turnModel
+              if (tm === 'defer') {
+                return 'turnModel: defer \u2014 Bot Mode owns turns in this world; this pane only draws.'
+              }
+              if (tm === 'director') {
+                return `turnModel: ${tm} \u2014 no Director process on Hermes; treated as defer (Bot Mode owns turns). This pane only records state and draws, it never picks the speaker.`
+              }
+              if (tm === 'round-robin' || tm === 'free-for-all') {
+                return `turnModel: ${tm} \u2014 not wired on Hermes (posting into the room is gated on a measured no-race check); treated as defer. Bot Mode owns turns.`
+              }
+              return `turnModel: ${tm} \u2014 unrecognized; treated as defer. Bot Mode owns turns; this pane only draws.`
+            })()
           })
         : null,
 
