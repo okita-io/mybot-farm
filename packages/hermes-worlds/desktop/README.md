@@ -2,7 +2,7 @@
 
 Planted GAF worlds as a scene page in Hermes Desktop (`/hermes-worlds`,
 sidebar label **Worlds**, palette "Worlds: Open planted world").
-Spec: `docs/desktop-plugin-spec.md`.
+Spec: [docs/worlds/hermes/desktop-file-handoff.md](../../../docs/worlds/hermes/desktop-file-handoff.md).
 
 ## Install
 
@@ -36,7 +36,8 @@ Reads the planted files directly through the Electron preload bridge
   page never fetches it. On bridge failure the page shows an error card — it
   never falls back to listing profiles. Missing images are omitted, never
   blanking the page.
-- No profile join: this plugin does not read `profiles/` or `profile.yaml`.
+- Lists `profiles/` for the roster Add control; does not read `profile.yaml` yet.
+- Writes `roster.json` via `writeTextFile` (see file-handoff).
 
 Semantics mirror `dashboard/plugin_api.py` (`_safe_world_id`, `read_world`,
-`_default_state`); see `docs/desktop-file-handoff.md`.
+`_apply_roster`, `_default_state`).

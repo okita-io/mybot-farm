@@ -15,6 +15,7 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | [openclaw-plugin.md](./openclaw-plugin.md) | OpenClaw `mybot-farm` plugin — plant plus `farm_post` (GAF listings, seller API key) |
 | [kirocrew-plugin-spec.md](./kirocrew-plugin-spec.md) | **KiroCrew plugin spec** (Track B) — fourth runtime: plant GAF into `~/.kiro/agents/*.json` + crew, `farm_post` back (system #14) |
 | [kirocrew-team-workflows-spec.md](./kirocrew-team-workflows-spec.md) | **Team workflows spec** — additive `workflows[]` on the team kind: bundle a crew's orchestrating workflows with its members; self-satisfying KiroCrew install (system #15) |
+| [worlds/README.md](./worlds/README.md) | **Worlds** — hub for `worlds/v1`, exchange/portability specs, Hermes data contract, conformance, implementation todos |
 | [hermes-plugin.md](./hermes-plugin.md) | Hermes `mybot-farm` plugin — Desktop Recruit plus plant/reinstall and `farm_post` (GAF listings, seller API key) |
 | [hermes-team-stall-bundle.md](./hermes-team-stall-bundle.md) | Hermes team stall contract: download/bundle shape, GAF install flow, shipping gates |
 | [api-keys.md](./api-keys.md) | Seller API keys, `POST /api/listings` Bearer auth, WebMCP `post_listing`, Hermes/OpenClaw `farm_post` |

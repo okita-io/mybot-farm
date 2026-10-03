@@ -3,8 +3,8 @@
 Serves the GAF **worlds/v1** data contract to the dashboard scene pane.
 The browser cannot read $HERMES_HOME directly, so this module is the only
 filesystem boundary. See ../README.md ("Data contract" + "API sketch") and
-the authoritative mybot-farm specs (docs/worlds-exchange-spec.md,
-docs/worlds-portability-spec.md).
+the authoritative mybot-farm specs (docs/worlds/exchange-spec.md,
+docs/worlds/portability-spec.md, docs/worlds/hermes/data-contract.md).
 
 Reads (Layer 2 on disk, written by farm_plant):
     $HERMES_HOME/worlds/<id>/world.json   (worlds/v1)

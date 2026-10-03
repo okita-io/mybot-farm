@@ -48,7 +48,7 @@ export const TEAM_PACK_FORMAT = "mybot.farm/team-pack";
  * art) installs as an empty stage: the pack ships no cast, and MIN_WORLD_CAST
  * is 0. The downloader populates it with their own agents (roster.json in
  * Hermes). Runtimes that do not understand `world` ignore it — graceful
- * degradation, matching worlds-exchange-spec.md.
+ * degradation, matching docs/worlds/exchange-spec.md.
  */
 export const WORLD_PACK_FORMAT = "mybot.farm/world-pack";
 export const MIN_TEAM_MEMBERS = 2;
@@ -58,7 +58,7 @@ export const MIN_WORLD_CAST = 0;
 export const WORLD_CAPABILITIES = ["web", "files", "schedule"] as const;
 /** Turn models a world scene can declare. `defer` = runtime's own room protocol picks the speaker. */
 export const WORLD_TURN_MODELS = ["director", "free-for-all", "round-robin", "defer"] as const;
-/** Portable world block schema id (worlds-exchange-spec §2.1). */
+/** Portable world block schema id (docs/worlds/exchange-spec.md §2.1). */
 export const WORLD_BLOCK_SCHEMA = "worlds/v1";
 export const WORLD_MEMORY_SCOPES = ["private", "shared", "substrate"] as const;
 /** Default cap on characters listed at one place (Grok group size). */
@@ -394,7 +394,7 @@ export function validateWorldThumbnail(
  * keys are allowed so the block can grow, but the fields the Worlds tab and the
  * importers rely on (thumbnail, cast role refs, place/scene ids, turn model,
  * capability names) are shape-checked here. Mirrors worlds/v1 in
- * worlds-exchange-spec.md §2.1.
+ * docs/worlds/exchange-spec.md §2.1.
  */
 export function validateWorldBlock(
   world: unknown,

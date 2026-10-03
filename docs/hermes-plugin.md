@@ -192,7 +192,7 @@ PyPI 0.19.0: skip that; the unittest probe above is the admission check (`regist
 
 `packages/hermes-worlds` draws a planted world. It is not part of the `mybot-farm` tool plugin. `plugin.yaml` exists so the catalog can list it; `register()` adds no tools. `farm_plant` writes `~/.hermes/worlds/<slug>/world.json` + `WORLD.md` + same-origin `assets/**`; this package reads them.
 
-**Worlds ship unpopulated.** The reference pack (`neon-harbor`) has places + art but an empty cast; the downloader fills the stage with their own agents. Population is per-owner in `~/.hermes/worlds/<slug>/roster.json` (`worlds/roster/v1`), written only by the Hermes Desktop Worlds page (Electron `writeTextFile` bridge, capped at `rules.maxPresent`); the dashboard `plugin_api.py` applies it (`_apply_roster`, `rosterOwned: true`) but is read-only. When `roster.json` is valid it is authoritative — pack cast is not shown, `state.where` derives from the roster. Re-planting updates `world.json`/assets but never touches `roster.json`. See `packages/hermes-worlds/README.md` (Layer 2b+) for the data model.
+**Worlds ship unpopulated.** The reference pack (`neon-harbor`) has places + art but an empty cast; the downloader fills the stage with their own agents. Population is per-owner in `~/.hermes/worlds/<slug>/roster.json` (`worlds/roster/v1`), written only by the Hermes Desktop Worlds page (Electron `writeTextFile` bridge, capped at `rules.maxPresent`); the dashboard `plugin_api.py` applies it (`_apply_roster`, `rosterOwned: true`) but is read-only. When `roster.json` is valid it is authoritative — pack cast is not shown, `state.where` derives from the roster. Re-planting updates `world.json`/assets but never touches `roster.json`. See [docs/worlds/hermes/data-contract.md](./worlds/hermes/data-contract.md) (Layer 2b+) and the [Worlds hub](./worlds/README.md).
 
 A checkout stays live by linking the package into the Hermes plugins dir:
 
@@ -236,9 +236,9 @@ items below are resolved in this commit.
    described the world as a cast-bearing team superset. Rewritten to describe
    the unpopulated-world model (places + art, no cast, `MIN_WORLD_CAST = 0`).
 3. Roster re-plant caveat was undocumented. Now stated in
-   `packages/hermes-worlds/README.md` (Layer 2b+) and
-   `packages/hermes-mybot-farm/README.md` (Worlds): re-planting updates
-   `world.json`/assets but never touches `roster.json`.
+   [docs/worlds/hermes/data-contract.md](./worlds/hermes/data-contract.md) and
+   `packages/hermes-mybot-farm/README.md`: re-planting updates `world.json`/assets
+   but never touches `roster.json`.
 
 **Open (not blockers):**
 - KiroCrew world plant claims parity with the Hermes `_world.md` + skins path
