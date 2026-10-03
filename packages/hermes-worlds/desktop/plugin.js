@@ -1312,9 +1312,24 @@ function WorldsPage() {
   function addAgent() {
     const place = cur && cur.id
     if (!pick || !place) return
-    const existing = world && world.rosterOwned
-      ? cast.map(c => ({ profile: c.id, place: (state.where && state.where[c.id]) || c.home }))
-      : []
+    // Seed the roster from whatever cast is CURRENTLY shown so the first add on
+    // a sample scene both carries those members forward AND counts them against
+    // maxPresent (G3: the guard used to see an empty list and let the first add
+    // exceed the cap). The roster stores PROFILE dir names, so use profileName
+    // (roster members set it to their own id); skip sample cast with no profile
+    // join — they can't be roster members.
+    const existing = cast
+      .map(c => ({
+        profile: c.profileName || c.id,
+        place: (state.where && state.where[c.id]) || c.home,
+        joined: !!(c.profileName || world.rosterOwned)
+      }))
+      .filter(m => m.joined && m.profile)
+      .map(({ profile, place }) => ({ profile, place }))
+    if (existing.some(m => m.profile === pick)) {
+      setRosterNote('That agent is already in this world.')
+      return
+    }
     let max = Number(rules.maxPresent)
     if (!Number.isInteger(max) || max <= 0) max = 6
     if (existing.filter(m => m.place === place).length >= max) {

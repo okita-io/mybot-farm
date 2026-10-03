@@ -244,7 +244,7 @@ aid, not a contract — confirm against the file before editing.
   contract can't redirect the send), prefer `resolved_id` over `id`, and
   create the hidden canonical chat only when the lookup returns nothing.
 
-- [ ] **G3. The place-full guard is bypassed on a pack-sample scene.**
+- [x] **G3. The place-full guard is bypassed on a pack-sample scene.**
   `addAgent` (`plugin.js`) builds `existing` from the current cast **only
   when `world.rosterOwned`** is true; on a scene still showing the pack
   sample `existing` is `[]`, so the first add never counts the sample
@@ -253,6 +253,13 @@ aid, not a contract — confirm against the file before editing.
   (then say so and drop the note), or it does (then seed `existing` from the
   shown cast, not just the roster). The dashboard never writes, so this is a
   desktop-only fix.
+  **DONE (2026-10-03):** chose "it counts". `addAgent` now seeds `existing`
+  from the currently-shown cast regardless of `rosterOwned`, so a sample
+  scene's first add both carries those members forward and is capped by
+  `maxPresent`. The roster stores PROFILE dir names, so it seeds from
+  `profileName` (roster members use their own id) and skips sample cast with
+  no profile join — they cannot be roster members. Also added a duplicate
+  guard ("already in this world"). Desktop-only; dashboard stays read-only.
 
 - [x] **G4. `prompt.submit` has no optimistic echo and no reply poll.** Todo
   2 is done for the round trip, but `sendChatLine` (`plugin.js`) submits,
