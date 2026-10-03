@@ -78,6 +78,7 @@ function resolveAssetPath(rel, worldDir) {
 
 function messageText(msg) {
   if (!msg || typeof msg !== 'object') return ''
+  if (typeof msg.text === 'string') return msg.text
   const c = msg.content
   if (typeof c === 'string') return c
   if (Array.isArray(c)) {
@@ -189,6 +190,19 @@ test('previewMessages: flattens array content parts', () => {
     { role: 'assistant', content: [{ text: 'a' }, { type: 'img' }, { text: 'b' }] }
   ])
   assert.deepEqual(out, [{ role: 'assistant', text: 'ab' }])
+})
+
+test('previewMessages: reads the top-level text field (Hermes resume shape)', () => {
+  // THE empty-bubble bug: resume/history rows are { role, text }, not
+  // { role, content }. messageText must read `text` or every row drops.
+  const out = previewMessages([
+    { role: 'assistant', text: 'Yo! Just kicking it here.' },
+    { role: 'user', text: 'hey' }
+  ])
+  assert.deepEqual(out, [
+    { role: 'assistant', text: 'Yo! Just kicking it here.' },
+    { role: 'user', text: 'hey' }
+  ])
 })
 
 test('previewMessages: non-array input is empty', () => {

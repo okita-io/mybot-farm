@@ -402,3 +402,16 @@ aid, not a contract — confirm against the file before editing.
   restores the full transcript inline under `messages` — exactly what the
   bubble reads. The hydrate-poll + wider reply budget stay as belt-and-braces.
   This is the behavior parity the user asked for.
+
+  **RESOLVED (2026-10-03) — it was a field-name mismatch, found via on-screen
+  debug.** Instrumenting the bubble proved the data DID reach the plugin:
+  `session.list` → 1 row "Bot Chat" (message_count 96), `session.resume` →
+  `messages_omitted:false`, `msgsLen:94`, `firstMsg`
+  `{"role":"assistant","text":"Yo!..."}`. So resume delivered 94 messages —
+  but `messageText` only read `msg.content`, while Hermes rows carry the body
+  on a top-level **`text`** field. Every row flattened to '' and
+  `previewMessages` dropped all 94 → "No messages yet." **FIX:** `messageText`
+  now reads `msg.text` first, then falls back to `content` string / parts.
+  Covered by a `{role,text}` unit test. The on-screen DEBUG instrumentation
+  was removed after the finding. Clicking an agent now loads the last
+  session's transcript into the bubble — the KiroCrew-worlds parity goal.

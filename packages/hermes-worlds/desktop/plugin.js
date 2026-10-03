@@ -777,6 +777,12 @@ const BUBBLE_INPUT = {
 
 function messageText(msg) {
   if (!msg || typeof msg !== 'object') return ''
+  // Hermes session.resume/history rows carry the text on a top-level `text`
+  // field ({ role, text }) — this was THE empty-bubble bug: messageText only
+  // read `content`, so every row flattened to '' and previewMessages dropped
+  // all 94 messages. Check `text` first, then fall back to `content` shapes
+  // (string, or an array of { text } parts) for other providers.
+  if (typeof msg.text === 'string') return msg.text
   const c = msg.content
   if (typeof c === 'string') return c
   if (Array.isArray(c)) {
@@ -835,11 +841,6 @@ async function ensureBotChatSession(profile) {
     title: BOT_CHAT_TITLE
   }))
   const sessions = (listed && listed.sessions) || []
-  const listDebug = {
-    listKeys: listed ? Object.keys(listed).join(',') : '(null)',
-    sessionCount: sessions.length,
-    firstRow: sessions[0] ? JSON.stringify(sessions[0]).slice(0, 160) : null
-  }
   const row = sessions[0]
   if (row) {
     // Title lookup is exact server-side; verify client-side anyway so a
@@ -873,28 +874,11 @@ async function ensureBotChatSession(profile) {
       const liveId = (resumed && (resumed.session_id || resumed.resolved_id)) || foundId
       const msgs = resumed && Array.isArray(resumed.messages) ? resumed.messages : []
       const messageCount = Number(resumed && resumed.message_count) || 0
-      // DEBUG: capture the raw shape the plugin actually receives, so the
-      // bubble can show what reached it (keys + message/count/flags).
-      const debug = {
-        where: 'resume',
-        ...listDebug,
-        foundId,
-        liveId,
-        listedTitle: row.title,
-        resumeKeys: resumed ? Object.keys(resumed).join(',') : '(null)',
-        msgsLen: msgs.length,
-        messageCount,
-        hydrating: resumed && resumed.hydrating,
-        status: resumed && resumed.status,
-        messagesOmitted: resumed && resumed.messages_omitted,
-        firstMsg: msgs.length ? JSON.stringify(msgs[0]).slice(0, 120) : null
-      }
       return {
         sessionId: liveId,
         created: false,
         messages: msgs.length ? previewMessages(msgs) : null,
-        messageCount,
-        debug
+        messageCount
       }
     }
   }
@@ -908,12 +892,7 @@ async function ensureBotChatSession(profile) {
   }
   // A freshly created session is already live in memory (session.create binds
   // it), so a submit works directly; it has no history yet.
-  return {
-    sessionId: created.session_id,
-    created: true,
-    messages: [],
-    debug: { where: 'create', ...listDebug, createdId: created.session_id }
-  }
+  return { sessionId: created.session_id, created: true, messages: [] }
 }
 
 async function loadBotChatHistory(sessionId, profile) {
@@ -1064,20 +1043,18 @@ function WorldsPage() {
     })
     setChatDraft('')
     try {
-      const { sessionId, messages: initial, messageCount, debug } =
+      const { sessionId, messages: initial, messageCount } =
         await ensureBotChatSession(profile)
       const live = () => selRef.current === selectedId && chatRef.current &&
         chatRef.current.profile === profile
       let messages = Array.isArray(initial) ? initial : []
       let count = messageCount || messages.length
-      let dbg = debug
       // Resume returned no inline transcript (desktop/deferred hydration) but
       // the session has history — poll session.history until it fills in.
       if (!messages.length && messageCount > 0) {
         const res = await hydrateHistory(sessionId, profile, messageCount, live)
         messages = res.messages
         count = res.count || count
-        dbg = { ...(dbg || {}), hydrateMsgs: res.messages.length, hydrateCount: res.count }
       }
       if (!live()) return
       // Merge, don't replace: the hydration poll above can take seconds, and
@@ -1090,7 +1067,7 @@ function WorldsPage() {
         if (prev.sending || prev.messages.length > messages.length) {
           // A send is in flight or already added rows — keep the user's view,
           // just make sure the live sessionId/count are set for the poll.
-          return { ...prev, sessionId, messageCount: count, loading: false, error: null, debug: dbg }
+          return { ...prev, sessionId, messageCount: count, loading: false, error: null }
         }
         return {
           ...prev,
@@ -1098,8 +1075,7 @@ function WorldsPage() {
           messages,
           messageCount: count,
           loading: false,
-          error: null,
-          debug: dbg
+          error: null
         }
       })
     } catch (err) {
@@ -1485,21 +1461,6 @@ function WorldsPage() {
                     : null,
                   !chat.loading && !chat.messages.length && !chat.error
                     ? jsx('div', { style: MUTED, children: 'No messages yet.' })
-                    : null,
-                  chat.debug
-                    ? jsx('div', {
-                        style: {
-                          fontSize: 10,
-                          fontFamily: 'monospace',
-                          opacity: 0.7,
-                          whiteSpace: 'pre-wrap',
-                          margin: '6px 0',
-                          padding: '6px 8px',
-                          border: '1px dashed var(--color-border, #555)',
-                          borderRadius: 6
-                        },
-                        children: 'DEBUG ' + JSON.stringify(chat.debug, null, 1)
-                      })
                     : null,
                   chat.messages.map((m, i) =>
                     jsx('div', {
