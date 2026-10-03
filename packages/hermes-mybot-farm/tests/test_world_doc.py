@@ -91,6 +91,49 @@ class WorldDocTests(unittest.TestCase):
         plan = build_plant_plan(stall, pack, "https://mybot.farm")
         self.assertTrue(str(plan.world_doc).endswith("/worlds/neon-harbor/WORLD.md"))
 
+    def test_shared_text_in_files_skin_is_per_member(self) -> None:
+        # Task 7: the shared scene lives in WORLD.md (a file); each member's
+        # OWN MEMORY.md gets its character skin. The cast must NOT be made to
+        # read a SEPARATE profile's MEMORY.md (portability spec §11.4 — that
+        # file is small and frozen). So: a skin lands in each member profile,
+        # the WORLD.md scene is shared, and no extra "world"/"shared" profile
+        # dir is created to hold shared text.
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            profiles = home / "profiles"
+            # Only the two cast members exist as profiles.
+            for name in ("patch", "probe"):
+                (profiles / name / "memories").mkdir(parents=True)
+
+            members = {"harbor-engineer": "patch", "night-watch": "probe"}
+            for role, prof in members.items():
+                block = world_skin_block(
+                    WORLD, "neon-harbor", role=role, profile_name=prof,
+                    world_doc_path="../../worlds/neon-harbor/WORLD.md",
+                )
+                self.assertTrue(append_world_memory(profiles / prof, "neon-harbor", block))
+
+            # (a) Each member got ITS OWN skin in ITS OWN MEMORY.md.
+            patch_mem = (profiles / "patch" / "memories" / "MEMORY.md").read_text()
+            probe_mem = (profiles / "probe" / "memories" / "MEMORY.md").read_text()
+            self.assertIn("You are **Patch**", patch_mem)
+            self.assertIn("You are **Probe**", probe_mem)
+            self.assertNotIn("You are **Probe**", patch_mem)  # not cross-contaminated
+
+            # (b) Shared scene text is the WORLD.md FILE, pointed at from the
+            #     skin — not duplicated into a profile's memory.
+            self.assertIn("worlds/neon-harbor/WORLD.md", patch_mem)
+            doc = compose_world_doc(WORLD, "neon-harbor")
+            self.assertIn("# Neon Harbor — world", doc)
+
+            # (c) NO separate "world"/"shared" profile was created to hold the
+            #     shared text — only the real cast members exist.
+            created = sorted(p.name for p in profiles.iterdir() if p.is_dir())
+            self.assertEqual(created, ["patch", "probe"])
+            for stray in ("world", "shared", "neon-harbor", "_world"):
+                self.assertFalse((profiles / stray).exists(),
+                                 f"unexpected shared profile '{stray}' was created")
+
 
 if __name__ == "__main__":
     unittest.main()

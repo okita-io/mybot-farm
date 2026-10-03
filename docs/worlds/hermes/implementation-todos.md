@@ -163,11 +163,20 @@ source, not from a live click in Desktop.
   add/remove round-trip hasn't been clicked through on the desktop yet — the
   contract is confirmed from source but not exercised end-to-end.
 
-- [ ] **7. Shared scene text stays in files.** Each member already gets a
+- [x] **7. Shared scene text stays in files.** Each member already gets a
   private skin in `MEMORY.md`. Do not create a second profile and expect
   the cast to read that profile’s `MEMORY.md` (portability spec §11.4:
   that file is small and frozen until the next session). Shared text is
   `WORLD.md` and `state.json`.
+  **DONE (2026-10-03):** verified the plant path — `append_world_memory`
+  writes the skin into each member's OWN `profiles/<name>/memories/MEMORY.md`
+  (`profile_dir(home, member.name)` in plant.py's member loop), `WORLD.md` is
+  the single shared scene file, and `import_profile` only ever imports the
+  cast members' own tarballs. No separate "world"/"shared" profile is created.
+  Locked with `test_world_doc.py::test_shared_text_in_files_skin_is_per_member`:
+  each member gets its own non-cross-contaminated skin pointing at the shared
+  `WORLD.md` file, and the only profile dirs created are the real cast members
+  (asserts no `world`/`shared`/`<slug>`/`_world` profile appears).
 
 - [x] **8. Assert plant does not add tools from `cast[].capabilities`.**
   Hermes has no KiroCrew `DEFAULT_TOOLS` list. A planted profile keeps the
