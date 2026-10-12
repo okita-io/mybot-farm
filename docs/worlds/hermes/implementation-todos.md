@@ -22,6 +22,12 @@ invent `host.botMode`. `host.sessions` is pin / reorder / colour only
 engine plan is [parity-roadmap.md](parity-roadmap.md).
 This file is the checklist.
 
+**World-export review (2026-10-11):** the character-identity export on
+`feat/world-export-full-identity` (`f2d15ce`) needs six fixes before merge —
+contract and join problems verified against a real planted world. The
+implementing agent starts at
+[export-fix-handoff.md](export-fix-handoff.md).
+
 Checked against the installed Hermes tree (`apps/desktop`, `tui_gateway/contracts`)
 on 2026-10-02. The write door and the Bot Chat lookup below are from that
 source, not from a live click in Desktop.
