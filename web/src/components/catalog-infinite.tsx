@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -48,7 +49,7 @@ export function CatalogInfinite({
   const sentinelRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef(offset);
   const hasMoreRef = useRef(hasMore);
-  const arm = useRef(() => setArmed(true)).current;
+  const arm = useCallback(() => setArmed(true), []);
 
   useEffect(() => {
     offsetRef.current = offset;
