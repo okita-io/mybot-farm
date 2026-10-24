@@ -1,6 +1,6 @@
 # Dependency advisory handoff (2026-10-23 sweep)
 
-**Status:** docs-only review for Alex. No code or lockfile changes in this note.  
+**Status:** upgraded on 2026-10-23. `web/` pins `next` and `eslint-config-next` at 16.4.3 (`sharp` 0.35.5), `sanitize-html` 2.18.1, `hono` 4.13.13, and overrides `ip-address` 10.7.4 plus `@modelcontextprotocol/sdk` 1.32.2. OpenClaw optionalDependency is SDK 1.32.2 with the same `ip-address` and `hono` overrides. Nested `openclaw` still ships its own SDK 1.30.0. `web` tests (121), lint, and production build passed; OpenClaw tests (16) passed. Target GHSA packages are absent from `npm audit`.  
 **Reviewed:** 2026-10-24 against `web/package-lock.json` and `packages/openclaw-mybot-farm/package-lock.json` on `main` (`7c85553`).  
 **Method:** version matching, reading this repo, OSV lookups, and one production header check. **Nothing was exploited against production.**  
 **Live site:** [mybot.farm](https://mybot.farm) on Vercel (`web/`).

@@ -42,7 +42,7 @@
     "typebox": "^1.0.0"
   },
   "optionalDependencies": {
-    "@modelcontextprotocol/sdk": "^1.30.0"
+    "@modelcontextprotocol/sdk": "^1.32.2"
   },
   "peerDependencies": {
     "openclaw": ">=2026.9.4"
@@ -71,5 +71,9 @@
     "esbuild": "^0.28.2",
     "typescript": "^7.0.2"
   },
-  "main": "./dist/index.js"
+  "main": "./dist/index.js",
+  "overrides": {
+    "ip-address": "10.7.4",
+    "hono": "4.13.13"
+  }
 }
