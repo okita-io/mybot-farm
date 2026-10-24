@@ -14,6 +14,7 @@ import plugin_import  # noqa: F401
 from hermes_mybot_farm.export_world import (  # noqa: E402
     EXCHANGE_SCHEMA,
     ExportError,
+    build_character_pack,
     build_portable_world,
     export_world,
     scrub_state,
@@ -152,6 +153,79 @@ class ExportToolTests(unittest.TestCase):
         payload = json.loads(farm_export_world({}))
         self.assertFalse(payload["ok"])
         self.assertIn("worldId required", payload["error"])
+
+
+class BuildCharacterPackTests(unittest.TestCase):
+    def _profile(self, tmp, name, *, soul=None, desc=None, memory=None, user=None):
+        p = Path(tmp) / "profiles" / name
+        (p / "memories").mkdir(parents=True)
+        if soul is not None:
+            (p / "SOUL.md").write_text(soul)
+        if desc is not None:
+            (p / "profile.yaml").write_text(f"description: {desc}\ndescription_auto: false\n")
+        if memory is not None:
+            (p / "memories" / "MEMORY.md").write_text(memory)
+        if user is not None:
+            (p / "memories" / "USER.md").write_text(user)
+        return p
+
+    def test_captures_soul_description_and_memory(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            p = self._profile(tmp, "cydonia",
+                              soul="# TheDrummer\n**Mission:** bants",
+                              desc="TheDrummer — bants",
+                              memory="remembered fact A",
+                              user="operator prefers brevity")
+            pack, loss = build_character_pack("harbor-engineer", p)
+            self.assertEqual(pack["schema"], "mybot.farm/agent-pack")
+            # Persona = SOUL + yaml description, both present, full (not clipped).
+            self.assertIn("TheDrummer", pack["profile"]["description"])
+            self.assertIn("bants", pack["profile"]["description"])
+            # Memory carries both MEMORY.md (private) and USER.md (operator).
+            scopes = {m["scope"]: m["text"] for m in pack["memory"]}
+            self.assertIn("remembered fact A", scopes.get("private", ""))
+            self.assertIn("operator prefers brevity", scopes.get("operator", ""))
+            self.assertEqual(loss, [])  # nothing over the caps
+
+    def test_memory_over_cap_is_clipped_newest_and_ledgered(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            big = "OLD" + ("x" * 3000) + "NEWEST-ENTRY"
+            p = self._profile(tmp, "cydonia", soul="s", memory=big)
+            pack, loss = build_character_pack("c", p)
+            mem = next(m for m in pack["memory"] if m["scope"] == "private")["text"]
+            self.assertIn("NEWEST-ENTRY", mem)       # tail kept
+            self.assertNotIn("OLD", mem)             # head dropped
+            self.assertTrue(any(l["action"] == "clipped" and "memory" in l["path"] for l in loss))
+
+    def test_missing_profile_ledgers_loss(self) -> None:
+        pack, loss = build_character_pack("ghost", None)
+        self.assertEqual(pack["profile"]["description"], "")
+        self.assertTrue(any(l["action"] == "missing" for l in loss))
+
+    def test_export_resolves_profile_via_roster_role_mapping(self) -> None:
+        # role harbor-engineer -> profile cydonia (names differ); the persona
+        # must still be captured for the character.
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._profile(tmp, "cydonia", soul="# Patch persona", memory="patch note")
+            wdir = root / "worlds" / "neon-harbor"
+            wdir.mkdir(parents=True)
+            wdir.joinpath("world.json").write_text(json.dumps({
+                "schema": "worlds/v1", "title": "Neon Harbor",
+                "cast": [{"role": "harbor-engineer", "name": "Patch"}],
+                "entrypoint": {"place": "dock"},
+                "places": [{"id": "dock", "present": ["harbor-engineer"]}],
+            }))
+            wdir.joinpath("roster.json").write_text(json.dumps({
+                "schema": "worlds/roster/v1",
+                "members": [{"role": "harbor-engineer", "profile": "cydonia", "place": "dock"}],
+            }))
+            export_world("neon-harbor", root / "worlds", root / "out",
+                         profiles_root=root / "profiles")
+            pack = json.loads((root / "out" / "neon-harbor.world" / "characters" /
+                               "harbor-engineer.json").read_text())
+            self.assertIn("Patch persona", pack["profile"]["description"])
+            self.assertTrue(any("patch note" in m["text"] for m in pack["memory"]))
 
 
 if __name__ == "__main__":
