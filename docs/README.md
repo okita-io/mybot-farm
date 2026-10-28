@@ -20,7 +20,8 @@ Product and marketplace notes for [mybot.farm](https://mybot.farm). The web app 
 | [hermes-team-stall-bundle.md](./hermes-team-stall-bundle.md) | Hermes team stall contract: download/bundle shape, GAF install flow, shipping gates |
 | [api-keys.md](./api-keys.md) | Seller API keys, `POST /api/listings` Bearer auth, WebMCP `post_listing`, Hermes/OpenClaw `farm_post` |
 | [solana-roadmap.md](./solana-roadmap.md) | Solana as an MPP rail: phased code changes, tests, GitHub branch + e2e checkpoints |
-| [notes/2026-10-23-dependency-advisories.md](./notes/2026-10-23-dependency-advisories.md) | **Docs-only security handoff** (2026-10-23 sweep): Next 16.3.4 advisories, sharp/image path, Cache Components, sanitize-html / Hono / MCP / ip-address — confirmed vs hypothesis |
+| [notes/2026-10-23-dependency-advisories.md](./notes/2026-10-23-dependency-advisories.md) | **Security handoff** (2026-10-23 sweep, PRs #42 docs + #43 upgrades merged): Next 16.3.4 advisories, sharp/image path, Cache Components, sanitize-html / Hono / MCP / ip-address |
+| [notes/2026-10-27-dependency-advisories.md](./notes/2026-10-27-dependency-advisories.md) | **Docs-only security handoff** (2026-10-27 sweep): undici 7.29.1, qs 6.16.0, deepmerge 4.3.1 — parents, runtime vs CLI, overrides |
 | [../packs/](../packs/) | Seed agent & team bots plus [Agency Agents packs](../packs/agency-agents/) |
 
 Vault twin (editable scratch): `~/Documents/GlobalNotes/2026-09-11-mybot-farm-agent-marketplace.md`
