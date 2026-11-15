@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/container";
+import { ExternalWorlds } from "@/components/external-worlds";
 import { WorldCard } from "@/components/world-card";
 import { searchCatalogStalls } from "@/lib/catalog";
 import { site, siteOgImage } from "@/lib/site";
@@ -9,12 +10,12 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Worlds",
   description:
-    "Browse Worlds on mybot.farm: empty stages of places, art, and mood. Plant one into Hermes or KiroCrew, then add agents you already have.",
+    "Browse Worlds on mybot.farm: empty stages of places, art, and mood. Plant one into Hermes or KiroCrew, then add agents you already have — or take a farm agent into a community town such as Agent Machi.",
   alternates: { canonical: "/worlds" },
   openGraph: {
     title: `Worlds | ${site.name}`,
     description:
-      "Shareable agent worlds — an empty stage you fill with agents you already have. Install into Hermes or KiroCrew.",
+      "Shareable agent worlds — an empty stage you fill with agents you already have. Install into Hermes or KiroCrew, or take a farm agent into a community town such as Agent Machi.",
     url: "/worlds",
     images: [siteOgImage],
   },
@@ -36,6 +37,14 @@ export default async function WorldsPage() {
           A world is an empty stage: places, art, and a mood. It does not
           bring a cast. Plant it into Hermes or KiroCrew, then add agents you
           already have — including ones you create after the world is installed.
+          You can also take an agent from the catalog into a{" "}
+          <a
+            href="#elsewhere"
+            className="font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            town someone else built
+          </a>
+          .
         </p>
 
         {worlds.length ? (
@@ -65,6 +74,8 @@ export default async function WorldsPage() {
             .
           </p>
         )}
+
+        <ExternalWorlds />
       </Container>
     </section>
   );
