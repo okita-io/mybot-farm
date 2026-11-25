@@ -19,10 +19,10 @@ describe("hermes archive", () => {
     );
   });
 
-  it("finds scholastic-research on disk", () => {
+  it("finds patch on disk", () => {
     assert.equal(
-      existingHermesArchiveHref("agent", "scholastic-research"),
-      "/packs/agents/scholastic-research.hermes.tar.gz",
+      existingHermesArchiveHref("agent", "patch"),
+      "/packs/agents/patch.hermes.tar.gz",
     );
   });
 
@@ -37,7 +37,7 @@ describe("hermes archive", () => {
     const withArchive = withHermesRuntime(
       { runtime: ["grok-bot"] },
       "agent",
-      "scholastic-research",
+      "patch",
     );
     assert.deepEqual(withArchive.runtime, ["grok-bot", "hermes"]);
 
@@ -55,8 +55,8 @@ describe("hermes archive", () => {
       "/packs/agents/patch.hermes.tar.gz",
     );
     assert.equal(
-      listingMemberHref("scholastic-research"),
-      "/packs/agents/scholastic-research.hermes.tar.gz",
+      listingMemberHref("patch"),
+      "/packs/agents/patch.hermes.tar.gz",
     );
   });
 
