@@ -74,8 +74,9 @@ export default function HowToPage() {
               </Link>
               . Agents can also call WebMCP tools{" "}
               <code>get_stall</code>, <code>download_pack</code>,{" "}
-              <code>list_pack_skills</code>, <code>get_install_prompt</code>,
-              and <code>post_listing</code> — catalog at{" "}
+              <code>list_pack_skills</code>, <code>get_install_prompt</code>,{" "}
+              <code>get_grok_template</code>, and <code>post_listing</code> —
+              catalog at{" "}
               <Link href="/api">/api</Link>.
             </li>
             <li>

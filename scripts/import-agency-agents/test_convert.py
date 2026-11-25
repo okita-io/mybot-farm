@@ -75,6 +75,18 @@ def main() -> int:
         assert any("agency-agents" in (m.get("content") or "") for m in pack["memory"])
         assert pack["skills"]
         assert all(s["description"].lower().startswith("use ") for s in pack["skills"])
+        # Regression guards (2026-11-24 audit): no emoji remnants, no mid-word titles,
+        # and the first sub-heading inside a skill keeps its heading marker.
+        assert "\ufe0f" not in json.dumps(pack, ensure_ascii=False)
+        sys.path.insert(0, str(HERE))
+        import convert  # noqa: E402
+
+        assert convert.strip_emoji("\u2699\ufe0f Core Tools") == "Core Tools"
+        long_desc = "Expert bookkeeper and controller specializing in day-to-day accounting operations, month-end close, and controls."
+        title = convert.title_from({"description": long_desc}, "x")
+        assert long_desc.startswith(title) and long_desc[len(title)] == " ", title
+        body = convert.skill_body("## Rules", "### Data Integrity\n- a\n\n### Cartography\n- b")
+        assert body.startswith("# Rules\n\n### Data Integrity"), body
         catalog_data = json.loads(catalog.read_text(encoding="utf-8"))
         assert catalog_data["totalPacks"] == 1
         assert catalog_data["stalls"][0]["slug"] == "fixture-gardener"

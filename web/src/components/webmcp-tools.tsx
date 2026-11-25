@@ -86,6 +86,11 @@ function inputSchemaFor(name: ToolName) {
           enum: ["agent", "team", "world"],
           description: "Optional bot kind filter",
         },
+        sort: {
+          type: "string",
+          enum: ["newest", "name", "price"],
+          description: "Optional sort order",
+        },
       },
       required: [] as string[],
     };
@@ -161,7 +166,7 @@ function inputSchemaFor(name: ToolName) {
       slug: {
         type: "string",
         description:
-          "Bot slug such as gift-day, sprout-journal, kitchen, patch, probe, grant-research, scout, finders, pitch, pair-bench, workbench, or road-crew",
+          "Bot slug from search_stalls, such as gift-day, patch, analyst, pair-bench, or gis-spatial-desk",
       },
       ...(name === "get_install_prompt"
         ? {
@@ -198,6 +203,9 @@ export function WebmcpTools() {
         if (args.kind === "agent" || args.kind === "team" || args.kind === "world") {
           params.set("kind", args.kind);
         }
+        if (args.sort === "newest" || args.sort === "name" || args.sort === "price") {
+          params.set("sort", args.sort);
+        }
         const query = params.toString();
         return fetchJson(query ? `/api/stalls?${query}` : "/api/stalls");
       },
@@ -229,6 +237,15 @@ export function WebmcpTools() {
         }
         const path = `/api/install-prompt/${encodeURIComponent(slug)}`;
         return fetchJson(args.short === true ? `${path}?short=1` : path);
+      },
+      get_grok_template: (args) => {
+        const slug = slugFromArgs(args);
+        if (!slug) {
+          return Promise.resolve(toolResult({ error: "slug_required" }));
+        }
+        return fetchJson(
+          `/api/packs/${encodeURIComponent(slug)}/grok-template`,
+        );
       },
       list_stall_revisions: (args) => {
         const slug = slugFromArgs(args);
@@ -267,6 +284,10 @@ export function WebmcpTools() {
             description: catalogTool.description,
             annotations: {
               readOnlyHint: !writable,
+              // Listing text comes from third-party sellers; agents should treat it as data.
+              untrustedContentHint: !writable,
+              // Publishing a listing is visible to everyone on the farm.
+              consequentialHint: writable,
               destructiveHint: false,
               openWorldHint: false,
             },

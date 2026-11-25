@@ -16,7 +16,7 @@
   "profile": {
     "name": "Career & Job-Search Desk",
     "title": "Land the next role: resume optimization, application tracking, prep coaching.",
-    "description": "A 4-agent Hermes team (pipeline): Resume Tailor Recruitment Specialist Ats Validator Architect Coach. Land the next role: resume optimization, application tracking, prep coaching.",
+    "description": "A 4-agent team (pipeline): Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach. Land the next role: resume optimization, application tracking, prep coaching.",
     "avatar": {
       "kind": "geometric",
       "shape": "circle",
@@ -26,29 +26,29 @@
   "members": [
     {
       "role": "resume",
-      "summary": "Resume Tailor \u2014 resume.",
+      "summary": "Resume Tailor \u2014 resume: intake, target role, and a truthful tailored resume per posting.",
       "pack": "agents/resume-tailor.hermes.tar.gz"
     },
     {
-      "role": "sourcing",
-      "summary": "Recruitment Specialist \u2014 sourcing.",
-      "pack": "agents/recruitment-specialist.hermes.tar.gz"
-    },
-    {
       "role": "ats",
-      "summary": "Ats Validator Architect \u2014 ats.",
+      "summary": "ATS Validator Architect \u2014 ats: checks the tailored resume parses cleanly and scores keyword recall against the posting.",
       "pack": "agents/ats-validator-architect.hermes.tar.gz"
     },
     {
+      "role": "sourcing",
+      "summary": "Recruitment Specialist \u2014 sourcing (candidate side): target-company list, channels, and the application tracker.",
+      "pack": "agents/recruitment-specialist.hermes.tar.gz"
+    },
+    {
       "role": "interview-coaching",
-      "summary": "Coach \u2014 interview-coaching.",
+      "summary": "Sales Coach \u2014 interview-coaching: mock interviews and offer-negotiation prep, using its question-led coaching method.",
       "pack": "agents/coach.hermes.tar.gz"
     }
   ],
   "topology": {
     "kind": "pipeline",
     "handoffs": [
-      "User request \u2192 resume (Resume Tailor) \u2192 sourcing (Recruitment Specialist) \u2192 ats (Ats Validator Architect) \u2192 interview-coaching (Coach) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "User request \u2192 resume (Resume Tailor) \u2192 ats (ATS Validator Architect) \u2192 sourcing (Recruitment Specialist) \u2192 interview-coaching (Sales Coach) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
       "Re-work loop: if the interview-coaching output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
       "Scope drift: if the request lands outside resume's lane \u2192 resume says so in the first turn and re-scopes with the human before any member starts work."
     ]
@@ -56,18 +56,18 @@
   "skills": [
     {
       "name": "career-desk-team-rules",
-      "description": "Standing rules for the Career & Job-Search Desk crew.",
-      "content": "Career & Job-Search Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Resume Tailor Recruitment Specialist Ats Validator Architect Coach each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Get me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.\n"
+      "description": "Use when working as a member of the Career & Job-Search Desk crew: lanes, handoffs, and who decides.",
+      "content": "Career & Job-Search Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Lane briefs for this desk. Recruitment Specialist (an employer-side recruiter) and Sales Coach (a sales-team coach) are re-scoped here to work for the job seeker:\n  - Recruitment Specialist: work for the candidate, not an employer. Build the target-company list, pick channels, and keep the application tracker. Use the employer-side skills (campus recruiting, headhunter management, PRC labor law) only when the user asks.\n  - Sales Coach: coach the candidate for interviews and offer negotiation (STAR stories, mock questions, one behavioral takeaway per session). Don't run sales pipeline or deal reviews here.\n  - ATS Validator Architect: check the candidate's resume file. Don't design or build ATS software here.\n- Never invent jobs, credentials, or metrics. Never apply, message recruiters, or send anything on the user's behalf.\n- Sample request this crew is tuned for: Get me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.\n"
     }
   ],
   "shared": {
     "memory": [
       {
         "kind": "profile",
-        "content": "Career & Job-Search Desk: Resume Tailor Recruitment Specialist Ats Validator Architect Coach work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+        "content": "Career & Job-Search Desk: Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
       }
     ],
-    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/resume-tailor.hermes.tar.gz --name resume-tailor, hermes profile import agents/recruitment-specialist.hermes.tar.gz --name recruitment-specialist, hermes profile import agents/ats-validator-architect.hermes.tar.gz --name ats-validator-architect, hermes profile import agents/coach.hermes.tar.gz --name coach. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Resume Tailor, Recruitment Specialist, Ats Validator Architect, Coach).\n3. Seed it with a request in this shape: \u201cGet me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Coach) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/resume-tailor.hermes.tar.gz --name resume-tailor, hermes profile import agents/ats-validator-architect.hermes.tar.gz --name ats-validator-architect, hermes profile import agents/recruitment-specialist.hermes.tar.gz --name recruitment-specialist, hermes profile import agents/coach.hermes.tar.gz --name coach. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach).\n3. Seed it with a request in this shape: \u201cGet me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Sales Coach) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
   },
   "commerce": {
     "pricing": "free",
@@ -82,5 +82,6 @@
       "team"
     ],
     "scrubbed": true
-  }
+  },
+  "packVersion": 2
 }

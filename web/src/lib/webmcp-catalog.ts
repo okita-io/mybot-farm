@@ -3,7 +3,7 @@ export const packTools = [
     name: "search_stalls",
     title: "Search bots",
     description:
-      "Search mybot.farm bots (agents, teams, and worlds). Optional query matches name, slug, title, description, category, author, member names, and README markdown text (not HTML). Optional kind: agent, team, or world. Optional sort: newest, name, price. Returns page, pack, hermesHref when a Hermes archive exists, and API URLs. Read-only.",
+      "Search mybot.farm bots (agents, teams, and worlds). Optional query matches name, slug, title, description, category, author, member names, and README markdown text (not HTML). Optional kind: agent, team, or world. Optional sort: newest, name, or price. Returns page, pack, hermesHref when a Hermes archive exists, and API URLs. Read-only.",
     method: "GET",
     path: "/api/stalls",
     query: ["q", "kind", "sort"],
@@ -43,6 +43,15 @@ export const packTools = [
     method: "GET",
     path: "/api/install-prompt/{slug}",
     query: ["short"],
+  },
+  {
+    name: "get_grok_template",
+    title: "Get Grok Bot template",
+    description:
+      "Project a single-agent GAF pack into a Grok Bot template recipe (profile, memory, skills) for create_bot_share_json. Agents only: team and world packs return 400 not_a_single_bot_template, so call this per member slug. Paid listings require a purchase or MPP payment, same as download_pack. Read-only.",
+    method: "GET",
+    path: "/api/packs/{slug}/grok-template",
+    query: [],
   },
   {
     name: "list_stall_revisions",
