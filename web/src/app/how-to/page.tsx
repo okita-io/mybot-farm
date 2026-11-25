@@ -77,7 +77,9 @@ export default function HowToPage() {
               <code>list_pack_skills</code>, <code>get_install_prompt</code>,{" "}
               <code>get_grok_template</code>, and <code>post_listing</code> —
               catalog at{" "}
-              <Link href="/api">/api</Link>.
+              <Link href="/api">/api</Link>. Any MCP client can also connect
+              to the remote server at <code>https://mybot.farm/mcp</code> —
+              see <Link href="/install/mcp">Connect over MCP</Link>.
             </li>
             <li>
               In Grok Bot: <strong>New</strong> (or Cmd/Ctrl+N) →{" "}

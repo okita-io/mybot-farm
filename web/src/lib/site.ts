@@ -54,6 +54,7 @@ export const footerLinks = [
   { href: "/install/openclaw", label: "OpenClaw" },
   { href: "/install/hermes", label: "Hermes" },
   { href: "/install/kirocrew", label: "KiroCrew" },
+  { href: "/install/mcp", label: "MCP" },
   { href: "/plant", label: "Plant" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
@@ -135,6 +136,12 @@ export const contentRoutes = [
   {
     path: "/install/kirocrew",
     title: "Install in KiroCrew",
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  },
+  {
+    path: "/install/mcp",
+    title: "Connect over MCP",
     changeFrequency: "monthly" as const,
     priority: 0.8,
   },
