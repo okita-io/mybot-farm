@@ -5,7 +5,6 @@ import kitchen from "../../public/packs/agents/kitchen.json";
 import patch from "../../public/packs/agents/patch.json";
 import pitch from "../../public/packs/agents/pitch.json";
 import probe from "../../public/packs/agents/probe.json";
-import scholasticResearch from "../../public/packs/agents/scholastic-research.json";
 import scout from "../../public/packs/agents/scout.json";
 import sproutJournal from "../../public/packs/agents/sprout-journal.json";
 import pairBench from "../../public/packs/teams/pair-bench.json";
@@ -232,7 +231,6 @@ const packsBySlug: Record<string, FarmPack> = {
   patch,
   probe,
   "grant-research": grantResearch,
-  "scholastic-research": scholasticResearch,
   scout,
   finders,
   pitch,
