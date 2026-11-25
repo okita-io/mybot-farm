@@ -87,6 +87,8 @@ export type FarmPack = {
   version?: string;
   /** Content revision for same-slug updates. Distinct from GAF format `version`. */
   packVersion?: number;
+  /** ISO date the pack content last changed. Drives the "Updated" chip on stall cards. Optional. */
+  updatedAt?: string;
   runtime?: string[];
   slug?: string;
   category?: string;

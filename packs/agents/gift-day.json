@@ -73,5 +73,7 @@
       "reminders"
     ],
     "scrubbed": true
-  }
+  },
+  "packVersion": 2,
+  "updatedAt": "2026-11-24T00:00:00.000Z"
 }

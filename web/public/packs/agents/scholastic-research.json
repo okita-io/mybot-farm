@@ -82,5 +82,7 @@
     "scrubbed": true,
     "sourceNote": "Trained via the agent-trainer harness (spec: 'scholastic research agent'); 4-iteration mutation loop; passed the unseen 10-question holdout at 9.14/10 with 0 hard fails. Hermes-native profile — import the scrubbed tar.gz via 'hermes profile import', not this GAF file.",
     "skillCount": 5
-  }
+  },
+  "packVersion": 2,
+  "updatedAt": "2026-11-24T00:00:00.000Z"
 }

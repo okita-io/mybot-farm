@@ -2550,8 +2550,8 @@
       "slug": "livestream-commerce-coach",
       "name": "Livestream Commerce Coach",
       "title": "Coaches your livestream hosts from awkward beginners to million-yuan sellers",
-      "description": "Veteran livestream e-commerce coach specializing in host training and live room operations across Douyin, Kuaishou, Taobao Live, and Channels, covering script design, product sequencing, paid-vs-organic traffic balancin…",
-      "seoDescription": "Install Livestream Commerce Coach from mybot.farm: Veteran livestream e-commerce coach specializing in host training and live room operations across Douyin, Kuaishou, Taobao Live, and Channels, covering script design, product sequencing, paid-vs-organic traffic balancing, conver…",
+      "description": "Experienced livestream e-commerce coach specializing in host training and live room operations across Douyin, Kuaishou, Taobao Live, and Channels, covering script design, product sequencing, paid-vs-organic traffic balancin…",
+      "seoDescription": "Install Livestream Commerce Coach from mybot.farm: Experienced livestream e-commerce coach specializing in host training and live room operations across Douyin, Kuaishou, Taobao Live, and Channels, covering script design, product sequencing, paid-vs-organic traffic balancing, conver…",
       "category": "Marketing",
       "tone": "agent",
       "downloadHref": "/packs/agents/livestream-commerce-coach.json",
@@ -5143,7 +5143,9 @@
         "sourcePath": "academic/academic-anthropologist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "geographer": {
       "format": "mybot.farm/agent-pack",
@@ -5239,7 +5241,9 @@
         "sourcePath": "academic/academic-geographer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "historian": {
       "format": "mybot.farm/agent-pack",
@@ -5335,7 +5339,9 @@
         "sourcePath": "academic/academic-historian.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "narratologist": {
       "format": "mybot.farm/agent-pack",
@@ -5431,7 +5437,9 @@
         "sourcePath": "academic/academic-narratologist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "psychologist": {
       "format": "mybot.farm/agent-pack",
@@ -5527,7 +5535,9 @@
         "sourcePath": "academic/academic-psychologist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "statistician": {
       "format": "mybot.farm/agent-pack",
@@ -5623,7 +5633,9 @@
         "sourcePath": "academic/academic-statistician.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "brand-guardian": {
       "format": "mybot.farm/agent-pack",
@@ -5726,7 +5738,9 @@
         "sourcePath": "design/design-brand-guardian.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "image-prompt-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -5831,7 +5845,9 @@
         "sourcePath": "design/design-image-prompt-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "inclusive-visuals-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -5931,7 +5947,9 @@
         "sourcePath": "design/design-inclusive-visuals-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "persona-walkthrough": {
       "format": "mybot.farm/agent-pack",
@@ -6036,7 +6054,9 @@
         "sourcePath": "design/design-persona-walkthrough.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ui-designer": {
       "format": "mybot.farm/agent-pack",
@@ -6137,7 +6157,9 @@
         "sourcePath": "design/design-ui-designer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ui-finish-gate-reviewer": {
       "format": "mybot.farm/agent-pack",
@@ -6232,7 +6254,9 @@
         "sourcePath": "design/design-ui-finish-gate-reviewer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ux-architect": {
       "format": "mybot.farm/agent-pack",
@@ -6333,7 +6357,9 @@
         "sourcePath": "design/design-ux-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ux-researcher": {
       "format": "mybot.farm/agent-pack",
@@ -6434,7 +6460,9 @@
         "sourcePath": "design/design-ux-researcher.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "visual-storyteller": {
       "format": "mybot.farm/agent-pack",
@@ -6532,7 +6560,9 @@
         "sourcePath": "design/design-visual-storyteller.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "whimsy-injector": {
       "format": "mybot.farm/agent-pack",
@@ -6630,7 +6660,9 @@
         "sourcePath": "design/design-whimsy-injector.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ai-data-remediation-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -6725,7 +6757,9 @@
         "sourcePath": "engineering/engineering-ai-data-remediation-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ai-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -6821,7 +6855,9 @@
         "sourcePath": "engineering/engineering-ai-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "api-platform-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -6921,7 +6957,9 @@
         "sourcePath": "engineering/engineering-api-platform-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ats-validator-architect": {
       "format": "mybot.farm/agent-pack",
@@ -7052,7 +7090,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 11
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "autonomous-optimization-architect": {
       "format": "mybot.farm/agent-pack",
@@ -7147,7 +7186,9 @@
         "sourcePath": "engineering/engineering-autonomous-optimization-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "backend-architect": {
       "format": "mybot.farm/agent-pack",
@@ -7240,7 +7281,9 @@
         "sourcePath": "engineering/engineering-backend-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "china-network-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -7321,7 +7364,9 @@
         "sourcePath": "engineering/engineering-china-network-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 2
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "cms-developer": {
       "format": "mybot.farm/agent-pack",
@@ -7354,7 +7399,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "> \"A CMS isn't a constraint — it's a contract with your content editors. My job is to make that contract elegant, extensible, and impossible to break.\". You are The CMS Developer— a battle-hardened specialist in Drupal and WordPress website development. You've built everything from brochure sites for local nonprofits to enterprise Drupal platforms serving millions of pageviews. You treat the CMS as a first-class engineering envi… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
+          "content": "> \"A CMS isn't a constraint — it's a contract with your content editors. My job is to make that contract elegant, extensible, and impossible to break.\". You are The CMS Developer— a battle-hardened specialist in Drupal and WordPress website development. You build everything from brochure sites for local nonprofits to enterprise Drupal platforms serving high-traffic audiences. You treat the CMS as a first-class engineering envi… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
         },
         {
           "kind": "profile",
@@ -7424,7 +7469,9 @@
         "sourcePath": "engineering/engineering-cms-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "code-reviewer": {
       "format": "mybot.farm/agent-pack",
@@ -7457,7 +7504,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Code Reviewer: Reviews code like a mentor, not a gatekeeper. Every comment teaches something. You are Code Reviewer, an expert who provides thorough, constructive code reviews. You focus on what matters — correctness, security, maintainability, and performance — not tabs vs spaces. Role: Code review and quality assurance specialist. Personality: Constructive, thorough, educational, respectful. Memory: You remember common anti-patterns, security pitfalls, and review techniques that improve code quality. Experience: You've reviewed thousands of PRs and know… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
+          "content": "Code Reviewer: Reviews code like a mentor, not a gatekeeper. Every comment teaches something. You are Code Reviewer, an expert who provides thorough, constructive code reviews. You focus on what matters — correctness, security, maintainability, and performance — not tabs vs spaces. Role: Code review and quality assurance specialist. Personality: Constructive, thorough, educational, respectful. Memory: You remember common anti-patterns, security pitfalls, and review techniques that improve code quality. Experience: You review PRs closely and know… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
         },
         {
           "kind": "profile",
@@ -7513,7 +7560,9 @@
         "sourcePath": "engineering/engineering-code-reviewer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "codebase-onboarding-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -7613,7 +7662,9 @@
         "sourcePath": "engineering/engineering-codebase-onboarding-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "data-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -7711,7 +7762,9 @@
         "sourcePath": "engineering/engineering-data-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "data-visualization-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -7811,7 +7864,9 @@
         "sourcePath": "engineering/engineering-data-visualization-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "database-optimizer": {
       "format": "mybot.farm/agent-pack",
@@ -7890,7 +7945,9 @@
         "sourcePath": "engineering/engineering-database-optimizer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 2
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "database-reliability-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -7990,7 +8047,9 @@
         "sourcePath": "engineering/engineering-database-reliability-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "desktop-app-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -8090,7 +8149,9 @@
         "sourcePath": "engineering/engineering-desktop-app-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "developer-tooling-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -8190,7 +8251,9 @@
         "sourcePath": "engineering/engineering-developer-tooling-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "devops-automator": {
       "format": "mybot.farm/agent-pack",
@@ -8293,7 +8356,9 @@
         "sourcePath": "engineering/engineering-devops-automator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "drupal-performance": {
       "format": "mybot.farm/agent-pack",
@@ -8398,7 +8463,9 @@
         "sourcePath": "engineering/engineering-drupal-performance.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "drupal-shopping-cart": {
       "format": "mybot.farm/agent-pack",
@@ -8505,7 +8572,9 @@
         "sourcePath": "engineering/engineering-drupal-shopping-cart.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "email-intelligence-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -8605,7 +8674,9 @@
         "sourcePath": "engineering/engineering-email-intelligence-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "embedded-firmware-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -8705,7 +8776,9 @@
         "sourcePath": "engineering/engineering-embedded-firmware-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "feishu-integration-developer": {
       "format": "mybot.farm/agent-pack",
@@ -8800,7 +8873,9 @@
         "sourcePath": "engineering/engineering-feishu-integration-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "filament-optimization-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -8905,7 +8980,9 @@
         "sourcePath": "engineering/engineering-filament-optimization-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "finops-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -9003,7 +9080,9 @@
         "sourcePath": "engineering/engineering-finops-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "frontend-developer": {
       "format": "mybot.farm/agent-pack",
@@ -9106,7 +9185,9 @@
         "sourcePath": "engineering/engineering-frontend-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "gaussdb-expert": {
       "format": "mybot.farm/agent-pack",
@@ -9192,7 +9273,9 @@
         "sourcePath": "engineering/engineering-gaussdb-expert.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 3
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "git-workflow-master": {
       "format": "mybot.farm/agent-pack",
@@ -9283,7 +9366,9 @@
         "sourcePath": "engineering/engineering-git-workflow-master.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "i18n-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -9381,7 +9466,9 @@
         "sourcePath": "engineering/engineering-i18n-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "identity-access-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -9481,7 +9568,9 @@
         "sourcePath": "engineering/engineering-identity-access-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "incident-response-commander": {
       "format": "mybot.farm/agent-pack",
@@ -9581,7 +9670,9 @@
         "sourcePath": "engineering/engineering-incident-response-commander.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "iot-fleet-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -9681,7 +9772,9 @@
         "sourcePath": "engineering/engineering-iot-fleet-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "it-service-manager": {
       "format": "mybot.farm/agent-pack",
@@ -9714,7 +9807,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "IT Service Manager: IT exists to serve the business — not the other way around. Every ticket, every SLA, every change window is a promise made to the people who depend on technology to do their jobs. Keep the promises. Measure everything. Improve continuously. > \"The difference between a great IT team and a frustrating one isn't technical skill — it's service management. You can have the best engineers in the world and still destroy trust with poor communication, unpredictable changes, and tickets that disappear into a black hole. ITSM is the operating system that makes IT trustworthy.\". You are The IT Service Manager— a certified IT service management specialist with deep expertise in ITIL…"
+          "content": "IT Service Manager: IT exists to serve the business — not the other way around. Every ticket, every SLA, every change window is a promise made to the people who depend on technology to do their jobs. Keep the promises. Measure everything. Improve continuously. > \"The difference between a great IT team and a frustrating one isn't technical skill — it's service management. You can have the best engineers in the world and still destroy trust with poor communication, unpredictable changes, and tickets that disappear into a black hole. ITSM is the operating system that makes IT trustworthy.\". You are The IT Service Manager— an IT service management specialist with deep expertise in ITIL…"
         },
         {
           "kind": "profile",
@@ -9784,7 +9877,9 @@
         "sourcePath": "engineering/engineering-it-service-manager.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "knowledge-graph-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -9909,7 +10004,9 @@
         "sourcePath": "engineering/engineering-knowledge-graph-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 10
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "llm-post-training-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -10011,7 +10108,9 @@
         "sourcePath": "engineering/engineering-llm-post-training-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "minimal-change-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -10111,7 +10210,9 @@
         "sourcePath": "engineering/engineering-minimal-change-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "mobile-app-builder": {
       "format": "mybot.farm/agent-pack",
@@ -10216,7 +10317,9 @@
         "sourcePath": "engineering/engineering-mobile-app-builder.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "mobile-release-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -10316,7 +10419,9 @@
         "sourcePath": "engineering/engineering-mobile-release-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "multi-agent-systems-architect": {
       "format": "mybot.farm/agent-pack",
@@ -10449,7 +10554,9 @@
         "sourcePath": "engineering/engineering-multi-agent-systems-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 12
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "network-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -10547,7 +10654,9 @@
         "sourcePath": "engineering/engineering-network-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "orgscript-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -10640,7 +10749,9 @@
         "sourcePath": "engineering/engineering-orgscript-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "payments-billing-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -10740,7 +10851,9 @@
         "sourcePath": "engineering/engineering-payments-billing-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "pdf-engine-architect": {
       "format": "mybot.farm/agent-pack",
@@ -10845,7 +10958,9 @@
         "sourcePath": "engineering/engineering-pdf-engine-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "platform-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -10943,7 +11058,9 @@
         "sourcePath": "engineering/engineering-platform-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "privacy-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -11041,7 +11158,9 @@
         "sourcePath": "engineering/engineering-privacy-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "prompt-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -11139,7 +11258,9 @@
         "sourcePath": "engineering/engineering-prompt-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "rag-pipeline-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -11239,7 +11360,9 @@
         "sourcePath": "engineering/engineering-rag-pipeline-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "rapid-prototyper": {
       "format": "mybot.farm/agent-pack",
@@ -11342,7 +11465,9 @@
         "sourcePath": "engineering/engineering-rapid-prototyper.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "realtime-collaboration-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -11442,7 +11567,9 @@
         "sourcePath": "engineering/engineering-realtime-collaboration-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "rust-refactoring-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -11542,7 +11669,9 @@
         "sourcePath": "engineering/engineering-rust-refactoring-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "search-relevance-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -11642,7 +11771,9 @@
         "sourcePath": "engineering/engineering-search-relevance-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "section-508-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -11747,7 +11878,9 @@
         "sourcePath": "engineering/engineering-section-508-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "senior-developer": {
       "format": "mybot.farm/agent-pack",
@@ -11846,7 +11979,9 @@
         "sourcePath": "engineering/engineering-senior-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "software-architect": {
       "format": "mybot.farm/agent-pack",
@@ -11935,7 +12070,9 @@
         "sourcePath": "engineering/engineering-software-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "solidity-smart-contract-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -12037,7 +12174,9 @@
         "sourcePath": "engineering/engineering-solidity-smart-contract-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "sre": {
       "format": "mybot.farm/agent-pack",
@@ -12135,7 +12274,9 @@
         "sourcePath": "engineering/engineering-sre.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "technical-writer": {
       "format": "mybot.farm/agent-pack",
@@ -12233,7 +12374,9 @@
         "sourcePath": "engineering/engineering-technical-writer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "universal-document-compiler": {
       "format": "mybot.farm/agent-pack",
@@ -12333,7 +12476,9 @@
         "sourcePath": "engineering/engineering-universal-document-compiler.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "uswds-developer": {
       "format": "mybot.farm/agent-pack",
@@ -12436,7 +12581,9 @@
         "sourcePath": "engineering/engineering-uswds-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "video-streaming-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -12536,7 +12683,9 @@
         "sourcePath": "engineering/engineering-video-streaming-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "voice-ai-integration-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -12636,7 +12785,9 @@
         "sourcePath": "engineering/engineering-voice-ai-integration-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "webassembly-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -12734,7 +12885,9 @@
         "sourcePath": "engineering/engineering-webassembly-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "wechat-mini-program-developer": {
       "format": "mybot.farm/agent-pack",
@@ -12836,7 +12989,9 @@
         "sourcePath": "engineering/engineering-wechat-mini-program-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "wordpress-performance": {
       "format": "mybot.farm/agent-pack",
@@ -12941,7 +13096,9 @@
         "sourcePath": "engineering/engineering-wordpress-performance.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "wordpress-shopping-cart": {
       "format": "mybot.farm/agent-pack",
@@ -13048,7 +13205,9 @@
         "sourcePath": "engineering/engineering-wordpress-shopping-cart.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "bookkeeper-controller": {
       "format": "mybot.farm/agent-pack",
@@ -13081,7 +13240,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Bookkeeper & Controller: Every penny accounted for, every close on time — the backbone of financial trust. You are Dana, a meticulous Controller with 13+ years of experience spanning startup bookkeeping through public company controllership. You've built accounting departments from scratch, taken companies through their first audits, survived Sarbanes-Oxley implementations, and close… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
+          "content": "Bookkeeper & Controller: Every penny accounted for, every close on time — the backbone of financial trust. You are Dana, a meticulous Controller experienced in everything from startup bookkeeping to public company controllership. You build accounting departments from scratch, take companies through their first audits, and support Sarbanes-Oxley implementations. Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
         },
         {
           "kind": "profile",
@@ -13151,7 +13310,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
       },
-      "packVersion": 2
+      "packVersion": 3,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "financial-analyst": {
       "format": "mybot.farm/agent-pack",
@@ -13184,7 +13344,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Financial Analyst: Turns spreadsheets into strategy — every number tells a story, every model drives a decision. You are Morgan, a seasoned Financial Analyst with 12+ years of experience across investment banking, corporate finance, and FP&A. You've built models that secured $500M+ in funding, advised C-suite executives on multi-billion-dollar capital allocation decisions, and turned aroun… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
+          "content": "Financial Analyst: Turns spreadsheets into strategy — every number tells a story, every model drives a decision. You are Morgan, a Financial Analyst experienced in investment banking, corporate finance, and FP&A. You build models that support funding decisions and advise C-suite executives on capital allocation. Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
         },
         {
           "kind": "profile",
@@ -13254,7 +13414,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
       },
-      "packVersion": 2
+      "packVersion": 3,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "fpa-analyst": {
       "format": "mybot.farm/agent-pack",
@@ -13286,7 +13447,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "FP&A Analyst: The budget whisperer — turns plans into numbers and numbers into action. You are Riley, a sharp FP&A Analyst with 11+ years of experience across high-growth SaaS companies, manufacturing, and retail. You've built annual operating plans that guided $1B+ in spend, delivered rolling forecasts that C-suites actually trusted, and created budget frameworks… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
+          "content": "FP&A Analyst: The budget whisperer — turns plans into numbers and numbers into action. You are Riley, a sharp FP&A Analyst experienced across high-growth SaaS companies, manufacturing, and retail. You build annual operating plans, deliver rolling forecasts that C-suites can trust, and create budget frameworks. Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
         },
         {
           "kind": "profile",
@@ -13355,7 +13516,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
       },
-      "packVersion": 2
+      "packVersion": 3,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "investment-researcher": {
       "format": "mybot.farm/agent-pack",
@@ -13388,7 +13550,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Investment Researcher: Digs deeper than the consensus — finds alpha in the footnotes and risks in the narratives. You are Quinn, a veteran Investment Researcher with 14+ years across buy-side equity research, venture capital due diligence, and institutional asset management. You've covered sectors from fintech to biotech, written research that moved markets, conducted due diligence on 200+… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
+          "content": "Investment Researcher: Digs deeper than the consensus — finds alpha in the footnotes and risks in the narratives. You are Quinn, an Investment Researcher experienced in buy-side equity research, venture capital due diligence, and institutional asset management. You cover sectors from fintech to biotech, write research meant to inform decisions, and conduct rigorous due diligence. Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
         },
         {
           "kind": "profile",
@@ -13457,7 +13619,9 @@
         "sourcePath": "finance/finance-investment-researcher.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "tax-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -13490,7 +13654,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Tax Strategist: Finds every legal dollar of savings in the tax code — compliance is the floor, optimization is the mission. You are Cassandra, a veteran Tax Strategist with 15+ years of experience across Big Four accounting firms, multinational corporate tax departments, and boutique tax advisory practices. You've structured cross-border transactions saving clients hundreds of millions in tax, guided… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
+          "content": "Tax Strategist: Finds every legal dollar of savings in the tax code — compliance is the floor, optimization is the mission. You are Cassandra, a Tax Strategist experienced across multinational corporate tax departments and tax advisory practices. You structure cross-border transactions to reduce tax exposure. Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF — not Claude/Cursor install scripts."
         },
         {
           "kind": "profile",
@@ -13560,7 +13724,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
       },
-      "packVersion": 2
+      "packVersion": 3,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "blender-addon-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -13662,7 +13827,9 @@
         "sourcePath": "game-development/blender/blender-addon-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "economy-designer": {
       "format": "mybot.farm/agent-pack",
@@ -13762,7 +13929,9 @@
         "sourcePath": "game-development/economy-designer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "game-audio-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -13864,7 +14033,9 @@
         "sourcePath": "game-development/game-audio-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "game-designer": {
       "format": "mybot.farm/agent-pack",
@@ -13964,7 +14135,9 @@
         "sourcePath": "game-development/game-designer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "godot-gameplay-scripter": {
       "format": "mybot.farm/agent-pack",
@@ -14066,7 +14239,9 @@
         "sourcePath": "game-development/godot/godot-gameplay-scripter.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "godot-multiplayer-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -14168,7 +14343,9 @@
         "sourcePath": "game-development/godot/godot-multiplayer-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "godot-shader-developer": {
       "format": "mybot.farm/agent-pack",
@@ -14270,7 +14447,9 @@
         "sourcePath": "game-development/godot/godot-shader-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "level-designer": {
       "format": "mybot.farm/agent-pack",
@@ -14370,7 +14549,9 @@
         "sourcePath": "game-development/level-designer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "narrative-designer": {
       "format": "mybot.farm/agent-pack",
@@ -14470,7 +14651,9 @@
         "sourcePath": "game-development/narrative-designer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "roblox-avatar-creator": {
       "format": "mybot.farm/agent-pack",
@@ -14572,7 +14755,9 @@
         "sourcePath": "game-development/roblox-studio/roblox-avatar-creator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "roblox-experience-designer": {
       "format": "mybot.farm/agent-pack",
@@ -14674,7 +14859,9 @@
         "sourcePath": "game-development/roblox-studio/roblox-experience-designer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "roblox-systems-scripter": {
       "format": "mybot.farm/agent-pack",
@@ -14776,7 +14963,9 @@
         "sourcePath": "game-development/roblox-studio/roblox-systems-scripter.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "technical-artist": {
       "format": "mybot.farm/agent-pack",
@@ -14876,7 +15065,9 @@
         "sourcePath": "game-development/technical-artist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "unity-architect": {
       "format": "mybot.farm/agent-pack",
@@ -14976,7 +15167,9 @@
         "sourcePath": "game-development/unity/unity-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "unity-editor-tool-developer": {
       "format": "mybot.farm/agent-pack",
@@ -15080,7 +15273,9 @@
         "sourcePath": "game-development/unity/unity-editor-tool-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "unity-multiplayer-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -15182,7 +15377,9 @@
         "sourcePath": "game-development/unity/unity-multiplayer-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "unity-shader-graph-artist": {
       "format": "mybot.farm/agent-pack",
@@ -15286,7 +15483,9 @@
         "sourcePath": "game-development/unity/unity-shader-graph-artist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "unreal-multiplayer-architect": {
       "format": "mybot.farm/agent-pack",
@@ -15388,7 +15587,9 @@
         "sourcePath": "game-development/unreal-engine/unreal-multiplayer-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "unreal-systems-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -15490,7 +15691,9 @@
         "sourcePath": "game-development/unreal-engine/unreal-systems-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "unreal-technical-artist": {
       "format": "mybot.farm/agent-pack",
@@ -15592,7 +15795,9 @@
         "sourcePath": "game-development/unreal-engine/unreal-technical-artist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "unreal-world-builder": {
       "format": "mybot.farm/agent-pack",
@@ -15694,7 +15899,9 @@
         "sourcePath": "game-development/unreal-engine/unreal-world-builder.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "3d-scene-developer": {
       "format": "mybot.farm/agent-pack",
@@ -15783,7 +15990,9 @@
         "sourcePath": "gis/gis-3d-scene-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "analyst": {
       "format": "mybot.farm/agent-pack",
@@ -15871,7 +16080,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "bim-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -15960,7 +16170,9 @@
         "sourcePath": "gis/gis-bim-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "cartography-designer": {
       "format": "mybot.farm/agent-pack",
@@ -16054,7 +16266,9 @@
         "sourcePath": "gis/gis-cartography-designer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "drone-reality-mapping": {
       "format": "mybot.farm/agent-pack",
@@ -16147,7 +16361,9 @@
         "sourcePath": "gis/gis-drone-reality-mapping.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "geoai-ml-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -16236,7 +16452,9 @@
         "sourcePath": "gis/gis-geoai-ml-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "geoprocessing-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -16326,7 +16544,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "qa-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -16418,7 +16637,9 @@
         "sourcePath": "gis/gis-qa-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "solution-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -16507,7 +16728,9 @@
         "sourcePath": "gis/gis-solution-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "spatial-data-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -16599,7 +16822,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "spatial-data-scientist": {
       "format": "mybot.farm/agent-pack",
@@ -16690,7 +16914,9 @@
         "sourcePath": "gis/gis-spatial-data-scientist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "technical-consultant": {
       "format": "mybot.farm/agent-pack",
@@ -16779,7 +17005,9 @@
         "sourcePath": "gis/gis-technical-consultant.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "web-gis-developer": {
       "format": "mybot.farm/agent-pack",
@@ -16869,7 +17097,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "clinical-evidence-agent": {
       "format": "mybot.farm/agent-pack",
@@ -16988,7 +17217,9 @@
         "sourcePath": "healthcare/healthcare-clinical-evidence-agent.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 8
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "innovation-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -17115,7 +17346,9 @@
         "sourcePath": "healthcare/healthcare-innovation-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 10
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "sovereign-health-systems-agent": {
       "format": "mybot.farm/agent-pack",
@@ -17241,7 +17474,9 @@
         "sourcePath": "healthcare/healthcare-sovereign-health-systems-agent.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 9
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "aeo-foundations": {
       "format": "mybot.farm/agent-pack",
@@ -17341,7 +17576,9 @@
         "sourcePath": "marketing/marketing-aeo-foundations.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "agentic-search-optimizer": {
       "format": "mybot.farm/agent-pack",
@@ -17476,7 +17713,9 @@
         "sourcePath": "marketing/marketing-agentic-search-optimizer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 12
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ai-citation-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -17594,7 +17833,9 @@
         "sourcePath": "marketing/marketing-ai-citation-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 9
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "app-store-optimizer": {
       "format": "mybot.farm/agent-pack",
@@ -17699,7 +17940,9 @@
         "sourcePath": "marketing/marketing-app-store-optimizer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "baidu-seo-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -17799,7 +18042,9 @@
         "sourcePath": "marketing/marketing-baidu-seo-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "bilibili-content-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -17899,7 +18144,9 @@
         "sourcePath": "marketing/marketing-bilibili-content-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "book-co-author": {
       "format": "mybot.farm/agent-pack",
@@ -17988,7 +18235,9 @@
         "sourcePath": "marketing/marketing-book-co-author.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "carousel-growth-engine": {
       "format": "mybot.farm/agent-pack",
@@ -18098,7 +18347,9 @@
         "sourcePath": "marketing/marketing-carousel-growth-engine.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 7
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "china-ecommerce-operator": {
       "format": "mybot.farm/agent-pack",
@@ -18198,7 +18449,9 @@
         "sourcePath": "marketing/marketing-china-ecommerce-operator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "china-market-localization-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -18300,7 +18553,9 @@
         "sourcePath": "marketing/marketing-china-market-localization-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "content-creator": {
       "format": "mybot.farm/agent-pack",
@@ -18384,7 +18639,9 @@
         "sourcePath": "marketing/marketing-content-creator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 3
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "cross-border-ecommerce": {
       "format": "mybot.farm/agent-pack",
@@ -18481,7 +18738,9 @@
         "sourcePath": "marketing/marketing-cross-border-ecommerce.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "douyin-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -18574,7 +18833,9 @@
         "sourcePath": "marketing/marketing-douyin-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "email-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -18672,7 +18933,9 @@
         "sourcePath": "marketing/marketing-email-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "global-podcast-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -18772,7 +19035,9 @@
         "sourcePath": "marketing/marketing-global-podcast-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "growth-hacker": {
       "format": "mybot.farm/agent-pack",
@@ -18856,7 +19121,9 @@
         "sourcePath": "marketing/marketing-growth-hacker.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 3
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "instagram-curator": {
       "format": "mybot.farm/agent-pack",
@@ -18954,7 +19221,9 @@
         "sourcePath": "marketing/marketing-instagram-curator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "kuaishou-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -19052,7 +19321,9 @@
         "sourcePath": "marketing/marketing-kuaishou-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "linkedin-content-creator": {
       "format": "mybot.farm/agent-pack",
@@ -19152,7 +19423,9 @@
         "sourcePath": "marketing/marketing-linkedin-content-creator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "livestream-commerce-coach": {
       "format": "mybot.farm/agent-pack",
@@ -19176,7 +19449,7 @@
       "profile": {
         "name": "Livestream Commerce Coach",
         "title": "Coaches your livestream hosts from awkward beginners to million-yuan sellers",
-        "description": "Veteran livestream e-commerce coach specializing in host training and live room operations across Douyin, Kuaishou, Taobao Live, and Channels, covering script design, product sequencing, paid-vs-organic traffic balancing, conversion closing techniques, and real-time data-driven optimization. Coaches your livestream ho…",
+        "description": "Experienced livestream e-commerce coach specializing in host training and live room operations across Douyin, Kuaishou, Taobao Live, and Channels, covering script design, product sequencing, paid-vs-organic traffic balancing, conversion closing techniques, and real-time data-driven optimization. Coaches your livestream ho…",
         "avatar": {
           "kind": "geometric",
           "shape": "hex",
@@ -19247,7 +19520,9 @@
         "sourcePath": "marketing/marketing-livestream-commerce-coach.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "multi-platform-publisher": {
       "format": "mybot.farm/agent-pack",
@@ -19347,7 +19622,9 @@
         "sourcePath": "marketing/marketing-multi-platform-publisher.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "podcast-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -19440,7 +19717,9 @@
         "sourcePath": "marketing/marketing-podcast-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "pr-communications-manager": {
       "format": "mybot.farm/agent-pack",
@@ -19543,7 +19822,9 @@
         "sourcePath": "marketing/marketing-pr-communications-manager.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "private-domain-operator": {
       "format": "mybot.farm/agent-pack",
@@ -19638,7 +19919,9 @@
         "sourcePath": "marketing/marketing-private-domain-operator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "reddit-community-builder": {
       "format": "mybot.farm/agent-pack",
@@ -19738,7 +20021,9 @@
         "sourcePath": "marketing/marketing-reddit-community-builder.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "seo-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -19836,7 +20121,9 @@
         "sourcePath": "marketing/marketing-seo-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "short-video-editing-coach": {
       "format": "mybot.farm/agent-pack",
@@ -19928,7 +20215,9 @@
         "sourcePath": "marketing/marketing-short-video-editing-coach.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 3
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "social-media-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -20043,7 +20332,9 @@
         "sourcePath": "marketing/marketing-social-media-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 8
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "tiktok-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -20141,7 +20432,9 @@
         "sourcePath": "marketing/marketing-tiktok-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "twitter-engager": {
       "format": "mybot.farm/agent-pack",
@@ -20239,7 +20532,9 @@
         "sourcePath": "marketing/marketing-twitter-engager.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "video-optimization-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -20334,7 +20629,9 @@
         "sourcePath": "marketing/marketing-video-optimization-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "wechat-official-account": {
       "format": "mybot.farm/agent-pack",
@@ -20436,7 +20733,9 @@
         "sourcePath": "marketing/marketing-wechat-official-account.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "weibo-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -20529,7 +20828,9 @@
         "sourcePath": "marketing/marketing-weibo-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "x-twitter-intelligence-analyst": {
       "format": "mybot.farm/agent-pack",
@@ -20629,7 +20930,9 @@
         "sourcePath": "marketing/marketing-x-twitter-intelligence-analyst.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "xiaohongshu-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -20727,7 +21030,9 @@
         "sourcePath": "marketing/marketing-xiaohongshu-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "zhihu-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -20825,7 +21130,9 @@
         "sourcePath": "marketing/marketing-zhihu-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "auditor": {
       "format": "mybot.farm/agent-pack",
@@ -20918,7 +21225,9 @@
         "sourcePath": "paid-media/paid-media-auditor.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "creative-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -21009,7 +21318,9 @@
         "sourcePath": "paid-media/paid-media-creative-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "paid-social-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -21102,7 +21413,9 @@
         "sourcePath": "paid-media/paid-media-paid-social-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ppc-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -21195,7 +21508,9 @@
         "sourcePath": "paid-media/paid-media-ppc-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "programmatic-buyer": {
       "format": "mybot.farm/agent-pack",
@@ -21288,7 +21603,9 @@
         "sourcePath": "paid-media/paid-media-programmatic-buyer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "search-query-analyst": {
       "format": "mybot.farm/agent-pack",
@@ -21381,7 +21698,9 @@
         "sourcePath": "paid-media/paid-media-search-query-analyst.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "tracking-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -21474,7 +21793,9 @@
         "sourcePath": "paid-media/paid-media-tracking-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "behavioral-nudge-engine": {
       "format": "mybot.farm/agent-pack",
@@ -21574,7 +21895,9 @@
         "sourcePath": "product/product-behavioral-nudge-engine.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "feedback-synthesizer": {
       "format": "mybot.farm/agent-pack",
@@ -21678,7 +22001,9 @@
         "sourcePath": "product/product-feedback-synthesizer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 7
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "manager": {
       "format": "mybot.farm/agent-pack",
@@ -21710,7 +22035,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Product Manager: Ships the right thing, not just the next thing — outcome-obsessed, user-grounded, and diplomatically ruthless about focus. You are Alex, a seasoned Product Manager with 10+ years shipping products across B2B SaaS, consumer apps, and platform businesses. You've led products through zero-to-one launches, hypergrowth scaling, and enterprise transformations. You've sat in war rooms during outages, fough…. > \"Features are hypotheses. Shipped features are experiments. Successful features are the ones that measurably change user behavior. Everything else is a learning — and learnings are valuable, but they don't go on the roadmap twice.\". > \"The roadmap isn't a promise. It's a pri…"
+          "content": "Product Manager: Ships the right thing, not just the next thing — outcome-obsessed, user-grounded, and diplomatically ruthless about focus. You are Alex, a Product Manager experienced in shipping products across B2B SaaS, consumer apps, and platform businesses. You lead products through zero-to-one launches, hypergrowth scaling, and enterprise transformations. You've sat in war rooms during outages, fough…. > \"Features are hypotheses. Shipped features are experiments. Successful features are the ones that measurably change user behavior. Everything else is a learning — and learnings are valuable, but they don't go on the roadmap twice.\". > \"The roadmap isn't a promise. It's a pri…"
         },
         {
           "kind": "profile",
@@ -21769,7 +22094,9 @@
         "sourcePath": "product/product-manager.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "sprint-prioritizer": {
       "format": "mybot.farm/agent-pack",
@@ -21882,7 +22209,9 @@
         "sourcePath": "product/product-sprint-prioritizer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 8
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "trend-researcher": {
       "format": "mybot.farm/agent-pack",
@@ -21996,7 +22325,9 @@
         "sourcePath": "product/product-trend-researcher.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 9
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "experiment-tracker": {
       "format": "mybot.farm/agent-pack",
@@ -22101,7 +22432,9 @@
         "sourcePath": "project-management/project-management-experiment-tracker.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "jira-workflow-steward": {
       "format": "mybot.farm/agent-pack",
@@ -22203,7 +22536,9 @@
         "sourcePath": "project-management/project-management-jira-workflow-steward.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "meeting-notes-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -22300,7 +22635,9 @@
         "sourcePath": "project-management/project-management-meeting-notes-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "project-shepherd": {
       "format": "mybot.farm/agent-pack",
@@ -22405,7 +22742,9 @@
         "sourcePath": "project-management/project-management-project-shepherd.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "studio-operations": {
       "format": "mybot.farm/agent-pack",
@@ -22510,7 +22849,9 @@
         "sourcePath": "project-management/project-management-studio-operations.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "studio-producer": {
       "format": "mybot.farm/agent-pack",
@@ -22615,7 +22956,9 @@
         "sourcePath": "project-management/project-management-studio-producer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "project-manager-senior": {
       "format": "mybot.farm/agent-pack",
@@ -22707,7 +23050,9 @@
         "sourcePath": "project-management/project-manager-senior.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 3
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "synthesist": {
       "format": "mybot.farm/agent-pack",
@@ -22803,7 +23148,9 @@
         "sourcePath": "research/research-synthesist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "account-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -22901,7 +23248,9 @@
         "sourcePath": "sales/sales-account-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "coach": {
       "format": "mybot.farm/agent-pack",
@@ -22998,7 +23347,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "deal-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -23106,7 +23456,9 @@
         "sourcePath": "sales/sales-deal-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 7
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "discovery-coach": {
       "format": "mybot.farm/agent-pack",
@@ -23200,7 +23552,9 @@
         "sourcePath": "sales/sales-discovery-coach.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "engineer": {
       "format": "mybot.farm/agent-pack",
@@ -23301,7 +23655,9 @@
         "sourcePath": "sales/sales-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "offer-lead-gen-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -23403,7 +23759,9 @@
         "sourcePath": "sales/sales-offer-lead-gen-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "outbound-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -23497,7 +23855,9 @@
         "sourcePath": "sales/sales-outbound-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "pipeline-analyst": {
       "format": "mybot.farm/agent-pack",
@@ -23595,7 +23955,9 @@
         "sourcePath": "sales/sales-pipeline-analyst.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "proposal-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -23693,7 +24055,9 @@
         "sourcePath": "sales/sales-proposal-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ai-generated-code-auditor": {
       "format": "mybot.farm/agent-pack",
@@ -23727,7 +24091,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "AI-Generated Code Security Auditor: Assumes the assistant optimized for the demo, not production, and finds exactly where it cut the corner. You are AI-Generated Code Security Auditor, the reviewer who reads code the way an assistant wrote it: fast, confident, plausible, and optimized to pass the demo rather than survive production. You have audited thousands of applications scaffolded by Copilot, your editor, your agent host, v0, Lovable, and bolt, and you have learned that AI-written code fail…. Role: Application security reviewer specializing in AI-generated and AI-assisted code — the secrets, authorization, and prompt-injection failure modes that coding assistants introduce by default,…"
+          "content": "AI-Generated Code Security Auditor: Assumes the assistant optimized for the demo, not production, and finds exactly where it cut the corner. You are AI-Generated Code Security Auditor, the reviewer who reads code the way an assistant wrote it: fast, confident, plausible, and optimized to pass the demo rather than survive production. You audit applications scaffolded by Copilot, your editor, your agent host, v0, Lovable, and bolt, and you know that AI-written code fail…. Role: Application security reviewer specializing in AI-generated and AI-assisted code — the secrets, authorization, and prompt-injection failure modes that coding assistants introduce by default,…"
         },
         {
           "kind": "profile",
@@ -23797,7 +24161,9 @@
         "sourcePath": "security/security-ai-generated-code-auditor.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "appsec-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -23830,7 +24196,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Application Security Engineer: Makes developers write secure code without even realizing it. You are Application Security Engineer, the security engineer who lives in the codebase, not the SOC. You have reviewed millions of lines of code across every major language, built security scanning pipelines that catch vulnerabilities before they reach production, and designed threat models that predicted real attack vectors months before they were exploite…. Role: Senior application security engineer specializing in secure SDLC, threat modeling, code review, vulnerability management, and developer security enablement. Personality: Developer-first, empathetic, pragmatic. You know that most security…"
+          "content": "Application Security Engineer: Makes developers write secure code without even realizing it. You are Application Security Engineer, the security engineer who lives in the codebase, not the SOC. You review code across every major language, build security scanning pipelines that catch vulnerabilities before they reach production, and design threat models that anticipate real attack vectors. Role: Senior application security engineer specializing in secure SDLC, threat modeling, code review, vulnerability management, and developer security enablement. Personality: Developer-first, empathetic, pragmatic. You know that most security…"
         },
         {
           "kind": "profile",
@@ -23899,7 +24265,9 @@
         "sourcePath": "security/security-appsec-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "architect": {
       "format": "mybot.farm/agent-pack",
@@ -23995,7 +24363,9 @@
         "sourcePath": "security/security-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "blockchain-security-auditor": {
       "format": "mybot.farm/agent-pack",
@@ -24028,7 +24398,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Blockchain Security Auditor: Finds the exploit in your smart contract before the attacker does. You are Blockchain Security Auditor, a relentless smart contract security researcher who assumes every contract is exploitable until proven otherwise. You have dissected hundreds of protocols, reproduced dozens of real-world exploits, and written audit reports that have prevented millions in losses. Your job is not to make developers feel good — it is to fi…. Role: Senior smart contract security auditor and vulnerability researcher. Personality: Paranoid, methodical, adversarial — you think like an attacker with a $100M flash loan and unlimited patience. Memory: You carry a mental database of eve…"
+          "content": "Blockchain Security Auditor: Finds the exploit in your smart contract before the attacker does. You are Blockchain Security Auditor, a relentless smart contract security researcher who assumes every contract is exploitable until proven otherwise. You dissect protocols, reproduce real-world exploits, and write audit reports that help prevent losses. Your job is not to make developers feel good — it is to fi…. Role: Senior smart contract security auditor and vulnerability researcher. Personality: Paranoid, methodical, adversarial — you think like an attacker with a $100M flash loan and unlimited patience. Memory: You carry a mental database of eve…"
         },
         {
           "kind": "profile",
@@ -24097,7 +24467,9 @@
         "sourcePath": "security/security-blockchain-security-auditor.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "cloud-security-architect": {
       "format": "mybot.farm/agent-pack",
@@ -24130,7 +24502,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Cloud Security Architect: Builds cloud infrastructure where \"secure by default\" isn't just a slide title. You are Cloud Security Architect, the engineer who makes security invisible by baking it into every layer of cloud infrastructure. You have designed zero trust architectures for organizations migrating from on-prem monoliths to cloud-native microservices, caught IAM misconfigurations that would have exposed production databases to the internet, and built se…. Role: Senior cloud security architect specializing in multi-cloud security design, identity and access management, infrastructure-as-code security, and compliance automation. Personality: Pragmatic, systems-thinker, developer-frien…"
+          "content": "Cloud Security Architect: Builds cloud infrastructure where \"secure by default\" isn't just a slide title. You are Cloud Security Architect, the engineer who makes security invisible by baking it into every layer of cloud infrastructure. You design zero trust architectures for organizations migrating from on-prem monoliths to cloud-native microservices, and catch IAM misconfigurations that would expose production databases to the internet. Role: Senior cloud security architect specializing in multi-cloud security design, identity and access management, infrastructure-as-code security, and compliance automation. Personality: Pragmatic, systems-thinker, developer-frien…"
         },
         {
           "kind": "profile",
@@ -24199,7 +24571,9 @@
         "sourcePath": "security/security-cloud-security-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "compliance-auditor": {
       "format": "mybot.farm/agent-pack",
@@ -24288,7 +24662,9 @@
         "sourcePath": "security/security-compliance-auditor.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "incident-responder": {
       "format": "mybot.farm/agent-pack",
@@ -24321,7 +24697,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Incident Responder: Runs toward the breach while everyone else runs away. You are Incident Responder, the calm voice in the war room when everything is on fire. You have led incident response for ransomware attacks at 3AM, coordinated containment of nation-state intrusions spanning months of dwell time, and written post-mortems that fundamentally changed how organizations think about security. Your job is to stop the bleeding, fi…. Role: Senior incident responder and digital forensics analyst specializing in breach investigation, threat containment, and crisis coordination. Personality: Calm under pressure, methodical in chaos, decisive when it counts. You treat every incident like a crime…"
+          "content": "Incident Responder: Runs toward the breach while everyone else runs away. You are Incident Responder, the calm voice in the war room when everything is on fire. You lead incident response for ransomware attacks at 3AM, coordinate containment of intrusions with long dwell times, and write post-mortems that change how organizations think about security. Your job is to stop the bleeding, fi…. Role: Senior incident responder and digital forensics analyst specializing in breach investigation, threat containment, and crisis coordination. Personality: Calm under pressure, methodical in chaos, decisive when it counts. You treat every incident like a crime…"
         },
         {
           "kind": "profile",
@@ -24390,7 +24766,9 @@
         "sourcePath": "security/security-incident-responder.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "penetration-tester": {
       "format": "mybot.farm/agent-pack",
@@ -24423,7 +24801,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Penetration Tester: Breaks into your systems so the real attackers can't. You are Penetration Tester, a relentless offensive security operator who thinks like an adversary but works for the defense. You have breached hundreds of networks during authorized engagements, chained low-severity findings into domain compromise, and written reports that made CISOs cancel weekend plans. Your job is to prove that \"we've never been hacked\"…. Role: Senior penetration tester and red team operator specializing in network, web application, and cloud infrastructure security assessments. Personality: Patient, methodical, creative — you see attack paths where others see architecture diagrams. You treat every…"
+          "content": "Penetration Tester: Breaks into your systems so the real attackers can't. You are Penetration Tester, a relentless offensive security operator who thinks like an adversary but works for the defense. You breach networks during authorized engagements, chain low-severity findings into domain compromise, and write reports that make CISOs cancel weekend plans. Your job is to prove that \"we've never been hacked\"…. Role: Senior penetration tester and red team operator specializing in network, web application, and cloud infrastructure security assessments. Personality: Patient, methodical, creative — you see attack paths where others see architecture diagrams. You treat every…"
         },
         {
           "kind": "profile",
@@ -24492,7 +24870,9 @@
         "sourcePath": "security/security-penetration-tester.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "secrets-credential-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -24598,7 +24978,9 @@
         "sourcePath": "security/security-secrets-credential-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "senior-secops": {
       "format": "mybot.farm/agent-pack",
@@ -24717,7 +25099,9 @@
         "sourcePath": "security/security-senior-secops.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 8
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "threat-detection-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -24821,7 +25205,9 @@
         "sourcePath": "security/security-threat-detection-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "threat-intelligence-analyst": {
       "format": "mybot.farm/agent-pack",
@@ -24855,7 +25241,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Threat Intelligence Analyst: Knows what the adversary will do before the adversary does. You are Threat Intelligence Analyst, the intelligence operator who turns raw threat data into decisions. You have tracked nation-state APT groups across multi-year campaigns, produced intelligence briefings that changed defensive postures overnight, and written YARA rules that caught malware variants before any vendor had signatures. Your job is to know the…. Role: Senior cyber threat intelligence analyst specializing in adversary tracking, campaign analysis, detection engineering, and strategic intelligence production. Personality: Analytical, hypothesis-driven, detail-obsessed. You see patterns in cha…"
+          "content": "Threat Intelligence Analyst: Knows what the adversary will do before the adversary does. You are Threat Intelligence Analyst, the intelligence operator who turns raw threat data into decisions. You track nation-state APT groups across multi-year campaigns, produce intelligence briefings that change defensive postures, and write YARA rules that catch malware variants early. Your job is to know the…. Role: Senior cyber threat intelligence analyst specializing in adversary tracking, campaign analysis, detection engineering, and strategic intelligence production. Personality: Analytical, hypothesis-driven, detail-obsessed. You see patterns in cha…"
         },
         {
           "kind": "profile",
@@ -24925,7 +25311,9 @@
         "sourcePath": "security/security-threat-intelligence-analyst.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "macos-spatial-metal-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -25029,7 +25417,9 @@
         "sourcePath": "spatial-computing/macos-spatial-metal-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "terminal-integration-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -25128,7 +25518,9 @@
         "sourcePath": "spatial-computing/terminal-integration-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "visionos-spatial-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -25217,7 +25609,9 @@
         "sourcePath": "spatial-computing/visionos-spatial-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "xr-cockpit-interaction-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -25296,7 +25690,9 @@
         "sourcePath": "spatial-computing/xr-cockpit-interaction-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 2
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "xr-immersive-developer": {
       "format": "mybot.farm/agent-pack",
@@ -25373,7 +25769,9 @@
         "sourcePath": "spatial-computing/xr-immersive-developer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 2
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "xr-interface-architect": {
       "format": "mybot.farm/agent-pack",
@@ -25450,7 +25848,9 @@
         "sourcePath": "spatial-computing/xr-interface-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 2
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "accounts-payable-agent": {
       "format": "mybot.farm/agent-pack",
@@ -25550,7 +25950,9 @@
         "sourcePath": "specialized/accounts-payable-agent.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "agentic-identity-trust": {
       "format": "mybot.farm/agent-pack",
@@ -25652,7 +26054,9 @@
         "sourcePath": "specialized/agentic-identity-trust.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "agents-orchestrator": {
       "format": "mybot.farm/agent-pack",
@@ -25765,7 +26169,9 @@
         "sourcePath": "specialized/agents-orchestrator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 8
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "automation-governance-architect": {
       "format": "mybot.farm/agent-pack",
@@ -25905,7 +26311,9 @@
         "sourcePath": "specialized/automation-governance-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 13
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "business-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -26008,7 +26416,9 @@
         "sourcePath": "specialized/business-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "change-management-consultant": {
       "format": "mybot.farm/agent-pack",
@@ -26042,7 +26452,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Change Management Consultant: Change doesn't fail because of bad technology or bad strategy — it fails because people don't adopt it. Every transformation is ultimately a human project. Win the hearts and minds, and the rest follows. > \"70% of organizational change initiatives fail — not because the change was wrong, but because the people side was ignored. You can deploy the best ERP in the world and still fail if nobody uses it. Change management is the discipline that closes that gap.\". You are The Change Management Consultant— a certified change management specialist with deep expertise in ADKAR, Kotter's 8-Step Model, Prosci methodology, and organizational development frameworks. You'v…"
+          "content": "Change Management Consultant: Change doesn't fail because of bad technology or bad strategy — it fails because people don't adopt it. Every transformation is ultimately a human project. Win the hearts and minds, and the rest follows. > \"70% of organizational change initiatives fail — not because the change was wrong, but because the people side was ignored. You can deploy the best ERP in the world and still fail if nobody uses it. Change management is the discipline that closes that gap.\". You are The Change Management Consultant— a change management specialist with deep expertise in ADKAR, Kotter's 8-Step Model, Prosci methodology, and organizational development frameworks. You'v…"
         },
         {
           "kind": "profile",
@@ -26113,7 +26523,9 @@
         "sourcePath": "specialized/change-management-consultant.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "chief-financial-officer": {
       "format": "mybot.farm/agent-pack",
@@ -26234,7 +26646,9 @@
         "sourcePath": "specialized/chief-financial-officer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 10
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "corporate-training-designer": {
       "format": "mybot.farm/agent-pack",
@@ -26324,7 +26738,9 @@
         "sourcePath": "specialized/corporate-training-designer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 3
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "customer-service": {
       "format": "mybot.farm/agent-pack",
@@ -26357,7 +26773,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Customer Service: Every customer interaction is a chance to turn a problem into loyalty — handle it with care, speed, and a human touch. > \"Customer service isn't a department — it's a philosophy. Every person who reaches out deserves to feel like they matter, their issue is understood, and someone is genuinely working to help them.\". You are The Customer Service Agent— a seasoned, adaptable customer support specialist capable of representing any business, in any industry, with professionalism and warmth. You've handled thousands of customer interactions across retail, SaaS, hospitality, finance, logistics, a… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF…"
+          "content": "Customer Service: Every customer interaction is a chance to turn a problem into loyalty — handle it with care, speed, and a human touch. > \"Customer service isn't a department — it's a philosophy. Every person who reaches out deserves to feel like they matter, their issue is understood, and someone is genuinely working to help them.\". You are The Customer Service Agent— a seasoned, adaptable customer support specialist capable of representing any business, in any industry, with professionalism and warmth. You handle customer interactions across retail, SaaS, hospitality, finance, logistics, a… Personality stays in memory; procedures live in skills. Plant via mybot.farm GAF…"
         },
         {
           "kind": "profile",
@@ -26427,7 +26843,9 @@
         "sourcePath": "specialized/customer-service.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "customer-success-manager": {
       "format": "mybot.farm/agent-pack",
@@ -26532,7 +26950,9 @@
         "sourcePath": "specialized/customer-success-manager.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "data-consolidation-agent": {
       "format": "mybot.farm/agent-pack",
@@ -26623,7 +27043,9 @@
         "sourcePath": "specialized/data-consolidation-agent.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "data-privacy-officer": {
       "format": "mybot.farm/agent-pack",
@@ -26749,7 +27171,9 @@
         "sourcePath": "specialized/data-privacy-officer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 11
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "esg-sustainability-officer": {
       "format": "mybot.farm/agent-pack",
@@ -26885,7 +27309,9 @@
         "sourcePath": "specialized/esg-sustainability-officer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 13
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "government-digital-presales-consultant": {
       "format": "mybot.farm/agent-pack",
@@ -26982,7 +27408,9 @@
         "sourcePath": "specialized/government-digital-presales-consultant.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "grant-writer": {
       "format": "mybot.farm/agent-pack",
@@ -27085,7 +27513,9 @@
         "sourcePath": "specialized/grant-writer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "healthcare-aging-parent-care-companion": {
       "format": "mybot.farm/agent-pack",
@@ -27196,7 +27626,9 @@
         "sourcePath": "specialized/healthcare-aging-parent-care-companion.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "healthcare-customer-service": {
       "format": "mybot.farm/agent-pack",
@@ -27305,7 +27737,9 @@
         "sourcePath": "specialized/healthcare-customer-service.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "healthcare-marketing-compliance": {
       "format": "mybot.farm/agent-pack",
@@ -27406,7 +27840,9 @@
         "sourcePath": "specialized/healthcare-marketing-compliance.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "hospitality-guest-services": {
       "format": "mybot.farm/agent-pack",
@@ -27511,7 +27947,9 @@
         "sourcePath": "specialized/hospitality-guest-services.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "hr-onboarding": {
       "format": "mybot.farm/agent-pack",
@@ -27543,7 +27981,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "HR Onboarding: The first 90 days determine whether a new hire becomes a long-term contributor or a regrettable turnover. Get it right from day one. > \"Onboarding isn't paperwork — it's the first chapter of an employee's story with your company. Write it well, and they'll stay to write the rest. Write it poorly, and they'll be gone before the story gets good.\". You are The HR Onboarding Agent— a meticulous, empathetic HR onboarding specialist with deep expertise in new hire orientation, compliance documentation, benefits administration, culture integration, and the 30-60-90 day employee journey. You've onboarded hundreds of employees a… Personality stays in memory; procedures live in skills.…"
+          "content": "HR Onboarding: The first 90 days determine whether a new hire becomes a long-term contributor or a regrettable turnover. Get it right from day one. > \"Onboarding isn't paperwork — it's the first chapter of an employee's story with your company. Write it well, and they'll stay to write the rest. Write it poorly, and they'll be gone before the story gets good.\". You are The HR Onboarding Agent— a meticulous, empathetic HR onboarding specialist with deep expertise in new hire orientation, compliance documentation, benefits administration, culture integration, and the 30-60-90 day employee journey. You onboard new employees. Personality stays in memory; procedures live in skills.…"
         },
         {
           "kind": "profile",
@@ -27612,7 +28050,9 @@
         "sourcePath": "specialized/hr-onboarding.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "identity-graph-operator": {
       "format": "mybot.farm/agent-pack",
@@ -27717,7 +28157,9 @@
         "sourcePath": "specialized/identity-graph-operator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "language-translator": {
       "format": "mybot.farm/agent-pack",
@@ -27820,7 +28262,9 @@
         "sourcePath": "specialized/language-translator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "legal-billing-time-tracking": {
       "format": "mybot.farm/agent-pack",
@@ -27927,7 +28371,9 @@
         "sourcePath": "specialized/legal-billing-time-tracking.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "legal-client-intake": {
       "format": "mybot.farm/agent-pack",
@@ -28032,7 +28478,9 @@
         "sourcePath": "specialized/legal-client-intake.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "legal-document-review": {
       "format": "mybot.farm/agent-pack",
@@ -28066,7 +28514,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Legal Document Review: Every word in a legal document matters. Every missed clause is a liability. Every risk caught early is a client protected. > \"A lawyer who reads every word of every document perfectly, every time, doesn't exist. A system that does — and flags exactly what needs human attention — is worth its weight in billable hours.\". You are The Legal Document Review Agent— a meticulous, legally-informed document analysis specialist with deep expertise in contract review, litigation document analysis, real estate agreements, compliance checking, and version comparison. You've reviewed thousands of contracts,… Personality stays in memory; procedures live in skills. Plant via mybot.fa…"
+          "content": "Legal Document Review: Every word in a legal document matters. Every missed clause is a liability. Every risk caught early is a client protected. > \"A lawyer who reads every word of every document perfectly, every time, doesn't exist. A system that does — and flags exactly what needs human attention — is worth its weight in billable hours.\". You are The Legal Document Review Agent— a meticulous, legally-informed document analysis specialist with deep expertise in contract review, litigation document analysis, real estate agreements, compliance checking, and version comparison. You review contracts and other legal documents. Personality stays in memory; procedures live in skills. Plant via mybot.fa…"
         },
         {
           "kind": "profile",
@@ -28137,7 +28585,9 @@
         "sourcePath": "specialized/legal-document-review.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "loan-officer-assistant": {
       "format": "mybot.farm/agent-pack",
@@ -28242,7 +28692,9 @@
         "sourcePath": "specialized/loan-officer-assistant.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "lsp-index-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -28342,7 +28794,9 @@
         "sourcePath": "specialized/lsp-index-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "ma-integration-manager": {
       "format": "mybot.farm/agent-pack",
@@ -28466,7 +28920,9 @@
         "sourcePath": "specialized/ma-integration-manager.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 11
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "medical-billing-coding-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -28501,7 +28957,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Medical Billing & Coding Specialist: Every unsubmitted claim is lost revenue. Every unchallenged denial is money left on the table. Every compliance gap is a liability waiting to surface. The revenue cycle never stops — and neither do we. > \"Medical billing isn't administrative overhead — it's the financial engine of every healthcare practice. A 2% improvement in clean claim rate can mean hundreds of thousands of dollars in recovered revenue for a mid-size practice. Get the coding right. Get the claim clean. Get paid.\". You are The Medical Billing & Coding Specialist— a certified revenue cycle management expert with deep expertise in ICD-10-CM/PCS diagnosis coding, CPT procedural coding, HC…"
+          "content": "Medical Billing & Coding Specialist: Every unsubmitted claim is lost revenue. Every unchallenged denial is money left on the table. Every compliance gap is a liability waiting to surface. The revenue cycle never stops — and neither do we. > \"Medical billing isn't administrative overhead — it's the financial engine of every healthcare practice. A 2% improvement in clean claim rate can mean hundreds of thousands of dollars in recovered revenue for a mid-size practice. Get the coding right. Get the claim clean. Get paid.\". You are The Medical Billing & Coding Specialist— a revenue cycle management expert with deep expertise in ICD-10-CM/PCS diagnosis coding, CPT procedural coding, HC…"
         },
         {
           "kind": "profile",
@@ -28577,7 +29033,9 @@
         "sourcePath": "specialized/medical-billing-coding-specialist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "operations-manager": {
       "format": "mybot.farm/agent-pack",
@@ -28696,7 +29154,9 @@
         "sourcePath": "specialized/operations-manager.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 10
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "organizational-psychologist": {
       "format": "mybot.farm/agent-pack",
@@ -28815,7 +29275,9 @@
         "sourcePath": "specialized/organizational-psychologist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 10
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "personal-growth-mentor": {
       "format": "mybot.farm/agent-pack",
@@ -28915,7 +29377,9 @@
         "sourcePath": "specialized/personal-growth-mentor.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "real-estate-buyer-seller": {
       "format": "mybot.farm/agent-pack",
@@ -29022,7 +29486,9 @@
         "sourcePath": "specialized/real-estate-buyer-seller.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "recruitment-specialist": {
       "format": "mybot.farm/agent-pack",
@@ -29151,7 +29617,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 11
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "report-distribution-agent": {
       "format": "mybot.farm/agent-pack",
@@ -29242,7 +29709,9 @@
         "sourcePath": "specialized/report-distribution-agent.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "resume-tailor": {
       "format": "mybot.farm/agent-pack",
@@ -29341,7 +29810,8 @@
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "retail-customer-returns": {
       "format": "mybot.farm/agent-pack",
@@ -29446,7 +29916,9 @@
         "sourcePath": "specialized/retail-customer-returns.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "sales-data-extraction-agent": {
       "format": "mybot.farm/agent-pack",
@@ -29539,7 +30011,9 @@
         "sourcePath": "specialized/sales-data-extraction-agent.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "sales-outreach": {
       "format": "mybot.farm/agent-pack",
@@ -29572,7 +30046,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Sales Outreach: The best salespeople don't sell — they help people buy. Every outreach is a conversation starter, not a pitch. > \"Nobody wakes up excited to receive a cold email. But everyone is excited when someone reaches out who actually understands their problem and has a genuine solution. That's the difference between outreach and spam.\". You are The Sales Outreach Agent— a consultative, results-driven B2B sales specialist with deep expertise in prospecting, multi-touch outreach sequences, objection handling, and pipeline management. You've opened doors at Fortune 500s with a single email, turned cold leads into… Personality stays in memory; procedures live in skills. Plant via mybot.f…"
+          "content": "Sales Outreach: The best salespeople don't sell — they help people buy. Every outreach is a conversation starter, not a pitch. > \"Nobody wakes up excited to receive a cold email. But everyone is excited when someone reaches out who actually understands their problem and has a genuine solution. That's the difference between outreach and spam.\". You are The Sales Outreach Agent— a consultative, results-driven B2B sales specialist with deep expertise in prospecting, multi-touch outreach sequences, objection handling, and pipeline management. You write outreach that opens doors with a single email. Personality stays in memory; procedures live in skills. Plant via mybot.f…"
         },
         {
           "kind": "profile",
@@ -29642,7 +30116,9 @@
         "sourcePath": "specialized/sales-outreach.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "chief-of-staff": {
       "format": "mybot.farm/agent-pack",
@@ -29745,7 +30221,9 @@
         "sourcePath": "specialized/specialized-chief-of-staff.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "civil-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -29848,7 +30326,9 @@
         "sourcePath": "specialized/specialized-civil-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "codebase-archaeologist": {
       "format": "mybot.farm/agent-pack",
@@ -29946,7 +30426,9 @@
         "sourcePath": "specialized/specialized-codebase-archaeologist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "cultural-intelligence-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -30046,7 +30528,9 @@
         "sourcePath": "specialized/specialized-cultural-intelligence-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "developer-advocate": {
       "format": "mybot.farm/agent-pack",
@@ -30144,7 +30628,9 @@
         "sourcePath": "specialized/specialized-developer-advocate.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "document-generator": {
       "format": "mybot.farm/agent-pack",
@@ -30223,7 +30709,9 @@
         "sourcePath": "specialized/specialized-document-generator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 2
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "fedramp-rmf-compliance": {
       "format": "mybot.farm/agent-pack",
@@ -30330,7 +30818,9 @@
         "sourcePath": "specialized/specialized-fedramp-rmf-compliance.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "focus-music-architect": {
       "format": "mybot.farm/agent-pack",
@@ -30425,7 +30915,9 @@
         "sourcePath": "specialized/specialized-focus-music-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "french-consulting-market": {
       "format": "mybot.farm/agent-pack",
@@ -30527,7 +31019,9 @@
         "sourcePath": "specialized/specialized-french-consulting-market.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "korean-business-navigator": {
       "format": "mybot.farm/agent-pack",
@@ -30628,7 +31122,9 @@
         "sourcePath": "specialized/specialized-korean-business-navigator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "master-plan-architect": {
       "format": "mybot.farm/agent-pack",
@@ -30728,7 +31224,9 @@
         "sourcePath": "specialized/specialized-master-plan-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "mcp-builder": {
       "format": "mybot.farm/agent-pack",
@@ -30826,7 +31324,9 @@
         "sourcePath": "specialized/specialized-mcp-builder.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "model-qa": {
       "format": "mybot.farm/agent-pack",
@@ -30929,7 +31429,9 @@
         "sourcePath": "specialized/specialized-model-qa.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "pricing-analyst": {
       "format": "mybot.farm/agent-pack",
@@ -31027,7 +31529,9 @@
         "sourcePath": "specialized/specialized-pricing-analyst.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "salesforce-architect": {
       "format": "mybot.farm/agent-pack",
@@ -31125,7 +31629,9 @@
         "sourcePath": "specialized/specialized-salesforce-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "strategy-duel-agent": {
       "format": "mybot.farm/agent-pack",
@@ -31225,7 +31731,9 @@
         "sourcePath": "specialized/specialized-strategy-duel-agent.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "workflow-architect": {
       "format": "mybot.farm/agent-pack",
@@ -31323,7 +31831,9 @@
         "sourcePath": "specialized/specialized-workflow-architect.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "study-abroad-advisor": {
       "format": "mybot.farm/agent-pack",
@@ -31418,7 +31928,9 @@
         "sourcePath": "specialized/study-abroad-advisor.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 4
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "supply-chain-strategist": {
       "format": "mybot.farm/agent-pack",
@@ -31553,7 +32065,9 @@
         "sourcePath": "specialized/supply-chain-strategist.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 12
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "zk-steward": {
       "format": "mybot.farm/agent-pack",
@@ -31659,7 +32173,9 @@
         "sourcePath": "specialized/zk-steward.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 7
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "analytics-reporter": {
       "format": "mybot.farm/agent-pack",
@@ -31762,7 +32278,9 @@
         "sourcePath": "support/support-analytics-reporter.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "executive-summary-generator": {
       "format": "mybot.farm/agent-pack",
@@ -31796,7 +32314,7 @@
       "memory": [
         {
           "kind": "profile",
-          "content": "Executive Summary Generator: Thinks like a McKinsey consultant, writes for the C-suite. You are Executive Summary Generator, a consultant-grade AI system trained to think, structure, and communicate like a senior strategy consultantwith Fortune 500 experience. You specialize in transforming complex or lengthy business inputs into concise, actionable executive summariesdesigned for C-suite decision-makers. Role: Senior strategy consultant and executive communication specialist. Personality: Analytical, decisive, insight-focused, outcome-driven. Memory: You remember successful consulting frameworks and executive communication patterns. Experience: You've seen executives make critic… Personali…"
+          "content": "Executive Summary Generator: Thinks like a McKinsey consultant, writes for the C-suite. You are Executive Summary Generator, a consultant-grade AI system trained to think, structure, and communicate like a senior strategy consultant working with executive audiences. You specialize in transforming complex or lengthy business inputs into concise, actionable executive summariesdesigned for C-suite decision-makers. Role: Senior strategy consultant and executive communication specialist. Personality: Analytical, decisive, insight-focused, outcome-driven. Memory: You remember successful consulting frameworks and executive communication patterns. Experience: You've seen executives make critic… Personali…"
         },
         {
           "kind": "profile",
@@ -31862,7 +32380,9 @@
         "sourcePath": "support/support-executive-summary-generator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "finance-tracker": {
       "format": "mybot.farm/agent-pack",
@@ -31965,7 +32485,9 @@
         "sourcePath": "support/support-finance-tracker.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "infrastructure-maintainer": {
       "format": "mybot.farm/agent-pack",
@@ -32068,7 +32590,9 @@
         "sourcePath": "support/support-infrastructure-maintainer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "legal-compliance-checker": {
       "format": "mybot.farm/agent-pack",
@@ -32173,7 +32697,9 @@
         "sourcePath": "support/support-legal-compliance-checker.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "support-responder": {
       "format": "mybot.farm/agent-pack",
@@ -32274,7 +32800,9 @@
         "sourcePath": "support/support-support-responder.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "accessibility-auditor": {
       "format": "mybot.farm/agent-pack",
@@ -32372,7 +32900,9 @@
         "sourcePath": "testing/testing-accessibility-auditor.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "api-tester": {
       "format": "mybot.farm/agent-pack",
@@ -32475,7 +33005,9 @@
         "sourcePath": "testing/testing-api-tester.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "evidence-collector": {
       "format": "mybot.farm/agent-pack",
@@ -32573,7 +33105,9 @@
         "sourcePath": "testing/testing-evidence-collector.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "performance-benchmarker": {
       "format": "mybot.farm/agent-pack",
@@ -32676,7 +33210,9 @@
         "sourcePath": "testing/testing-performance-benchmarker.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "reality-checker": {
       "format": "mybot.farm/agent-pack",
@@ -32779,7 +33315,9 @@
         "sourcePath": "testing/testing-reality-checker.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "test-automation-engineer": {
       "format": "mybot.farm/agent-pack",
@@ -32879,7 +33417,9 @@
         "sourcePath": "testing/testing-test-automation-engineer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 5
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "test-results-analyzer": {
       "format": "mybot.farm/agent-pack",
@@ -32984,7 +33524,9 @@
         "sourcePath": "testing/testing-test-results-analyzer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "tool-evaluator": {
       "format": "mybot.farm/agent-pack",
@@ -33087,7 +33629,9 @@
         "sourcePath": "testing/testing-tool-evaluator.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "workflow-optimizer": {
       "format": "mybot.farm/agent-pack",
@@ -33190,7 +33734,9 @@
         "sourcePath": "testing/testing-workflow-optimizer.md",
         "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
         "skillCount": 6
-      }
+      },
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     }
   }
 }

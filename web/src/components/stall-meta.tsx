@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { Globe, User, Users } from "lucide-react";
+import { Globe, RefreshCw, User, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatPriceLabel } from "@/lib/money";
 import { type StallAuthor, type StallKind } from "@/lib/packs";
 import { runtimeTag, type RuntimeTag } from "@/lib/runtimes";
+import { recentStallUpdate } from "@/lib/stall-updated";
 import { cn } from "@/lib/utils";
 
 function RuntimeBadge({ runtime }: { runtime: RuntimeTag }) {
@@ -123,6 +124,32 @@ export function StallHeaderMeta({
       </span>
       {extra}
     </div>
+  );
+}
+
+/** "Updated Nov 24 · v3" chip for packs revised within the last 30 days; null otherwise. */
+export function StallUpdatedBadge({
+  packVersion,
+  updatedAt,
+}: {
+  packVersion?: number | null;
+  updatedAt?: string | null;
+}) {
+  const update = recentStallUpdate({ packVersion, updatedAt });
+
+  if (!update) {
+    return null;
+  }
+
+  return (
+    <Badge variant="secondary" className="h-8 px-3.5 bg-agent/15 text-agent-foreground">
+      <RefreshCw aria-hidden="true" />
+      <span>
+        Updated <time dateTime={update.iso}>{update.dateLabel}</time>
+        <span aria-hidden="true"> · </span>
+        <span className="sr-only">, version </span>v{update.version}
+      </span>
+    </Badge>
   );
 }
 

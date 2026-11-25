@@ -11,7 +11,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { StallActions, StallMembers } from "@/components/stall-actions";
 import { StallEngagement } from "@/components/stall-engagement";
-import { StallDates, StallHeaderMeta, StallPackStats } from "@/components/stall-meta";
+import {
+  StallDates,
+  StallHeaderMeta,
+  StallPackStats,
+  StallUpdatedBadge,
+} from "@/components/stall-meta";
 import { StallSlugMeta } from "@/components/stall-slug-meta";
 import { catalogStallCardStats } from "@/lib/catalog";
 import { getStallEngagement } from "@/lib/engagement";
@@ -51,6 +56,7 @@ export async function StallCard({
           runtimes={stats?.runtimes ?? []}
           author={stall.author}
           priceCents={stall.priceCents ?? 0}
+          extra={<StallUpdatedBadge packVersion={stall.packVersion} updatedAt={stall.updatedAt} />}
         />
         <CardTitle className="clay-title text-2xl font-extrabold tracking-tight">
           <Link href={href} className="underline-offset-4 hover:underline">

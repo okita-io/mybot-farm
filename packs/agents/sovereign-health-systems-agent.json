@@ -122,5 +122,7 @@
     "sourcePath": "healthcare/healthcare-sovereign-health-systems-agent.md",
     "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
     "skillCount": 9
-  }
+  },
+  "packVersion": 2,
+  "updatedAt": "2026-11-24T00:00:00.000Z"
 }

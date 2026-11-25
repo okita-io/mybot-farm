@@ -1,5 +1,6 @@
 type PackVersionSource = {
   packVersion?: unknown;
+  updatedAt?: unknown;
   slug?: string;
   version?: string;
 };
@@ -41,6 +42,17 @@ export function readOptionalPackVersion(
 /** Content revision. Missing/invalid values count as 1. Not the GAF format `version`. */
 export function packVersionOf(pack: PackVersionSource | null | undefined): number {
   return parsePackVersion(pack?.packVersion) ?? 1;
+}
+
+/** Pack-level `updatedAt` (ISO 8601 date or datetime) as a normalized ISO string, or null when absent/invalid. */
+export function packUpdatedAtOf(pack: PackVersionSource | null | undefined): string | null {
+  const value = pack?.updatedAt;
+  if (typeof value !== "string" || !value.trim()) {
+    return null;
+  }
+
+  const time = Date.parse(value.trim());
+  return Number.isNaN(time) ? null : new Date(time).toISOString();
 }
 
 export function applyPackVersion<T extends PackVersionSource>(

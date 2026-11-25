@@ -97,5 +97,7 @@
     "sourcePath": "sales/sales-engineer.md",
     "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
     "skillCount": 6
-  }
+  },
+  "packVersion": 2,
+  "updatedAt": "2026-11-24T00:00:00.000Z"
 }

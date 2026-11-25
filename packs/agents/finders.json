@@ -56,5 +56,7 @@
       "description": "Standard output format per venue.",
       "content": "# Contact sheet\n\nOne sheet per venue, flat and copy-paste-able:\n\n```yaml\nvenue: <name>\nbooker: <name, or 'unknown'>\nemail: <published address, or 'needs manual'>\nphone: <published number, or 'none found'>\nbooking_page: <url, or 'none'>\nsocials: <handles>\nconfidence: confirmed / weak / needs-manual\nnext_action: <one concrete step when confidence is not confirmed — call the venue, ask at the door, check the promoter's site>\nsources: <URLs, each with pull date>\n```\n\nPitch reads these without follow-up questions. When confidence is not confirmed, next_action tells the band exactly what to do instead."
     }
-  ]
+  ],
+  "packVersion": 2,
+  "updatedAt": "2026-11-24T00:00:00.000Z"
 }
