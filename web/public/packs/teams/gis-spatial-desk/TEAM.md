@@ -14,10 +14,10 @@ instead of N solos.
 
 | Handle | Profile | Role | One-line contract |
 |--------|---------|------|-------------------|
-| `@analyst` | `analyst` | **gis-analysis** | Analyst — gis-analysis. |
-| `@web-gis-developer` | `web-gis-developer` | **web-maps** | Web GIS Developer — web-maps. |
-| `@spatial-data-engineer` | `spatial-data-engineer` | **spatial-pipelines** | Spatial Data Engineer — spatial-pipelines. |
-| `@geoprocessing-specialist` | `geoprocessing-specialist` | **geoprocessing** | Geoprocessing Specialist — geoprocessing. |
+| `@analyst` | `analyst` | **gis-analysis** | GIS Analyst — gis-analysis: scopes the question, inventories sources and CRS, and runs final QA and cartography. |
+| `@spatial-data-engineer` | `spatial-data-engineer` | **spatial-pipelines** | Spatial Data Engineer — spatial-pipelines: ingests, cleans, and validates the data; owns the refresh pipeline. |
+| `@geoprocessing-specialist` | `geoprocessing-specialist` | **geoprocessing** | Geoprocessing Specialist — geoprocessing: runs the analysis (service areas, overlays) as a repeatable tool, ArcPy or open-source. |
+| `@web-gis-developer` | `web-gis-developer` | **web-maps** | Web GIS Developer — web-maps: publishes the QA'd layers as a fast public web map. |
 
 All members run on the same Hermes install. They coordinate in the shared
 group chat (and via `message_agent` DMs when Bot Mode is on). Nobody ships,
@@ -25,8 +25,8 @@ sends, or deploys unattended — the human owns the final decision.
 
 ## Handoffs
 
-- User request → gis-analysis (Analyst) → web-maps (Web GIS Developer) → spatial-pipelines (Spatial Data Engineer) → geoprocessing (Geoprocessing Specialist) → human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.
-- Re-work loop: if the geoprocessing output is rejected (by the human or a downstream gate) → the failing stage gets a re-work note with the specific gap → re-runs only the failed stage → artifact flows down again. No stage silently rewrites an earlier stage's work.
+- User request → gis-analysis (GIS Analyst) → spatial-pipelines (Spatial Data Engineer) → geoprocessing (Geoprocessing Specialist) → web-maps (Web GIS Developer) → human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.
+- Re-work loop: if the web-maps output is rejected (by the human or a downstream gate) → the failing stage gets a re-work note with the specific gap → re-runs only the failed stage → artifact flows down again. No stage silently rewrites an earlier stage's work.
 - Scope drift: if the request lands outside gis-analysis's lane → gis-analysis says so in the first turn and re-scopes with the human before any member starts work.
 
 ## Quality bar
@@ -56,7 +56,7 @@ first handoffs) in the group chat before doing the work.
 
 GIS & Spatial Data Desk standing rules:
 - The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.
-- Lane discipline: Analyst Web GIS Developer Spatial Data Engineer Geoprocessing Specialist each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.
+- Lane discipline: GIS Analyst, Spatial Data Engineer, Geoprocessing Specialist, Web GIS Developer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.
 - First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.
 - Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.
 - Sample request this crew is tuned for: Build a city-scale service-area analysis with a public web map and refresh pipeline.

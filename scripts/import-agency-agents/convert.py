@@ -214,6 +214,7 @@ EMOJI_RE = re.compile(
     "\U00002700-\U000027bf"
     "\U0001f900-\U0001f9ff"
     "\U00002600-\U000026ff"
+    "\ufe0f\u200d"  # variation selector / zero-width joiner left behind by stripped emoji
     "]+",
     flags=re.UNICODE,
 )
@@ -469,7 +470,9 @@ def skill_body(heading: str, content: str) -> str:
         line for line in body.splitlines() if not BOILERPLATE_LINE_RE.search(line)
     )
     body = clip(body.strip(), MAX_SKILL_CHARS)
-    body = re.sub(r"^#+\s+", "", body, count=1)
+    # Keep the section's first sub-heading as a heading (stripping the marker
+    # turned "### Data Integrity" into a stray plain line).
+    body = re.sub(r"^#+\s+", "### ", body, count=1)
     return f"# {title}\n\n{body}".strip()
 
 
@@ -514,7 +517,8 @@ def title_from(meta: dict[str, Any], name: str) -> str:
         first = re.split(r"(?<=[.!?])\s+", desc)[0]
         if len(first) <= 90:
             return first.rstrip(".")
-        return clip(first, 80).rstrip(".…")
+        cut = first[:80].rsplit(" ", 1)[0]  # word boundary, never mid-word
+        return cut.rstrip(" ,;:—-.…")
     return name
 
 

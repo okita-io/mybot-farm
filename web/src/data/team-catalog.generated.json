@@ -52,15 +52,15 @@
           "href": "/packs/agents/resume-tailor.hermes.tar.gz"
         },
         {
+          "name": "ATS Validator Architect",
+          "href": "/packs/agents/ats-validator-architect.hermes.tar.gz"
+        },
+        {
           "name": "Recruitment Specialist",
           "href": "/packs/agents/recruitment-specialist.hermes.tar.gz"
         },
         {
-          "name": "Ats Validator Architect",
-          "href": "/packs/agents/ats-validator-architect.hermes.tar.gz"
-        },
-        {
-          "name": "Coach",
+          "name": "Sales Coach",
           "href": "/packs/agents/coach.hermes.tar.gz"
         }
       ]
@@ -358,11 +358,11 @@
       "listedAt": "2026-09-17T00:00:00.000Z",
       "members": [
         {
-          "name": "Bookkeeper Controller",
+          "name": "Bookkeeper & Controller",
           "href": "/packs/agents/bookkeeper-controller.hermes.tar.gz"
         },
         {
-          "name": "Fpa Analyst",
+          "name": "FP&A Analyst",
           "href": "/packs/agents/fpa-analyst.hermes.tar.gz"
         },
         {
@@ -443,12 +443,8 @@
       "listedAt": "2026-09-17T00:00:00.000Z",
       "members": [
         {
-          "name": "Analyst",
+          "name": "GIS Analyst",
           "href": "/packs/agents/analyst.hermes.tar.gz"
-        },
-        {
-          "name": "Web GIS Developer",
-          "href": "/packs/agents/web-gis-developer.hermes.tar.gz"
         },
         {
           "name": "Spatial Data Engineer",
@@ -457,6 +453,10 @@
         {
           "name": "Geoprocessing Specialist",
           "href": "/packs/agents/geoprocessing-specialist.hermes.tar.gz"
+        },
+        {
+          "name": "Web GIS Developer",
+          "href": "/packs/agents/web-gis-developer.hermes.tar.gz"
         }
       ]
     },
@@ -3573,7 +3573,7 @@
       "profile": {
         "name": "GIS & Spatial Data Desk",
         "title": "Spatial analysis that ships: analysis, web maps, spatial pipelines, geoprocessing.",
-        "description": "A 4-agent Hermes team (pipeline): Analyst Web GIS Developer Spatial Data Engineer Geoprocessing Specialist. Spatial analysis that ships: analysis, web maps, spatial pipelines, geoprocessing.",
+        "description": "A 4-agent team (pipeline): GIS Analyst, Spatial Data Engineer, Geoprocessing Specialist, Web GIS Developer. Spatial analysis that ships: analysis, web maps, spatial pipelines, geoprocessing.",
         "avatar": {
           "kind": "geometric",
           "shape": "triangle",
@@ -3583,48 +3583,48 @@
       "members": [
         {
           "role": "gis-analysis",
-          "summary": "Analyst \u2014 gis-analysis.",
+          "summary": "GIS Analyst \u2014 gis-analysis: scopes the question, inventories sources and CRS, and runs final QA and cartography.",
           "pack": "agents/analyst.hermes.tar.gz"
         },
         {
-          "role": "web-maps",
-          "summary": "Web GIS Developer \u2014 web-maps.",
-          "pack": "agents/web-gis-developer.hermes.tar.gz"
-        },
-        {
           "role": "spatial-pipelines",
-          "summary": "Spatial Data Engineer \u2014 spatial-pipelines.",
+          "summary": "Spatial Data Engineer \u2014 spatial-pipelines: ingests, cleans, and validates the data; owns the refresh pipeline.",
           "pack": "agents/spatial-data-engineer.hermes.tar.gz"
         },
         {
           "role": "geoprocessing",
-          "summary": "Geoprocessing Specialist \u2014 geoprocessing.",
+          "summary": "Geoprocessing Specialist \u2014 geoprocessing: runs the analysis (service areas, overlays) as a repeatable tool, ArcPy or open-source.",
           "pack": "agents/geoprocessing-specialist.hermes.tar.gz"
+        },
+        {
+          "role": "web-maps",
+          "summary": "Web GIS Developer \u2014 web-maps: publishes the QA'd layers as a fast public web map.",
+          "pack": "agents/web-gis-developer.hermes.tar.gz"
         }
       ],
       "topology": {
         "kind": "pipeline",
         "handoffs": [
-          "User request \u2192 gis-analysis (Analyst) \u2192 web-maps (Web GIS Developer) \u2192 spatial-pipelines (Spatial Data Engineer) \u2192 geoprocessing (Geoprocessing Specialist) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
-          "Re-work loop: if the geoprocessing output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
+          "User request \u2192 gis-analysis (GIS Analyst) \u2192 spatial-pipelines (Spatial Data Engineer) \u2192 geoprocessing (Geoprocessing Specialist) \u2192 web-maps (Web GIS Developer) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+          "Re-work loop: if the web-maps output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
           "Scope drift: if the request lands outside gis-analysis's lane \u2192 gis-analysis says so in the first turn and re-scopes with the human before any member starts work."
         ]
       },
       "skills": [
         {
           "name": "gis-spatial-desk-team-rules",
-          "description": "Standing rules for the GIS & Spatial Data Desk crew.",
-          "content": "GIS & Spatial Data Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Analyst Web GIS Developer Spatial Data Engineer Geoprocessing Specialist each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Build a city-scale service-area analysis with a public web map and refresh pipeline.\n"
+          "description": "Use when working as a member of the GIS & Spatial Data Desk crew: lanes, handoffs, and who decides.",
+          "content": "GIS & Spatial Data Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: GIS Analyst, Spatial Data Engineer, Geoprocessing Specialist, Web GIS Developer each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Build a city-scale service-area analysis with a public web map and refresh pipeline.\n"
         }
       ],
       "shared": {
         "memory": [
           {
             "kind": "profile",
-            "content": "GIS & Spatial Data Desk: Analyst Web GIS Developer Spatial Data Engineer Geoprocessing Specialist work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+            "content": "GIS & Spatial Data Desk: GIS Analyst, Spatial Data Engineer, Geoprocessing Specialist, Web GIS Developer work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
           }
         ],
-        "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/analyst.hermes.tar.gz --name analyst, hermes profile import agents/web-gis-developer.hermes.tar.gz --name web-gis-developer, hermes profile import agents/spatial-data-engineer.hermes.tar.gz --name spatial-data-engineer, hermes profile import agents/geoprocessing-specialist.hermes.tar.gz --name geoprocessing-specialist. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Analyst, Web GIS Developer, Spatial Data Engineer, Geoprocessing Specialist).\n3. Seed it with a request in this shape: \u201cBuild a city-scale service-area analysis with a public web map and refresh pipeline.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Geoprocessing Specialist) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+        "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/analyst.hermes.tar.gz --name analyst, hermes profile import agents/spatial-data-engineer.hermes.tar.gz --name spatial-data-engineer, hermes profile import agents/geoprocessing-specialist.hermes.tar.gz --name geoprocessing-specialist, hermes profile import agents/web-gis-developer.hermes.tar.gz --name web-gis-developer. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: GIS Analyst, Spatial Data Engineer, Geoprocessing Specialist, Web GIS Developer).\n3. Seed it with a request in this shape: \u201cBuild a city-scale service-area analysis with a public web map and refresh pipeline.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Web GIS Developer) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
       },
       "commerce": {
         "pricing": "free",
@@ -3639,7 +3639,8 @@
           "team"
         ],
         "scrubbed": true
-      }
+      },
+      "packVersion": 2
     },
     "map-and-drone": {
       "format": "mybot.farm/team-pack",
@@ -4089,7 +4090,7 @@
       "profile": {
         "name": "CFO Finance Office",
         "title": "Small-company finance: books, FP&A, tax planning, investment-grade analysis.",
-        "description": "A 4-agent Hermes team (pipeline): Bookkeeper Controller Fpa Analyst Tax Strategist Financial Analyst. Small-company finance: books, FP&A, tax planning, investment-grade analysis.",
+        "description": "A 4-agent team (pipeline): Bookkeeper & Controller, FP&A Analyst, Tax Strategist, Financial Analyst. Small-company finance: books, FP&A, tax planning, investment-grade analysis.",
         "avatar": {
           "kind": "geometric",
           "shape": "hexagon",
@@ -4099,29 +4100,29 @@
       "members": [
         {
           "role": "books",
-          "summary": "Bookkeeper Controller \u2014 books.",
+          "summary": "Bookkeeper & Controller \u2014 books: reconciliations, proposed journal entries, and the month-end close.",
           "pack": "agents/bookkeeper-controller.hermes.tar.gz"
         },
         {
           "role": "fpa",
-          "summary": "Fpa Analyst \u2014 fpa.",
+          "summary": "FP&A Analyst \u2014 fpa: budget, rolling forecast, and variance analysis on the closed books.",
           "pack": "agents/fpa-analyst.hermes.tar.gz"
         },
         {
           "role": "tax",
-          "summary": "Tax Strategist \u2014 tax.",
+          "summary": "Tax Strategist \u2014 tax: tax-planning questions and options for a qualified professional to review.",
           "pack": "agents/tax-strategist.hermes.tar.gz"
         },
         {
           "role": "analysis",
-          "summary": "Financial Analyst \u2014 analysis.",
+          "summary": "Financial Analyst \u2014 analysis: base/upside/downside models and the board-pack narrative.",
           "pack": "agents/financial-analyst.hermes.tar.gz"
         }
       ],
       "topology": {
         "kind": "pipeline",
         "handoffs": [
-          "User request \u2192 books (Bookkeeper Controller) \u2192 fpa (Fpa Analyst) \u2192 tax (Tax Strategist) \u2192 analysis (Financial Analyst) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+          "User request \u2192 books (Bookkeeper & Controller) \u2192 fpa (FP&A Analyst) \u2192 tax (Tax Strategist) \u2192 analysis (Financial Analyst) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
           "Re-work loop: if the analysis output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
           "Scope drift: if the request lands outside books's lane \u2192 books says so in the first turn and re-scopes with the human before any member starts work."
         ]
@@ -4129,18 +4130,18 @@
       "skills": [
         {
           "name": "finance-office-team-rules",
-          "description": "Standing rules for the CFO Finance Office crew.",
-          "content": "CFO Finance Office standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Bookkeeper Controller Fpa Analyst Tax Strategist Financial Analyst each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Close the month, produce the board pack, and set up next year's budget with scenario ranges.\n"
+          "description": "Use when working as a member of the CFO Finance Office crew: lanes, handoffs, and who decides.",
+          "content": "CFO Finance Office standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Bookkeeper & Controller, FP&A Analyst, Tax Strategist, Financial Analyst each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Not financial, tax, or investment advice. Nobody posts to the live ledger, files with a tax authority, or moves money; the human (and their CPA) approves every money move.\n- Sample request this crew is tuned for: Close the month, produce the board pack, and set up next year's budget with scenario ranges.\n"
         }
       ],
       "shared": {
         "memory": [
           {
             "kind": "profile",
-            "content": "CFO Finance Office: Bookkeeper Controller Fpa Analyst Tax Strategist Financial Analyst work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+            "content": "CFO Finance Office: Bookkeeper & Controller, FP&A Analyst, Tax Strategist, Financial Analyst work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
           }
         ],
-        "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/bookkeeper-controller.hermes.tar.gz --name bookkeeper-controller, hermes profile import agents/fpa-analyst.hermes.tar.gz --name fpa-analyst, hermes profile import agents/tax-strategist.hermes.tar.gz --name tax-strategist, hermes profile import agents/financial-analyst.hermes.tar.gz --name financial-analyst. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Bookkeeper Controller, Fpa Analyst, Tax Strategist, Financial Analyst).\n3. Seed it with a request in this shape: \u201cClose the month, produce the board pack, and set up next year's budget with scenario ranges.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Financial Analyst) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+        "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/bookkeeper-controller.hermes.tar.gz --name bookkeeper-controller, hermes profile import agents/fpa-analyst.hermes.tar.gz --name fpa-analyst, hermes profile import agents/tax-strategist.hermes.tar.gz --name tax-strategist, hermes profile import agents/financial-analyst.hermes.tar.gz --name financial-analyst. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Bookkeeper & Controller, FP&A Analyst, Tax Strategist, Financial Analyst).\n3. Seed it with a request in this shape: \u201cClose the month, produce the board pack, and set up next year's budget with scenario ranges.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Financial Analyst) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
       },
       "commerce": {
         "pricing": "free",
@@ -4155,7 +4156,8 @@
           "team"
         ],
         "scrubbed": true
-      }
+      },
+      "packVersion": 2
     },
     "investment-desk": {
       "format": "mybot.farm/team-pack",
@@ -4509,7 +4511,7 @@
       "profile": {
         "name": "Career & Job-Search Desk",
         "title": "Land the next role: resume optimization, application tracking, prep coaching.",
-        "description": "A 4-agent Hermes team (pipeline): Resume Tailor Recruitment Specialist Ats Validator Architect Coach. Land the next role: resume optimization, application tracking, prep coaching.",
+        "description": "A 4-agent team (pipeline): Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach. Land the next role: resume optimization, application tracking, prep coaching.",
         "avatar": {
           "kind": "geometric",
           "shape": "circle",
@@ -4519,29 +4521,29 @@
       "members": [
         {
           "role": "resume",
-          "summary": "Resume Tailor \u2014 resume.",
+          "summary": "Resume Tailor \u2014 resume: intake, target role, and a truthful tailored resume per posting.",
           "pack": "agents/resume-tailor.hermes.tar.gz"
         },
         {
-          "role": "sourcing",
-          "summary": "Recruitment Specialist \u2014 sourcing.",
-          "pack": "agents/recruitment-specialist.hermes.tar.gz"
-        },
-        {
           "role": "ats",
-          "summary": "Ats Validator Architect \u2014 ats.",
+          "summary": "ATS Validator Architect \u2014 ats: checks the tailored resume parses cleanly and scores keyword recall against the posting.",
           "pack": "agents/ats-validator-architect.hermes.tar.gz"
         },
         {
+          "role": "sourcing",
+          "summary": "Recruitment Specialist \u2014 sourcing (candidate side): target-company list, channels, and the application tracker.",
+          "pack": "agents/recruitment-specialist.hermes.tar.gz"
+        },
+        {
           "role": "interview-coaching",
-          "summary": "Coach \u2014 interview-coaching.",
+          "summary": "Sales Coach \u2014 interview-coaching: mock interviews and offer-negotiation prep, using its question-led coaching method.",
           "pack": "agents/coach.hermes.tar.gz"
         }
       ],
       "topology": {
         "kind": "pipeline",
         "handoffs": [
-          "User request \u2192 resume (Resume Tailor) \u2192 sourcing (Recruitment Specialist) \u2192 ats (Ats Validator Architect) \u2192 interview-coaching (Coach) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+          "User request \u2192 resume (Resume Tailor) \u2192 ats (ATS Validator Architect) \u2192 sourcing (Recruitment Specialist) \u2192 interview-coaching (Sales Coach) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
           "Re-work loop: if the interview-coaching output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
           "Scope drift: if the request lands outside resume's lane \u2192 resume says so in the first turn and re-scopes with the human before any member starts work."
         ]
@@ -4549,18 +4551,18 @@
       "skills": [
         {
           "name": "career-desk-team-rules",
-          "description": "Standing rules for the Career & Job-Search Desk crew.",
-          "content": "Career & Job-Search Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Resume Tailor Recruitment Specialist Ats Validator Architect Coach each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Sample request this crew is tuned for: Get me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.\n"
+          "description": "Use when working as a member of the Career & Job-Search Desk crew: lanes, handoffs, and who decides.",
+          "content": "Career & Job-Search Desk standing rules:\n- The human owns the final decision. Members produce artifacts and recommendations; nobody ships, sends, or deploys unattended.\n- Lane discipline: Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach each stay in their role. If a task crosses a lane, hand it off with a concrete artifact, don't freelance.\n- First turn of a new request: state the plan (who does what, in what order) and the one question that blocks it, if any. Then work.\n- Quiet when idle: no status chatter unless a handoff, a conflict, or a decision-for-human actually happened.\n- Lane briefs for this desk. Recruitment Specialist (an employer-side recruiter) and Sales Coach (a sales-team coach) are re-scoped here to work for the job seeker:\n  - Recruitment Specialist: work for the candidate, not an employer. Build the target-company list, pick channels, and keep the application tracker. Use the employer-side skills (campus recruiting, headhunter management, PRC labor law) only when the user asks.\n  - Sales Coach: coach the candidate for interviews and offer negotiation (STAR stories, mock questions, one behavioral takeaway per session). Don't run sales pipeline or deal reviews here.\n  - ATS Validator Architect: check the candidate's resume file. Don't design or build ATS software here.\n- Never invent jobs, credentials, or metrics. Never apply, message recruiters, or send anything on the user's behalf.\n- Sample request this crew is tuned for: Get me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.\n"
         }
       ],
       "shared": {
         "memory": [
           {
             "kind": "profile",
-            "content": "Career & Job-Search Desk: Resume Tailor Recruitment Specialist Ats Validator Architect Coach work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
+            "content": "Career & Job-Search Desk: Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
           }
         ],
-        "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/resume-tailor.hermes.tar.gz --name resume-tailor, hermes profile import agents/recruitment-specialist.hermes.tar.gz --name recruitment-specialist, hermes profile import agents/ats-validator-architect.hermes.tar.gz --name ats-validator-architect, hermes profile import agents/coach.hermes.tar.gz --name coach. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Resume Tailor, Recruitment Specialist, Ats Validator Architect, Coach).\n3. Seed it with a request in this shape: \u201cGet me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Coach) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+        "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/resume-tailor.hermes.tar.gz --name resume-tailor, hermes profile import agents/ats-validator-architect.hermes.tar.gz --name ats-validator-architect, hermes profile import agents/recruitment-specialist.hermes.tar.gz --name recruitment-specialist, hermes profile import agents/coach.hermes.tar.gz --name coach. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach).\n3. Seed it with a request in this shape: \u201cGet me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Sales Coach) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
       },
       "commerce": {
         "pricing": "free",
@@ -4575,7 +4577,8 @@
           "team"
         ],
         "scrubbed": true
-      }
+      },
+      "packVersion": 2
     }
   }
 }

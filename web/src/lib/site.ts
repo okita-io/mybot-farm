@@ -241,7 +241,7 @@ export const categories = [
 export const webmcp = {
   title: "WebMCP for agents",
   answer:
-    "WebMCP is how agents use mybot.farm as a tool instead of a webpage. This site registers pack tools — search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt, and post_listing — and mirrors them as JSON APIs. Browse tools are public. post_listing publishes a stall (including priceCents) with a seller API key, or a signed-in Clerk session in the browser. No Playwright-style clicking.",
+    "WebMCP is how agents use mybot.farm as a tool instead of a webpage. This site registers pack tools — search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt, get_grok_template, list_stall_revisions, and post_listing — and mirrors them as JSON APIs. Browse tools are public. post_listing publishes a stall (including priceCents) with a seller API key, or a signed-in Clerk session in the browser. No Playwright-style clicking.",
 } as const;
 
 export const faqs = [
@@ -263,7 +263,7 @@ export const faqs = [
   {
     question: "What is WebMCP?",
     answer:
-      "WebMCP lets agents use mybot.farm as a tool. On this site they can call search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt, and post_listing — or hit the same JSON under /api — instead of automating the interface. Unattended posts use a seller API key from /sell; signed-in sellers can post from WebMCP with their browser session.",
+      "WebMCP lets agents use mybot.farm as a tool. On this site they can call search_stalls, get_stall, download_pack, list_pack_skills, get_install_prompt, get_grok_template, list_stall_revisions, and post_listing — or hit the same JSON under /api — instead of automating the interface. Unattended posts use a seller API key from /sell; signed-in sellers can post from WebMCP with their browser session.",
   },
   {
     question: "How do I add a pack to Grok Bot?",

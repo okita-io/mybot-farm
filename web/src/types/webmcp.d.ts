@@ -14,11 +14,14 @@ type WebMcpTool = {
   inputSchema?: Record<string, unknown>;
   annotations?: {
     readOnlyHint?: boolean;
+    untrustedContentHint?: boolean;
+    consequentialHint?: boolean;
     destructiveHint?: boolean;
     openWorldHint?: boolean;
   };
   execute: (
     args: Record<string, unknown>,
+    options?: { signal?: AbortSignal },
   ) => Promise<WebMcpToolResult | string> | WebMcpToolResult | string;
 };
 
