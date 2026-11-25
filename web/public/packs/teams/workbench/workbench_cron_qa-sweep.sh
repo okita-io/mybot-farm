@@ -1,2 +1,2 @@
 #!/bin/bash
-exec "/Users/alexokita/.hermes/scripts/workbench_cron.sh" qa-sweep
+exec "$HOME/.hermes/scripts/workbench_cron.sh" qa-sweep

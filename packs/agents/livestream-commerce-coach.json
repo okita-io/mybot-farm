@@ -20,7 +20,7 @@
   "profile": {
     "name": "Livestream Commerce Coach",
     "title": "Coaches your livestream hosts from awkward beginners to million-yuan sellers",
-    "description": "Veteran livestream e-commerce coach specializing in host training and live room operations across Douyin, Kuaishou, Taobao Live, and Channels, covering script design, product sequencing, paid-vs-organic traffic balancing, conversion closing techniques, and real-time data-driven optimization. Coaches your livestream ho…",
+    "description": "Experienced livestream e-commerce coach specializing in host training and live room operations across Douyin, Kuaishou, Taobao Live, and Channels, covering script design, product sequencing, paid-vs-organic traffic balancing, conversion closing techniques, and real-time data-driven optimization. Coaches your livestream ho…",
     "avatar": {
       "kind": "geometric",
       "shape": "hex",
@@ -91,5 +91,7 @@
     "sourcePath": "marketing/marketing-livestream-commerce-coach.md",
     "attribution": "Copyright (c) 2025 AgentLand Contributors. MIT License. Adapted from https://github.com/msitarzewski/agency-agents.",
     "skillCount": 4
-  }
+  },
+  "packVersion": 2,
+  "updatedAt": "2026-11-24T00:00:00.000Z"
 }

@@ -26,31 +26,31 @@
   "members": [
     {
       "role": "resume",
-      "summary": "Resume Tailor \u2014 resume: intake, target role, and a truthful tailored resume per posting.",
+      "summary": "Resume Tailor — resume: intake, target role, and a truthful tailored resume per posting.",
       "pack": "agents/resume-tailor.hermes.tar.gz"
     },
     {
       "role": "ats",
-      "summary": "ATS Validator Architect \u2014 ats: checks the tailored resume parses cleanly and scores keyword recall against the posting.",
+      "summary": "ATS Validator Architect — ats: checks the tailored resume parses cleanly and scores keyword recall against the posting.",
       "pack": "agents/ats-validator-architect.hermes.tar.gz"
     },
     {
       "role": "sourcing",
-      "summary": "Recruitment Specialist \u2014 sourcing (candidate side): target-company list, channels, and the application tracker.",
+      "summary": "Recruitment Specialist — sourcing (candidate side): target-company list, channels, and the application tracker.",
       "pack": "agents/recruitment-specialist.hermes.tar.gz"
     },
     {
       "role": "interview-coaching",
-      "summary": "Sales Coach \u2014 interview-coaching: mock interviews and offer-negotiation prep, using its question-led coaching method.",
+      "summary": "Sales Coach — interview-coaching: mock interviews and offer-negotiation prep, using its question-led coaching method.",
       "pack": "agents/coach.hermes.tar.gz"
     }
   ],
   "topology": {
     "kind": "pipeline",
     "handoffs": [
-      "User request \u2192 resume (Resume Tailor) \u2192 ats (ATS Validator Architect) \u2192 sourcing (Recruitment Specialist) \u2192 interview-coaching (Sales Coach) \u2192 human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
-      "Re-work loop: if the interview-coaching output is rejected (by the human or a downstream gate) \u2192 the failing stage gets a re-work note with the specific gap \u2192 re-runs only the failed stage \u2192 artifact flows down again. No stage silently rewrites an earlier stage's work.",
-      "Scope drift: if the request lands outside resume's lane \u2192 resume says so in the first turn and re-scopes with the human before any member starts work."
+      "User request → resume (Resume Tailor) → ats (ATS Validator Architect) → sourcing (Recruitment Specialist) → interview-coaching (Sales Coach) → human reviews and ships. Each stage hands a concrete artifact to the next (cards, drafts, test reports), never raw chat.",
+      "Re-work loop: if the interview-coaching output is rejected (by the human or a downstream gate) → the failing stage gets a re-work note with the specific gap → re-runs only the failed stage → artifact flows down again. No stage silently rewrites an earlier stage's work.",
+      "Scope drift: if the request lands outside resume's lane → resume says so in the first turn and re-scopes with the human before any member starts work."
     ]
   },
   "skills": [
@@ -67,7 +67,7 @@
         "content": "Career & Job-Search Desk: Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach work as one crew. Each member stays in its lane, hands off concrete artifacts, and the human ships. Quiet when idle."
       }
     ],
-    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/resume-tailor.hermes.tar.gz --name resume-tailor, hermes profile import agents/ats-validator-architect.hermes.tar.gz --name ats-validator-architect, hermes profile import agents/recruitment-specialist.hermes.tar.gz --name recruitment-specialist, hermes profile import agents/coach.hermes.tar.gz --name coach. Verify all appear in `hermes profile list` BEFORE continuing \u2014 if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach).\n3. Seed it with a request in this shape: \u201cGet me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.\u201d \u2014 the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Sales Coach) integrates.\nKeep the group chat's shared context as the source of truth \u2014 it answers \u2018where are we?\u2019"
+    "gettingStarted": "Install order:\n1. Import the member profiles: hermes profile import agents/resume-tailor.hermes.tar.gz --name resume-tailor, hermes profile import agents/ats-validator-architect.hermes.tar.gz --name ats-validator-architect, hermes profile import agents/recruitment-specialist.hermes.tar.gz --name recruitment-specialist, hermes profile import agents/coach.hermes.tar.gz --name coach. Verify all appear in `hermes profile list` BEFORE continuing — if a name was deleted earlier on this machine, Hermes leaves a tombstone at ~/.hermes/profiles/.deleted/<name> that import does not clear; remove the stale entry and re-check.\n2. Start one group chat with all members (order: Resume Tailor, ATS Validator Architect, Recruitment Specialist, Sales Coach).\n3. Seed it with a request in this shape: “Get me interview-ready in 30 days: tailored resumes, tracker for 40 target companies, and two mock interviews.” — the team should co-generate the workflow for it (plan, lane assignments, first handoffs) before doing the work.\n4. The human reviews the plan, then unblocks with specifics. Members execute lane by lane; the last member (Sales Coach) integrates.\nKeep the group chat's shared context as the source of truth — it answers ‘where are we?’"
   },
   "commerce": {
     "pricing": "free",
@@ -83,5 +83,6 @@
     ],
     "scrubbed": true
   },
-  "packVersion": 2
+  "packVersion": 2,
+  "updatedAt": "2026-11-24T00:00:00.000Z"
 }

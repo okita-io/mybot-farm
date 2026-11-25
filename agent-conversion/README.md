@@ -29,7 +29,7 @@ more Hermes-like (matched built-in skills, not just the published GAF skills).
 Match GAF skill topics → installed Hermes skill categories, add to the profile:
 - research/data → `research/` (arxiv, rss-feeds, grounded-citations)
 - coding/dev → `software-development/` (github, test-driven-development, systematic-debugging)
-- marketing → `marketing-agi`, `research/web_competitor_intel`
+- marketing → `marketing-agi` (the author-specific `research/web_competitor_intel` skill is **not** shipped; removed 2026-11-24 — do not re-add it)
 - social → `social-media/xurl`, `social-media/reddit-reading`
 - ops/process → `productivity/` (sop-adjacent: docx/xlsx/pdf), `devops/sdlc-review`
 - web → `web/blocked-page-recovery`

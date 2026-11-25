@@ -3640,7 +3640,8 @@
         ],
         "scrubbed": true
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "map-and-drone": {
       "format": "mybot.farm/team-pack",
@@ -4157,7 +4158,8 @@
         ],
         "scrubbed": true
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     },
     "investment-desk": {
       "format": "mybot.farm/team-pack",
@@ -4578,7 +4580,8 @@
         ],
         "scrubbed": true
       },
-      "packVersion": 2
+      "packVersion": 2,
+      "updatedAt": "2026-11-24T00:00:00.000Z"
     }
   }
 }

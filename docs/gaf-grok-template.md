@@ -17,6 +17,7 @@ Golden pack: [Gift Day](https://mybot.farm/agents/gift-day) (`/packs/agents/gift
 |-------|------------|---------------------|
 | `stallId` | Stable UUID for the stall listing | **Seller listings:** `listings.id` (Postgres UUID). **Catalog/seed stalls:** UUID v5 of `https://mybot.farm/{agents\|teams}/{slug}` in the RFC 4122 URL namespace (`catalogStallId` in `web/src/lib/stall-id.ts`). Example: Finders (Road Crew peer) `04caa770-f6ae-5fad-881b-c77f28ae972c`; Gift Day `11732350-45c3-51ca-a73b-e9e8a1fc57b5`. |
 | `packVersion` | Integer **content revision** for same-slug GAF updates | Stored on pack JSON as `packVersion` (distinct from GAF format `version` such as `"0.1"` / `"0.2"`). Seeds omit it and the catalog reports `1`. Seller upserts auto-increment (`web/src/lib/pack-version.ts`). |
+| `updatedAt` | ISO 8601 date the pack content last changed | Optional top-level pack field. Bump it together with `packVersion` whenever a seed pack changes. Seed stalls use it as `updatedAt` (falls back to `listedAt`); cards and stall pages show an "Updated Nov 24 · v3" chip when `packVersion > 1` and the date is within 30 days (`web/src/lib/stall-updated.ts`). Marketplace listings use the listing's own `updatedAt`. |
 
 Cite these in FARM.md, install notes, or optional GAF `manifest` / `commerce` provenance if an exporter wants a paper trail. **Do not** stuff `stallId` or `packVersion` into the template recipe — Grok Bot Zod would reject unknown recipe fields, and they are not bot identity.
 

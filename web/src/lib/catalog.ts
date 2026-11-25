@@ -26,7 +26,7 @@ import {
   type StallKind,
 } from "@/lib/packs";
 import { getTeamPack, getTeamStalls } from "@/lib/team-catalog";
-import { packVersionOf } from "@/lib/pack-version";
+import { packUpdatedAtOf, packVersionOf } from "@/lib/pack-version";
 import {
   existingHermesArchiveHref,
   listingMemberHref,
@@ -109,7 +109,7 @@ export function withSeedPrice(stall: Stall): Stall {
     currency: stall.currency ?? "usd",
     author: stall.author ?? FARM_AUTHOR,
     listedAt,
-    updatedAt: stall.updatedAt ?? listedAt,
+    updatedAt: stall.updatedAt ?? packUpdatedAtOf(pack) ?? listedAt,
   };
 }
 

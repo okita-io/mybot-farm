@@ -56,5 +56,7 @@
       "description": "Standard output format for each shortlisted venue.",
       "content": "# Venue card\n\nOne card per venue:\n\n```yaml\nvenue: <name>\nneighborhood: <area / city>\ncapacity: <estimate — mark 'verified' or 'estimate'>\nhouse_genre: <what they usually play>\nrecent_acts: <2-4 recent acts, or 'unknown'>\nbooks_bands: yes / no / unverified\nfit_notes: <why this venue fits THIS band, 1-2 sentences>\nsources: <public URLs>\n```\n\nKeep cards flat and copy-paste-able — Finders works from them without asking questions."
     }
-  ]
+  ],
+  "packVersion": 2,
+  "updatedAt": "2026-11-24T00:00:00.000Z"
 }

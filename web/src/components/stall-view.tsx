@@ -3,7 +3,13 @@ import { Pencil } from "lucide-react";
 import { StallAdminRemove } from "@/components/stall-admin-remove";
 import { StallActions, StallMembers } from "@/components/stall-actions";
 import { StallEngagement } from "@/components/stall-engagement";
-import { StallDates, StallHeaderMeta, StallPackStats, StallRevisionHistory } from "@/components/stall-meta";
+import {
+  StallDates,
+  StallHeaderMeta,
+  StallPackStats,
+  StallRevisionHistory,
+  StallUpdatedBadge,
+} from "@/components/stall-meta";
 import { StallComments } from "@/components/stall-comments";
 import { StallReadmeCard } from "@/components/stall-readme-card";
 import { StallSlugMeta } from "@/components/stall-slug-meta";
@@ -119,6 +125,7 @@ export async function StallView({
             runtimes={stats?.runtimes ?? []}
             author={stall.author}
             priceCents={stall.priceCents ?? 0}
+            extra={<StallUpdatedBadge packVersion={stall.packVersion} updatedAt={stall.updatedAt} />}
           />
           <h1 className="clay-title mt-4 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
             {stall.name}
