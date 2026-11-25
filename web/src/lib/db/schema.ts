@@ -122,6 +122,31 @@ export const stallStats = pgTable("stall_stats", {
     .notNull(),
 });
 
+/**
+ * MCP download dedup: one counted download per (slug, caller) per 24h.
+ * caller_hash is a salted SHA-256 of "user:<id>" or "ip:<addr>" (no raw IPs).
+ * Migration: drizzle/0010_stall_download_events.sql (not applied yet).
+ */
+export const stallDownloadEvents = pgTable(
+  "stall_download_events",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    slug: text("slug").notNull(),
+    callerHash: text("caller_hash").notNull(),
+    source: text("source").notNull().default("mcp"),
+    countedAt: timestamp("counted_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    uniqueIndex("stall_download_events_slug_caller_idx").on(
+      table.slug,
+      table.callerHash,
+    ),
+    index("stall_download_events_counted_at_idx").on(table.countedAt),
+  ],
+);
+
 export const stallLikes = pgTable(
   "stall_likes",
   {

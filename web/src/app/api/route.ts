@@ -1,4 +1,5 @@
 import { jsonResponse, optionsResponse } from "@/lib/http";
+import { FARM_TOOL_NAMES } from "@/lib/mcp-tool-defs";
 import { packTools } from "@/lib/webmcp-catalog";
 
 export function GET() {
@@ -6,6 +7,14 @@ export function GET() {
     name: "mybot.farm",
     readOnly: false,
     tools: packTools,
+    mcp: {
+      url: "https://mybot.farm/mcp",
+      transport: "streamable-http",
+      discovery: "/.well-known/mcp.json",
+      docs: "/install/mcp",
+      tools: FARM_TOOL_NAMES,
+      writeAuth: "Authorization: Bearer mbf_… or X-Api-Key: mbf_…",
+    },
     endpoints: {
       search_stalls: "/api/stalls",
       get_stall: "/api/stalls/{slug}",

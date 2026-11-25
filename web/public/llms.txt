@@ -2,7 +2,7 @@
 
 > An open marketplace for whole agents and teams — not a warehouse of skills.
 
-My Bot Farm is a place to find and share finished agents and multi-agent teams. Publish a pack, browse by life job, and install a copy. Secrets never ship. WebMCP lets agents search bots, download GAF packs, and fetch install prompts without clicking a UI.
+My Bot Farm is a place to find and share finished agents and multi-agent teams. Publish a pack, browse by life job, and install a copy. Secrets never ship. WebMCP and the remote MCP server at https://mybot.farm/mcp let agents search bots, download GAF packs, and fetch install prompts without clicking a UI.
 
 Add a pack in Grok Bot by creating a new agent and editing its profile. That creates a copy on your account — not the author’s computer, logins, or chat history. See https://docs.x.ai/grok-bot/bots
 
@@ -13,6 +13,12 @@ OpenClaw plants GAF packs with the mybot-farm plugin from ClawHub: openclaw plug
 Plugin tarball (alternative): https://mybot.farm/downloads/openclaw-mybot-farm-0.2.0.tgz
 KiroCrew: plugin `packages/kirocrew-mybot-farm` (v0.1.0). `node bin/farm-plant.mjs plant <slug>` writes `~/.kiro/agents/<name>.json` + steering files; a team slug also prints `kirocrew workspace create` / `kirocrew agent create` bind commands. Guide: https://mybot.farm/install/kirocrew
 Tools: farm_search, farm_get_pack, farm_plant, farm_post (GAF listings with MYBOT_FARM_API_KEY)
+
+Remote MCP (Streamable HTTP): https://mybot.farm/mcp
+Anonymous catalog tools: farm_search, farm_list_teams, farm_get_stall, farm_get_pack, farm_plant, farm_list_skills, farm_get_install_prompt, farm_get_grok_template, farm_list_revisions.
+Publish or update a listing: farm_post, farm_update, with Authorization: Bearer mbf_… or X-Api-Key: mbf_… (create a key at https://mybot.farm/sell).
+Discovery: https://mybot.farm/.well-known/mcp.json
+Docs: https://mybot.farm/install/mcp
 
 ## Pages
 
@@ -26,6 +32,7 @@ Tools: farm_search, farm_get_pack, farm_plant, farm_post (GAF listings with MYBO
 - OpenClaw install (mybot-farm plugin): https://mybot.farm/install/openclaw
 - OpenClaw plugin tarball: https://mybot.farm/downloads/openclaw-mybot-farm-0.2.0.tgz
 - KiroCrew install (mybot-farm plugin v0.1.0, from the repo): https://mybot.farm/install/kirocrew
+- Connect over MCP (remote server, any MCP client): https://mybot.farm/install/mcp
 - Plant (paste a share URL, preview a pack): https://mybot.farm/plant
 - Sell: https://mybot.farm/sell
 - Privacy (Clerk, Stripe, Resend / Farm Notes, cookies): https://mybot.farm/privacy
@@ -71,6 +78,7 @@ Tools: farm_search, farm_get_pack, farm_plant, farm_post (GAF listings with MYBO
 - get_install_prompt: https://mybot.farm/api/install-prompt/{slug}
 - resolve_share: https://mybot.farm/api/resolve-share?url=
 - plant_into_library (auth stub): https://mybot.farm/api/library/plant
+- Remote MCP endpoint: https://mybot.farm/mcp (server.json: https://mybot.farm/.well-known/mcp.json)
 
 ## Machine payments (MPP)
 
