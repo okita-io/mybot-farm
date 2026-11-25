@@ -340,20 +340,6 @@ export const stalls: Stall[] = [
     hermesHref: "/packs/agents/grant-research.hermes.tar.gz",
   },
   {
-    kind: "agent",
-    slug: "scholastic-research",
-    name: "Scholastic Research",
-    title: "Scholastic research & source-synthesis agent",
-    description:
-      "Clarifies your research question, plans the search strategy, verifies peer-reviewed sources, and synthesizes them with clean citations. Trained and verified by an automated judge panel — 9.14/10 on unseen questions, zero fabricated citations.",
-    seoTitle: "Scholastic Research",
-    seoDescription:
-      "Install Scholastic Research from mybot.farm: a free Hermes-native agent that finds and verifies peer-reviewed sources, then synthesizes them with citations.",
-    category: "Education",
-    tone: "find",
-    downloadHref: "/packs/agents/scholastic-research.hermes.tar.gz",
-  },
-  {
     kind: "team",
     slug: "pair-bench",
     name: "Pair Bench",
